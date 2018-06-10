@@ -74,8 +74,13 @@
     <script src="https://cdn.bootcss.com/angular.js/1.6.8/angular.js"></script>
     <script>
         var app = angular.module('myMusicApp', []);
+        app.config(function($httpProvider) {
+            $httpProvider.defaults.headers.post = {
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
         var musicPlayerDom = document.getElementById("myMusicPlayer");
-        var baseMusicUrl = "https://api.imjad.cn/cloudmusic";
+        var baseMusicUrl = "https://music.163.com/api/search/get";
 
         function getTimeLongByMillisecond(time) {
             const minT = Math.floor(time / 1000 / 60) >= 10 ? Math.floor(time / 1000 / 60) : '0' + Math.floor(time /
@@ -157,11 +162,10 @@
                     if (!this.isLoadFinish) return;
                     this.isLoadFinish = false;
                     var searchDefualtObj = {
-                        type: "search",
-                        search_type: 1,
+                        type: 1,
                         s: "羽泉",
                         limit: this.pageSize,
-                        offset: 1,
+                        offset: 0
                     };
                     if (searchOption) {
                         searchDefualtObj = Object.assign(searchDefualtObj, searchOption);
@@ -169,9 +173,10 @@
                     var url = baseMusicUrl + "?" + $.param(searchDefualtObj);
                     var _this = this;
                     $http({
-                        method: 'GET',
+                        method: 'post',
                         url: url
                     }).then((response) => {
+                        debugger
                         if (response.status === 200) {
                             if (response.data && response.data.code === 200) {
                                 if (response.data.result) {
