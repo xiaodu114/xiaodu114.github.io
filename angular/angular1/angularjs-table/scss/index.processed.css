@@ -1,0 +1,19 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+.myAppContainer>.table-config-container {
+  height: 60px;
+}
+
+.myAppContainer>.table-container .scroll-header .flex-layout-block.th {
+  border-bottom: 1px solid #ddd;
+}
+
+.myAppContainer>.table-container .scroll-body .flex-layout-block.td {
+  border-bottom: 1px solid #ddd;
+}

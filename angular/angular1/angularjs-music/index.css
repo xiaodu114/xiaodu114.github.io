@@ -1,0 +1,69 @@
+html,
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+.myMusicAppContainer {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.myMusicAppContainer>.music-header {
+    height: 60px;
+    flex-shrink: 0;
+    padding-left: 20px;
+    background-color: rebeccapurple;
+    display: flex;
+    align-items: center;
+}
+
+.myMusicAppContainer>.music-header>.logo-container {
+    margin-right: 200px;
+    display: flex;
+    align-items: center;
+}
+
+.myMusicAppContainer>.music-header>.logo-container>.logo-img {
+    padding-right: 8px;
+}
+
+.myMusicAppContainer>.music-header>.logo-container>.logo-text {
+    color: #fff;
+}
+
+.myMusicAppContainer>.music-body {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.myMusicAppContainer>.music-footer {
+    height: 100px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.myMusicAppContainer>.music-footer>.player-operation {
+    color: rebeccapurple;
+}
+
+.myMusicAppContainer>.music-footer>.player-contianer {
+    flex: 1;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.myMusicAppContainer>.music-footer>.player-contianer>.music-selected {
+    display: flex;
+    justify-content: space-between;
+}
+
+.myMusicAppContainer>.music-footer>.player-contianer>.music-progress {
+    color: rebeccapurple;
+}
