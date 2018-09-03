@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            margin: 0;
+        }
+        
+        .myApp-Container {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .single-slider-range-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 500px;
+        }
+        
+        .single-slider-range-container>.range-label {
+            height: 10px;
+        }
+        
+        .single-slider-range-container>.slider-track {
+            height: 6px;
+            width: 100%;
+            padding-left: 15px;
+            padding-right: 15px;
+            box-sizing: border-box;
+            background-color: #efefef;
+        }
+        
+        .single-slider-range-container>.slider-track>.slider-track-child-copy {
+            height: 0;
+            width: 100%;
+        }
+        
+        .single-slider-range-container>.slider-track>.selected-range {
+            height: 100%;
+            background-color: #249ee4;
+            transition: marginLeft .1s ease;
+        }
+        
+        .single-slider-range-container>.slider {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: left .1s ease;
+            background-color: #fff;
+            box-shadow: 0px 2px 4px rgba(66, 158, 228, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .single-slider-range-container>.slider.left {
+            left: 0;
+        }
+        
+        .single-slider-range-container>.slider.right {
+            right: 0;
+        }
+        
+        .single-slider-range-container>.slider>.slider-center {
+            height: 8px;
+            width: 8px;
+            background-color: #429ee4;
+            border-radius: 50%;
+        }
+        
+        .single-slider-range-container>.slider.transition-none {
+            transition: none;
+        }
+    </style>
+</head>
+
+<body ng-cloak ng-controller="MyAppController">
+    <div class="myApp-Container">
+        <div>
+            <p>
+                <label for="">
+                    最小值：
+                    <input type="text" ng-model="minRangeValue">
+                </label>
+                <label for="">
+                    最大值：
+                    <input type="text" ng-model="maxRangeValue">
+                </label>
+                <button type="button" ng-click="resetSlider();">重置</button>
+            </p>
+        </div>
+        <div ddz-range start="minRangeValue" end="maxRangeValue"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/angular@1.7.2/angular.min.js" integrity="sha256-ruP2+uorUblSeg7Tozk75u8TaSUKRCZVvNV0zRGxkRQ=" crossorigin="anonymous"></script>
+
+    <script type="text/ng-template" id="ddzRangeTpl">
+        <div class="single-slider-range-container">
+            <div class="slider-track">
+                <div class='slider-track-child-copy'></div>
+                <div class='selected-range'></div>
+            </div>
+            <div class="slider left">
+                <div class="slider-center"></div>
+            </div>
+            <div class="slider right">
+                <div class="slider-center"></div>
+            </div>
+        </div>
+    </script>
+    <script>
+        var myApp = angular.module('myApp', []);
+        myApp.directive('ddzRange', function($timeout) {
+            var reSetSliderPosition = function(leftSliderDom, rightSliderDom, selectedRangeDom,
+                silderTrackWidth, _start, _end) {
+                leftSliderDom.classList.add("transition-none");
+                rightSliderDom.classList.add("transition-none");
+                leftSliderDom.style.left = `${silderTrackWidth*(_start/100)}px`;
+                rightSliderDom.style.left = `${silderTrackWidth*(_end/100)}px`;
+                selectedRangeDom.style.marginRight = `${silderTrackWidth*(1
+- _end/100)}px`;
+                selectedRangeDom.style.marginLeft = `${silderTrackWidth*(_start/100)}px`;
+            }
+            return {
+                restrict: "A",
+                replace: true,
+                templateUrl: 'ddzRangeTpl',
+                scope: {
+                    start: "=",
+                    end: "="
+                },
+                link: function(scope, el, attrs) {
+                    if (scope.start === undefined) {
+                        scope.start = 30;
+                    }
+                    if (scope.end === undefined) {
+                        scope.end = 60;
+                    }
+
+                    var silderTrackDom = el[0].querySelector(".slider-track>.slider-track-child-copy");
+                    var silderTrackWidth = silderTrackDom.clientWidth;
+                    var selectedRangeDom = el[0].querySelector(".slider-track>.selected-range");
+                    var leftSliderDom = el[0].querySelector(".slider.left");
+                    var rightSliderDom = el[0].querySelector(".slider.right");
+
+                    reSetSliderPosition(leftSliderDom, rightSliderDom, selectedRangeDom, silderTrackWidth,
+                        scope.start, scope.end);
+                    scope.$on('ResetSliderEvent', function(event, data) {
+                        reSetSliderPosition(leftSliderDom, rightSliderDom, selectedRangeDom, silderTrackWidth,
+                            0, 100);
+                    });
+
+                    leftSliderDom.addEventListener("mousedown", function(event) {
+                        event.stopPropagation();
+                        event.preventDefault();
+                        var isRealDrag = true,
+                            startMovePosX = event.clientX,
+                            oldLeft = parseFloat(leftSliderDom.style.left),
+                            maxMoveX = parseFloat(rightSliderDom.style.left);
+
+                        leftSliderDom.classList.add("transition-none");
+                        document.onmousemove = function(event) {
+                            if (isRealDrag) {
+                                leftSliderDom.classList.add("transition-none");
+                                var tempSliderMoveX = oldLeft + event.clientX - startMovePosX;
+                                if (tempSliderMoveX > maxMoveX) {
+                                    tempSliderMoveX = maxMoveX;
+                                } else if (tempSliderMoveX < 0) {
+                                    tempSliderMoveX = 0;
+                                }
+                                leftSliderDom.style.left = `${tempSliderMoveX}px`;
+                                selectedRangeDom.style.marginLeft = `${tempSliderMoveX}px`;
+                                $timeout(function() {
+                                    scope.start = Math.round((tempSliderMoveX /
+                                        silderTrackWidth) * 100);
+                                }, 0);
+                            }
+                        };
+                        document.onmouseup = function(event) {
+                            isRealDrag = false;
+                            leftSliderDom.classList.remove("transition-none");
+                            leftSliderDom.style.zIndex = 1;
+                            rightSliderDom.style.zIndex = 0;
+                            document.onmousemove = null;
+                            document.onmouseup = null;
+                        };
+                    });
+                    rightSliderDom.addEventListener("mousedown", function(event) {
+                        event.stopPropagation();
+                        event.preventDefault();
+                        var isRealDrag = true,
+                            startMovePosX = event.clientX,
+                            oldLeft = parseFloat(rightSliderDom.style.left),
+                            minMoveX = parseFloat(leftSliderDom.style.left);
+                        rightSliderDom.classList.add("transition-none");
+                        document.onmousemove = function(event) {
+                            if (isRealDrag) {
+                                rightSliderDom.classList.add("transition-none");
+                                var tempSliderMoveX = oldLeft + event.clientX - startMovePosX;
+                                if (tempSliderMoveX > silderTrackWidth) {
+                                    tempSliderMoveX = silderTrackWidth;
+                                } else if (tempSliderMoveX < minMoveX) {
+                                    tempSliderMoveX = minMoveX;
+                                }
+                                rightSliderDom.style.left = `${tempSliderMoveX}px`;
+                                selectedRangeDom.style.marginRight =
+                                    `${silderTrackWidth-tempSliderMoveX}px`;
+                                $timeout(function() {
+                                    scope.end = Math.round((tempSliderMoveX /
+                                        silderTrackWidth) * 100);
+                                }, 0);
+                            }
+                        };
+                        document.onmouseup = function(event) {
+                            isRealDrag = false;
+                            rightSliderDom.classList.remove("transition-none");
+                            leftSliderDom.style.zIndex = 0;
+                            rightSliderDom.style.zIndex = 1;
+                            document.onmousemove = null;
+                            document.onmouseup = null;
+                        };
+                    });
+                }
+            }
+        });
+        myApp.controller("MyAppController", function($scope) {
+            $scope.minRangeValue = 30;
+            $scope.maxRangeValue = 60;
+            $scope.resetSlider = function() {
+                $scope.minRangeValue = 0;
+                $scope.maxRangeValue = 100;
+                $scope.$broadcast("ResetSliderEvent");
+            }
+        });
+    </script>
+</body>
+
+</html>
