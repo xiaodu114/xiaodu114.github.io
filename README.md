@@ -10,7 +10,3 @@
 #### angularjs music
 基于angularjs的音乐播放列表：
 * 十分感谢，https://api.imjad.cn 提供API支持
-# 测试更新 
-# 1234 
-# ddz 
-# qwe
