@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hans">
 
 <head>
     <meta charset="UTF-8">
@@ -11,7 +11,10 @@
 
 <body>
     <div class="page-container">
-        <div class="fab-menu-container">
+        <div style="position: absolute;top: 100px;">
+            <h2>你可以点击♥试试</h2>
+        </div>
+        <div class="fab-menu-container open">
             <div class="fab-trigger"><i class="icon icon-heart"></i></div>
             <div class="fab-action-container">
                 <div class="action">
@@ -53,7 +56,17 @@
             </div>
         </div>
     </div>
-
+    <script>
+        var fabMenuContainerDom = document.querySelector(".fab-menu-container"),
+            fabBtnTriggerDom = document.querySelector(".fab-menu-container>.fab-trigger");
+        fabBtnTriggerDom.addEventListener("click", function() {
+            if (fabMenuContainerDom.classList.contains("open")) {
+                fabMenuContainerDom.classList.remove("open");
+            } else {
+                fabMenuContainerDom.classList.add("open");
+            }
+        });
+    </script>
 </body>
 
 </html>
