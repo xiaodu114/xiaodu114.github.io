@@ -2,81 +2,81 @@
 
 // 图标通用样式
 .icon {
-    display: inline-block;
-    vertical-align: middle;
-    position: relative;
-    font-style: normal;
-    color: #ddd;
-    text-align: left;
-    text-indent: -9999px;
-    direction: ltr;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  font-style: normal;
+  color: #ddd;
+  text-align: left;
+  text-indent: -9999px;
+  direction: ltr;
 }
 
 .icon::after,
 .icon::before {
-    content: '';
-    pointer-events: none;
+  content: "";
+  pointer-events: none;
 }
 
 // 加号图标
 .icon-plus {
-    width: 30px;
-    height: 30px;
+  width: 30px;
+  height: 30px;
 }
 
 .icon-plus::before {
-    width: 20px;
-    height: 2px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: inset 0 0 0 32px;
+  width: 20px;
+  height: 2px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: inset 0 0 0 32px;
 }
 
 .icon-plus::after {
-    height: 20px;
-    width: 2px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: inset 0 0 0 32px;
+  height: 20px;
+  width: 2px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: inset 0 0 0 32px;
 }
 
 // 心型图标
 .icon-heart {
-    width: 20px;
-    height: 20px;
-    border-top-color: transparent;
-    border-left-color: transparent;
-    transform: rotate(45deg);
-    border-radius: 7px 0;
-    margin: 9px 7px 5px;
-    border-bottom: 2px solid;
-    border-right: 2px solid;
+  width: 20px;
+  height: 20px;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  transform: rotate(45deg);
+  border-radius: 7px 0;
+  margin: 9px 7px 5px;
+  border-bottom: 2px solid;
+  border-right: 2px solid;
 }
 
 .icon-heart::before {
-    width: 12px;
-    height: 20px;
-    position: absolute;
-    left: -10px;
-    bottom: -2px;
-    border-radius: 20px 0 0 20px;
-    border: 2px solid;
-    border-right: none;
+  width: 12px;
+  height: 20px;
+  position: absolute;
+  left: -10px;
+  bottom: -2px;
+  border-radius: 20px 0 0 20px;
+  border: 2px solid;
+  border-right: none;
 }
 
 .icon-heart::after {
-    width: 20px;
-    height: 12px;
-    right: -2px;
-    top: -10px;
-    border-radius: 20px 20px 0 0;
-    position: absolute;
-    border: 2px solid;
-    border-bottom: none;
+  width: 20px;
+  height: 12px;
+  right: -2px;
+  top: -10px;
+  border-radius: 20px 20px 0 0;
+  position: absolute;
+  border: 2px solid;
+  border-bottom: none;
 }
 
 // 纯CSS图标 ********结束********
@@ -89,77 +89,84 @@
 *,
 *::after,
 *::before {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html,
 body {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    overflow: hidden;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
 }
 
 .page-container {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .fab-menu-container {
-    width: 2 * @fabTriggerRadius;
-    height: 2 * @fabTriggerRadius;
-    position: fixed;
+  width: 2 * @fabTriggerRadius;
+  height: 2 * @fabTriggerRadius;
+  position: fixed;
 
-    >.fab-trigger {
-        height: 100%;
-        width: 100%;
-        //background-color: #06C;
-        color: #FFF;
-        //box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.11);
+  >.fab-trigger {
+    height: 100%;
+    width: 100%;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  >.fab-action-container {
+    height: 0;
+    width: 0;
+    position: absolute;
+    top: @fabTriggerRadius;
+    left: @fabTriggerRadius;
+
+    >.action {
+      height: 0;
+      width: 0;
+      position: absolute;
+      transform: scale(0, 0);
+      transition: 0.3s;
+
+      .for(@i) when (@i <=@fabActionCounter) {
+        &:nth-child(@{i}) {
+          left: @distanceBetweenCircleCenter * cos((@i - 3) * 30deg);
+          top: @distanceBetweenCircleCenter * sin((@i - 3) * 30deg);
+          transition: 0.3s @i*0.3s;
+        }
+
+        .for((@i + 1));
+      }
+
+      .for(1);
+
+      >.action-content {
+        width: 2 * @fabActionRadius;
+        height: 2 * @fabActionRadius;
+        position: absolute;
+        top: -@fabActionRadius;
+        left: -@fabActionRadius;
         display: flex;
         align-items: center;
         justify-content: center;
+      }
     }
+  }
+}
 
-    >.fab-action-container {
-        height: 0;
-        width: 0;
-        // background-color: red;
-        position: absolute;
-        top: @fabTriggerRadius;
-        left: @fabTriggerRadius;
-
-        >.action {
-            height: 0;
-            width: 0;
-            position: absolute;
-
-            .for(@i) when (@i <=@fabActionCounter) {
-
-                &:nth-child(@{i}) {
-                    left: @distanceBetweenCircleCenter * cos((@i - 3)*30deg);
-                    top: @distanceBetweenCircleCenter * sin((@i - 3)*30deg);
-                }
-
-                .for((@i + 1));
-            }
-
-            .for(1);
-
-            >.action-content {
-                width: 2 * @fabActionRadius;
-                height: 2 * @fabActionRadius;
-                position: absolute;
-                top: -@fabActionRadius;
-                left: -@fabActionRadius;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                // background-color: red;
-            }
-        }
+.fab-menu-container.open {
+  >.fab-action-container {
+    >.action {
+      transform: scale(1, 1);
     }
+  }
 }
