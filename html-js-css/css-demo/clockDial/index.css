@@ -10,7 +10,7 @@
 }
 .icon::after,
 .icon::before {
-  content: '';
+  content: "";
   pointer-events: none;
 }
 .icon-plus {
@@ -93,10 +93,11 @@ body {
 .fab-menu-container > .fab-trigger {
   height: 100%;
   width: 100%;
-  color: #FFF;
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 .fab-menu-container > .fab-action-container {
   height: 0;
@@ -109,54 +110,68 @@ body {
   height: 0;
   width: 0;
   position: absolute;
+  transform: scale(0, 0);
+  transition: 0.3s;
 }
 .fab-menu-container > .fab-action-container > .action:nth-child( 1) {
   left: 50px;
   top: -86.60254038px;
+  transition: 0.3s 0.3s;
 }
 .fab-menu-container > .fab-action-container > .action:nth-child( 2) {
   left: 86.60254038px;
   top: -50px;
+  transition: 0.3s 0.6s;
 }
 .fab-menu-container > .fab-action-container > .action:nth-child( 3) {
   left: 100px;
   top: 0px;
+  transition: 0.3s 0.9s;
 }
 .fab-menu-container > .fab-action-container > .action:nth-child( 4) {
   left: 86.60254038px;
   top: 50px;
+  transition: 0.3s 1.2s;
 }
 .fab-menu-container > .fab-action-container > .action:nth-child( 5) {
   left: 50px;
   top: 86.60254038px;
+  transition: 0.3s 1.5s;
 }
 .fab-menu-container > .fab-action-container > .action:nth-child( 6) {
   left: 0px;
   top: 100px;
+  transition: 0.3s 1.8s;
 }
 .fab-menu-container > .fab-action-container > .action:nth-child( 7) {
   left: -50px;
   top: 86.60254038px;
+  transition: 0.3s 2.1s;
 }
 .fab-menu-container > .fab-action-container > .action:nth-child( 8) {
   left: -86.60254038px;
   top: 50px;
+  transition: 0.3s 2.4s;
 }
 .fab-menu-container > .fab-action-container > .action:nth-child( 9) {
   left: -100px;
   top: 0px;
+  transition: 0.3s 2.7s;
 }
 .fab-menu-container > .fab-action-container > .action:nth-child( 10) {
   left: -86.60254038px;
   top: -50px;
+  transition: 0.3s 3s;
 }
 .fab-menu-container > .fab-action-container > .action:nth-child( 11) {
   left: -50px;
   top: -86.60254038px;
+  transition: 0.3s 3.3s;
 }
 .fab-menu-container > .fab-action-container > .action:nth-child( 12) {
   left: 0px;
   top: -100px;
+  transition: 0.3s 3.6s;
 }
 .fab-menu-container > .fab-action-container > .action > .action-content {
   width: 40px;
@@ -167,4 +182,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.fab-menu-container.open > .fab-action-container > .action {
+  transform: scale(1, 1);
 }
