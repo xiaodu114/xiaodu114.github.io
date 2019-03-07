@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>fab 菜单</title>
+    <link rel="stylesheet" href="./index.css">
+</head>
+
+<body>
+    <div>
+        <p>
+            <center><strong>请在手机模式下查看</strong></center>
+            <center>图片地址：<a href="https://materialdesignicons.com/" target="_blank">Material Design Icons</a></center>
+        </p>
+        <div class="fab-menu-container">
+            <div class="fab-trigger">
+                <i class="icon icon-plus"></i>
+            </div>
+            <div class="fab-action-container">
+                <div class="action">
+                    <div class="action-content" data-operate-type="ScanCode"></div>
+                    <div class="action-tip"></div>
+                </div>
+                <div class="action">
+                    <div class="action-content" data-operate-type="AddHomeNav"></div>
+                    <div class="action-tip"></div>
+                </div>
+                <div class="action">
+                    <div class="action-content" data-operate-type="OffLinePage"></div>
+                    <div class="action-tip"></div>
+                </div>
+                <div class="action">
+                    <div class="action-content" data-operate-type="More"></div>
+                    <div class="action-tip"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var fixedActionContainerDom = document.querySelector(".fab-menu-container"),
+            fabActionContainerDom = document.querySelector(".fab-action-container"),
+            fabTriggerDom = document.querySelector(".fab-menu-container>.fab-trigger"),
+            fabTriggerIconDom = document.querySelector(".fab-menu-container>.fab-trigger>i"),
+            floatBtnDomStyle = getComputedStyle(fixedActionContainerDom),
+            floatBtnDomWidth = parseFloat(floatBtnDomStyle.width),
+            floatBtnDomHeight = parseFloat(floatBtnDomStyle.height),
+            bodyWidth = document.body.clientWidth,
+            bodyHeight = document.body.clientHeight,
+            maxMoveX = bodyWidth - floatBtnDomWidth,
+            maxMoveY = bodyHeight - floatBtnDomHeight,
+            isClickFloatButton = true,
+            minCompareDistance = 60;
+        fixedActionContainerDom.addEventListener("touchstart", function(event) {
+            // event.stopPropagation();
+            // event.preventDefault();
+            if (!(event.target === fabTriggerDom || event.target === fabTriggerIconDom)) {
+                return false;
+            }
+            isClickFloatButton = true;
+            var isRealDrag = true,
+                startMovePosX = event.touches[0].clientX,
+                startMovePosY = event.touches[0].clientY,
+                oldRightPX = parseFloat(floatBtnDomStyle.right),
+                oldBottomPX = parseFloat(floatBtnDomStyle.bottom);
+
+            fixedActionContainerDom.classList.add("transition-none");
+            document.ontouchmove = function(event) {
+                fabActionContainerDom.style.display = "none";
+                fixedActionContainerDom.classList.remove("open", "circle", "top-semi-circle",
+                    "right-semi-circle", "bottom-semi-circle", "left-semi-circle", "left-top-sector",
+                    "right-top-sector", "right-bottom-sector", "left-bottom-sector");
+
+                if (isRealDrag) {
+                    fixedActionContainerDom.classList.add("transition-none");
+                    var tempSliderMoveX = oldRightPX + startMovePosX - event.touches[0].clientX
+                    if (tempSliderMoveX < 0) {
+                        tempSliderMoveX = 0;
+                    } else if (tempSliderMoveX > maxMoveX) {
+                        tempSliderMoveX = maxMoveX;
+                    }
+                    var tempSliderMoveY = oldBottomPX + startMovePosY - event.touches[0].clientY;
+                    if (tempSliderMoveY < 0) {
+                        tempSliderMoveY = 0;
+                    } else if (tempSliderMoveY > maxMoveY) {
+                        tempSliderMoveY = maxMoveY;
+                    }
+                    fixedActionContainerDom.style.right = `${tempSliderMoveX}px`;
+                    fixedActionContainerDom.style.bottom = `${tempSliderMoveY}px`;
+                }
+            };
+            document.ontouchend = function(event) {
+                isRealDrag = false;
+                fixedActionContainerDom.classList.remove("transition-none");
+                document.ontouchmove = null;
+                document.ontouchend = null;
+
+                fabActionContainerDom.style.display = "block";
+                var tempToRightpPX = parseFloat(floatBtnDomStyle.right);
+                var tempToBottomPX = parseFloat(floatBtnDomStyle.bottom);
+                var tempToLeftPX = bodyWidth - floatBtnDomWidth - tempToRightpPX;
+                var tempToTopPX = bodyHeight - floatBtnDomHeight - tempToBottomPX;
+                if (tempToRightpPX !== oldRightPX || tempToBottomPX !== oldBottomPX) {
+                    isClickFloatButton = false;
+                }
+
+                if (tempToTopPX > minCompareDistance && tempToRightpPX > minCompareDistance &&
+                    tempToBottomPX > minCompareDistance && tempToLeftPX > minCompareDistance) {
+                    // 距离上、下、左、右大于minCompareDistance，出圆形菜单
+                    fixedActionContainerDom.classList.add("circle");
+                } else if (tempToTopPX <= minCompareDistance && tempToRightpPX > minCompareDistance &&
+                    tempToBottomPX > minCompareDistance &&
+                    tempToLeftPX > minCompareDistance) {
+                    // 距离右、下、左大于minCompareDistance，距离上小于minCompareDistance.出半圆菜单
+                    fixedActionContainerDom.classList.add("top-semi-circle");
+                } else if (tempToTopPX > minCompareDistance && tempToRightpPX <= minCompareDistance &&
+                    tempToBottomPX > minCompareDistance &&
+                    tempToLeftPX > minCompareDistance) {
+                    // 距离上、下、左大于minCompareDistance，距离右小于minCompareDistance.出半圆菜单
+                    fixedActionContainerDom.classList.add("right-semi-circle");
+                } else if (tempToTopPX > minCompareDistance && tempToRightpPX > minCompareDistance &&
+                    tempToBottomPX <= minCompareDistance &&
+                    tempToLeftPX > minCompareDistance) {
+                    // 距离上、右、左大于minCompareDistance，距离下小于minCompareDistance.出半圆菜单
+                    fixedActionContainerDom.classList.add("bottom-semi-circle");
+                } else if (tempToTopPX > minCompareDistance && tempToRightpPX > minCompareDistance &&
+                    tempToBottomPX > minCompareDistance &&
+                    tempToLeftPX <= minCompareDistance) {
+                    // 距离上、右、下大于minCompareDistance，距离左小于minCompareDistance.出半圆菜单
+                    fixedActionContainerDom.classList.add("left-semi-circle");
+                } else if (tempToTopPX <= minCompareDistance && tempToRightpPX <= minCompareDistance &&
+                    tempToBottomPX > minCompareDistance &&
+                    tempToLeftPX >
+                    minCompareDistance) {
+                    // 距离下、左大于minCompareDistance，距离上、右小于minCompareDistance.出扇形菜单(右上角) 1
+                    fixedActionContainerDom.classList.add("right-top-sector");
+                } else if (tempToTopPX <= minCompareDistance && tempToRightpPX > minCompareDistance &&
+                    tempToBottomPX <= minCompareDistance &&
+                    tempToLeftPX >
+                    minCompareDistance) {
+                    // 距离右、左大于minCompareDistance，距离上、下小于minCompareDistance.左右平分菜单 2
+                    // fixedActionContainerDom.classList.add("");
+                } else if (tempToTopPX <= minCompareDistance && tempToRightpPX > minCompareDistance &&
+                    tempToBottomPX > minCompareDistance &&
+                    tempToLeftPX <=
+                    minCompareDistance) {
+                    // 距离右、下大于minCompareDistance，距离上、左小于minCompareDistance.出扇形菜单(左上角) 3
+                    fixedActionContainerDom.classList.add("left-top-sector");
+                } else if (tempToTopPX > minCompareDistance && tempToRightpPX <= minCompareDistance &&
+                    tempToBottomPX <= minCompareDistance &&
+                    tempToLeftPX >
+                    minCompareDistance) {
+                    // 距离上、左大于minCompareDistance，距离右、下小于minCompareDistance.出扇形菜单(右下角) 4
+                    fixedActionContainerDom.classList.add("right-bottom-sector");
+                } else if (tempToTopPX > minCompareDistance && tempToRightpPX <= minCompareDistance &&
+                    tempToBottomPX > minCompareDistance &&
+                    tempToLeftPX <=
+                    minCompareDistance) {
+                    // 距离上、下大于minCompareDistance，距离右、左小于minCompareDistance.上下平分菜单 5
+                    //fixedActionContainerDom.classList.add("");
+                } else if (tempToTopPX > minCompareDistance && tempToRightpPX > minCompareDistance &&
+                    tempToBottomPX <= minCompareDistance &&
+                    tempToLeftPX <=
+                    minCompareDistance) {
+                    // 距离上、右大于minCompareDistance，距离下、左小于minCompareDistance.出扇形菜单(左下角) 6
+                    fixedActionContainerDom.classList.add("left-bottom-sector");
+                } else if (tempToTopPX > minCompareDistance && tempToRightpPX <= minCompareDistance &&
+                    tempToBottomPX <= minCompareDistance &&
+                    tempToLeftPX <=
+                    minCompareDistance) {
+                    // 距离上大于minCompareDistance，距离右、下、左小于minCompareDistance.出矩形菜单
+                    fixedActionContainerDom.classList.add("top-line");
+                } else if (tempToTopPX <= minCompareDistance && tempToRightpPX > minCompareDistance &&
+                    tempToBottomPX <= minCompareDistance &&
+                    tempToLeftPX <=
+                    minCompareDistance) {
+                    // 距离右大于minCompareDistance，距离上、下、左小于minCompareDistance.出矩形菜单
+                    fixedActionContainerDom.classList.add("right-line");
+                } else if (tempToTopPX <= minCompareDistance && tempToRightpPX <= minCompareDistance &&
+                    tempToBottomPX > minCompareDistance &&
+                    tempToLeftPX <=
+                    minCompareDistance) {
+                    // 距离下大于minCompareDistance，距离上、右、左小于minCompareDistance.出矩形菜单
+                    fixedActionContainerDom.classList.add("bottom-line");
+                } else if (tempToTopPX <= minCompareDistance && tempToRightpPX <= minCompareDistance &&
+                    tempToBottomPX <= minCompareDistance &&
+                    tempToLeftPX > minCompareDistance) {
+                    // 距离左大于minCompareDistance，距离上、右、下小于minCompareDistance.出矩形菜单
+                    fixedActionContainerDom.classList.add("left-line");
+                }
+            };
+        });
+        fabTriggerDom.addEventListener("click", function() {
+            if (isClickFloatButton) {
+                if (fixedActionContainerDom.classList.contains("open")) {
+                    fixedActionContainerDom.classList.remove("open");
+                } else {
+                    fixedActionContainerDom.classList.add("open");
+                }
+            }
+        });
+        fabActionContainerDom.addEventListener("click", function(event) {
+            if (event.target.classList.contains("action-content")) {
+                switch (event.target.dataset.operateType) {
+                    case "ScanCode":
+                        {
+                            alert("扫描二维码");
+                            break;
+                        }
+                    case "AddHomeNav":
+                        {
+                            alert("添加导航");
+                            break;
+                        }
+                    case "OffLinePage":
+                        {
+                            alert("离线页面");
+                            break;
+                        }
+                    case "More":
+                        {
+                            alert("更多");
+                            break;
+                        }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

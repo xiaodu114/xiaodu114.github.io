@@ -1,0 +1,520 @@
+// 1、 纯CSS图标 ********开始********
+
+// 图标通用样式
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  font-style: normal;
+  color: #ddd;
+  text-align: left;
+  text-indent: -9999px;
+  direction: ltr;
+
+  &::after,
+  &::before {
+    content: "";
+    pointer-events: none;
+  }
+}
+
+// 加号图标
+.icon-plus {
+  width: 30px;
+  height: 30px;
+
+  &::before {
+    width: 20px;
+    height: 2px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: inset 0 0 0 32px;
+  }
+
+  &::after {
+    height: 20px;
+    width: 2px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: inset 0 0 0 32px;
+  }
+}
+
+// 心型图标
+.icon-heart {
+  width: 20px;
+  height: 20px;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  transform: rotate(45deg);
+  border-radius: 7px 0;
+  margin: 9px 7px 5px;
+  border-bottom: 2px solid;
+  border-right: 2px solid;
+
+  &::before {
+    width: 12px;
+    height: 20px;
+    position: absolute;
+    left: -10px;
+    bottom: -2px;
+    border-radius: 20px 0 0 20px;
+    border: 2px solid;
+    border-right: none;
+  }
+
+  &::after {
+    width: 20px;
+    height: 12px;
+    right: -2px;
+    top: -10px;
+    border-radius: 20px 20px 0 0;
+    position: absolute;
+    border: 2px solid;
+    border-bottom: none;
+  }
+}
+
+.icon-scan {
+  color: #000;
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  border: solid 1px currentColor;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 9px;
+    top: -1px;
+    width: 10px;
+    height: 30px;
+    color: white;
+    border-top: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: -1px;
+    top: 8px;
+    width: 30px;
+    height: 10px;
+    color: #fff;
+    border-left: 1px solid currentColor;
+    border-right: 1px solid currentColor;
+  }
+}
+
+// 纯CSS图标 ********结束********
+
+@fabTriggerRadius: 28px; // Fab Button 触发按钮半径
+@fabActionRadius: 20px; // Fab Sub Button 操作按钮半径
+@distanceBetweenCircleCenter: 86px; // 触发按钮和操作按钮两个圆心之间的距离
+@fabMenuCircleTypeRadius: 90px;
+@fabActionCounter: 12;
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+.fab-menu-container {
+  width: 2 * @fabTriggerRadius;
+  height: 2 * @fabTriggerRadius;
+  position: fixed;
+  bottom: 15px;
+  right: 20px;
+  transition: all 0.5s ease;
+  text-align: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+
+  >.fab-trigger {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    background-color: #06c;
+    color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.11);
+    transition: 0.3s;
+  }
+}
+
+.fab-menu-container.transition-none {
+  transition: none;
+}
+
+/* 以下为弹出菜单样式 */
+
+.fab-menu-container {
+  >.fab-action-container {
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: @fabTriggerRadius;
+    left: @fabTriggerRadius;
+
+    >.action {
+      width: 0;
+      height: 0;
+      position: absolute;
+      transform: scale(0, 0);
+      transition: 0.3s;
+
+      .for(@i) when (@i <=4) {
+        &:nth-child(@{i}) {
+          transition: 0.3s @i*0.3s;
+        }
+
+        .for((@i + 1));
+      }
+
+      .for(1);
+
+      >.action-content {
+        width: 2 * @fabActionRadius;
+        height: 2 * @fabActionRadius;
+        position: absolute;
+        top: -@fabActionRadius;
+        left: -@fabActionRadius;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin: auto;
+        cursor: pointer;
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.11);
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+    }
+
+    >.action {
+      &:nth-child(1) {
+        >.action-content {
+          background-image: url(./images/barcode-scan.png);
+          background-color: #8e24aa;
+        }
+      }
+
+      &:nth-child(2) {
+        >.action-content {
+          background-image: url(./images/link-plus.png);
+          background-color: #00e676;
+        }
+      }
+
+      &:nth-child(3) {
+        >.action-content {
+          background-image: url(./images/file-cancel-outline.png);
+          background-color: #40c4ff;
+        }
+      }
+
+      &:nth-child(4) {
+        >.action-content {
+          background-image: url(./images/dots-horizontal.png);
+          background-color: #ffa000;
+        }
+      }
+    }
+  }
+}
+
+.fab-menu-container.open {
+  >.fab-trigger {
+    transform: rotate(225deg);
+  }
+
+  >.fab-action-container {
+    >.action {
+      transform: scale(1, 1);
+    }
+  }
+}
+
+/* 打开圆形菜单  开始 */
+
+.fab-menu-container.circle {
+  >.fab-action-container {
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: 0.3s 0.3s;
+
+    >.action>.action-content {
+      color: #fff;
+      box-shadow: none;
+      background-color: transparent;
+    }
+
+    >.action:nth-child(1) {
+      left: @fabMenuCircleTypeRadius;
+      top: (@fabMenuCircleTypeRadius - @fabTriggerRadius)/2;
+    }
+
+    >.action:nth-child(2) {
+      left: 2 * @fabMenuCircleTypeRadius - (@fabMenuCircleTypeRadius - @fabTriggerRadius)/2;
+      top: @fabMenuCircleTypeRadius;
+    }
+
+    >.action:nth-child(3) {
+      top: 2 * @fabMenuCircleTypeRadius - (@fabMenuCircleTypeRadius - @fabTriggerRadius)/2;
+      left: @fabMenuCircleTypeRadius;
+    }
+
+    >.action:nth-child(4) {
+      top: @fabMenuCircleTypeRadius;
+      left: (@fabMenuCircleTypeRadius - @fabTriggerRadius)/2;
+    }
+  }
+}
+
+.fab-menu-container.circle.open {
+  >.fab-action-container {
+    width: 2 * @fabMenuCircleTypeRadius;
+    height: 2 * @fabMenuCircleTypeRadius;
+    left: @fabTriggerRadius - @fabMenuCircleTypeRadius;
+    top: @fabTriggerRadius - @fabMenuCircleTypeRadius;
+    opacity: 1;
+
+    >.action {
+      transform: scale(1, 1);
+      transition: 0.3s 0.6s;
+    }
+  }
+}
+
+/* 打开圆形菜单  结束 */
+
+/* 打开上半圆菜单 开始 */
+.fab-menu-container.top-semi-circle,
+.fab-menu-container.top-semi-circle.open {
+  >.fab-action-container {
+    >.action {
+
+      // 钟表的3、5、7、9的位置
+      .for(@i) when (@i <=4) {
+        &:nth-child(@{i}) {
+          left: @distanceBetweenCircleCenter * cos((2 * @i - 2) * 30deg);
+          top: @distanceBetweenCircleCenter * sin((2 * @i - 2) * 30deg);
+        }
+
+        .for((@i + 1));
+      }
+
+      .for(1);
+    }
+  }
+}
+
+/* 打开上半圆菜单 结束 */
+
+/* 打开右半圆菜单 开始 */
+.fab-menu-container.right-semi-circle,
+.fab-menu-container.right-semi-circle.open {
+  >.fab-action-container {
+    >.action {
+
+      // 钟表的6、8、10、12的位置
+      .for(@i) when (@i <=4) {
+        &:nth-child(@{i}) {
+          left: @distanceBetweenCircleCenter * cos((2 * @i + 1) * 30deg);
+          top: @distanceBetweenCircleCenter * sin((2 * @i + 1) * 30deg);
+        }
+
+        .for((@i + 1));
+      }
+
+      .for(1);
+    }
+  }
+}
+
+/* 打开右半圆菜单 结束 */
+
+/* 打开下半圆菜单 开始 */
+.fab-menu-container.bottom-semi-circle,
+.fab-menu-container.bottom-semi-circle.open {
+  >.fab-action-container {
+    >.action {
+
+      // 钟表的3、9、11、1的位置
+      &:nth-child(1) {
+        left: @distanceBetweenCircleCenter * cos((3 - 3) * 30deg);
+        top: @distanceBetweenCircleCenter * sin((3 - 3) * 30deg);
+      }
+
+      &:nth-child(2) {
+        left: @distanceBetweenCircleCenter * cos((9 - 3) * 30deg);
+        top: @distanceBetweenCircleCenter * sin((9 - 3) * 30deg);
+      }
+
+      &:nth-child(3) {
+        left: @distanceBetweenCircleCenter * cos((11 - 3) * 30deg);
+        top: @distanceBetweenCircleCenter * sin((11 - 3) * 30deg);
+      }
+
+      &:nth-child(4) {
+        left: @distanceBetweenCircleCenter * cos((1 - 3) * 30deg);
+        top: @distanceBetweenCircleCenter * sin((1 - 3) * 30deg);
+      }
+    }
+  }
+}
+
+/* 打开下半圆菜单 结束 */
+
+/* 打开左半圆菜单 开始 */
+.fab-menu-container.left-semi-circle,
+.fab-menu-container.left-semi-circle.open {
+  >.fab-action-container {
+    >.action {
+
+      // 钟表的12、2、4、6的位置
+      &:nth-child(1) {
+        left: @distanceBetweenCircleCenter * cos((12 - 3) * 30deg);
+        top: @distanceBetweenCircleCenter * sin((12 - 3) * 30deg);
+      }
+
+      &:nth-child(2) {
+        left: @distanceBetweenCircleCenter * cos((2 - 3) * 30deg);
+        top: @distanceBetweenCircleCenter * sin((2 - 3) * 30deg);
+      }
+
+      &:nth-child(3) {
+        left: @distanceBetweenCircleCenter * cos((4 - 3) * 30deg);
+        top: @distanceBetweenCircleCenter * sin((4 - 3) * 30deg);
+      }
+
+      &:nth-child(4) {
+        left: @distanceBetweenCircleCenter * cos((6 - 3) * 30deg);
+        top: @distanceBetweenCircleCenter * sin((6 - 3) * 30deg);
+      }
+    }
+  }
+}
+
+/* 打开左半圆菜单 结束 */
+
+/* 打开左上角扇形菜单 开始 */
+.fab-menu-container.left-top-sector,
+.fab-menu-container.left-top-sector.open {
+  >.fab-action-container {
+    >.action {
+
+      // 钟表的3、4、5、6的位置
+      .for(@i) when (@i <=4) {
+        &:nth-child(@{i}) {
+          left: @distanceBetweenCircleCenter * cos((@i - 1) * 30deg);
+          top: @distanceBetweenCircleCenter * sin((@i - 1) * 30deg);
+        }
+
+        .for((@i + 1));
+      }
+
+      .for(1);
+    }
+  }
+}
+
+/* 打开左上角扇形菜单 结束 */
+
+/* 打开右上角扇形菜单 开始 */
+.fab-menu-container.right-top-sector,
+.fab-menu-container.right-top-sector.open {
+  >.fab-action-container {
+    >.action {
+
+      // 钟表的6、7、8、9的位置
+      .for(@i) when (@i <=4) {
+        &:nth-child(@{i}) {
+          left: @distanceBetweenCircleCenter * cos((@i + 2) * 30deg);
+          top: @distanceBetweenCircleCenter * sin((@i + 2) * 30deg);
+        }
+
+        .for((@i + 1));
+      }
+
+      .for(1);
+    }
+  }
+}
+
+/* 打开右上角扇形菜单 结束 */
+
+/* 打开右下角扇形菜单 开始 */
+.fab-menu-container.right-bottom-sector,
+.fab-menu-container.right-bottom-sector.open {
+  >.fab-action-container {
+    >.action {
+
+      // 钟表的9、10、11、12的位置
+      .for(@i) when (@i <=4) {
+        &:nth-child(@{i}) {
+          left: @distanceBetweenCircleCenter * cos((@i + 5) * 30deg);
+          top: @distanceBetweenCircleCenter * sin((@i + 5) * 30deg);
+          transition: 0.3s @i*0.3s;
+        }
+
+        .for((@i + 1));
+      }
+
+      .for(1);
+    }
+  }
+}
+
+/* 打开右下角扇形菜单 结束 */
+
+/* 打开左下角扇形菜单 开始 */
+.fab-menu-container.left-bottom-sector,
+.fab-menu-container.left-bottom-sector.open {
+  >.fab-action-container {
+    >.action {
+
+      // 钟表的12、1、2、3的位置
+      &:nth-child(1) {
+        left: @distanceBetweenCircleCenter * cos((12 - 3) * 30deg);
+        top: @distanceBetweenCircleCenter * sin((12 - 3) * 30deg);
+      }
+
+      &:nth-child(2) {
+        left: @distanceBetweenCircleCenter * cos((1 - 3) * 30deg);
+        top: @distanceBetweenCircleCenter * sin((1 - 3) * 30deg);
+      }
+
+      &:nth-child(3) {
+        left: @distanceBetweenCircleCenter * cos((2 - 3) * 30deg);
+        top: @distanceBetweenCircleCenter * sin((2 - 3) * 30deg);
+      }
+
+      &:nth-child(4) {
+        left: @distanceBetweenCircleCenter * cos((3 - 3) * 30deg);
+        top: @distanceBetweenCircleCenter * sin((3 - 3) * 30deg);
+      }
+    }
+  }
+}
+
+/* 打开左下角扇形菜单 结束 */

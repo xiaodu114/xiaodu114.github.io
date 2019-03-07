@@ -1,0 +1,422 @@
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  font-style: normal;
+  color: #ddd;
+  text-align: left;
+  text-indent: -9999px;
+  direction: ltr;
+}
+.icon::after,
+.icon::before {
+  content: "";
+  pointer-events: none;
+}
+.icon-plus {
+  width: 30px;
+  height: 30px;
+}
+.icon-plus::before {
+  width: 20px;
+  height: 2px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: inset 0 0 0 32px;
+}
+.icon-plus::after {
+  height: 20px;
+  width: 2px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: inset 0 0 0 32px;
+}
+.icon-heart {
+  width: 20px;
+  height: 20px;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  transform: rotate(45deg);
+  border-radius: 7px 0;
+  margin: 9px 7px 5px;
+  border-bottom: 2px solid;
+  border-right: 2px solid;
+}
+.icon-heart::before {
+  width: 12px;
+  height: 20px;
+  position: absolute;
+  left: -10px;
+  bottom: -2px;
+  border-radius: 20px 0 0 20px;
+  border: 2px solid;
+  border-right: none;
+}
+.icon-heart::after {
+  width: 20px;
+  height: 12px;
+  right: -2px;
+  top: -10px;
+  border-radius: 20px 20px 0 0;
+  position: absolute;
+  border: 2px solid;
+  border-bottom: none;
+}
+.icon-scan {
+  color: #000;
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  border: solid 1px currentColor;
+}
+.icon-scan::before {
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: -1px;
+  width: 10px;
+  height: 30px;
+  color: white;
+  border-top: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+}
+.icon-scan::after {
+  content: "";
+  position: absolute;
+  left: -1px;
+  top: 8px;
+  width: 30px;
+  height: 10px;
+  color: #fff;
+  border-left: 1px solid currentColor;
+  border-right: 1px solid currentColor;
+}
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+.fab-menu-container {
+  width: 56px;
+  height: 56px;
+  position: fixed;
+  bottom: 15px;
+  right: 20px;
+  transition: all 0.5s ease;
+  text-align: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+}
+.fab-menu-container > .fab-trigger {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  background-color: #06c;
+  color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.11);
+  transition: 0.3s;
+}
+.fab-menu-container.transition-none {
+  transition: none;
+}
+/* 以下为弹出菜单样式 */
+.fab-menu-container > .fab-action-container {
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: 28px;
+  left: 28px;
+}
+.fab-menu-container > .fab-action-container > .action {
+  width: 0;
+  height: 0;
+  position: absolute;
+  transform: scale(0, 0);
+  transition: 0.3s;
+}
+.fab-menu-container > .fab-action-container > .action:nth-child( 1) {
+  transition: 0.3s 0.3s;
+}
+.fab-menu-container > .fab-action-container > .action:nth-child( 2) {
+  transition: 0.3s 0.6s;
+}
+.fab-menu-container > .fab-action-container > .action:nth-child( 3) {
+  transition: 0.3s 0.9s;
+}
+.fab-menu-container > .fab-action-container > .action:nth-child( 4) {
+  transition: 0.3s 1.2s;
+}
+.fab-menu-container > .fab-action-container > .action > .action-content {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin: auto;
+  cursor: pointer;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.11);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.fab-menu-container > .fab-action-container > .action:nth-child(1) > .action-content {
+  background-image: url(images/barcode-scan.png);
+  background-color: #8e24aa;
+}
+.fab-menu-container > .fab-action-container > .action:nth-child(2) > .action-content {
+  background-image: url(images/link-plus.png);
+  background-color: #00e676;
+}
+.fab-menu-container > .fab-action-container > .action:nth-child(3) > .action-content {
+  background-image: url(images/file-cancel-outline.png);
+  background-color: #40c4ff;
+}
+.fab-menu-container > .fab-action-container > .action:nth-child(4) > .action-content {
+  background-image: url(images/dots-horizontal.png);
+  background-color: #ffa000;
+}
+.fab-menu-container.open > .fab-trigger {
+  transform: rotate(225deg);
+}
+.fab-menu-container.open > .fab-action-container > .action {
+  transform: scale(1, 1);
+}
+/* 打开圆形菜单  开始 */
+.fab-menu-container.circle > .fab-action-container {
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition: 0.3s 0.3s;
+}
+.fab-menu-container.circle > .fab-action-container > .action > .action-content {
+  color: #fff;
+  box-shadow: none;
+  background-color: transparent;
+}
+.fab-menu-container.circle > .fab-action-container > .action:nth-child(1) {
+  left: 90px;
+  top: 31px;
+}
+.fab-menu-container.circle > .fab-action-container > .action:nth-child(2) {
+  left: 149px;
+  top: 90px;
+}
+.fab-menu-container.circle > .fab-action-container > .action:nth-child(3) {
+  top: 149px;
+  left: 90px;
+}
+.fab-menu-container.circle > .fab-action-container > .action:nth-child(4) {
+  top: 90px;
+  left: 31px;
+}
+.fab-menu-container.circle.open > .fab-action-container {
+  width: 180px;
+  height: 180px;
+  left: -62px;
+  top: -62px;
+  opacity: 1;
+}
+.fab-menu-container.circle.open > .fab-action-container > .action {
+  transform: scale(1, 1);
+  transition: 0.3s 0.6s;
+}
+/* 打开圆形菜单  结束 */
+/* 打开上半圆菜单 开始 */
+.fab-menu-container.top-semi-circle > .fab-action-container > .action:nth-child( 1),
+.fab-menu-container.top-semi-circle.open > .fab-action-container > .action:nth-child( 1) {
+  left: 86px;
+  top: 0px;
+}
+.fab-menu-container.top-semi-circle > .fab-action-container > .action:nth-child( 2),
+.fab-menu-container.top-semi-circle.open > .fab-action-container > .action:nth-child( 2) {
+  left: 43px;
+  top: 74.47818473px;
+}
+.fab-menu-container.top-semi-circle > .fab-action-container > .action:nth-child( 3),
+.fab-menu-container.top-semi-circle.open > .fab-action-container > .action:nth-child( 3) {
+  left: -43px;
+  top: 74.47818473px;
+}
+.fab-menu-container.top-semi-circle > .fab-action-container > .action:nth-child( 4),
+.fab-menu-container.top-semi-circle.open > .fab-action-container > .action:nth-child( 4) {
+  left: -86px;
+  top: 0px;
+}
+/* 打开上半圆菜单 结束 */
+/* 打开右半圆菜单 开始 */
+.fab-menu-container.right-semi-circle > .fab-action-container > .action:nth-child( 1),
+.fab-menu-container.right-semi-circle.open > .fab-action-container > .action:nth-child( 1) {
+  left: 0px;
+  top: 86px;
+}
+.fab-menu-container.right-semi-circle > .fab-action-container > .action:nth-child( 2),
+.fab-menu-container.right-semi-circle.open > .fab-action-container > .action:nth-child( 2) {
+  left: -74.47818473px;
+  top: 43px;
+}
+.fab-menu-container.right-semi-circle > .fab-action-container > .action:nth-child( 3),
+.fab-menu-container.right-semi-circle.open > .fab-action-container > .action:nth-child( 3) {
+  left: -74.47818473px;
+  top: -43px;
+}
+.fab-menu-container.right-semi-circle > .fab-action-container > .action:nth-child( 4),
+.fab-menu-container.right-semi-circle.open > .fab-action-container > .action:nth-child( 4) {
+  left: 0px;
+  top: -86px;
+}
+/* 打开右半圆菜单 结束 */
+/* 打开下半圆菜单 开始 */
+.fab-menu-container.bottom-semi-circle > .fab-action-container > .action:nth-child(1),
+.fab-menu-container.bottom-semi-circle.open > .fab-action-container > .action:nth-child(1) {
+  left: 86px;
+  top: 0px;
+}
+.fab-menu-container.bottom-semi-circle > .fab-action-container > .action:nth-child(2),
+.fab-menu-container.bottom-semi-circle.open > .fab-action-container > .action:nth-child(2) {
+  left: -86px;
+  top: 0px;
+}
+.fab-menu-container.bottom-semi-circle > .fab-action-container > .action:nth-child(3),
+.fab-menu-container.bottom-semi-circle.open > .fab-action-container > .action:nth-child(3) {
+  left: -43px;
+  top: -74.47818473px;
+}
+.fab-menu-container.bottom-semi-circle > .fab-action-container > .action:nth-child(4),
+.fab-menu-container.bottom-semi-circle.open > .fab-action-container > .action:nth-child(4) {
+  left: 43px;
+  top: -74.47818473px;
+}
+/* 打开下半圆菜单 结束 */
+/* 打开左半圆菜单 开始 */
+.fab-menu-container.left-semi-circle > .fab-action-container > .action:nth-child(1),
+.fab-menu-container.left-semi-circle.open > .fab-action-container > .action:nth-child(1) {
+  left: 0px;
+  top: -86px;
+}
+.fab-menu-container.left-semi-circle > .fab-action-container > .action:nth-child(2),
+.fab-menu-container.left-semi-circle.open > .fab-action-container > .action:nth-child(2) {
+  left: 74.47818473px;
+  top: -43px;
+}
+.fab-menu-container.left-semi-circle > .fab-action-container > .action:nth-child(3),
+.fab-menu-container.left-semi-circle.open > .fab-action-container > .action:nth-child(3) {
+  left: 74.47818473px;
+  top: 43px;
+}
+.fab-menu-container.left-semi-circle > .fab-action-container > .action:nth-child(4),
+.fab-menu-container.left-semi-circle.open > .fab-action-container > .action:nth-child(4) {
+  left: 0px;
+  top: 86px;
+}
+/* 打开左半圆菜单 结束 */
+/* 打开左上角扇形菜单 开始 */
+.fab-menu-container.left-top-sector > .fab-action-container > .action:nth-child( 1),
+.fab-menu-container.left-top-sector.open > .fab-action-container > .action:nth-child( 1) {
+  left: 86px;
+  top: 0px;
+}
+.fab-menu-container.left-top-sector > .fab-action-container > .action:nth-child( 2),
+.fab-menu-container.left-top-sector.open > .fab-action-container > .action:nth-child( 2) {
+  left: 74.47818473px;
+  top: 43px;
+}
+.fab-menu-container.left-top-sector > .fab-action-container > .action:nth-child( 3),
+.fab-menu-container.left-top-sector.open > .fab-action-container > .action:nth-child( 3) {
+  left: 43px;
+  top: 74.47818473px;
+}
+.fab-menu-container.left-top-sector > .fab-action-container > .action:nth-child( 4),
+.fab-menu-container.left-top-sector.open > .fab-action-container > .action:nth-child( 4) {
+  left: 0px;
+  top: 86px;
+}
+/* 打开左上角扇形菜单 结束 */
+/* 打开右上角扇形菜单 开始 */
+.fab-menu-container.right-top-sector > .fab-action-container > .action:nth-child( 1),
+.fab-menu-container.right-top-sector.open > .fab-action-container > .action:nth-child( 1) {
+  left: 0px;
+  top: 86px;
+}
+.fab-menu-container.right-top-sector > .fab-action-container > .action:nth-child( 2),
+.fab-menu-container.right-top-sector.open > .fab-action-container > .action:nth-child( 2) {
+  left: -43px;
+  top: 74.47818473px;
+}
+.fab-menu-container.right-top-sector > .fab-action-container > .action:nth-child( 3),
+.fab-menu-container.right-top-sector.open > .fab-action-container > .action:nth-child( 3) {
+  left: -74.47818473px;
+  top: 43px;
+}
+.fab-menu-container.right-top-sector > .fab-action-container > .action:nth-child( 4),
+.fab-menu-container.right-top-sector.open > .fab-action-container > .action:nth-child( 4) {
+  left: -86px;
+  top: 0px;
+}
+/* 打开右上角扇形菜单 结束 */
+/* 打开右下角扇形菜单 开始 */
+.fab-menu-container.right-bottom-sector > .fab-action-container > .action:nth-child( 1),
+.fab-menu-container.right-bottom-sector.open > .fab-action-container > .action:nth-child( 1) {
+  left: -86px;
+  top: 0px;
+  transition: 0.3s 0.3s;
+}
+.fab-menu-container.right-bottom-sector > .fab-action-container > .action:nth-child( 2),
+.fab-menu-container.right-bottom-sector.open > .fab-action-container > .action:nth-child( 2) {
+  left: -74.47818473px;
+  top: -43px;
+  transition: 0.3s 0.6s;
+}
+.fab-menu-container.right-bottom-sector > .fab-action-container > .action:nth-child( 3),
+.fab-menu-container.right-bottom-sector.open > .fab-action-container > .action:nth-child( 3) {
+  left: -43px;
+  top: -74.47818473px;
+  transition: 0.3s 0.9s;
+}
+.fab-menu-container.right-bottom-sector > .fab-action-container > .action:nth-child( 4),
+.fab-menu-container.right-bottom-sector.open > .fab-action-container > .action:nth-child( 4) {
+  left: 0px;
+  top: -86px;
+  transition: 0.3s 1.2s;
+}
+/* 打开右下角扇形菜单 结束 */
+/* 打开左下角扇形菜单 开始 */
+.fab-menu-container.left-bottom-sector > .fab-action-container > .action:nth-child(1),
+.fab-menu-container.left-bottom-sector.open > .fab-action-container > .action:nth-child(1) {
+  left: 0px;
+  top: -86px;
+}
+.fab-menu-container.left-bottom-sector > .fab-action-container > .action:nth-child(2),
+.fab-menu-container.left-bottom-sector.open > .fab-action-container > .action:nth-child(2) {
+  left: 43px;
+  top: -74.47818473px;
+}
+.fab-menu-container.left-bottom-sector > .fab-action-container > .action:nth-child(3),
+.fab-menu-container.left-bottom-sector.open > .fab-action-container > .action:nth-child(3) {
+  left: 74.47818473px;
+  top: -43px;
+}
+.fab-menu-container.left-bottom-sector > .fab-action-container > .action:nth-child(4),
+.fab-menu-container.left-bottom-sector.open > .fab-action-container > .action:nth-child(4) {
+  left: 86px;
+  top: 0px;
+}
+/* 打开左下角扇形菜单 结束 */
