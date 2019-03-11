@@ -12,7 +12,12 @@
 <body>
     <div>
         <p>
-            <center><strong>请在手机上查看，或者Chrome手机模式</strong></center>
+            <center><strong>为了更好的效果，您可以按照以下方式浏览：</strong></center>
+            <center><strong>1、在手机浏览器中浏览</strong></center>
+            <center><strong>2、桌面浏览器手机模式</strong></center>
+            <center>您可以任意改变屏幕大小</center>
+            <center><strong>注意：您不妨拖拽按钮试试，并在不同的位置点击菜单</strong></center>
+            <center><strong>共有圆、半圆、1/4圆、直线、射线五种打开方式</strong></center>
             <center>图标来源：<a href="https://materialdesignicons.com/" target="_blank">Material Design Icons</a></center>
         </p>
         <div class="fab-menu-container">
@@ -71,7 +76,8 @@
                 fabActionContainerDom.style.display = "none";
                 fixedActionContainerDom.classList.remove("open", "circle", "top-semi-circle",
                     "right-semi-circle", "bottom-semi-circle", "left-semi-circle", "left-top-sector",
-                    "right-top-sector", "right-bottom-sector", "left-bottom-sector");
+                    "right-top-sector", "right-bottom-sector", "left-bottom-sector", "left-right-line",
+                    "top-bottom-line", "top-line", "right-line", "bottom-line", "left-line");
 
                 if (isRealDrag) {
                     fixedActionContainerDom.classList.add("transition-none");
@@ -141,7 +147,7 @@
                     tempToLeftPX >
                     minCompareDistance) {
                     // 距离右、左大于minCompareDistance，距离上、下小于minCompareDistance.左右平分菜单 2
-                    // fixedActionContainerDom.classList.add("");
+                    fixedActionContainerDom.classList.add("left-right-line");
                 } else if (tempToTopPX <= minCompareDistance && tempToRightpPX > minCompareDistance &&
                     tempToBottomPX > minCompareDistance &&
                     tempToLeftPX <=
@@ -159,7 +165,7 @@
                     tempToLeftPX <=
                     minCompareDistance) {
                     // 距离上、下大于minCompareDistance，距离右、左小于minCompareDistance.上下平分菜单 5
-                    //fixedActionContainerDom.classList.add("");
+                    fixedActionContainerDom.classList.add("top-bottom-line");
                 } else if (tempToTopPX > minCompareDistance && tempToRightpPX > minCompareDistance &&
                     tempToBottomPX <= minCompareDistance &&
                     tempToLeftPX <=

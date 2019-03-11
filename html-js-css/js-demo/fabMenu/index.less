@@ -115,8 +115,10 @@
 
 @fabTriggerRadius: 28px; // Fab Button 触发按钮半径
 @fabActionRadius: 20px; // Fab Sub Button 操作按钮半径
+@fabActionLineDistance: 10px; // 两个操作按钮的距离
+@fabActionEdgeDistance: 5px; // 操作按钮的边缘距离
 @distanceBetweenCircleCenter: 86px; // 触发按钮和操作按钮两个圆心之间的距离
-@fabMenuCircleTypeRadius: 90px;
+@fabMenuCircleTypeRadius: 90px; // 圆形菜单时的大圆半径
 @fabActionCounter: 12;
 
 *,
@@ -518,3 +520,311 @@ body {
 }
 
 /* 打开左下角扇形菜单 结束 */
+
+/* 打开水平菜单 开始 */
+.fab-menu-container.left-right-line {
+  >.fab-action-container {
+    transition: 0.3s;
+    height: 2 * @fabTriggerRadius + 2 * @fabActionEdgeDistance;
+    width: 4 * 2 * @fabActionRadius + 2 * @fabTriggerRadius + 4 * @fabActionLineDistance + 2 * @fabActionEdgeDistance;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: (2 * @fabTriggerRadius + 2 * @fabActionEdgeDistance)/2;
+    top: -@fabActionEdgeDistance;
+    left: @fabTriggerRadius - (4 * 2 * @fabActionRadius + 2 * @fabTriggerRadius + 4 * @fabActionLineDistance + 2 * @fabActionEdgeDistance)/2;
+    opacity: 0;
+    transition: none;
+
+    >.action {
+      top: (2 * @fabTriggerRadius + 10)/2;
+      transition: none;
+
+      &:nth-child(1) {
+        left: @fabActionEdgeDistance + @fabActionRadius;
+      }
+
+      &:nth-child(2) {
+        left: @fabActionEdgeDistance + 2 * @fabActionRadius + @fabActionLineDistance + @fabActionRadius;
+      }
+
+      &:nth-child(3) {
+        right: @fabActionEdgeDistance + 2 * @fabActionRadius + @fabActionLineDistance + @fabActionRadius;
+      }
+
+      &:nth-child(4) {
+        right: @fabActionEdgeDistance + @fabActionRadius;
+      }
+    }
+  }
+}
+
+.fab-menu-container.left-right-line.open {
+  >.fab-action-container {
+    opacity: 1;
+
+    >.action {
+      transition: 0.2s 0.3s;
+    }
+  }
+}
+
+/* 打开水平菜单 结束 */
+
+/* 打开垂直菜单 开始 */
+.fab-menu-container.top-bottom-line {
+  >.fab-action-container {
+    transition: 0.3s;
+    width: 2 * @fabTriggerRadius + 2 * @fabActionEdgeDistance;
+    height: 4 * 2 * @fabActionRadius + 2 * @fabTriggerRadius + 4 * @fabActionLineDistance + 2 * @fabActionEdgeDistance;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: (2 * @fabTriggerRadius + 2 * @fabActionEdgeDistance)/2;
+    left: -@fabActionEdgeDistance;
+    top: @fabTriggerRadius - (4 * 2 * @fabActionRadius + 2 * @fabTriggerRadius + 4 * @fabActionLineDistance + 2 * @fabActionEdgeDistance)/2;
+    opacity: 0;
+    transition: none;
+
+    >.action {
+      left: (2 * @fabTriggerRadius + 10)/2;
+      transition: none;
+
+      &:nth-child(1) {
+        top: @fabActionEdgeDistance + @fabActionRadius;
+      }
+
+      &:nth-child(2) {
+        top: @fabActionEdgeDistance + 2 * @fabActionRadius + @fabActionLineDistance + @fabActionRadius;
+      }
+
+      &:nth-child(3) {
+        bottom: @fabActionEdgeDistance + 2 * @fabActionRadius + @fabActionLineDistance + @fabActionRadius;
+      }
+
+      &:nth-child(4) {
+        bottom: @fabActionEdgeDistance + @fabActionRadius;
+      }
+    }
+  }
+}
+
+.fab-menu-container.top-bottom-line.open {
+  >.fab-action-container {
+    opacity: 1;
+
+    >.action {
+      transition: 0.2s 0.3s;
+    }
+  }
+}
+
+/* 打开垂直菜单 结束 */
+
+/* 向左打开水平方向菜单 开始 */
+.fab-menu-container.left-line {
+  >.fab-action-container {
+    >.action {
+      right: 0;
+
+      &:nth-child(1) {
+        transition: 0.3s 1.2s;
+      }
+
+      &:nth-child(2) {
+        transition: 0.3s 0.9s;
+      }
+
+      &:nth-child(3) {
+        transition: 0.3s 0.6s;
+      }
+
+      &:nth-child(4) {
+        transition: 0.3s 0.3s;
+      }
+    }
+  }
+}
+
+.fab-menu-container.left-line.open {
+  >.fab-action-container {
+    >.action {
+      &:nth-child(1) {
+        right: @fabTriggerRadius + 7 * @fabActionRadius + 4 * @fabActionLineDistance;
+        transition: 0.3s 0.3s;
+      }
+
+      &:nth-child(2) {
+        right: @fabTriggerRadius + 5 * @fabActionRadius + 3 * @fabActionLineDistance;
+        transition: 0.3s 0.6s;
+      }
+
+      &:nth-child(3) {
+        right: @fabTriggerRadius + 3 * @fabActionRadius + 2 * @fabActionLineDistance;
+        transition: 0.3s 0.9s;
+      }
+
+      &:nth-child(4) {
+        right: @fabTriggerRadius + @fabActionRadius + @fabActionLineDistance;
+        transition: 0.3s 1.2s;
+      }
+    }
+  }
+}
+
+/* 向左打开水平方向菜单 结束 */
+
+/* 向上打开水平方向菜单 开始 */
+.fab-menu-container.top-line {
+  >.fab-action-container {
+    >.action {
+      top: 0;
+
+      &:nth-child(1) {
+        transition: 0.3s 1.2s;
+      }
+
+      &:nth-child(2) {
+        transition: 0.3s 0.9s;
+      }
+
+      &:nth-child(3) {
+        transition: 0.3s 0.6s;
+      }
+
+      &:nth-child(4) {
+        transition: 0.3s 0.3s;
+      }
+    }
+  }
+}
+
+.fab-menu-container.top-line.open {
+  >.fab-action-container {
+    >.action {
+      &:nth-child(1) {
+        top: -(@fabTriggerRadius + 7 * @fabActionRadius + 4 * @fabActionLineDistance);
+        transition: 0.3s 0.3s;
+      }
+
+      &:nth-child(2) {
+        top: -(@fabTriggerRadius + 5 * @fabActionRadius + 3 * @fabActionLineDistance);
+        transition: 0.3s 0.6s;
+      }
+
+      &:nth-child(3) {
+        top: -(@fabTriggerRadius + 3 * @fabActionRadius + 2 * @fabActionLineDistance);
+        transition: 0.3s 0.9s;
+      }
+
+      &:nth-child(4) {
+        top: -(@fabTriggerRadius + @fabActionRadius + @fabActionLineDistance);
+        transition: 0.3s 1.2s;
+      }
+    }
+  }
+}
+
+/* 向上打开水平方向菜单 结束 */
+
+/* 向右打开水平方向菜单 开始 */
+.fab-menu-container.right-line {
+  >.fab-action-container {
+    >.action {
+      left: 0;
+
+      &:nth-child(1) {
+        transition: 0.3s 1.2s;
+      }
+
+      &:nth-child(2) {
+        transition: 0.3s 0.9s;
+      }
+
+      &:nth-child(3) {
+        transition: 0.3s 0.6s;
+      }
+
+      &:nth-child(4) {
+        transition: 0.3s 0.3s;
+      }
+    }
+  }
+}
+
+.fab-menu-container.right-line.open {
+  >.fab-action-container {
+    >.action {
+      &:nth-child(1) {
+        left: @fabTriggerRadius + 7 * @fabActionRadius + 4 * @fabActionLineDistance;
+        transition: 0.3s 0.3s;
+      }
+
+      &:nth-child(2) {
+        left: @fabTriggerRadius + 5 * @fabActionRadius + 3 * @fabActionLineDistance;
+        transition: 0.3s 0.6s;
+      }
+
+      &:nth-child(3) {
+        left: @fabTriggerRadius + 3 * @fabActionRadius + 2 * @fabActionLineDistance;
+        transition: 0.3s 0.9s;
+      }
+
+      &:nth-child(4) {
+        left: @fabTriggerRadius + @fabActionRadius + @fabActionLineDistance;
+        transition: 0.3s 1.2s;
+      }
+    }
+  }
+}
+
+/* 向右打开水平方向菜单 结束 */
+
+/* 向下打开水平方向菜单 开始 */
+.fab-menu-container.bottom-line {
+  >.fab-action-container {
+    >.action {
+      bottom: 0;
+
+      &:nth-child(1) {
+        transition: 0.3s 1.2s;
+      }
+
+      &:nth-child(2) {
+        transition: 0.3s 0.9s;
+      }
+
+      &:nth-child(3) {
+        transition: 0.3s 0.6s;
+      }
+
+      &:nth-child(4) {
+        transition: 0.3s 0.3s;
+      }
+    }
+  }
+}
+
+.fab-menu-container.bottom-line.open {
+  >.fab-action-container {
+    >.action {
+      &:nth-child(1) {
+        bottom: -(@fabTriggerRadius + 7 * @fabActionRadius + 4 * @fabActionLineDistance);
+        transition: 0.3s 0.3s;
+      }
+
+      &:nth-child(2) {
+        bottom: -(@fabTriggerRadius + 5 * @fabActionRadius + 3 * @fabActionLineDistance);
+        transition: 0.3s 0.6s;
+      }
+
+      &:nth-child(3) {
+        bottom: -(@fabTriggerRadius + 3 * @fabActionRadius + 2 * @fabActionLineDistance);
+        transition: 0.3s 0.9s;
+      }
+
+      &:nth-child(4) {
+        bottom: -(@fabTriggerRadius + @fabActionRadius + @fabActionLineDistance);
+        transition: 0.3s 1.2s;
+      }
+    }
+  }
+}
+
+/* 向下打开水平方向菜单 结束 */

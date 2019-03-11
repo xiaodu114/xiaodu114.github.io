@@ -420,3 +420,205 @@ body {
   top: 0px;
 }
 /* 打开左下角扇形菜单 结束 */
+/* 打开水平菜单 开始 */
+.fab-menu-container.left-right-line > .fab-action-container {
+  transition: 0.3s;
+  height: 66px;
+  width: 266px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 33px;
+  top: -5px;
+  left: -105px;
+  opacity: 0;
+  transition: none;
+}
+.fab-menu-container.left-right-line > .fab-action-container > .action {
+  top: 33px;
+  transition: none;
+}
+.fab-menu-container.left-right-line > .fab-action-container > .action:nth-child(1) {
+  left: 25px;
+}
+.fab-menu-container.left-right-line > .fab-action-container > .action:nth-child(2) {
+  left: 75px;
+}
+.fab-menu-container.left-right-line > .fab-action-container > .action:nth-child(3) {
+  right: 75px;
+}
+.fab-menu-container.left-right-line > .fab-action-container > .action:nth-child(4) {
+  right: 25px;
+}
+.fab-menu-container.left-right-line.open > .fab-action-container {
+  opacity: 1;
+}
+.fab-menu-container.left-right-line.open > .fab-action-container > .action {
+  transition: 0.2s 0.3s;
+}
+/* 打开水平菜单 结束 */
+/* 打开垂直菜单 开始 */
+.fab-menu-container.top-bottom-line > .fab-action-container {
+  transition: 0.3s;
+  width: 66px;
+  height: 266px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 33px;
+  left: -5px;
+  top: -105px;
+  opacity: 0;
+  transition: none;
+}
+.fab-menu-container.top-bottom-line > .fab-action-container > .action {
+  left: 33px;
+  transition: none;
+}
+.fab-menu-container.top-bottom-line > .fab-action-container > .action:nth-child(1) {
+  top: 25px;
+}
+.fab-menu-container.top-bottom-line > .fab-action-container > .action:nth-child(2) {
+  top: 75px;
+}
+.fab-menu-container.top-bottom-line > .fab-action-container > .action:nth-child(3) {
+  bottom: 75px;
+}
+.fab-menu-container.top-bottom-line > .fab-action-container > .action:nth-child(4) {
+  bottom: 25px;
+}
+.fab-menu-container.top-bottom-line.open > .fab-action-container {
+  opacity: 1;
+}
+.fab-menu-container.top-bottom-line.open > .fab-action-container > .action {
+  transition: 0.2s 0.3s;
+}
+/* 打开垂直菜单 结束 */
+/* 向左打开水平方向菜单 开始 */
+.fab-menu-container.left-line > .fab-action-container > .action {
+  right: 0;
+}
+.fab-menu-container.left-line > .fab-action-container > .action:nth-child(1) {
+  transition: 0.3s 1.2s;
+}
+.fab-menu-container.left-line > .fab-action-container > .action:nth-child(2) {
+  transition: 0.3s 0.9s;
+}
+.fab-menu-container.left-line > .fab-action-container > .action:nth-child(3) {
+  transition: 0.3s 0.6s;
+}
+.fab-menu-container.left-line > .fab-action-container > .action:nth-child(4) {
+  transition: 0.3s 0.3s;
+}
+.fab-menu-container.left-line.open > .fab-action-container > .action:nth-child(1) {
+  right: 208px;
+  transition: 0.3s 0.3s;
+}
+.fab-menu-container.left-line.open > .fab-action-container > .action:nth-child(2) {
+  right: 158px;
+  transition: 0.3s 0.6s;
+}
+.fab-menu-container.left-line.open > .fab-action-container > .action:nth-child(3) {
+  right: 108px;
+  transition: 0.3s 0.9s;
+}
+.fab-menu-container.left-line.open > .fab-action-container > .action:nth-child(4) {
+  right: 58px;
+  transition: 0.3s 1.2s;
+}
+/* 向左打开水平方向菜单 结束 */
+/* 向上打开水平方向菜单 开始 */
+.fab-menu-container.top-line > .fab-action-container > .action {
+  top: 0;
+}
+.fab-menu-container.top-line > .fab-action-container > .action:nth-child(1) {
+  transition: 0.3s 1.2s;
+}
+.fab-menu-container.top-line > .fab-action-container > .action:nth-child(2) {
+  transition: 0.3s 0.9s;
+}
+.fab-menu-container.top-line > .fab-action-container > .action:nth-child(3) {
+  transition: 0.3s 0.6s;
+}
+.fab-menu-container.top-line > .fab-action-container > .action:nth-child(4) {
+  transition: 0.3s 0.3s;
+}
+.fab-menu-container.top-line.open > .fab-action-container > .action:nth-child(1) {
+  top: -208px;
+  transition: 0.3s 0.3s;
+}
+.fab-menu-container.top-line.open > .fab-action-container > .action:nth-child(2) {
+  top: -158px;
+  transition: 0.3s 0.6s;
+}
+.fab-menu-container.top-line.open > .fab-action-container > .action:nth-child(3) {
+  top: -108px;
+  transition: 0.3s 0.9s;
+}
+.fab-menu-container.top-line.open > .fab-action-container > .action:nth-child(4) {
+  top: -58px;
+  transition: 0.3s 1.2s;
+}
+/* 向上打开水平方向菜单 结束 */
+/* 向右打开水平方向菜单 开始 */
+.fab-menu-container.right-line > .fab-action-container > .action {
+  left: 0;
+}
+.fab-menu-container.right-line > .fab-action-container > .action:nth-child(1) {
+  transition: 0.3s 1.2s;
+}
+.fab-menu-container.right-line > .fab-action-container > .action:nth-child(2) {
+  transition: 0.3s 0.9s;
+}
+.fab-menu-container.right-line > .fab-action-container > .action:nth-child(3) {
+  transition: 0.3s 0.6s;
+}
+.fab-menu-container.right-line > .fab-action-container > .action:nth-child(4) {
+  transition: 0.3s 0.3s;
+}
+.fab-menu-container.right-line.open > .fab-action-container > .action:nth-child(1) {
+  left: 208px;
+  transition: 0.3s 0.3s;
+}
+.fab-menu-container.right-line.open > .fab-action-container > .action:nth-child(2) {
+  left: 158px;
+  transition: 0.3s 0.6s;
+}
+.fab-menu-container.right-line.open > .fab-action-container > .action:nth-child(3) {
+  left: 108px;
+  transition: 0.3s 0.9s;
+}
+.fab-menu-container.right-line.open > .fab-action-container > .action:nth-child(4) {
+  left: 58px;
+  transition: 0.3s 1.2s;
+}
+/* 向右打开水平方向菜单 结束 */
+/* 向下打开水平方向菜单 开始 */
+.fab-menu-container.bottom-line > .fab-action-container > .action {
+  bottom: 0;
+}
+.fab-menu-container.bottom-line > .fab-action-container > .action:nth-child(1) {
+  transition: 0.3s 1.2s;
+}
+.fab-menu-container.bottom-line > .fab-action-container > .action:nth-child(2) {
+  transition: 0.3s 0.9s;
+}
+.fab-menu-container.bottom-line > .fab-action-container > .action:nth-child(3) {
+  transition: 0.3s 0.6s;
+}
+.fab-menu-container.bottom-line > .fab-action-container > .action:nth-child(4) {
+  transition: 0.3s 0.3s;
+}
+.fab-menu-container.bottom-line.open > .fab-action-container > .action:nth-child(1) {
+  bottom: -208px;
+  transition: 0.3s 0.3s;
+}
+.fab-menu-container.bottom-line.open > .fab-action-container > .action:nth-child(2) {
+  bottom: -158px;
+  transition: 0.3s 0.6s;
+}
+.fab-menu-container.bottom-line.open > .fab-action-container > .action:nth-child(3) {
+  bottom: -108px;
+  transition: 0.3s 0.9s;
+}
+.fab-menu-container.bottom-line.open > .fab-action-container > .action:nth-child(4) {
+  bottom: -58px;
+  transition: 0.3s 1.2s;
+}
+/* 向下打开水平方向菜单 结束 */
