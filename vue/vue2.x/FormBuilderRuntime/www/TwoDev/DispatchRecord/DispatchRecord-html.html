@@ -1,0 +1,29 @@
+<template>
+    <div class="dispatchrecord-html-custom-list-item-view list-item-container">
+        <div class="title">
+            {{this.item.title}}
+            <span @click="customTitleClickFn();">{{this.customTitle}}</span>
+        </div>
+        <div class="subtitle">
+            <div class="left">
+                <div class="item-label">{{this.formConfig['1557302467936'].label.text}}：</div>
+                <div class="item-value">{{this.item['1557302467936']}}</div>
+            </div>
+            <div class="right">
+                <div class="item-label">{{this.formConfig['1557302467937'].label.text}}：</div>
+                <div class="item-value">{{this.item['1557302467937']}}</div>
+            </div>
+        </div>
+        <div class="subtitle">
+            <div class="right">
+                <div class="item-label">{{this.formConfig['1557302467938'].label.text}}：</div>
+                <div class="item-value">{{this.item['1557302467938']}}</div>
+            </div>
+        </div>
+    </div>
+</template>
+<style>
+    .dispatchrecord-html-custom-list-item-view.list-item-container {
+        background-color: violet;
+    }
+</style>

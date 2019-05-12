@@ -1,0 +1,91 @@
+{
+    "formItems": [{
+        "id": "1548245360015",
+        "type": "text",
+        "label": {
+            "show": true,
+            "text": "车牌号",
+            "direction": "left"
+        },
+        "value": "",
+        "tagName": "form-item-text",
+        "validate": {},
+        "extend": {
+            "placeholder": "请输入车牌号"
+        }
+    }, {
+        "id": "1548245360016",
+        "type": "text",
+        "label": {
+            "show": true,
+            "text": "车品牌",
+            "direction": "left"
+        },
+        "value": "",
+        "tagName": "form-item-text",
+        "validate": {},
+        "extend": {
+            "placeholder": "请输入车品牌"
+        }
+    }, {
+        "id": "1548245360017",
+        "type": "text",
+        "label": {
+            "show": true,
+            "text": "车型",
+            "direction": "left"
+        },
+        "value": "",
+        "tagName": "form-item-text",
+        "validate": {},
+        "extend": {
+            "placeholder": "请输入车型"
+        }
+    }, {
+        "id": "1548245360018",
+        "type": "date",
+        "label": {
+            "show": true,
+            "text": "购买日期",
+            "direction": "left"
+        },
+        "value": "",
+        "tagName": "form-item-date",
+        "validate": {},
+        "extend": {
+            "placeholder": "请选择购买日期"
+        }
+    }],
+    "extandConfig": {
+        "add": {
+            "web": {
+                "html": "",
+                "js": ""
+            },
+            "mobile": {
+                "html": "",
+                "js": ""
+            }
+        },
+        "list": {
+            "web": {
+                "html": "",
+                "js": ""
+            },
+            "mobile": {
+                "html": "",
+                "js": ["./TwoDev/CarInfo/CarInfo.js"]
+            }
+        },
+        "detail": {
+            "web": {
+                "html": "",
+                "js": ""
+            },
+            "mobile": {
+                "html": "",
+                "js": ""
+            }
+        }
+    }
+}

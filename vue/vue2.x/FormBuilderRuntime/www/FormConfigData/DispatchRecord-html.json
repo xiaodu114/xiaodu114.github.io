@@ -1,0 +1,97 @@
+{
+    "formItems": [{
+            "id": "1557302467935",
+            "type": "text",
+            "label": {
+                "show": true,
+                "text": "出车车辆主键ID",
+                "direction": "left"
+            },
+            "value": "",
+            "tagName": "form-item-text",
+            "validate": {},
+            "extend": {
+                "placeholder": ""
+            }
+        },
+        {
+            "id": "1557302467936",
+            "type": "text",
+            "label": {
+                "show": true,
+                "text": "收入",
+                "direction": "left"
+            },
+            "value": "",
+            "tagName": "form-item-text",
+            "validate": {},
+            "extend": {
+                "placeholder": "请输入收入"
+            }
+        },
+        {
+            "id": "1557302467937",
+            "type": "text",
+            "label": {
+                "show": true,
+                "text": "里程",
+                "direction": "left"
+            },
+            "value": "",
+            "tagName": "form-item-text",
+            "validate": {},
+            "extend": {
+                "placeholder": "请输入里程"
+            }
+        },
+        {
+            "id": "1557302467938",
+            "type": "text",
+            "label": {
+                "show": true,
+                "text": "备注",
+                "direction": "left"
+            },
+            "value": "",
+            "tagName": "form-item-text",
+            "validate": {},
+            "extend": {
+                "placeholder": "请输入备注"
+            }
+        }
+    ],
+    "extandConfig": {
+        "add": {
+            "web": {
+                "html": "",
+                "js": ""
+            },
+            "mobile": {
+                "html": "",
+                "js": ""
+            }
+        },
+        "list": {
+            "web": {
+                "html": "",
+                "js": ""
+            },
+            "mobile": {
+                "html": "",
+                "js": [
+                    "./TwoDev/DispatchRecord/DispatchRecord-html.js"
+                ]
+            }
+        },
+        "detail": {
+            "web": {
+                "html": "",
+                "js": ""
+            },
+            "mobile": {
+                "html": "",
+                "js": ""
+            }
+        }
+    }
+}

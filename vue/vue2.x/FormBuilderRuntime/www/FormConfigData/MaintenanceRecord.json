@@ -1,0 +1,83 @@
+{
+    "formItems": [
+        {
+            "id": "1557302039597",
+            "type": "text",
+            "label": {
+                "show": true,
+                "text": "维护车辆主键ID",
+                "direction": "left"
+            },
+            "value": "",
+            "tagName": "form-item-text",
+            "validate": {},
+            "extend": {
+                "placeholder": ""
+            }
+        },
+        {
+            "id": "1557302039598",
+            "type": "text",
+            "label": {
+                "show": true,
+                "text": "维护费用",
+                "direction": "left"
+            },
+            "value": "",
+            "tagName": "form-item-text",
+            "validate": {},
+            "extend": {
+                "placeholder": "请输入维护费用"
+            }
+        },
+        {
+            "id": "1557302039599",
+            "type": "text",
+            "label": {
+                "show": true,
+                "text": "维护内容",
+                "direction": "left"
+            },
+            "value": "",
+            "tagName": "form-item-text",
+            "validate": {},
+            "extend": {
+                "placeholder": "请输入维护内容"
+            }
+        }
+    ],
+    "extandConfig": {
+        "add": {
+            "web": {
+                "html": "",
+                "js": ""
+            },
+            "mobile": {
+                "html": "",
+                "js": ""
+            }
+        },
+        "list": {
+            "web": {
+                "html": "",
+                "js": ""
+            },
+            "mobile": {
+                "html": "",
+                "js": [
+                    "./TwoDev/MaintenanceRecord/MaintenanceRecord.js"
+                ]
+            }
+        },
+        "detail": {
+            "web": {
+                "html": "",
+                "js": ""
+            },
+            "mobile": {
+                "html": "",
+                "js": ""
+            }
+        }
+    }
+}
