@@ -307,9 +307,11 @@ var myApp = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
                     //      1.6、UglifyJS
                     //          1.6.1、https://github.com/mishoo/UglifyJS2/
                     //          1.6.2、https://www.uglifyjs.net/
+                    //      道路相当坎坷，最后简单实现了以下；先用babal转一下，在使用new Function()
+                    //      参考网址：https://github.com/amio/require-cjs-string          
                     //  2、解析文件中Style标签下的内容（可能是less又可能是scss……）😢😢😢😢😢😢
                     //      2.1、将非css转为css
-                    //      2.2、scope不知如何实现
+                    //      2.2、scope未实现
                     //  3、如果上面个的两种都解决了，还有性能的问题……😢😢😢😢😢😢
                     //      也就是说编译.vue文件做的所有事情需要在浏览器环境进行一遍。说来惭愧其实看了一点vue-loader是怎么处理.vue文件的，
                     //  了解之后看看有没有对应的浏览器版本，很遗憾没看懂😢😢😢😢😢😢
@@ -346,7 +348,26 @@ var myApp = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
                                 });
                             }
                         }
-                        if (tempTemplateDomStr) {
+                        if (Babel && tempComponentScriptStr) {
+                            var output = Babel.transform(tempComponentScriptStr, {
+                                presets: ['es2015']
+                            }).code;
+                            var _fn = new Function('module', 'exports', output);
+                            var _module = {
+                                exports: {}
+                            };
+                            _fn(_module, _module.exports);
+                            var tempComponentOption = {};
+                            if (tempTemplateDomStr) {
+                                tempComponentOption = {
+                                    template: tempTemplateDomStr
+                                };
+                            }
+                            if (getDataType(tempComponentOption) === "object") {
+                                tempComponentOption = deep_extend__WEBPACK_IMPORTED_MODULE_3___default()({}, _module.exports.default, tempComponentOption);
+                            }
+                            vue__WEBPACK_IMPORTED_MODULE_0___default.a.component(this.tplConfig.body.listItemView.componentConfig.name, tempComponentOption);
+                        } else if (tempTemplateDomStr) {
                             vue__WEBPACK_IMPORTED_MODULE_0___default.a.component(this.tplConfig.body.listItemView.componentConfig.name, () => {
                                 return new Promise((resolve, reject) => {
                                     resolve({

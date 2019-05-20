@@ -1,7 +1,13 @@
 <template>
   <div class="maintenancerecord-singlefile-list-item-view list-item-container">
-    <div>我是一个单文件组件，我还不完善</div>
-    <div>抱歉现在还不能解析SCRIPT标签并且STYLE标签只支持css</div>
+    <div>1、我是一个单文件组件，非常规注册，我还不完善</div>
+    <div>2、现在可以解析SCRIPT标签但是不识别其中引入其他的类库和组件，未测试是否支持TS</div>
+    <div>3、STYLE标签只支持css</div>
+    <div>{{customTitle}}</div>
+    <div><button
+        type="button"
+        @click="btn1Click"
+      >测试点击事件</button></div>
   </div>
 </template>
 <script>
@@ -15,27 +21,20 @@ export default {
     formConfig: {
       type: Object,
       required: true
-    },
-    tpl: {
-      type: String
-    },
-    bindData: {
-      type: Object
     }
   },
   data: function() {
     return {
-      customTitle: "(自定义组件方式)"
+      customTitle: "单文件组件(自定义组件方式)"
     };
   },
   methods: {
     btn1Click(item) {
-      [1, 2, 3].map(item => console.log(item));
-      alert("主键ID：" + this.item.id + "您点击的是按钮1");
-    },
-    btn2Click() {
-      alert("主键ID：" + this.item.id + "您点击的是按钮2");
+      alert("主键ID：" + this.item.id + "您点击的是测试按钮");
     }
+  },
+  created() {
+    console.log("组件生命周期：created");
   }
 };
 </script>
