@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>测试我的Vue组件库：ddztestlib01</title>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="myApp" v-cloak>
+        <h3>{{msg}}</h3>
+        <div>下面是组件1的内容</div>
+        <ddzcomponent01 :prop1="ddzcomponent01prop1"></ddzcomponent01>
+        <div>下面是组件2的内容</div>
+        <ddzcomponent02 :prop1="ddzcomponent02prop1"></ddzcomponent02>
+    </div>
+    <script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+    <script src="./dist/ddztestlib01.js"></script>
+    <script>
+        var myApp = new Vue({
+            el: "#myApp",
+            data() {
+                return {
+                    msg: "测试我的Vue组件库：ddztestlib01",
+                    ddzcomponent01prop1: "我在这里为组件1的属性1赋值:" + new Date(),
+                    ddzcomponent02prop1: "我在这里为组件2的属性1赋值:" + Math.random(),
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
