@@ -1,0 +1,2 @@
+1、yarn add vue
+2、yarn add css-loader less less-loader style-loader vue-loader vue-template-compiler webpack webpack-cli -D
