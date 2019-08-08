@@ -1,6 +1,6 @@
 ﻿define([
-    '/htmlSnippets/amd3/module1.js',
-    '/htmlSnippets/amd3/module2.js'
+    './module1.js',
+    './module2.js'
 ], function (m1, m2) {
     return {
         data: {
@@ -10,8 +10,8 @@
             m2Obj: m2,
             preText: `
 define([
-    '/htmlSnippets/amd3/module1.js',
-    '/htmlSnippets/amd3/module2.js'
+    './module1.js',
+    './module2.js'
 ], function (m1, m2) {
     return {
         data: {

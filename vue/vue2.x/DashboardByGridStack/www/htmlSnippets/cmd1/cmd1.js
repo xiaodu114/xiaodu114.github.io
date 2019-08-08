@@ -1,6 +1,6 @@
 ﻿define(function (require, exports, module) {
-    var m1 = require('/htmlSnippets/cmd1/module1.js'),
-        m2 = require('/htmlSnippets/cmd1/module2.js');
+    var m1 = require('./module1.js'),
+        m2 = require('./module2.js');
     module.exports = {
         data: {
             title: "模块规范：CMD",
@@ -12,10 +12,9 @@ AMD是依赖前置，CMD是就近依赖，但是AMD也支持CMD的就近依赖�
 `,
             m1Obj: m1,
             m2Obj: m2,
-            preText:
-                `define(function (require, exports, module) {
-    var m1 = require('/htmlSnippets/cmd1/module1.js'),
-        m2 = require('/htmlSnippets/cmd1/module2.js');
+            preText: `define(function (require, exports, module) {
+    var m1 = require('./module1.js'),
+        m2 = require('./module2.js');
     return {
         data: {
             title: "模块规范：CMD",
