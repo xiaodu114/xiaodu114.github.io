@@ -1,6 +1,6 @@
 ﻿define(function (require) {
-    var m1 = require('/htmlSnippets/amd3/module1.js'),
-        m2 = require('/htmlSnippets/amd3/module2.js');
+    var m1 = require('./module1.js'),
+        m2 = require('./module2.js');
     return {
         data: {
             title: "模块规范：AMD",
@@ -9,8 +9,8 @@
             m2Obj: m2,
             preText: `
 define(function (require) {
-    var m1 = require('/htmlSnippets/amd3/module1.js'),
-        m2 = require('/htmlSnippets/amd3/module2.js');
+    var m1 = require('./module1.js'),
+        m2 = require('./module2.js');
     return {
         data: {
             title: "模块规范：AMD",
