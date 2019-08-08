@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>iframe 页面2</title>
+</head>
+
+<body>
+    <div id="myIframe2VueApp">
+        <div>
+            {{msg}}
+            <hr>
+        </div>
+        <div>
+            <div>这里接收主页面的上下文：</div>
+            <pre>{{mainPageContextInfo}}</pre>
+            <hr>
+        </div>
+        <div>
+            <div>这里接收主页面的广播：</div>
+            <div>{{mainPageBroadcast}}</div>
+            <hr>
+        </div>
+        <div>
+            <div>这里接收兄弟页面的事件：</div>
+            <div>{{brotherPageBroadcast}}</div>
+            <hr>
+        </div>
+    </div>
+    <script src="../lib/vue/2.6.10/vue.js"></script>
+    <script>
+        var myIframe2VueApp = new Vue({
+            el: "#myIframe2VueApp",
+            data() {
+                return {
+                    msg: "自我介绍：我是iframe-2，一个vue应用程序",
+                    mainPageContextInfo: null,
+                    mainPageBroadcast: "正在监听……",
+                    brotherPageBroadcast: "正在监听……"
+                }
+            },
+            methods: {},
+            beforeCreate() {},
+            created() {
+                if (parent.GlobalStore) {
+                    if (parent.GlobalStore.contextInfo) {
+                        this.mainPageContextInfo = JSON.stringify(parent.GlobalStore.contextInfo);
+                    }
+                }
+                if (parent.GlobalEventBus) {
+                    parent.GlobalEventBus.$on("mainpage-broadcast-event-01", (data) => {
+                        if (data && data.msg) {
+                            this.mainPageBroadcast = data.msg;
+                        }
+                    });
+                    parent.GlobalEventBus.$on("iframe1-sendEvent-1", (data) => {
+                        if (data && data.msg) {
+                            this.brotherPageBroadcast = data.msg;
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

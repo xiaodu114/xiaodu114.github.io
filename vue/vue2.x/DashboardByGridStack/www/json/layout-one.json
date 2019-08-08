@@ -1,0 +1,12 @@
+[{
+    "id": "1",
+    "type": "html",
+    "url": "./htmlSnippets/amd1/amd1.html",
+    "js": "./htmlSnippets/amd1/amd1.js",
+    "gridstack": {
+        "x": 0,
+        "y": 0,
+        "width": 3,
+        "height": 3
+    }
+}]

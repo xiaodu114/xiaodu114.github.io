@@ -1,0 +1,35 @@
+﻿<template>
+    <div class="cjs3">
+        <h3>{{title}}</h3>
+        <div>
+            <span>created函数：</span>
+            <span>{{createdData}}</span>
+        </div>
+        <div>
+            <span>beforeMount函数：</span>
+            <span>{{beforeMountData}}</span>
+        </div>
+        <div>
+            <span>mounted函数：</span>
+            <span>{{mountedData}}</span>
+        </div>
+        <div>
+            <span>beforeUpdate函数：</span>
+            <span>{{beforeUpdateData}}</span>
+        </div>
+        <div>
+            <span>updated函数：</span>
+            <span>{{updatedData}}</span>
+        </div>
+        <div>
+            <button type="button" @click="clickFn1">点击事件</button>
+        </div>
+    </div>
+</template>
+<style>
+    .cjs3 {
+        color: #1e88e5;
+        height: 100%;
+        overflow-y: auto;
+    }
+</style>

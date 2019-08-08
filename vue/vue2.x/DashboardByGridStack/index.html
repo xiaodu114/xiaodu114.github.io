@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>动态布局设计</title>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #myVueApp {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            background: #eeeded;
+            overflow-y: auto;
+        }
+    </style>
+    <link rel="stylesheet" href="./lib/gridstack/0.4.0/gridstack.min.css">
+    <link rel="stylesheet" href="./lib/font-awesome/4.7.0/font-awesome.css">
+</head>
+
+<body>
+    <div id="myVueApp" v-cloak></div>
+    <!-- 1、******  systemjs 相关 -->
+    <!-- <script src="./lib/systemjs/3.1.6/system.min.js"></script>
+    <script src="./lib/systemjs/3.1.6/extras/amd.min.js"></script>
+    <script src="./lib/systemjs/3.1.6/extras/global.min.js"></script>
+    <script src="./lib/systemjs/3.1.6/extras/named-exports.min.js"></script>
+    <script src="./lib/systemjs/3.1.6/extras/named-register.min.js"></script>
+    <script src="./lib/systemjs/3.1.6/extras/transform.min.js"></script>
+    <script src="./lib/systemjs-transform-babel/0.1.2/babel-transform.js"></script> -->
+    <script src="./lib/systemjs/0.21.6/system.src.js"></script>
+    <script>
+        window.GlobalSystemjs = System;
+    </script>
+
+    <!-- 2、******  @babel/standalone real-time compile/transform JavaScript -->
+    <script src="./lib/babel/standalone/7.4.4/babel.min.js"></script>
+    <!-- 3、******  gridstack 相关依赖 -->
+    <script src="./lib/lodash/4.17.11/lodash.min.js"></script>
+    <script src="./lib/jquery/3.4.1/jquery.min.js"></script>
+    <script src="./lib/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <!--    3.1、gridstack touch device need -->
+    <script src="./lib/jquery-ui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <script src="./lib/gridstack/0.4.0/gridstack.all.js"></script>
+</body>
+
+</html>

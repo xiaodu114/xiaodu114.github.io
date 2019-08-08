@@ -1,0 +1,26 @@
+﻿<template>
+    <div class="amd3">
+        <h3>{{title}}</h3>
+        <div>{{detail}}</div>
+        <div>
+            <button type="button" class="btn btn-default" @click="clickModule1Fn1">调用依赖modue1中的方法1</button>
+            <button type="button" class="btn btn-default" @click="clickModule1Fn2">调用依赖modue1中的方法2</button>
+        </div>
+        <div>
+            <button type="button" class="btn btn-default" @click="clickModule2Fn1">调用依赖modue2中的方法1</button>
+        </div>
+        <div>依赖模块modue1导出的对象</div>
+        <pre>{{m1Obj}}</pre>
+        <div>依赖模块modue2导出的对象</div>
+        <pre>{{m2Obj}}</pre>
+        <div>本模块代码示例</div>
+        <pre>{{preText}}</pre>
+    </div>
+</template>
+<style>
+    .amd3 {
+        color: #90caf9;
+        height: 100%;
+        overflow-y: auto;
+    }
+</style>

@@ -1,0 +1,61 @@
+[{
+        "id": "1",
+        "type": "html",
+        "url": "./htmlSnippets/amd1/amd1.html",
+        "js": "./htmlSnippets/amd1/amd1.js",
+        "gridstack": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 3
+        }
+    },
+    {
+        "id": "2",
+        "type": "html",
+        "url": "./htmlSnippets/amd2/amd2.html",
+        "js": "./htmlSnippets/amd2/amd2.js",
+        "gridstack": {
+            "x": 3,
+            "y": 0,
+            "width": 5,
+            "height": 4
+        }
+    },
+    {
+        "id": "3",
+        "type": "html",
+        "url": "./htmlSnippets/amd3/amd3.html",
+        "js": "./htmlSnippets/amd3/amd3.js",
+        "gridstack": {
+            "x": 8,
+            "y": 3,
+            "width": 3,
+            "height": 4
+        }
+    },
+    {
+        "id": "4",
+        "type": "html",
+        "url": "./htmlSnippets/amd4/amd4.html",
+        "js": "./htmlSnippets/amd4/amd4.js",
+        "gridstack": {
+            "x": 9,
+            "y": 0,
+            "width": 2,
+            "height": 3
+        }
+    },
+    {
+        "id": "5",
+        "type": "html",
+        "url": "./htmlSnippets/cmd1/cmd1.html",
+        "js": "./htmlSnippets/cmd1/cmd1.js",
+        "gridstack": {
+            "x": 0,
+            "y": 4,
+            "width": 4,
+            "height": 3
+        }
+    }
+]

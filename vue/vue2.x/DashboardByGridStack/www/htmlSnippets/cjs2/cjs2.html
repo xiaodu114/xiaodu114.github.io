@@ -1,0 +1,21 @@
+﻿<template>
+    <div class="cjs2">
+        <h3>{{title}}</h3>
+        <div>{{detail}}</div>
+        <div>
+            <button type="button" class="btn btn-default" @click="clickModule1Fn1">调用依赖modue1中的方法1</button>
+        </div>
+        <div>
+            <div>这里是引入的JS文件中的类</div>
+            <pre>{{tempKVModel}}</pre>
+        </div>
+        <pre>{{preText}}</pre>
+    </div>
+</template>
+<style>
+    .cjs2 {
+        color: #2196f3;
+        height: 100%;
+        overflow-y: auto;
+    }
+</style>

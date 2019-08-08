@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>iframe 页面1</title>
+</head>
+
+<body>
+    <div>
+        自我介绍：我是iframe-1，纯html、js、css
+        <hr>
+    </div>
+    <div>
+        郑重声明：因为出身iframe导致不能拖动位置了只能改变大小……
+        <hr>
+    </div>
+    <div>
+        <div>这里接收主页面的上下文：</div>
+        <pre id="mainPageContextInfo"></pre>
+        <hr>
+    </div>
+    <div>
+        <div>这里接收主页面的广播：</div>
+        <div id="mainPageBroadcast">正在监听……</div>
+        <hr>
+    </div>
+    <div>
+        <div><button type="button" id="iframe1-btn-sendEvent1">发送事件</button></div>
+        <hr>
+    </div>
+    <script>
+        if (parent.GlobalStore) {
+            if (parent.GlobalStore.contextInfo) {
+                document.getElementById("mainPageContextInfo").innerHTML = JSON.stringify(parent.GlobalStore
+                    .contextInfo);
+            }
+        }
+        if (parent.GlobalEventBus) {
+            parent.GlobalEventBus.$on("mainpage-broadcast-event-01", (data) => {
+                if (data && data.msg) {
+                    document.getElementById("mainPageBroadcast").innerHTML = data.msg;
+                }
+            });
+            document.getElementById("iframe1-btn-sendEvent1").addEventListener("click", function () {
+                parent.GlobalEventBus.$emit("iframe1-sendEvent-1", {
+                    msg: "我是iframe1，朋友们有时间吗？一起聚聚？" + Math.random()
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>
