@@ -7,32 +7,32 @@ customElements.define('single-slider',
                 "slider-color": {
                     domName: "containerDom",
                     names: ["background-color"],
-                    value: "rgba(0, 0, 0, .1)"
+                    value: "rgba(255, 255, 255, .1)"
                 },
                 "slider-height": {
                     domName: "containerDom",
                     names: ["height"],
-                    value: "10px"
+                    value: "2px"
                 },
                 "load-color": {
                     domName: "loadDom",
                     names: ["background-color"],
-                    value: "rgba(0, 0, 0, .2)"
+                    value: "rgba(255, 255, 255, .2)"
                 },
                 "slid-color": {
                     domName: "slidDom",
                     names: ["background-color"],
-                    value: "rgba(0, 0, 0, .4)"
+                    value: "rgba(255, 255, 255, .7)"
                 },
                 "dot-size": {
                     domName: "handlerDom",
                     names: ["height", "width"],
-                    value: "20px"
+                    value: "10px"
                 },
                 "dot-radius": {
                     domName: "handlerDom",
                     names: ["border-radius"],
-                    value: "15px"
+                    value: "5px"
                 },
                 "dot-color": {
                     domName: "handlerDom",
