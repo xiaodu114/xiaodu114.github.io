@@ -1,6 +1,6 @@
 customElements.define('single-slider',
     class SingleSlider extends HTMLElement {
-        //可以看一下：
+        //  可以看一下：
         //  https://www.sitepoint.com/javascript-private-class-fields/
         static get selfDefaultAttrObj() {
             return {
@@ -38,6 +38,16 @@ customElements.define('single-slider',
                     domName: "handlerDom",
                     names: ["background-color"],
                     value: "darkviolet"
+                },
+                "slid-value": {
+                    domName: "slidDom",
+                    names: ["width"],
+                    value: "0"
+                },
+                "load-value": {
+                    domName: "loadDom",
+                    names: ["width"],
+                    value: "0"
                 }
             }
         };
@@ -60,7 +70,7 @@ customElements.define('single-slider',
                     width: 100%;
                 }
 
-                .single-slider-container>.slid-progress {
+                .single-slider-container .slid-progress {
                     position: absolute;
                     top: 0;
                     left: 0;
@@ -68,32 +78,33 @@ customElements.define('single-slider',
                     background: rgba(255, 255, 255, .7);
                 }
 
-                .single-slider-container>.load-progress {
+                .single-slider-container .slider-handler-wrapper {
+                    position: absolute;
+                    top: 0;
+                    width: 0;
+                    left: 100%;
+                }
+
+                .single-slider-container .slider-handler {
+                    position: absolute;
+                    cursor: pointer;
+                }
+
+                .single-slider-container .load-progress {
                     position: absolute;
                     top: 0;
                     left: 0;
                     height: 100%;
                     background: rgba(255, 255, 255, .2);
                 }
-
-                .single-slider-container>.slider-handler-wrapper {
-                    position: absolute;
-                    top: 0;
-                    width: 0;
-                }
-
-                .single-slider-container>.slider-handler-wrapper>.slider-handler {
-                    position: absolute;
-                    cursor: pointer;
-                }
             </style>
             <div class="single-slider-container">
                 <div class="load-progress">
                 </div>
                 <div class="slid-progress">
-                </div>
-                <div class="slider-handler-wrapper">
-                    <div class="slider-handler"></div>
+                    <div class="slider-handler-wrapper">
+                        <div class="slider-handler"></div>
+                    </div>
                 </div>
             </div>
             `;
@@ -102,10 +113,9 @@ customElements.define('single-slider',
             //  这里获取不到传入的属性值
             //  可以获取dom结构
             this.containerDom = this.shadowRoot.querySelector(".single-slider-container");
-            this.loadDom = this.shadowRoot.querySelector(".single-slider-container>.load-progress");
-            this.slidDom = this.shadowRoot.querySelector(".single-slider-container>.slid-progress");
-            this.handlerDom = this.shadowRoot.querySelector(".single-slider-container>.slider-handler-wrapper>.slider-handler");
-            this.handlerWrapperDom = this.shadowRoot.querySelector(".single-slider-container>.slider-handler-wrapper");
+            this.loadDom = this.shadowRoot.querySelector(".single-slider-container .load-progress");
+            this.slidDom = this.shadowRoot.querySelector(".single-slider-container .slid-progress");
+            this.handlerDom = this.shadowRoot.querySelector(".single-slider-container .slider-handler");
         }
 
         //#region  生命周期回调
@@ -142,31 +152,19 @@ customElements.define('single-slider',
                         newValue += "px";
                     }
                 }
-                switch (attrName) {
-                    case "slider-color":
-                    case "load-color":
-                    case "slid-color":
-                    case "dot-radius":
-                    case "dot-color": {
-                        let attrDefaultObj = SingleSlider.selfDefaultAttrObj[attrName];
-                        let tempObj = {};
-                        attrDefaultObj.names.forEach(name => {
-                            tempObj[name] = newValue;
-                        });
-                        this.privateSetDomStyleByObj(this[attrDefaultObj.domName], tempObj);
-                        break;
+                if (["slid-value", "load-value"].indexOf(attrName) >= 0) {
+                    if (!isNaN(Number(newValue))) {
+                        newValue += "%";
                     }
-                    case "dot-size":
-                    case "slider-height": {
-                        let attrDefaultObj = SingleSlider.selfDefaultAttrObj[attrName];
-                        let tempObj = {};
-                        attrDefaultObj.names.forEach(name => {
-                            tempObj[name] = newValue;
-                        });
-                        this.privateSetDomStyleByObj(this[attrDefaultObj.domName], tempObj);
-                        this.privateCorrectDotStyle();
-                        break;
-                    }
+                }
+                let attrDefaultObj = SingleSlider.selfDefaultAttrObj[attrName];
+                let tempObj = {};
+                attrDefaultObj.names.forEach(name => {
+                    tempObj[name] = newValue;
+                });
+                this.privateSetDomStyleByObj(this[attrDefaultObj.domName], tempObj);
+                if (["dot-size", "slider-height"].indexOf(attrName) >= 0) {
+                    this.privateCorrectDotStyle();
                 }
             }
         }
@@ -208,10 +206,10 @@ customElements.define('single-slider',
             this.privateCorrectDotStyle();
         }
 
-        privateUpdateSliderStyle(slidValue, loadValue) {
-            this.handlerWrapperDom.style.left = `${slidValue}%`;
-            this.slidDom.style.width = `${slidValue}%`;
-            this.loadDom.style.width = `${loadValue}%`;
+        privateUpdateSlidStyle(slidValue) {
+            this.privateSetDomStyleByObj(this.slidDom, {
+                "width": `${slidValue}%`
+            });
         }
 
         privateHandleSelfEvent() {
@@ -220,7 +218,7 @@ customElements.define('single-slider',
                 mousedownE.stopPropagation();
                 mousedownE.preventDefault();
                 var isRealDrag = true,
-                    oldLeftpercent = parseFloat(this.handlerWrapperDom.style.left || 0),
+                    oldLeftpercent = parseFloat(this.slidDom.style.width || 0),
                     toLeftMaxMoveX = tempTrackWidth * oldLeftpercent / 100,
                     startMovePosX = mousedownE.clientX;
                 document.onmousemove = (mousemoveE) => {
@@ -231,7 +229,7 @@ customElements.define('single-slider',
                         } else if (tempMoveX < 0) {
                             tempMoveX = 0;
                         }
-                        this.privateUpdateSliderStyle(tempMoveX * 100 / tempTrackWidth, this.value.loadValue);
+                        this.privateUpdateSlidStyle(tempMoveX * 100 / tempTrackWidth);
                         this.dispatchEvent(new InputEvent('input'));
                     }
                 };
@@ -252,7 +250,7 @@ customElements.define('single-slider',
 
         get value() {
             return {
-                slidValue: parseFloat(this.handlerWrapperDom.style.left || 0),
+                slidValue: parseFloat(this.slidDom.style.width || 0),
                 loadValue: parseFloat(this.loadDom.style.width || 0)
             };
         }
@@ -268,7 +266,10 @@ customElements.define('single-slider',
                     tempLoadValue = newValue["loadValue"];
                 }
             }
-            this.privateUpdateSliderStyle(tempSlidValue, tempLoadValue);
+            this.privateUpdateSlidStyle(tempSlidValue);
+            this.privateSetDomStyleByObj(this.loadDom, {
+                "width": `${tempLoadValue}%`
+            });
             if (newValue.loadValue !== oldValue.loadValue || newValue.slidValue !== oldValue.slidValue) {
                 this.dispatchEvent(new CustomEvent('change', {
                     detail: {
