@@ -48,12 +48,57 @@ customElements.define('single-slider',
 
         constructor() {
             super();
-            let template = document.getElementById('WebComponents-SingleSlider-templete');
-            let templateContent = template.content;
             const shadowRoot = this.attachShadow({
-                    mode: 'open'
-                })
-                .appendChild(templateContent.cloneNode(true));
+                mode: 'open'
+            });
+
+            //#region 组件模板
+            shadowRoot.innerHTML = `
+            <style>
+                .single-slider-container {
+                    position: relative;
+                    width: 100%;
+                }
+
+                .single-slider-container>.slid-progress {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    background: rgba(255, 255, 255, .7);
+                }
+
+                .single-slider-container>.load-progress {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    background: rgba(255, 255, 255, .2);
+                }
+
+                .single-slider-container>.slider-handler-wrapper {
+                    position: absolute;
+                    top: 0;
+                    width: 0;
+                }
+
+                .single-slider-container>.slider-handler-wrapper>.slider-handler {
+                    position: absolute;
+                    cursor: pointer;
+                }
+            </style>
+            <div class="single-slider-container">
+                <div class="load-progress">
+                </div>
+                <div class="slid-progress">
+                </div>
+                <div class="slider-handler-wrapper">
+                    <div class="slider-handler"></div>
+                </div>
+            </div>
+            `;
+            //#endregion
+
             //  这里获取不到传入的属性值
             //  可以获取dom结构
             this.containerDom = this.shadowRoot.querySelector(".single-slider-container");
