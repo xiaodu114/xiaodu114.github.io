@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" ng-app="myMusicApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>🎵 Music Up</title>
+    <link rel="shortcut icon" href="/favicon.png" />
+    <link href="./lib/perfect-scrollbar/1.4.0/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="./css/tableview.css" rel="stylesheet" />
+    <link href="./css/index.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="music-app-container" ng-controller="MainController" ng-cloak>
+        <div class="music-design-container" ng-if="!musicDesignManager.showMyMusic">
+            <div>
+                <p>
+                    <span>
+                        <label>表单项</label>
+                        <select class="form-control" ng-model="musicDesignManager.musicConfig.currentItem"
+                            ng-options="x.fieldName for x in musicDesignManager.formItemSource track by x.id"></select>
+                    </span>
+                    <span>
+                        <label>列宽类型</label>
+                        <select class="form-control" ng-model="musicDesignManager.musicConfig.currentWidthType"
+                            ng-options="x.text for x in musicDesignManager.widthTypeOptions track by x.text"></select>
+                    </span>
+                    <span><input type="text" class="form-control"
+                            ng-model="musicDesignManager.musicConfig.currentWidthTypeValue"
+                            placeholder="请输入列类型值"></span>
+                    <span>
+                        <button type="button" class="btn btn-default"
+                            ng-click="musicDesignManager.addFormItem()">添加</button>
+                        <button type="button" class="btn btn-default" ng-click="navManager.goToMyMusic()">我的音乐</button>
+                    </span>
+                </p>
+            </div>
+            <div class="music-design-list-wrapper">
+                <div table-view config="tableViewDesignConfig">
+                    <div ng-if="tableViewDesignConfig.data.length===0">无配置</div>
+                </div>
+            </div>
+        </div>
+        <div class="music-player-container" ng-if="musicDesignManager.showMyMusic">
+            <div class="palyer-header">
+                <div class="logo-container">
+                    <div class="logo-img">
+                        <img width="33" src="./images/logo.png">
+                    </div>
+                    <div class="logo-text">Music Up</div>
+                </div>
+                <div class="music-search">
+                    <div class="input-search-wrapper">
+                        <input type="text" ng-keyup="musicListManager.enterKeyUpToSearch($event);"
+                            ng-model="musicListManager.searchText" placeholder="请输入个歌曲名称\歌手名称">
+                        <div class="icon search" ng-click="musicListManager.goToSearch()"></div>
+                    </div>
+                </div>
+                <div class="music-setting">
+                    <div class="dropdown-group">
+                        <div class="dropdown-toggle">
+                            <div class="icon chevron-down"></div>
+                        </div>
+                        <div class="dropdown-menu">
+                            <div class="item" ng-click="navManager.goToDesignPage()">去往设计时</div>
+                            <div class="item">关于</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="palyer-body">
+                <div class="music-content">
+                    <div class="music-content-left">
+                        <div table-view config="tableViewConfig" slide-to-bottom="musicListManager.loadMoreData()">
+                            <div ng-if="tableViewConfig.data.length===0"
+                                style="height: 100%; display: flex; align-items: center; justify-content: center;color: #fff;">
+                                你还在等什么，赶紧搜一下
+                            </div>
+                        </div>
+                    </div>
+                    <div class="music-content-right" ng-if="musicPlayerManager.songsPlaying.musicTrInfo">
+                        <div class="lyric-header">
+                            <div style="margin-bottom: 10px;">
+                                <img ng-src="{{musicPlayerManager.songsPlaying.musicTrInfo.picUrl}}" width="186"
+                                    height="186" alt="" srcset="">
+                            </div>
+                            <p>歌曲名：{{musicPlayerManager.songsPlaying.musicTrInfo.name}}</p>
+                            <p>歌手名：{{musicPlayerManager.songsPlaying.musicTrInfo.artists}}</p>
+                            <p>专辑名：{{musicPlayerManager.songsPlaying.musicTrInfo.album}}</p>
+                        </div>
+                        <div id="musicLyricContainer" class="music-lyric">
+                            <div ng-style="musicPlayerManager.songsPlaying.musicLyricPlayProgressStyle">
+                                <p ng-class="{on:p.isOn}"
+                                    ng-repeat="p in musicPlayerManager.songsPlaying.musicLyricArr track by $index">
+                                    {{p.lyric?p.lyric:"******终于可以喘口气了******"}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="music-bar" ng-show="tableViewConfig.data.length">
+                    <div class="play-control-left">
+                        <div class="icon play-prev" ng-click="musicPlayerManager.palyPrevSong()"></div>
+                        <div class="icon playing" ng-if="!musicPlayerManager.songsPlaying.isPlaying"
+                            ng-click="musicPlayerManager.setToPlayState()"></div>
+                        <div class="icon pause" ng-if="musicPlayerManager.songsPlaying.isPlaying"
+                            ng-click="musicPlayerManager.setToPauseState()"></div>
+                        <div class="icon play-next" ng-click="musicPlayerManager.palyNextSong()"></div>
+                    </div>
+                    <div class="music-play-info">
+                        <div class="brief" ng-if="musicPlayerManager.songsPlaying.musicTrInfo">
+                            <div class="music-name">
+                                {{musicPlayerManager.songsPlaying.musicTrInfo.name}}-{{musicPlayerManager.songsPlaying.musicTrInfo.artists}}
+                            </div>
+                            <div class="time-progress">
+                                {{musicPlayerManager.songsPlaying.playedTimeLong}}&nbsp;/&nbsp;{{musicPlayerManager.songsPlaying.totalTimeLong}}
+                            </div>
+                        </div>
+                        <div class="progressbar" ng-if="musicPlayerManager.songsPlaying.musicTrInfo">
+                            <single-slider load-value="{{musicPlayerManager.songsPlaying.loadProgress}}"
+                                slid-value="{{musicPlayerManager.songsPlaying.progress}}">
+                            </single-slider>
+                        </div>
+                        <div class="brief" ng-if="!musicPlayerManager.songsPlaying.musicTrInfo">
+                            你可以试着播放一首歌曲
+                        </div>
+                    </div>
+                    <div class="play-control-right">
+                        <div class="play-type"></div>
+                        <div class="play-volume">
+                            <div class="volume-icons">
+                                <i class="icon volume" ng-click="musicPlayerManager.toggleVolumeOnOff(0)"
+                                    ng-if="musicPlayerManager.songsPlaying.volumePercent>0"></i>
+                                <i class="icon volumeoff" ng-click="musicPlayerManager.toggleVolumeOnOff(1)"
+                                    ng-if="musicPlayerManager.songsPlaying.volumePercent===0"></i>
+                            </div>
+                            <single-slider id="volumeSlider" class="volume-slider"
+                                slid-value="{{musicPlayerManager.songsPlaying.volumePercent}}">
+                            </single-slider>
+                        </div>
+                    </div>
+                    <audio id="myMusicPlayer"></audio>
+                </div>
+            </div>
+            <div class="music-playing-bg"
+                ng-if="musicPlayerManager.songsPlaying.musicTrInfo&&musicPlayerManager.songsPlaying.musicTrInfo.picUrl"
+                ng-style="musicPlayerManager.songsPlaying.musicPlayingBgStyle">
+            </div>
+            <div class="music-playing-bg"
+                ng-if="!(musicPlayerManager.songsPlaying.musicTrInfo&&musicPlayerManager.songsPlaying.musicTrInfo.picUrl)"
+                style="background-image:url('./images/bg.png'); background-size: contain;">
+            </div>
+        </div>
+    </div>
+    <!-- <script src="./lib/web-components/SingleSlider/main.js"></script> -->
+    <script src="https://xiaodu114.github.io/WebComponents/SingleSlider/main.js"></script>
+    <script src="./lib/perfect-scrollbar/1.4.0/perfect-scrollbar.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/angular.js/1.6.8/angular.js"></script>
+    <!-- table-view 列表指令内容行模板 -->
+    <script type="text/ng-template" id="TableViewDataTrTpl">
+        <div class="tr" ng-repeat="tr in config.data track by $index" ng-init="trIndex=$index+1;"
+            ng-style="config.body.trStyle" ng-class="config.body.trClass" ng-mouseover="trMouseoverIndex = trIndex" ng-mouseleave="trMouseoverIndex = -1">
+            <div class="td" ng-repeat-start="td in config.columns track by $index" ng-style="td.tdStyle"
+                ng-class="td.tdClass" ng-if="td.tdTpl" ng-include="td.tdTpl">
+            </div>
+            <div class="td" ng-repeat-end ng-style="td.tdStyle" ng-class="td.tdClass" title="{{tr[td.tdIndex]}}"
+                ng-if="!td.tdTpl">
+                {{tr[td.tdIndex]}}
+            </div>
+        </div>
+    </script>
+    <!-- 自定义列模板:设计器使用 -->
+    <script type="text/ng-template" id="TableViewDesignSerialNumberColumnTpl">
+        {{trIndex}}
+    </script>
+    <script type="text/ng-template" id="TableViewDesignColumnIndexColumnTpl">
+        {{tr.tdTpl?"自定义列":tr.fieldId}}
+    </script>
+    <script type="text/ng-template" id="TableViewDesignOperationColumnTpl">
+        <button type="button" ng-class="{ddztest:trMouseoverIndex===trIndex}" style="cursor:pointer;" ng-click="td.deleteFormItem(tr,trIndex-1,$event)">
+            删除
+        </button>
+    </script>
+    <!-- 自定义列模板:音乐播放使用 -->
+    <script type="text/ng-template" id="TableViewMusicSerialNumberColumnThTpl">
+        <div style="text-align:center;">序号</div>
+    </script>
+    <script type="text/ng-template" id="TableViewMusicSerialNumberColumnTdTpl">
+        <div style="text-align:center;" ng-if="!tr.isPlayTheSong">{{trIndex}}</div>
+        <div style="text-align:center;" ng-if="tr.isPlayTheSong">
+            <img src="./images/wave.gif" alt="">
+        </div>
+    </script>
+    <script type="text/ng-template" id="TableViewMusicTitleColumnTdTpl">
+        <div class="music-title">
+            <div class="music-name" ng-class="{playingname:tr.isPlayTheSong}" title="{{tr[td.tdIndex]}}">{{tr[td.tdIndex]}}</div>
+            <div class="music-operation" ng-class="{show:trMouseoverIndex===trIndex||tr.isPlayTheSong}">
+                <span class="icon play" ng-if="tr.isPause" ng-click="td.clickToPlayOneSong(tr,trIndex-1,$event)"></span>
+                <span class="icon pause" ng-if="!tr.isPause" ng-click="td.setToPauseState()"></span>
+            </div>
+        </div>
+    </script>
+    <script type="text/ng-template" id="TableViewMusicOperationColumnTpl">
+        <span>下载</span>
+       <span>收藏</span>
+    </script>
+    <script type="text/ng-template" id="TableViewMusicHeatColumnTpl">
+        <span>等待查询</span>
+    </script>
+    <script>
+        //https://uicookies.com/html-music-player/
+        //https://freefrontend.com/css-music-players/
+        //https://colorlib.com/wp/music-website-templates/
+        //https://codepen.io/jcoulterdesign/full/EvQRRo
+        function getTimeLongByMillisecond(time) {
+            var minT = Math.floor(time / 1000 / 60) >= 10 ? Math.floor(time / 1000 / 60) : '0' + Math.floor(time /
+                1000 / 60);
+            var minS = Math.floor(time / 1000 % 60) >= 10 ? Math.floor(time / 1000 % 60) : '0' + Math.floor(time /
+                1000 % 60);
+            return minT + ':' + minS;
+        };
+
+        function getTimeLongBySecond(s) {
+            var minT = Math.floor(s / 60) >= 10 ? Math.floor(s / 60) : '0' + Math.floor(s / 60);
+            var minS = Math.floor(s % 60) >= 10 ? Math.floor(s % 60) : '0' + Math.floor(s % 60);
+            return minT + ':' + minS;
+        };
+
+        var handleListFormItems = function (listFormItems) {
+            var tempColumns = [],
+                tempTableMimWidth = 0;
+            if (Array.isArray(listFormItems) && listFormItems.length) {
+                [].map.call(listFormItems, function (mapItem) {
+                    var tempColumnMinWidth = (isNaN(Number(mapItem.minWidth)) ? 150 : mapItem.minWidth);
+                    var tempStyle = {};
+                    switch (mapItem.widthType) {
+                        case "%": {
+                            tempStyle["width"] = mapItem.widthValue + mapItem.widthType;
+                            tempStyle["min-width"] = tempColumnMinWidth + "px";
+                            tempStyle["flex-grow"] = 1;
+                            tempTableMimWidth += tempColumnMinWidth;
+                            break;
+                        }
+                        case "px": {
+                            tempStyle["width"] = mapItem.widthValue + mapItem.widthType;
+                            tempStyle["min-width"] = mapItem.widthValue + mapItem.widthType;
+                            tempTableMimWidth += mapItem.widthValue;
+                            break;
+                        }
+                        case "auto":
+                        default: {
+                            tempStyle["min-width"] = tempColumnMinWidth + "px";
+                            tempStyle["flex-basis"] = tempColumnMinWidth + "px";
+                            tempStyle["flex-shrink"] = 0;
+                            tempStyle["flex-grow"] = 1;
+                            tempTableMimWidth += tempColumnMinWidth;
+                            break;
+                        }
+                    }
+                    var tempTdConfigObj = {
+                        thText: mapItem.displayName,
+                        thTpl: mapItem.thTpl,
+                        thStyle: tempStyle,
+                        thClass: "",
+                        tdIndex: mapItem.fieldId,
+                        tdTpl: mapItem.tdTpl,
+                        tdStyle: tempStyle,
+                        tdClass: ""
+                    };
+                    tempColumns.push(tempTdConfigObj);
+                });
+            }
+            return tempColumns;
+        };
+
+        var app = angular.module('myMusicApp', []);
+        // app.config(function ($httpProvider) {
+        //     $httpProvider.defaults.headers.post = {
+        //         'Access-Control-Allow-Origin': '*'
+        //     }
+        // });
+        var musicPlayerDom = document.getElementById("myMusicPlayer");
+        app.directive("tableView", function ($templateCache, $compile) {
+            return {
+                restrict: "A",
+                replace: true,
+                templateUrl: './templete/TableView.html',
+                scope: {
+                    config: "=",
+                    slideToBottom: "&"
+                },
+                transclude: true,
+                controller: function ($scope, $element, $transclude) {
+                    //  参考：https://stackoverflow.com/questions/494143/creating-a-new-dom-element-from-an-html-string-using-built-in-dom-methods-or-pro
+                    // //  第一版
+                    // var tempTrDomStr = $templateCache.get('TableViewDataTrTpl');
+                    // var tempDiv = document.createElement('div');
+                    // tempDiv.innerHTML = tempTrDomStr.trim();
+                    // var tempTrDom = tempDiv.firstChild;
+                    // tempTrDom.setAttribute("ng-click", "config.body.trClick(tr,trIndex-1,$event);");
+                    // var tempTrDomCompileAfter = $compile(tempTrDom)($scope);
+                    // $element.find(".body").append(tempTrDomCompileAfter);
+                    //  第二版
+                    var tempTrjQueryDom = $($templateCache.get('TableViewDataTrTpl'));
+                    tempTrjQueryDom.attr("ng-click", "config.body.trClick(tr,trIndex-1,$event);");
+                    var tempTrjQueryDomAfter = $compile(tempTrjQueryDom)($scope);
+                    $element.find(".body").append(tempTrjQueryDomAfter);
+                    $transclude(function (clone, childScope) {
+                        if (clone.length == 0) return;
+                        $element.find(".body").append(clone);
+                    });
+                },
+                link: function (scope, element, attrs) {
+                    var defaultConfig = {
+                        data: [],
+                        header: {
+                            style: "",
+                            class: ""
+                        },
+                        body: {
+                            style: "",
+                            class: "",
+                            trStyle: "",
+                            trClass: "",
+                            trClick: function () {}
+                        },
+                        columns: [{
+                            thText: "",
+                            thTpl: '',
+                            thStyle: "",
+                            thClass: "",
+                            tdIndex: "",
+                            tdTpl: '',
+                            tdStyle: "",
+                            tdClass: ""
+                        }],
+                        scroll: {
+                            slideToBottom: null,
+                            slideToRight: null,
+                        }
+                    };
+                    var myScrollBar = null;
+                    if (window.PerfectScrollbar) {
+                        var bodyContentDom = element[0].querySelector(".body");
+                        myScrollBar = new PerfectScrollbar(bodyContentDom);
+                        bodyContentDom.addEventListener('ps-y-reach-end', function () {
+                            scope.slideToBottom();
+                        });
+                        bodyContentDom.addEventListener('ps-scroll-x', function () {
+                            var headContentDom = element[0].querySelector(".header");
+                            // headContentDom.style.transform =
+                            //     `translateX(-${myScrollBar.lastScrollLeft}px)`;
+                            headContentDom.style.transform =
+                                `translateX(-${myScrollBar.scrollbarXRail.style.left})`;
+                        });
+                    }
+                }
+            }
+        });
+
+        app.controller('MainController', function ($scope, $http, $timeout) {
+            var getMusicInfo = function (ids) {
+                // https://music-1258014408.file.myqcloud.com/onlineplayer/js/ajax.js
+                var url = "https://apimusic.postgraduate.top/song/detail?ids=" + ids;
+                return new Promise(function (resolve, reject) {
+                    $http({
+                        method: 'get',
+                        url: url
+                    }).then(function (responseData) {
+                        if (responseData.status === 200) {
+                            if (responseData.data && responseData.data.code === 200) {
+                                resolve(responseData.data);
+                            }
+                        }
+                    });
+                });
+            };
+            var getMusicLyric = function (id) {
+                var url = "https://apimusic.postgraduate.top/lyric?id=" + id;
+                return new Promise(function (resolve, reject) {
+                    $http({
+                        method: 'get',
+                        url: url
+                    }).then(function (responseData) {
+                        if (responseData.status === 200) {
+                            if (responseData.data && responseData.data.code === 200) {
+                                resolve(responseData.data);
+                            }
+                        }
+                    });
+                });
+            };
+
+            $scope.navManager = {
+                goToDesignPage: function () {
+                    $scope.musicDesignManager.showMyMusic = false;
+                },
+                goToMyMusic: function () {
+                    $scope.musicDesignManager.showMyMusic = true;
+                }
+            };
+
+            var tempDesignThTdStyle = {
+                "min-width": "150px",
+                "flex-basis": "150px",
+                "flex-shrink": 0,
+                "flex-grow": 1
+            };
+            //  设计时列表配置 
+            $scope.tableViewDesignConfig = {
+                data: [{
+                        "fieldId": "",
+                        "widthType": "px",
+                        "widthValue": "75",
+                        "displayName": "序号",
+                        "thTpl": "TableViewMusicSerialNumberColumnThTpl",
+                        "tdTpl": "TableViewMusicSerialNumberColumnTdTpl"
+                    },
+                    {
+                        "fieldId": "name",
+                        "widthType": "%",
+                        "widthValue": "50",
+                        "displayName": "歌曲",
+                        "thTpl": "",
+                        "tdTpl": "TableViewMusicTitleColumnTdTpl"
+                    },
+                    {
+                        "fieldId": "artists",
+                        "widthType": "px",
+                        "widthValue": "200",
+                        "displayName": "歌手",
+                        "thTpl": "",
+                        "tdTpl": ""
+                    },
+                    {
+                        "fieldId": "duration",
+                        "widthType": "px",
+                        "widthValue": "100",
+                        "displayName": "时长",
+                        "thTpl": "",
+                        "tdTpl": ""
+                    },
+                    // {
+                    //     "fieldId": "album",
+                    //     "widthType": "px",
+                    //     "widthValue": "1000",
+                    //     "displayName": "专辑",
+                    //     "thTpl": "",
+                    //     "tdTpl": ""
+                    // },
+                    // {
+                    //     "fieldId": "",
+                    //     "widthType": "px",
+                    //     "widthValue": "1000",
+                    //     "displayName": "热度",
+                    //     "thTpl": "",
+                    //     "tdTpl": "TableViewMusicHeatColumnTpl"
+                    // },
+                    // {
+                    //     "fieldId": "",
+                    //     "widthType": "px",
+                    //     "widthValue": "500",
+                    //     "displayName": "操作",
+                    //     "thTpl": "",
+                    //     "tdTpl": "TableViewMusicOperationColumnTpl"
+                    // }
+                ],
+                header: {
+                    style: "",
+                    class: ""
+                },
+                body: {},
+                columns: [{
+                    thText: "序号",
+                    thStyle: {
+                        "text-align": "center",
+                        "width": "60px",
+                        "min-width": "60px"
+                    },
+                    tdIndex: "",
+                    tdTpl: "TableViewDesignSerialNumberColumnTpl",
+                    tdStyle: {
+                        "width": "60px",
+                        "min-width": "60px",
+                        "text-align": "center"
+                    }
+                }, {
+                    thText: "列名称",
+                    thStyle: tempDesignThTdStyle,
+                    tdIndex: "displayName",
+                    tdTpl: "",
+                    tdStyle: tempDesignThTdStyle
+                }, {
+                    thText: "列宽类型",
+                    thStyle: tempDesignThTdStyle,
+                    tdIndex: "widthType",
+                    tdTpl: "",
+                    tdStyle: tempDesignThTdStyle
+                }, {
+                    thText: "列宽类型值",
+                    thStyle: tempDesignThTdStyle,
+                    tdIndex: "widthValue",
+                    tdTpl: "",
+                    tdStyle: tempDesignThTdStyle
+                }, {
+                    thText: "列索引",
+                    thStyle: tempDesignThTdStyle,
+                    tdIndex: "",
+                    tdTpl: "TableViewDesignColumnIndexColumnTpl",
+                    tdStyle: tempDesignThTdStyle
+                }, {
+                    thText: "操作",
+                    thStyle: tempDesignThTdStyle,
+                    tdIndex: "",
+                    tdTpl: "TableViewDesignOperationColumnTpl",
+                    tdStyle: tempDesignThTdStyle,
+                    deleteFormItem: function (tr, $index, $event) {
+                        $scope.tableViewDesignConfig.data.splice($index, 1);
+                    }
+                }]
+            };
+
+            //  音乐列表设计管理相关
+            $scope.musicDesignManager = {
+                showMyMusic: true,
+                musicConfig: {
+                    currentItem: null,
+                    currentWidthType: null,
+                    currentWidthTypeValue: ""
+                },
+                formItemSource: [{
+                        id: "1",
+                        fieldId: "",
+                        fieldName: "序号",
+                        thTemplete: "TableViewMusicSerialNumberColumnThTpl",
+                        fieldTemplete: "TableViewMusicSerialNumberColumnTdTpl"
+                    },
+                    {
+                        id: "2",
+                        fieldId: "name",
+                        fieldName: "歌曲",
+                        thTemplete: "",
+                        fieldTemplete: "TableViewMusicTitleColumnTdTpl"
+                    },
+                    {
+                        id: "3",
+                        fieldId: "artists",
+                        fieldName: "歌手",
+                        thTemplete: "",
+                        fieldTemplete: ""
+                    },
+                    {
+                        id: "4",
+                        fieldId: "album",
+                        fieldName: "专辑",
+                        thTemplete: "",
+                        fieldTemplete: ""
+                    },
+                    {
+                        id: "5",
+                        fieldId: "duration",
+                        fieldName: "时长",
+                        thTemplete: "",
+                        fieldTemplete: ""
+                    },
+                    {
+                        id: "6",
+                        fieldId: "",
+                        fieldName: "热度",
+                        thTemplete: "",
+                        fieldTemplete: "TableViewMusicHeatColumnTpl"
+                    },
+                    {
+                        id: "7",
+                        fieldId: "",
+                        fieldName: "操作",
+                        thTemplete: "",
+                        fieldTemplete: "TableViewMusicOperationColumnTpl"
+                    },
+                ],
+                widthTypeOptions: [{
+                    text: "auto"
+                }, {
+                    text: "%"
+                }, {
+                    text: "px"
+                }],
+                addFormItem: function () {
+                    if (!this.musicConfig.currentItem) {
+                        alert("请选择一个表单项");
+                        return;
+                    }
+                    if (!this.musicConfig.currentWidthType) {
+                        alert("请选择一个列宽类型");
+                        return;
+                    }
+                    if (["%", "px"].indexOf(this.musicConfig.currentWidthType.text) >= 0 && !this
+                        .musicConfig.currentWidthTypeValue) {
+                        alert("请输入对应列宽类型的值");
+                        return;
+                    }
+                    $scope.tableViewDesignConfig.data.push({
+                        fieldId: this.musicConfig.currentItem.fieldId,
+                        widthType: this.musicConfig.currentWidthType.text,
+                        widthValue: this.musicConfig.currentWidthTypeValue,
+                        displayName: this.musicConfig.currentItem.fieldName,
+                        thTpl: this.musicConfig.currentItem.thTemplete,
+                        tdTpl: this.musicConfig.currentItem.fieldTemplete,
+                    });
+                    this.musicConfig.currentItem = null;
+                    this.musicConfig.currentWidthType = null;
+                    this.musicConfig.currentWidthTypeValue = "";
+                }
+            };
+
+            //  音乐列表配置 
+            $scope.tableViewConfig = {
+                data: [],
+                header: {
+                    style: "",
+                    class: ""
+                },
+                body: {
+                    style: "",
+                    class: "",
+                    trStyle: "",
+                    trClass: ""
+                },
+                columns: []
+            };
+            $scope.$watch("tableViewDesignConfig.data", function (newValue, oldValue) {
+                $scope.tableViewConfig.columns = handleListFormItems(newValue);
+                [].forEach.call($scope.tableViewConfig.columns, function (item) {
+                    if (item.tdIndex === "name") {
+                        item.clickToPlayOneSong = $scope.musicPlayerManager.clickToPlayOneSong;
+                        item.setToPauseState = $scope.musicPlayerManager.setToPauseState;
+                    }
+                });
+            }, true);
+
+            //  音乐列表相关
+            $scope.musicListManager = {
+                pageSize: 30,
+                isLoadAll: false, // 判断是否加载了所有数据
+                isLoadFinish: true, // 判断本次请求是否完毕
+                noDataConfig: {
+                    isShow: false,
+                    text: "暂无音乐，您可以点击搜索"
+                },
+                searchText: "",
+                goToSearch: function () {
+                    if (!this.searchText) {
+                        return;
+                    }
+                    $scope.tableViewConfig.data = [];
+                    this.sendGetMusicApi({
+                        keywords: this.searchText,
+                        offset: 0,
+                        limit: this.pageSize
+                    });
+                },
+                enterKeyUpToSearch: function (e) {
+                    var keycode = window.event ? e.keyCode : e.which;
+                    if (keycode == 13) {
+                        $scope.musicListManager.goToSearch();
+                    }
+                },
+                loadMoreData: function () {
+                    this.sendGetMusicApi({
+                        keywords: this.searchText,
+                        offset: $scope.tableViewConfig.data.length,
+                        limit: this.pageSize
+                    });
+                },
+                handleResponseData: function (serverData) {
+                    var tempTrs = [];
+                    if (Array.isArray(serverData) && serverData.length) {
+                        [].map.call(serverData, function (mapItem) {
+                            var tempArtists = [];
+                            if (Array.isArray(mapItem.artists) && mapItem.artists.length) {
+                                [].map.call(mapItem.artists, function (singer) {
+                                    tempArtists.push(singer.name);
+                                });
+                            }
+                            tempTrs.push({
+                                id: mapItem.id,
+                                isPause: true,
+                                isPlayTheSong: false,
+                                name: mapItem.name,
+                                artists: tempArtists.join("/"),
+                                album: mapItem.album ? mapItem.album.name : "",
+                                duration: getTimeLongByMillisecond(
+                                    mapItem.duration),
+                                item: mapItem
+                            });
+                        });
+                    }
+                    return tempTrs;
+                },
+                sendGetMusicApi: function (searchOption) {
+                    var url = "https://apimusic.postgraduate.top/search";
+                    if (!this.isLoadFinish) return;
+                    this.isLoadFinish = false;
+                    var searchDefualtObj = {};
+                    if (searchOption) {
+                        searchDefualtObj = Object.assign(searchDefualtObj, searchOption);
+                    }
+                    if (Object.getOwnPropertyNames(searchDefualtObj).length) {
+                        url += "?" + $.param(searchDefualtObj);
+                    }
+                    var _this = this;
+                    $http({
+                        method: 'post',
+                        url: url
+                    }).then((responseData) => {
+                        if (responseData.status === 200) {
+                            if (responseData.data && responseData.data.code === 200) {
+                                if (responseData.data.result) {
+                                    var allCount = responseData.data.result.songCount;
+                                    $scope.tableViewConfig.data = $scope.tableViewConfig.data
+                                        .concat(_this.handleResponseData(responseData.data
+                                            .result.songs));
+                                    if (Object.hasOwnProperty.call(responseData.data.result,
+                                            "songs")) {
+                                        _this.isLoadAll = responseData.data.result.songs
+                                            .length < _this.pageSize;
+                                    } else {
+                                        _this.isLoadAll = true;
+                                    }
+                                }
+                            }
+                        }
+                        _this.isLoadFinish = true;
+                    }, (error) => {
+                        _this.isLoadFinish = true;
+                        alert(error);
+                    });
+                }
+            };
+            var tempSongPlayingObj = {
+                musicTrInfo: null,
+                //底部时间进入条相关
+                totalTimeLong: "00:00",
+                playedTimeLong: "00:00",
+                progress: 0,
+                loadProgress: 0,
+                isPlaying: false,
+                loadProgressStyle: null,
+                //歌词播放相关
+                musicTopObj: null,
+                musicLyricArr: [],
+                musicLyricPlayProgressStyle: null,
+                musicPlayingBgStyle: null,
+                //
+                volumePercent: 100
+            };
+            //  音乐播放相关
+            $scope.musicPlayerManager = {
+                songsPlaying: Object.assign({}, tempSongPlayingObj),
+                clickToPlayOneSong: function (tr, index, $event) {
+                    if ($scope.musicPlayerManager.songsPlaying.musicTrInfo &&
+                        $scope.musicPlayerManager.songsPlaying.musicTrInfo.id === tr.id) {
+                        $scope.musicPlayerManager.setToPlayState();
+                        return false;
+                    }
+                    $scope.musicPlayerManager.songsPlaying.musicLyricArr.length = 0;
+                    $scope.musicPlayerManager.songsPlaying.musicLyricPlayProgressStyle = null;
+                    [].forEach.call($scope.tableViewConfig.data, function (item) {
+                        item.isPlayTheSong = tr.id === item.id;
+                        item.isPause = tr.id !== item.id;
+                    });
+                    Promise.all([getMusicInfo(tr.id), getMusicLyric(tr.id)]).then(function (
+                        retAll) {
+                        if (Array.isArray(retAll) && retAll.length) {
+                            $scope.musicPlayerManager.playOneMusic(retAll[0], retAll[1],
+                                tr);
+                        }
+                    });
+                },
+                toggleVolumeOnOff: function (value) {
+                    musicPlayerDom.volume = value;
+                    $scope.musicPlayerManager.songsPlaying.volumePercent =
+                        value * 100;
+                },
+                playOneMusic: function (musicInfo, musicLyric, trInfo) {
+                    if (musicInfo && Array.isArray(musicInfo.songs) && musicInfo.songs.length) {
+                        var tempPalyIngSong = musicInfo.songs[0];
+                        $scope.musicPlayerManager.songsPlaying.musicTrInfo = Object.assign({}, trInfo, {
+                            picUrl: tempPalyIngSong.al && tempPalyIngSong.al.picUrl
+                        });
+                        $scope.musicPlayerManager.songsPlaying.musicPlayingBgStyle = {
+                            'background-image': `url(${$scope.musicPlayerManager.songsPlaying.musicTrInfo.picUrl})`
+                        };
+                        //  歌词相关
+                        if (musicLyric.lrc && musicLyric.lrc.lyric) {
+                            var tempMusicLyricArr = musicLyric.lrc.lyric.split("\n");
+                            [].forEach.call(tempMusicLyricArr, function (item) {
+                                if (item.length) {
+                                    var tempIndex = item.indexOf("]");
+                                    var tempTimeArr = item.substring(1, tempIndex).split(":");
+                                    $scope.musicPlayerManager.songsPlaying.musicLyricArr.push({
+                                        t: parseFloat(tempTimeArr[0]) * 60 + parseFloat(
+                                            tempTimeArr[1]),
+                                        lyric: item.substring(tempIndex + 1),
+                                        isOn: false
+                                    });
+                                }
+                            });
+                            $scope.musicPlayerManager.songsPlaying.musicLyricArr[0].isOn = true;
+                        }
+                        musicPlayerDom.src =
+                            "https://music.163.com/song/media/outer/url?id=" + tempPalyIngSong.id +
+                            ".mp3";
+                        musicPlayerDom.play();
+                        $scope.musicPlayerManager.songsPlaying.isPlaying = true;
+                    }
+                },
+                palyPrevSong: function () {
+                    if ($scope.tableViewConfig.data.length && $scope.musicPlayerManager.songsPlaying
+                        .musicTrInfo) {
+                        var tempIndex = $scope.tableViewConfig.data.findIndex(function (item) {
+                            return item.id === $scope.musicPlayerManager.songsPlaying
+                                .musicTrInfo.id;
+                        });
+                        var tempPreIndex = (tempIndex >= 1 && tempIndex < $scope.tableViewConfig.data
+                                .length) ? (tempIndex - 1) : $scope.tableViewConfig.data
+                            .length - 1;
+                        $scope.musicPlayerManager.clickToPlayOneSong($scope.tableViewConfig.data[
+                                tempPreIndex],
+                            tempPreIndex);
+                    }
+                },
+                setToPlayState: function () {
+                    if ($scope.musicPlayerManager.songsPlaying.musicTrInfo && musicPlayerDom.paused) {
+                        musicPlayerDom.play();
+                        $scope.musicPlayerManager.songsPlaying.isPlaying = true;
+                        [].forEach.call($scope.tableViewConfig.data, function (
+                            item) {
+                            item.isPause = $scope.musicPlayerManager.songsPlaying.musicTrInfo
+                                .id !== item.id;
+                        });
+                    } else if ($scope.tableViewConfig.data.length) {
+                        $scope.musicPlayerManager.clickToPlayOneSong($scope.tableViewConfig.data[0], 0);
+                    }
+                },
+                setToPauseState: function () {
+                    if ($scope.musicPlayerManager.songsPlaying.musicTrInfo && !musicPlayerDom.paused) {
+                        musicPlayerDom.pause();
+                        $scope.musicPlayerManager.songsPlaying.isPlaying = false;
+                        [].forEach.call($scope.tableViewConfig.data, function (
+                            item) {
+                            item.isPause = true;
+                        });
+                    }
+                },
+                palyNextSong: function () {
+                    if ($scope.tableViewConfig.data.length && $scope.musicPlayerManager.songsPlaying
+                        .musicTrInfo) {
+                        var tempIndex = $scope.tableViewConfig.data.findIndex(function (item) {
+                            return item.id === $scope.musicPlayerManager.songsPlaying
+                                .musicTrInfo.id;
+                        });
+                        var tempNextIndex = (tempIndex >= 0 && tempIndex < $scope.tableViewConfig.data
+                            .length - 1) ? (tempIndex + 1) : 0;
+                        $scope.musicPlayerManager.clickToPlayOneSong($scope.tableViewConfig.data[
+                                tempNextIndex],
+                            tempNextIndex);
+                    }
+                }
+            };
+            $timeout(function () {
+                document.getElementById("volumeSlider").addEventListener("input", (inputEvent) => {
+                    var tempVolumeValue = parseInt(inputEvent.target.value.slidValue);
+                    musicPlayerDom.volume = tempVolumeValue / 100;
+                    $scope.$apply(function () {
+                        $scope.musicPlayerManager.songsPlaying.volumePercent =
+                            tempVolumeValue;
+                    });
+                });
+            }, 500);
+            if (musicPlayerDom) {
+                $scope.musicPlayerManager.songsPlaying.volumePercent = musicPlayerDom.volume * 100;
+                musicPlayerDom.onloadedmetadata = function () {
+                    $scope.musicPlayerManager.songsPlaying.totalTimeLong = getTimeLongBySecond(
+                        musicPlayerDom.duration);
+                };
+                musicPlayerDom.onprogress = function () {
+                    var tempAllDuration = Math.floor(musicPlayerDom.duration);
+                    if (musicPlayerDom.buffered.length > 0) {
+                        var tempLoadDuration = 0
+                        for (var i = 0; i < musicPlayerDom.buffered.length; i++) {
+                            tempLoadDuration += musicPlayerDom.buffered.end(i) - musicPlayerDom.buffered
+                                .start(
+                                    i)
+                            if (tempLoadDuration > tempAllDuration) {
+                                tempLoadDuration = tempAllDuration;
+                            }
+                        }
+                        $scope.musicPlayerManager.songsPlaying.loadProgress = tempLoadDuration * 100 /
+                            tempAllDuration;
+                    }
+                };
+                musicPlayerDom.ontimeupdate = function () {
+                    //  当前播放时间——单位：秒
+                    var currentT = Math.floor(musicPlayerDom.currentTime);
+                    //  音频时长——单位：秒
+                    var duration = Math.floor(musicPlayerDom.duration);
+                    $scope.$apply(function () {
+                        //  1、播放进度——滑块
+                        $scope.musicPlayerManager.songsPlaying.playedTimeLong = getTimeLongBySecond(
+                            currentT);
+                        var tempPlayProgress = currentT * 100 / duration;
+                        $scope.musicPlayerManager.songsPlaying.progress = isNaN(tempPlayProgress) ?
+                            0 : tempPlayProgress;
+                        //  2、歌词进度
+                        //      2.1、正在播放的歌词
+                        var tempPlayedLyrics = [].filter.call($scope.musicPlayerManager.songsPlaying
+                            .musicLyricArr,
+                            function (filterItem) {
+                                return filterItem.t <= musicPlayerDom.currentTime;
+                            });
+                        var tempPalyingLyricIndex = (tempPlayedLyrics.length > 1 ?
+                            tempPlayedLyrics.length - 1 : tempPlayedLyrics.length);
+                        tempPalyingLyricIndex++;
+                        [].forEach.call($scope.musicPlayerManager.songsPlaying.musicLyricArr,
+                            function (lyricItem, itemIndex) {
+                                lyricItem.isOn = itemIndex === tempPalyingLyricIndex - 1;
+                            });
+                        //      2.2、滚动播放歌词
+                        var musicLyricContainerDom = document.getElementById("musicLyricContainer");
+                        if (musicLyricContainerDom) {
+                            //  歌词的直接容器
+                            var musicLyricScrollContnetDom = musicLyricContainerDom.children[0];
+                            if ($scope.musicPlayerManager.songsPlaying.musicLyricArr.length &&
+                                musicLyricScrollContnetDom) {
+                                //  歌词外层容器高度的一半
+                                var musicLyricContainerHalfHeight = musicLyricContainerDom
+                                    .clientHeight / 2;
+                                //  歌词每一行的高度
+                                var musicLyricLinePHeight = musicLyricScrollContnetDom
+                                    .clientHeight /
+                                    $scope.musicPlayerManager.songsPlaying.musicLyricArr.length;
+                                //  计算第一个开始移动的行索引
+                                var tempFirstMovePIndex = Math.ceil(musicLyricContainerHalfHeight /
+                                    musicLyricLinePHeight + 0.5);
+                                //  计算第一个开始移动的行索引
+                                var tempLastMovePIndex = $scope.musicPlayerManager.songsPlaying
+                                    .musicLyricArr.length - Math.ceil(
+                                        musicLyricContainerHalfHeight / musicLyricLinePHeight);
+                                var diffValueHeight = tempPalyingLyricIndex *
+                                    musicLyricLinePHeight -
+                                    musicLyricContainerHalfHeight - musicLyricLinePHeight / 2;
+
+
+                                if (tempPalyingLyricIndex >= tempFirstMovePIndex &&
+                                    tempPalyingLyricIndex <=
+                                    tempLastMovePIndex) {
+                                    $scope.musicPlayerManager.songsPlaying
+                                        .musicLyricPlayProgressStyle = {
+                                            transform: `translateY(-${diffValueHeight}px)`
+                                        };
+                                } else if (tempPalyingLyricIndex - 1 === tempLastMovePIndex) {
+                                    $scope.musicPlayerManager.songsPlaying
+                                        .musicLyricPlayProgressStyle = {
+                                            transform: `translateY(-${musicLyricScrollContnetDom.clientHeight-musicLyricContainerHalfHeight*2}px)`
+                                        };
+                                }
+                            }
+                        }
+                    });
+                };
+                musicPlayerDom.onended = function () { //   播放结束事件
+                    $scope.musicPlayerManager.palyNextSong();
+                };
+                musicPlayerDom.onerror = function () {};
+            }
+        });
+    </script>
+</body>
+
+</html>

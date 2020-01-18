@@ -1,0 +1,13 @@
+<div class="tableview-container">
+    <div class="header tr" ng-if="config&&config.columns.length" ng-style="config.header.style"
+        ng-class="config.header.class">
+        <div class="td" ng-repeat-start="th in config.columns track by $index" ng-style="th.thStyle"
+            ng-class="th.thClass" ng-if="th.thTpl" ng-include="th.thTpl">
+        </div>
+        <div class="td" ng-repeat-end ng-style="th.thStyle" ng-class="th.thClass" ng-if="!th.thTpl">
+            {{th.thText}}
+        </div>
+    </div>
+    <div class="body" ng-style="config.body.style" ng-class="config.body.class">
+    </div>
+</div>

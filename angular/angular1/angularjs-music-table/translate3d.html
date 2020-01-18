@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *,
+        *:before,
+        *:after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+
+
+        .container {
+            height: 280px;
+            width: 350px;
+            text-align: center;
+            overflow: hidden;
+            background-color: antiquewhite;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .center-line {
+            position: absolute;
+            top: 50%;
+            height: 2px;
+            width: 100%;
+            margin-top: -1px;
+            background-color: blueviolet;
+        }
+
+        p {
+            margin: 0;
+            height: 45px;
+            line-height: 45px;
+        }
+
+        p.on {
+            color: darkviolet;
+        }
+    </style>
+</head>
+
+<body>
+    <p></p>
+    <p></p>
+    <div id="container" class="container">
+        <div id="scollContainer"></div>
+        <div class="center-line"></div>
+    </div>
+    <script>
+        var containerDom = document.getElementById("container");
+        var scollContainerDom = document.getElementById("scollContainer");
+        for (var i = 0; i < 10; i++) {
+            var tempPDom = document.createElement("p");
+            tempPDom.innerHTML = `${i + 1}、爱拼才会赢`;
+            scollContainerDom.append(tempPDom);
+        }
+        console.log(scollContainerDom.clientHeight);
+        var tempPNodes = scollContainerDom.querySelectorAll("p");
+        var containerHalfHeight = containerDom.offsetHeight / 2;
+        var lyricPHeight = tempPNodes[0].offsetHeight;
+        var GVPPlayingLyricIndex = 0;
+        var setPlayingLyric = function () {
+            for (var i = 0; i < tempPNodes.length; i++) {
+                var pNode = tempPNodes[i];
+                pNode.classList.remove("on");
+            }
+            if (GVPPlayingLyricIndex >= tempPNodes.length) {
+                clearInterval(setPlayingLyric);
+                return;
+            }
+            tempPNodes[GVPPlayingLyricIndex].classList.add("on");
+            //  计算第一个开始移动的行索引
+            var tempFirstMovePIndex = Math.ceil(containerHalfHeight / lyricPHeight + 0.5);
+            //  计算第一个开始移动的行索引
+            var tempLastMovePIndex = tempPNodes.length - Math.ceil(containerHalfHeight / lyricPHeight);
+            //  计算可以移动的最大距离
+            //var tempTopStratMovePos = (tempFirstMovePIndex - 0.5) * lyricPHeight;
+            //var tempMaxMovePX = scollContainerDom.clientHeight - tempTopStratMovePos - containerHalfHeight;
+            var diffValueHeight = (GVPPlayingLyricIndex + 1) * lyricPHeight - containerHalfHeight - lyricPHeight /
+                2;
+            if ((GVPPlayingLyricIndex + 1) >= tempFirstMovePIndex && (GVPPlayingLyricIndex + 1) <=
+                tempLastMovePIndex) {
+                scollContainerDom.style.transform = `translateY(-${diffValueHeight}px)`;
+            } else if (GVPPlayingLyricIndex === tempLastMovePIndex) {
+                scollContainerDom.style.transform =
+                    `translateY(-${scollContainerDom.clientHeight-containerHalfHeight*2}px)`;
+            }
+            GVPPlayingLyricIndex++;
+            console.log("******正在执行中******");
+        }
+        setPlayingLyric();
+        setInterval(setPlayingLyric, 1000);
+    </script>
+</body>
+
+</html>
