@@ -22,7 +22,8 @@
             <form class="form-inline">
                 <div class="form-group">
                     <label></label>
-                    <input type="text" class="form-control" ng-model="listManager.searchText" placeholder="请输入个歌曲名称\歌手名称">
+                    <input type="text" class="form-control" ng-model="listManager.searchText"
+                        placeholder="请输入个歌曲名称\歌手名称">
                 </div>
                 <button type="button" class="btn btn-primary" ng-click="listManager.searchMusic()">搜索</button>
             </form>
@@ -42,7 +43,7 @@
                     <tr ng-repeat="tr in listManager.dataSource">
                         <td>{{$index+1}}</td>
                         <td style="cursor: pointer;" ng-click="listManager.itemClick(tr,$index,$event);">
-                            <span><img width="36" height="36" src="{{tr.pic}}" ></span>
+                            <span><img width="36" height="36" src="{{tr.pic}}"></span>
                             <span> {{tr.name}}</span>
                         </td>
                         <td>{{tr.singer}}</td>
@@ -62,7 +63,8 @@
             <div class="player-contianer">
                 <div class="music-selected">
                     <div>{{playerManager.musicSelected.item.name}} - {{playerManager.musicSelected.item.singer}}</div>
-                    <div>{{playerManager.musicSelected.playTimeLong}}/{{playerManager.musicSelected.item.timeLong}}</div>
+                    <div>{{playerManager.musicSelected.playTimeLong}}/{{playerManager.musicSelected.item.timeLong}}
+                    </div>
                 </div>
                 <div class="music-progress">进度
                 </div>
@@ -74,11 +76,11 @@
     <script src="https://cdn.bootcss.com/angular.js/1.6.8/angular.js"></script>
     <script>
         var app = angular.module('myMusicApp', []);
-        app.config(function($httpProvider) {
-            $httpProvider.defaults.headers.post = {
-                'Access-Control-Allow-Origin': '*'
-            }
-        });
+        // app.config(function($httpProvider) {
+        //     $httpProvider.defaults.headers.post = {
+        //         'Access-Control-Allow-Origin': '*'
+        //     }
+        // });
         var musicPlayerDom = document.getElementById("myMusicPlayer");
         var baseMusicUrl = "https://music.163.com/api/search/get";
 
@@ -96,7 +98,7 @@
             return minT + ':' + minS;
         };
 
-        app.controller('MainController', function($scope, $http) {
+        app.controller('MainController', function ($scope, $http) {
             //  列表数据管理
             $scope.listManager = {
                 pageSize: 18,
@@ -108,7 +110,7 @@
                     text: ""
                 },
                 searchText: "",
-                searchMusic: function() {
+                searchMusic: function () {
                     var tempObj = {};
                     if (this.searchText) {
                         tempObj["name"] = this.searchText;
@@ -117,7 +119,7 @@
                     this.isLoadAll = false;
                     this.loadData(tempObj);
                 },
-                getMusicInfo: function(id, callback) {
+                getMusicInfo: function (id, callback) {
                     var _this = this;
                     var urlObj = {
                         type: "song",
@@ -140,9 +142,9 @@
                         alert(error);
                     });
                 },
-                itemClick: function(tr, $index, $event) {
+                itemClick: function (tr, $index, $event) {
                     var _this = this;
-                    this.getMusicInfo(tr.id, function(musicInfo) {
+                    this.getMusicInfo(tr.id, function (musicInfo) {
                         $scope.playerManager.musicSelected.index = $index;
                         $scope.playerManager.musicSelected.item = _this.dataSource[$index];
                         $scope.playerManager.musicSelected.playUrl = musicInfo.url;
@@ -152,13 +154,13 @@
                     });
                 },
                 //  滚动条滑动到最下方时调用该方法（加载更多）
-                slideToBottom: function() {
+                slideToBottom: function () {
                     if (this.isLoadAll) return;
                     var searchObj = $scope.searchManager.createSearchModel();
                     searchObj["StartNumbers"] = this.dataSource.length;
                     this.loadData(searchObj);
                 },
-                loadData: function(searchOption) {
+                loadData: function (searchOption) {
                     if (!this.isLoadFinish) return;
                     this.isLoadFinish = false;
                     var searchDefualtObj = {
@@ -183,7 +185,7 @@
                                     var allCount = response.data.result.songCount;
                                     var currentSongs = response.data.result.songs;
                                     var tempTrs = [];
-                                    [].map.call(currentSongs, function(mapItem) {
+                                    [].map.call(currentSongs, function (mapItem) {
                                         tempTrs.push({
                                             id: mapItem.privilege.id,
                                             name: mapItem.name,
@@ -215,22 +217,23 @@
                     playProgress: 0,
                     item: null
                 },
-                musicPrevious: function() {
+                musicPrevious: function () {
                     var _this = this;
                     if (this.musicSelected.index === 0) {
                         this.musicSelected.index = $scope.listManager.dataSource.length - 1;
                     } else {
                         this.musicSelected.index--;
                     }
-                    $scope.listManager.getMusicInfo(this.musicSelected.item.id, function(musicInfo) {
-                        _this.musicSelected.item = $scope.listManager.dataSource[_this.musicSelected.index];
+                    $scope.listManager.getMusicInfo(this.musicSelected.item.id, function (musicInfo) {
+                        _this.musicSelected.item = $scope.listManager.dataSource[_this
+                            .musicSelected.index];
                         _this.musicSelected.playUrl = musicInfo.url;
                         _this.musicSelected.playTimeLong = "00:00";
                         _this.musicSelected.playProgress = 0;
                         _this.musicPlay();
                     });
                 },
-                musicPlay: function() {
+                musicPlay: function () {
                     if (this.musicSelected.playUrl && this.musicSelected.item) {
                         if (musicPlayerDom.paused) {
                             musicPlayerDom.src = this.musicSelected.playUrl;
@@ -238,20 +241,21 @@
                         }
                     }
                 },
-                musicPause: function() {
+                musicPause: function () {
                     if (!musicPlayerDom.paused) {
                         musicPlayerDom.pause();
                     }
                 },
-                musicNext: function() {
+                musicNext: function () {
                     var _this = this;
                     if (this.musicSelected.index === $scope.listManager.dataSource.length - 1) {
                         this.musicSelected.index = 0;
                     } else {
                         this.musicSelected.index++;
                     }
-                    $scope.listManager.getMusicInfo(this.musicSelected.item.id, function(musicInfo) {
-                        _this.musicSelected.item = $scope.listManager.dataSource[_this.musicSelected.index];
+                    $scope.listManager.getMusicInfo(this.musicSelected.item.id, function (musicInfo) {
+                        _this.musicSelected.item = $scope.listManager.dataSource[_this
+                            .musicSelected.index];
                         _this.musicSelected.playUrl = musicInfo.url;
                         _this.musicSelected.playTimeLong = "00:00";
                         _this.musicSelected.playProgress = 0;
@@ -263,8 +267,8 @@
             if (musicPlayerDom) {
                 // https://github.com/IFmiss/vue-website/blob/df859b25217b621ad8fe4e5dd087cb218a4e8f5b/src/components/music/music.js
                 // https://github.com/IFmiss/vue-website/blob/243dee3ced5af0bbe943ced3cefb1a2938c3a631/src/components/music/music.vue
-                musicPlayerDom.onloadedmetadata = function() {};
-                musicPlayerDom.onprogress = function() {
+                musicPlayerDom.onloadedmetadata = function () {};
+                musicPlayerDom.onprogress = function () {
                     // const durationT = Math.floor(ele.duration)
                     // try {
                     //     if (ele.buffered.length > 0) {
@@ -283,19 +287,20 @@
                     //     return
                     // }
                 };
-                musicPlayerDom.ontimeupdate = function() {
+                musicPlayerDom.ontimeupdate = function () {
                     //  当前播放时间——单位：秒
                     const currentT = Math.floor(musicPlayerDom.currentTime);
                     //  音频时长——单位：秒
                     const duration = Math.floor(musicPlayerDom.duration);
-                    $scope.$apply(function() {
+                    $scope.$apply(function () {
                         //  计算播放时间　　
-                        $scope.playerManager.musicSelected.playTimeLong = getTimeLongBySecond(currentT);
+                        $scope.playerManager.musicSelected.playTimeLong = getTimeLongBySecond(
+                            currentT);
                         //  计算播放进度 百分比
                         $scope.playerManager.musicSelected.playProgress = currentT / duration * 100;
                     });
                 };
-                musicPlayerDom.onended = function() { //   播放结束事件
+                musicPlayerDom.onended = function () { //   播放结束事件
                     $scope.playerManager.musicNext();
                 };
             }
