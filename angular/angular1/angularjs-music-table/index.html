@@ -185,11 +185,11 @@
     </script>
     <!-- 自定义列模板:音乐播放使用 -->
     <script type="text/ng-template" id="TableViewMusicSerialNumberColumnThTpl">
-        <div style="text-align:center;">序号</div>
+        <div style="flex: 1;text-align:center;">序号</div>
     </script>
     <script type="text/ng-template" id="TableViewMusicSerialNumberColumnTdTpl">
-        <div style="text-align:center;" ng-if="!tr.isPlayTheSong">{{trIndex}}</div>
-        <div style="text-align:center;" ng-if="tr.isPlayTheSong">
+        <div style="flex: 1;text-align:center;" ng-if="!tr.isPlayTheSong">{{trIndex}}</div>
+        <div style="flex: 1;text-align:center;" ng-if="tr.isPlayTheSong">
             <img src="./images/wave.gif" alt="">
         </div>
     </script>
@@ -232,29 +232,43 @@
             var tempColumns = [],
                 tempTableMimWidth = 0;
             if (Array.isArray(listFormItems) && listFormItems.length) {
+                var tempTotalPercent = 0,
+                    tempPercentNumber = 0,
+                    tempPercentAverage = 1;
+                [].forEach.call(listFormItems, function (item) {
+                    if (item.widthType === "%") {
+                        tempTotalPercent += parseFloat(item.widthValue);
+                        tempPercentNumber++;
+                    }
+                });
+                if (tempPercentNumber > 0) {
+                    tempPercentAverage = tempTotalPercent / tempPercentNumber;
+                }
                 [].map.call(listFormItems, function (mapItem) {
                     var tempColumnMinWidth = (isNaN(Number(mapItem.minWidth)) ? 150 : mapItem.minWidth);
                     var tempStyle = {};
                     switch (mapItem.widthType) {
                         case "%": {
-                            tempStyle["width"] = mapItem.widthValue + mapItem.widthType;
+                            tempStyle["flex-grow"] = parseFloat(mapItem.widthValue);
+                            tempStyle["flex-shrink"] = parseFloat(mapItem.widthValue);
+                            tempStyle["flex-basis"] = tempColumnMinWidth + "px";
                             tempStyle["min-width"] = tempColumnMinWidth + "px";
-                            tempStyle["flex-grow"] = 1;
                             tempTableMimWidth += tempColumnMinWidth;
                             break;
                         }
                         case "px": {
                             tempStyle["width"] = mapItem.widthValue + mapItem.widthType;
                             tempStyle["min-width"] = mapItem.widthValue + mapItem.widthType;
+                            tempStyle["flex-shrink"] = 0;
                             tempTableMimWidth += mapItem.widthValue;
                             break;
                         }
                         case "auto":
                         default: {
-                            tempStyle["min-width"] = tempColumnMinWidth + "px";
+                            tempStyle["flex-grow"] = tempPercentAverage;
+                            tempStyle["flex-shrink"] = tempPercentAverage;
                             tempStyle["flex-basis"] = tempColumnMinWidth + "px";
-                            tempStyle["flex-shrink"] = 0;
-                            tempStyle["flex-grow"] = 1;
+                            tempStyle["min-width"] = tempColumnMinWidth + "px";
                             tempTableMimWidth += tempColumnMinWidth;
                             break;
                         }

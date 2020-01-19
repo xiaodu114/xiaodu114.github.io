@@ -24,8 +24,21 @@
     font-size: 16px;
 }
 
-.tableview-container>.tr::after,
-.tableview-container>.body>.tr::after {
+.tableview-container>.tr>.td,
+.tableview-container>.body>.tr>.td {
+    height: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.tableview-container>.tr>.td::after,
+.tableview-container>.body>.tr>.td::after {
     position: absolute;
     bottom: 0;
     right: 0;
@@ -33,15 +46,5 @@
     height: 1px;
     content: '';
     transform: scaleY(0.5);
-    background-color: #e0e0e0;
-}
-
-.tableview-container>.tr>.td,
-.tableview-container>.body>.tr>.td {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    padding-left: 10px;
-    padding-right: 10px;
-    flex-shrink: 0;
+    background-color: rgba(224, 224, 224, 0.2);
 }

@@ -65,6 +65,7 @@ body {
 .music-player-container .tableview-container>.body>.tr>.td>.music-title {
     display: flex;
     align-items: center;
+    flex: 1;
 }
 
 .music-player-container .tableview-container>.body>.tr>.td>.music-title>.music-name {
@@ -78,6 +79,7 @@ body {
 .music-player-container .tableview-container>.body>.tr>.td>.music-title>.music-operation {
     flex-shrink: 0;
     display: none;
+    height: 36px;
 }
 
 .music-player-container .tableview-container>.body>.tr>.td>.music-title>.music-operation.show {

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *,
+        *:before,
+        *:after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .demo1 {
+            margin-left: 100px;
+            margin-right: 100px;
+            height: 48px;
+            position: relative;
+            white-space: nowrap;
+            overflow: hidden;
+            font-size: 0;
+        }
+
+        /* .demo1::after {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            height: 1px;
+            content: '';
+            transform: scaleY(0.5);
+            background-color: #e0e0e0;
+        } */
+
+        .demo1>div {
+            display: inline-block;
+            padding-left: 10px;
+            padding-right: 10px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            border-bottom: 1px solid rebeccapurple;
+            font-size: 14px;
+            height: 100%;
+            line-height: 48px;
+        }
+    </style>
+</head>
+
+<body>
+    <p>&nbsp;</p>
+    <p>参考：<a href="https://blog.csdn.net/hunhun1122/article/details/78591103" target="_blank">html5:div 横向排列的方法</a></p>
+    <div class="demo1">
+        <div style="width: 50%;">爱拼才会赢</div>
+        <div style="width: 300px;">爱拼才会赢</div>
+        <div style="width: 30%;">爱拼才会赢</div>
+        <div style="width: 500px;">爱拼才会赢</div>
+        <div style="width: 236px;">爱拼才会赢</div>
+        <div style="width: 100px;">爱拼才会赢</div>
+        <div style="width: 200px;">爱拼才会赢</div>
+        <div style="width: 500px;">爱拼才会赢</div>
+        <div style="width: 400px;">爱拼才会赢</div>
+        <div style="width: 1000px;">爱拼才会赢</div>
+        <div style="width: 700px;">爱拼才会赢</div>
+        <div style="width: 569px;">爱拼才会赢</div>
+        <div style="width: 236px;">爱拼才会赢</div>
+        <div style="width: 236px;">爱拼才会赢</div>
+    </div>
+    <p>&nbsp;</p>
+    <div class="demo1">
+        <div style="width: 50%;">外婆的澎湖湾</div>
+        <div style="width: 50%;">外婆的澎湖湾</div>
+        <div style="width: 50%;">外婆的澎湖湾</div>
+        <div style="width: 200px;">外婆的澎湖湾</div>
+        <div style="width: 300px;">外婆的澎湖湾</div>
+        <div style="width: 500px;">外婆的澎湖湾</div>
+    </div>
+    <p>&nbsp;</p>
+    <div class="demo1">
+        <div style="width: 50%;">偏偏喜欢你</div>
+        <div style="width: 200px;">偏偏喜欢你</div>
+    </div>
+</body>
+
+</html>
