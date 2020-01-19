@@ -315,6 +315,7 @@ body {
     flex-direction: column;
     padding-left: 80px;
     padding-right: 80px;
+    overflow: hidden;
 }
 
 .music-player-container>.palyer-body>.music-content {
