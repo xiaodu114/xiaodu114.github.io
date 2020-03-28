@@ -307,6 +307,11 @@ body {
     color: #fff;
 }
 
+.music-player-container>.palyer-header>.music-setting>.dropdown-group>.dropdown-menu>.divider {
+    height: 1px;
+    background-color: rgba(225, 225, 225, 0.6);
+}
+
 .music-player-container>.palyer-header>.music-setting>.dropdown-group:hover>.dropdown-menu {
     display: block;
 }
