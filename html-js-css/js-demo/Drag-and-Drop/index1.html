@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <title>drag and drop demo1</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .dnd-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .dnd-item {
+            height: 125px;
+            width: 125px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ccc;
+            border: 5px solid #666666;
+            border-radius: 10px;
+            margin: 15px;
+        }
+
+        .invisible {
+            opacity: 0 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="dnd-container" class="dnd-container">
+    </div>
+    <script>
+        //https://developer.mozilla.org/zh-CN/docs/Web/API/HTML_Drag_and_Drop_API
+        //https://juejin.im/post/5b784074518825430e570a7f
+        Array.prototype.changePosByIndex = function (from, to) {
+            this.splice(to, 0, this.splice(from, 1)[0]);
+        };
+        Element.prototype.putToMyBefore = function (insertNode) {
+            this.parentNode.insertBefore(insertNode, this);
+        };
+        Element.prototype.putToMyAfter = function (insertNode) {
+            if (this.parentNode.lastElementChild === this) {
+                this.parentNode.appendChild(insertNode);
+            } else {
+                this.nextElementSibling.putToMyBefore(insertNode);
+            }
+        };
+        class DndSortable {
+            container = null;
+
+            constructor(containerId, option) {
+                if (!containerId) return;
+                this.container = document.getElementById(containerId);
+                if (!this.container || !this.container.children.length) return;
+
+                [].forEach.call(this.container.children, (dragItem) => {
+                    dragItem.setAttribute('draggable', 'true');
+
+                    dragItem.addEventListener('dragstart', this._handleDragStart, false);
+                    dragItem.addEventListener('dragover', this._handleDragOver, false);
+                });
+            };
+
+            _handleDragOver = (event) => {
+                event.preventDefault();
+
+                if (!event.target.classList.contains("dragging")) {
+                    var tempDraggingItemObj = null,
+                        tempTargetItemObj = null;
+                    [].forEach.call(this.container.children, (dragItem, index) => {
+                        if (dragItem.classList.contains('dragging')) {
+                            tempDraggingItemObj = {
+                                index: index,
+                                item: dragItem
+                            }
+                        }
+                        if (dragItem === event.target) {
+                            tempTargetItemObj = {
+                                index: index,
+                                item: dragItem
+                            };
+                        }
+                    });
+                    if (tempDraggingItemObj && tempTargetItemObj) {
+                        if (tempDraggingItemObj.index < tempTargetItemObj.index) {
+                            tempTargetItemObj.item.putToMyAfter(tempDraggingItemObj.item);
+                        } else {
+                            tempTargetItemObj.item.putToMyBefore(tempDraggingItemObj.item);
+                        }
+                    }
+                }
+            };
+
+            _handleDragStart = (event) => {
+                var tempDraggingItem = [].find.call(this.container.children, dragItem => dragItem === event.target);
+                if (!tempDraggingItem) return;
+                event.dataTransfer.effectAllowed = 'move';
+                tempDraggingItem.classList.add('dragging');
+                tempDraggingItem.addEventListener('drag', this._handleDrag, false);
+                tempDraggingItem.addEventListener('dragend', this._handleDragEnd, false);
+            };
+
+            _handleDrag = (event) => {
+                event.target.classList.add("invisible");
+            };
+            _handleDragEnd = (event) => {
+                [].forEach.call(this.container.children, dragItem => {
+                    dragItem.classList.remove('dragging');
+                    dragItem.classList.remove('invisible');
+                });
+                event.target.removeEventListener('drag', this._handleDrag, false);
+                event.target.removeEventListener('dragend', this._handleDragEnd, false);
+            };
+
+        };
+        var initDragItems = () => {
+            var tempDragContainer = document.getElementById("dnd-container");
+            for (let index = 1; index <= 20; index++) {
+                tempDragContainer.appendChild(document.createRange().createContextualFragment(
+                    `<div class='dnd-item'>${index}</div>`));
+            }
+        };
+        initDragItems();
+        var temp1 = new DndSortable("dnd-container");
+    </script>
+</body>
+
+</html>

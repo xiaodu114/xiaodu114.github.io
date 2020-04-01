@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="container">
+        <!--...-->
+        <!DOCTYPE>
+        <a href="">3</a>
+        <abbr title="">4</abbr>
+        <acronym title="">5</acronym>
+        <address>6</address>
+        <applet>7</applet>
+        <area shape="" coords="" href="" alt="">
+        <article>9</article>
+        <aside>10</aside>
+        <audio src="">11</audio>
+        <b>12</b>
+        <base href="">
+        <basefont>
+        <bdi>15</bdi>
+        <bdo dir="">16</bdo>
+        <big>17</big>
+        <blockquote>18</blockquote>
+
+        <body>
+            19
+        </body>
+        <br />
+        <button>21</button>
+        <canvas>22</canvas>
+        <caption>23</caption>
+        <center>24</center>
+        <cite>25</cite>
+        <code>26</code>
+        <col align="left" />
+        <colgroup>28</colgroup>
+        <command>Click Me!</command>
+        <datalist>30</datalist>
+        <dd>31</dd>
+        <del>32</del>
+        <details>33</details>
+        <dir>34</dir>
+        <div>35</div>
+        <dfn>36</dfn>
+        <dialog>37</dialog>
+        <dl>38</dl>
+        <dt>39</dt>
+        <em>40</em>
+        <embed src="" type="" />
+        <fieldset>42</fieldset>
+        <figcaption>43</figcaption>
+        <figure>44</figure>
+        <font>45</font>
+        <footer>46</footer>
+        <form action="">47</form>
+        <frame />
+        <frameset>49</frameset>
+        <h1>50</h1>
+
+        <head>51</head>
+        <header>52</header>
+        <hr />
+        <html>54
+
+        </html>
+        <i>55</i>
+        <iframe src="" frameborder="0">56</iframe>
+        <img src="" alt="">
+        <input type="text">
+        <ins>59</ins>
+        <isindex>
+        <kbd>61</kbd>
+        <keygen>
+        <label for="">63</label>
+        <legend>64</legend>
+        <li>65</li>
+        <link rel="stylesheet" href="">
+        <map name="">67</map>
+        <mark>68</mark>
+        <menu>69</menu>
+        <menuitem>70
+        </menuitem>
+        <meta>
+        <meter>72</meter>
+        <nav>73</nav>
+        <noframes>74</noframes>
+        <noscript>75</noscript>
+        <object data="" type="">76</object>
+        <ol>77</ol>
+        <optgroup>78</optgroup>
+        <option value="">79</option>
+        <output>80</output>
+        <p>81</p>
+        <param name="" value="">
+        <pre>83</pre>
+        <progress>84</progress>
+        <q>85</q>
+        <rp>86</rp>
+        <rt>87</rt>
+        <ruby>88</ruby>
+        <s>89</s>
+        <samp>90</samp>
+        <script>
+            91
+        </script>
+        <section>92</section>
+        <select name="" id=""></select>
+        <small>94</small>
+        <source>
+        <span>96</span>
+        <strike>97</strike>
+        <strong>98</strong>
+        <style></style>
+        <sub>100</sub>
+        <summary>101</summary>
+        <sup>102</sup>
+        <table>103</table>
+        <tbody>104</tbody>
+        <td>105</td>
+        <textarea name="" id="" cols="30" rows="10">106</textarea>
+        <tfoot>107</tfoot>
+        <th>108</th>
+        <thead>109</thead>
+        <time>110</time>
+        <title>111</title>
+        <tr>112</tr>
+        <track>
+        <tt>114</tt>
+        <u>115</u>
+        <ul>116</ul>
+        <var>117</var>
+        <video src="">118</video>
+        <wbr>
+        <xmp>120</xmp>
+    </div>
+    <script>
+        var tempDom = document.getElementById("container");
+        var _GetDataType = (obj) => {
+            return Object.prototype.toString
+                .call(obj)
+                .replace(/^\[object\s(\w+)\]$/, "$1")
+                .toLowerCase();
+        };
+        var allNodeTypeArr = [];
+        [].forEach.call(tempDom.childNodes, function (node) {
+            var tmepNodeType = _GetDataType(node);
+            if (allNodeTypeArr.indexOf(tmepNodeType) < 0) {
+                allNodeTypeArr.push(tmepNodeType);
+            }
+        });
+        allNodeTypeArr.sort();
+        console.log(allNodeTypeArr);
+        console.log(JSON.stringify(allNodeTypeArr));
+    </script>
+</body>
+
+</html>

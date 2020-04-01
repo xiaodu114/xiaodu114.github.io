@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <title>drag and drop demo3</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .dnd-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .dnd-item {
+            height: 125px;
+            width: 125px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ccc;
+            border: 5px solid #666666;
+            border-radius: 10px;
+            margin: 15px;
+        }
+
+        .invisible {
+            opacity: 0 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <button type="button" id="btnAddOneNote">添加一个节点</button>
+    </div>
+
+    <div id="dnd-container" class="dnd-container">
+    </div>
+    <script>
+        //https://developer.mozilla.org/zh-CN/docs/Web/API/HTML_Drag_and_Drop_API
+        //https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/removeEventListener
+        //https://juejin.im/post/5b784074518825430e570a7f
+        Array.prototype.changePosByIndex = function (from, to) {
+            this.splice(to, 0, this.splice(from, 1)[0]);
+        };
+        //  ******这里竟然会出发 DOMNodeRemoved 事件******
+        Element.prototype.putToMyBefore = function (insertNode) {
+            this.parentNode.insertBefore(insertNode, this);
+        };
+        Element.prototype.putToMyAfter = function (insertNode) {
+            if (this.parentNode.lastElementChild === this) {
+                this.parentNode.appendChild(insertNode);
+            } else {
+                this.nextElementSibling.putToMyBefore(insertNode);
+            }
+        };
+
+        class DndSortable {
+            /**
+             * 获取数据的类型
+             * document                                     ->  htmldocument
+             * window                                       ->  window
+             * Web Components(extends HTMLElement)          ->  htmlelement
+             * es6+ class(name endsWith element)            ->  function
+             * es6+ class(name endsWith element) instance   ->  object 
+             * div                                          ->  htmldivelement
+             * button                                       ->  htmlbuttonelement
+             */
+            _GetDataType = (obj) => {
+                return Object.prototype.toString
+                    .call(obj)
+                    .replace(/^\[object\s(\w+)\]$/, "$1")
+                    .toLowerCase();
+            };
+            _isHTMLElementByDataType = (obj) => {
+                //https://stackoverflow.com/questions/384286/how-do-you-check-if-a-javascript-object-is-a-dom-object
+                var tempDataType = this._GetDataType(obj);
+                return tempDataType.endsWith("element") && obj.nodeType === 1;
+            };
+            //***************************************************************************************************************
+            container = null;
+            draggingClassName = "dragging-item";
+            constructor(el, option) {
+                if (!this._isHTMLElementByDataType(el)) throw "DndSortable: `el` must be an HTMLElement";
+                this.container = el;
+
+                this.container.addEventListener('mousedown', this._onTapStart, false);
+                this.container.addEventListener('dragover', this._handleDragOver, false);
+
+                // MutationObserver 可以监听自己吗？？？
+                this.container.addEventListener('DOMNodeRemoved', this._handleDOMNodeRemoved, false);
+            };
+
+            //  容器上的事件
+            _onTapStart = (event) => {
+                //  如果拖拽项中的DOM结构比较复杂，不知道需不需要修改一下这里，等待验证？？？
+                //  参考：Sortable.js
+                var isTouch = event.touches && event.touches[0] || event.pointerType && event.pointerType ===
+                    'touch' && event,
+                    targetDom = (isTouch || event).target,
+                    originalTarget = event.target.shadowRoot && (event.path && event.path[0] || event
+                        .composedPath && event.composedPath()[0]) || targetDom;
+                if (targetDom && targetDom.parentNode === this.container) {
+                    targetDom.setAttribute('draggable', 'true');
+                    targetDom.addEventListener('dragstart', this._handleDragStart, false);
+                }
+            };
+            _handleDragOver = (event) => {
+                event.preventDefault();
+                // var tempElementsFromPoint = document.elementsFromPoint(event.pageX, event.pageY);
+                // var tempDragOverDom = null;
+                // for (let i = 0; i < tempElementsFromPoint.length; i++) {
+                //     if (tempElementsFromPoint[i].parentNode === this.container && !tempElementsFromPoint[i]
+                //         .classList.contains(this.draggingClassName)) {
+                //         tempDragOverDom = tempElementsFromPoint[i];
+                //         break;
+                //     }
+                // }
+                var tempDragOverDom = null;
+                if (event.target.parentNode === this.container &&
+                    !event.target.classList.contains(this.draggingClassName)) {
+                    tempDragOverDom = event.target;
+                }
+                if (tempDragOverDom) {
+                    tempDragOverDom.setAttribute('draggable', 'true');
+                    tempDragOverDom.addEventListener('dragleave', this._handleDragLeave, false);
+                    var tempDraggingItemObj = null,
+                        tempTargetItemObj = null;
+                    [].forEach.call(this.container.children, (dragItem, index) => {
+                        if (dragItem.classList.contains(this.draggingClassName)) {
+                            tempDraggingItemObj = {
+                                index: index,
+                                item: dragItem
+                            }
+                        }
+                        if (dragItem === tempDragOverDom) {
+                            tempTargetItemObj = {
+                                index: index,
+                                item: dragItem
+                            };
+                        }
+                    });
+                    if (tempDraggingItemObj && tempTargetItemObj) {
+                        if (tempDraggingItemObj.index < tempTargetItemObj.index) {
+                            tempTargetItemObj.item.putToMyAfter(tempDraggingItemObj.item);
+                        } else {
+                            tempTargetItemObj.item.putToMyBefore(tempDraggingItemObj.item);
+                        }
+                    }
+                }
+            };
+            _handleDOMNodeRemoved = (event) => {
+                var isDragging = false;
+                for (var i = 0; i < this.container.children.length; i++) {
+                    if (this.container.children[i].classList.contains(this.draggingClassName)) {
+                        isDragging = true;
+                        break;
+                    }
+                }
+                if (isDragging) return;
+                this.container = null;
+            };
+
+            //  定义在拖拽项上的一些事件
+            _handleDragStart = (event) => {
+                event.dataTransfer.effectAllowed = 'move';
+                event.target.classList.add(this.draggingClassName);
+                event.target.addEventListener('drag', this._handleDrag, false);
+                event.target.addEventListener('dragend', this._handleDragEnd, false);
+            };
+            _handleDragLeave = (event) => {
+                event.target.removeAttribute('draggable');
+                event.target.removeEventListener('dragleave', this._handleDragLeave, false);
+            };
+            _handleDrag = (event) => {
+                event.target.classList.add("invisible");
+            };
+            _handleDragEnd = (event) => {
+                [].forEach.call(this.container.children, dragItem => {
+                    dragItem.classList.remove(this.draggingClassName);
+                    dragItem.classList.remove('invisible');
+                    dragItem.removeAttribute('draggable');
+                    dragItem.removeEventListener('dragstart', this._handleDragStart, false);
+                    dragItem.removeEventListener('drag', this._handleDrag, false);
+                    dragItem.removeEventListener('dragend', this._handleDragEnd, false);
+                });
+
+            };
+        };
+
+        var addOneDragItem = (dom) => {
+            dom.appendChild(document.createRange().createContextualFragment(
+                `<div class='dnd-item'>${++dom.children.length}</div>`));
+        };
+
+        var dragContainerDom = document.getElementById("dnd-container");
+        for (let index = 1; index <= 6; index++) {
+            addOneDragItem(dragContainerDom);
+        }
+
+        document.getElementById("btnAddOneNote").addEventListener("click", function () {
+            addOneDragItem(dragContainerDom);
+        });
+        var tempDndSortableInstance = new DndSortable(dragContainerDom);
+    </script>
+</body>
+
+</html>

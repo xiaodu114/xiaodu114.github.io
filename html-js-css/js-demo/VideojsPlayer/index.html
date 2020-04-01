@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="./videojs/7.7.5/video-js.min.css" rel="stylesheet">
+    <style>
+        *,
+        *:before,
+        *:after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .my-videojs-container {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 15px 5% 15px 5%;
+        }
+
+        .my-videojs-container>.my-videojs-toolbar {
+            flex-shrink: 0;
+            display: flex;
+            padding-bottom: 10px;
+            align-items: center;
+        }
+
+        .my-videojs-container>.my-videojs-toolbar>input[type='text'] {
+            flex: 1;
+            display: block;
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        }
+
+        .my-videojs-container>.my-videojs-toolbar>input[type='text']:focus {
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+        }
+
+        .my-videojs-container>.my-videojs-toolbar>button {
+            flex-shrink: 0;
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-image: none;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            color: #fff;
+            background-color: rebeccapurple;
+            border-color: rebeccapurple;
+            margin-left: 10px;
+        }
+
+        .my-videojs-container>.my-videojs-player {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .my-videojs-container>.my-videojs-player>div {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="my-videojs-container">
+        <div class="my-videojs-toolbar">
+            <input type="text" id="inputVideoUrl" placeholder="请输入视频地址">
+            <button type="button" id="btnPlayYouInputVideo">播放</button>
+        </div>
+        <div class="my-videojs-player">
+            <video id="my-player" class="video-js vjs-big-play-centered" webkit-playsinline="true" playsinline="true"
+                data-setup='{}'>
+            </video>
+        </div>
+    </div>
+
+    <script src="./videojs/7.7.5/video.min.js"></script>
+    <script>
+        function findTargetNode(currentNode, targetNode) {
+            if (!currentNode) return null;
+            if (currentNode === document) {
+                return null;
+            }
+            if (currentNode === targetNode) {
+                return currentNode;
+            }
+            return findTargetNode(currentNode.parentNode, targetNode);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var btnPlayYouInputVideoDom = document.getElementById("btnPlayYouInputVideo");
+            var inputVideoUrlDom = document.getElementById("inputVideoUrl");
+
+            var myVideojsPlayer = videojs('my-player', {
+                language: 'zh-CN',
+                controls: true,
+                preload: 'auto',
+                bigPlayButton: true,
+                textTrackDisplay: false,
+                posterImage: false,
+                errorDisplay: true,
+                playbackRates: [0.5, 1, 1.25, 1.5, 2],
+            }, function () {
+
+                if (this.currentSources().length) {
+                    this.play();
+                }
+                this.on("click", function (event) {
+                    var btnVjsBigPlayButtonDom = this.el_.querySelector(
+                        "button.vjs-big-play-button");
+                    if (btnPlayYouInputVideoDom) {
+                        var tempDom = findTargetNode(event.target, btnVjsBigPlayButtonDom);
+                        if (tempDom) {
+                            var tempCurrentSources = this.currentSources();
+                            if (!(Array.isArray(tempCurrentSources) && tempCurrentSources
+                                    .length)) {
+                                alert("请输入播放地址");
+                                inputVideoUrlDom.focus();
+                            }
+                        }
+                    }
+                });
+            });
+
+            btnPlayYouInputVideoDom.addEventListener("click", function () {
+                var tempVideojsSource = {
+                    src: ""
+                };
+                //http://mgcdn.vod.migucloud.com/vi1/331.1W6n0jWzp9JHDrqmgufWmH.4.uB0tTc/mm.m3u8
+                tempVideojsSource.src = inputVideoUrlDom.value;
+                if (!tempVideojsSource.src) {
+                    alert("请输入播放地址");
+                    inputVideoUrlDom.focus();
+                    return;
+                }
+                if (tempVideojsSource.src) {
+                    myVideojsPlayer.pause();
+                    myVideojsPlayer.src(tempVideojsSource);
+                    myVideojsPlayer.load(tempVideojsSource);
+                    myVideojsPlayer.play();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
