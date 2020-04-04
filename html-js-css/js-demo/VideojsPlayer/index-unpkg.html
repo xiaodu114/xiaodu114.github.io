@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>videojs player cdn</title>
     <link href="https://unpkg.com/video.js/dist/video-js.min.css" rel="stylesheet">
     <style>
@@ -131,6 +130,19 @@
             return findTargetNode(currentNode.parentNode, targetNode);
         }
 
+        function GetQueryStringParameters() {
+            var url = location.search; //获取url中"?"符后的字串
+            var theRequest = {};
+            if (url.indexOf("?") != -1) {
+                var str = url.substr(1);
+                strs = str.split("&");
+                for (var i = 0; i < strs.length; i++) {
+                    theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+                }
+            }
+            return theRequest;
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             var btnPlayYouInputVideoDom = document.getElementById("btnPlayYouInputVideo");
             var inputVideoUrlDom = document.getElementById("inputVideoUrl");
@@ -166,7 +178,7 @@
                 });
             });
 
-            btnPlayYouInputVideoDom.addEventListener("click", function () {
+            var playOneVideo = function () {
                 var tempVideojsSource = {
                     src: ""
                 };
@@ -183,7 +195,17 @@
                     myVideojsPlayer.load(tempVideojsSource);
                     myVideojsPlayer.play();
                 }
+            };
+
+            btnPlayYouInputVideoDom.addEventListener("click", function () {
+                playOneVideo();
             });
+
+            var tempQueryParameterObj = GetQueryStringParameters();
+            if (tempQueryParameterObj.url) {
+                inputVideoUrlDom.value = tempQueryParameterObj.url;
+                playOneVideo();
+            }
         });
     </script>
 </body>

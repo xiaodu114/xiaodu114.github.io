@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>videojs player</title>
+    <style>
+        *,
+        *:before,
+        *:after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        iframe {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <iframe id="iframeTransfer"></iframe>
+    <script>
+        //?url=http://ivi.bupt.edu.cn/hls/cctv6hd.m3u8
+        //?url=https://live.chdrstatic.com/cbn/index.m3u8
+        document.addEventListener('DOMContentLoaded', function () {
+            var iframeTransferDom = document.getElementById("iframeTransfer");
+            iframeTransferDom.src = "./index.html" + location.search;
+        });
+    </script>
+</body>
+
+</html>
