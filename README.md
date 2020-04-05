@@ -1,5 +1,5 @@
 # 我的学习笔记
-整体预览：[预览](https://xiaodu114.github.io/)
+整体预览：<a href="https://xiaodu114.github.io/" target="_blank">预览</a>
 ## Angular相关
 ### Angular 1.X相关
 #### angularjs table
