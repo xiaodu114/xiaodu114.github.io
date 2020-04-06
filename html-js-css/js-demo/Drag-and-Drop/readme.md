@@ -1,9 +1,9 @@
-Drag and Drop 项目介绍  
+# Drag and Drop 项目介绍  
 一、PC端  
 
     采用HTML 拖放（Drag and Drop）接口实现，是在拖拽过程中实时排序的。
     
-* 示例1  
+* 示例1：[入口](./index1.html)  
 
     第一版的实现方式是：传入的是拖拽容器的id,之后遍历容器中所有的拖拽项，为他们设置可拖拽属性，并添加dragstart、dragover事件监听。drag和dragend事件是在dragstart中注册的,并在拖拽结束时销毁这两个事件……
 
@@ -31,11 +31,11 @@ Drag and Drop 项目介绍
         }
     };
     ```
-* 示例2  
+* 示例2：[入口](./index2.html)  
 
     参考SortableJS的写法,为拖拽容器添加点击事件(mousedown、pointerdown),之后在点击事件中去设置拖拽项的拖拽属性和事件，并且在拖拽结束时销毁这些事件。因为如果使用示例1中的方式，自始至终只弄了一遍，并支持动态添加一个节点，也不支持刷新的方法，现在采用这种方式，就不用担心了……但是如果拖拽项比较多时，实时注册和销毁会不会影响性能，这个我就/(ㄒoㄒ)/~~
 
-* 示例3  
+* 示例3：[入口](./index3.html)  
 
     这一次添加了动态添加节点测试。由传入id修改为传入dom元素，因此这里也做了一些简单的验证。另一项改动就是将拖拽事件绑定到了拖拽容器上,具体是这样的：容器添加点击事件(mousedown),之后在该事件中注册容器的dragover事件，并且设置拖拽项的拖拽属性和dragstart事件并在该事件中绑定drag和dragend事件；在容器的dragover事件中需要处理一些碰撞检测和交换顺序……
 
@@ -66,7 +66,7 @@ Drag and Drop 项目介绍
 
 二、移动端  
 
-等待……
+    等待……
 
 【参考网址】  
 * [HTML 拖放 API - Web API 接口参考 | MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/HTML_Drag_and_Drop_API)  
