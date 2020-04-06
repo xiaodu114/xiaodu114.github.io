@@ -85,8 +85,6 @@
                 this.container = el;
 
                 this.container.addEventListener('mousedown', this._onTapStart, false);
-                this.container.addEventListener('dragover', this._handleDragOver, false);
-
                 // MutationObserver 可以监听自己吗？？？
                 this.container.addEventListener('DOMNodeRemoved', this._handleDOMNodeRemoved, false);
             };
@@ -101,6 +99,7 @@
                     originalTarget = event.target.shadowRoot && (event.path && event.path[0] || event
                         .composedPath && event.composedPath()[0]) || targetDom;
                 if (targetDom && targetDom.parentNode === this.container) {
+                    this.container.addEventListener('dragover', this._handleDragOver, false);
                     targetDom.setAttribute('draggable', 'true');
                     targetDom.addEventListener('dragstart', this._handleDragStart, false);
                 }
@@ -176,6 +175,7 @@
                 event.target.classList.add("invisible");
             };
             _handleDragEnd = (event) => {
+                this.container.removeEventListener('dragover', this._handleDragOver, false);
                 [].forEach.call(this.container.children, dragItem => {
                     dragItem.classList.remove(this.draggingClassName);
                     dragItem.classList.remove('invisible');
@@ -184,7 +184,6 @@
                     dragItem.removeEventListener('drag', this._handleDrag, false);
                     dragItem.removeEventListener('dragend', this._handleDragEnd, false);
                 });
-
             };
         };
 
