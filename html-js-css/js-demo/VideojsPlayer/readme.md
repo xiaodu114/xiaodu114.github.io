@@ -6,7 +6,11 @@
     videojs访问的是[unpkg](https://unpkg.com/)。
 
 这里再来点截图，顺便测试一下在md中如何插入图片  
-初始截图
+
+初始截图：  
+
 ![](https://xiaodu114.github.io/html-js-css/js-demo/VideojsPlayer/images/1.png)
-播放中截图
+
+播放中截图：  
+
 ![](https://xiaodu114.github.io/html-js-css/js-demo/VideojsPlayer/images/2.png)
