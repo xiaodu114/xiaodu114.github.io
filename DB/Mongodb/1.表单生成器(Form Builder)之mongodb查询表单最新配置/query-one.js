@@ -1,4 +1,3 @@
-//https://xbuba.com/questions/36824601
 db.getCollection('ConfigData').aggregate([{
     $match: {
         $or: [{
@@ -48,20 +47,5 @@ db.getCollection('ConfigData').aggregate([{
         newRoot: "$latestRecord"
     }
 }, {
-    $group: {
-        _id: {
-            FormId: "$FormId"
-        },
-        items: {
-            $push: "$$ROOT"
-        }
-    }
-}, {
-    $project: {
-        _id: 0,
-        FormId: '$_id.FormId',
-        latestConfig: {
-            $arrayElemAt: ["$items", 0]
-        }
-    }
+    $limit: 1
 }]);
