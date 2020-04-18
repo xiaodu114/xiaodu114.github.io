@@ -23,9 +23,9 @@
 
 为了演示这个，首先准备一些数据。这里使用车辆信息、车辆耗损、车辆营收三个表单，之前在[表单生成器(Form Builder)之伪造表单数据mongodb篇](https://www.cnblogs.com/du-blog/p/11815545.html)提过。写了一些脚本来生成这三个表单的配置数据，脚本地址:[伪造数据](./init.js)。  
 
-看一下生成的数据：  
+看一下生成的数据：   
 
-<image scr="./images/1.png" alt="伪造数据1"/>  
+![伪造数据1](./images/1.png)  
 
 在这些数据中选了一个，分别查一下四个层级(默认、公司、部门、个人)的配置。  
 
@@ -39,7 +39,7 @@
     });
     ```
     查询结果如下：  
-    <image scr="./images/2.png" alt="三个层级参数都不为空"/>  
+    ![三个层级参数都不为空](./images/2.png)  
 * 部门：FormId="CarInfo"、Level1="pineapple"、Level2="koala"、Level3=null  
     ```javascript
     db.getCollection('ConfigData').find({
@@ -50,7 +50,7 @@
     });
     ```  
     查询结果如下：  
-    <image scr="./images/3.png" alt="Level1 ne null;Level2 ne null;Level3 eq null;"/>  
+    ![Level1 ne null;Level2 ne null;Level3 eq null;](./images/3.png)  
 * 公司：FormId="CarInfo"、Level1="pineapple"、Level2=null、Level3=null  
     ```javascript
     db.getCollection('ConfigData').find({
@@ -61,7 +61,7 @@
     });
     ```  
     查询结果如下：  
-    <image scr="./images/4.png" alt="Level1 ne null;Level2 eq null;Level3 eq null;"/>  
+    ![Level1 ne null;Level2 eq null;Level3 eq null;](./images/4.png)  
 * 默认：FormId="CarInfo"、Level1=null、Level2=null、Level3=null  
     ```javascript
     db.getCollection('ConfigData').find({
@@ -72,29 +72,29 @@
     });
     ```  
     查询结果如下：  
-    <image scr="./images/5.png" alt="Level1 eq null;Level2 eq null;Level3 eq null;"/>  
+    ![Level1 eq null;Level2 eq null;Level3 eq null;](./images/5.png)  
 
 今天的主角来了，我们看一下是如何的查询，查询语句：[单个表单查询](./query-one.js)，看一下查询结果：  
 
-<image scr="./images/6.png" alt="单表单配置查询，员工级别存在"/> 
+![单表单配置查询，员工级别存在](./images/6.png) 
 
 上面的结果是当前层级存在的，并获取了最新的配置，下面分别修改一下查询参数,确保当前层级不存在去查询他的上一级：
 
 * 员工级别查询不到，使用部门级别：FormId="CarInfo"、Level1="pineapple"、Level2="koala"、Level3="1587173601147"  
 
     查询结果如下：  
-    <image scr="./images/7.png" alt="员工级别查询不到，使用部门级别"/>   
+    ![员工级别查询不到，使用部门级别](./images/7.png)   
 * 部门级别查询不到，使用公司级别：FormId="CarInfo"、Level1="pineapple"、Level2="1587174068418"、Level3="1587173601147"  
 
     查询结果如下：  
-    <image scr="./images/8.png" alt="部门级别查询不到，使用公司级别"/>   
+    ![部门级别查询不到，使用公司级别](./images/8.png)   
 * 公司级别查询不到，使用默认级别：FormId="CarInfo"、Level1="1587174220371"、Level2="1587174068418"、Level3="1587173601147"  
 
     查询结果如下：  
-    <image scr="./images/9.png" alt="公司级别查询不到，使用默认级别"/>     
+    ![公司级别查询不到，使用默认级别](./images/9.png)     
 
 可以对比一下，开始的查询不同层级的所有配置（不同的版本）与最后查出来的最新配置是否相同，我看了一下，没有什么问题。前面说了单个查询，后来了又有新的需求，有的时候需要一次查询多个，也就是批量查询，之前呢一直是循环调用上面的方法……也不是不行，就是觉得别扭，一直想着数据库层面的实现，后来想了一下，也不是特别麻烦，查询语句：[批量表单查询](./query-batch.js)，查看一下查询结果：  
 
-<image scr="./images/10.png" alt="批量查询表单配置"/>  
+![批量查询表单配置](./images/10.png)  
 
 到了这里这篇笔记就结束了。
