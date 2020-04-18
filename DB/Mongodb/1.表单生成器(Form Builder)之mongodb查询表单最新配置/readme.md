@@ -39,7 +39,7 @@
     });
     ```
     查询结果如下：  
-<image scr="./images/2.png" alt="三个层级参数都不为空"/>  
+    <image scr="./images/2.png" alt="三个层级参数都不为空"/>  
 * 部门：FormId="CarInfo"、Level1="pineapple"、Level2="koala"、Level3=null  
     ```javascript
     db.getCollection('ConfigData').find({
@@ -50,7 +50,7 @@
     });
     ```  
     查询结果如下：  
-<image scr="./images/3.png" alt="Level1 ne null;Level2 ne null;Level3 eq null;"/>  
+    <image scr="./images/3.png" alt="Level1 ne null;Level2 ne null;Level3 eq null;"/>  
 * 公司：FormId="CarInfo"、Level1="pineapple"、Level2=null、Level3=null  
     ```javascript
     db.getCollection('ConfigData').find({
@@ -61,7 +61,7 @@
     });
     ```  
     查询结果如下：  
-<image scr="./images/4.png" alt="Level1 ne null;Level2 eq null;Level3 eq null;"/>  
+    <image scr="./images/4.png" alt="Level1 ne null;Level2 eq null;Level3 eq null;"/>  
 * 默认：FormId="CarInfo"、Level1=null、Level2=null、Level3=null  
     ```javascript
     db.getCollection('ConfigData').find({
@@ -72,7 +72,7 @@
     });
     ```  
     查询结果如下：  
-<image scr="./images/5.png" alt="Level1 eq null;Level2 eq null;Level3 eq null;"/>  
+    <image scr="./images/5.png" alt="Level1 eq null;Level2 eq null;Level3 eq null;"/>  
 
 今天的主角来了，我们看一下是如何的查询，查询语句：[单个表单查询](./query-one.js)，看一下查询结果：  
 
