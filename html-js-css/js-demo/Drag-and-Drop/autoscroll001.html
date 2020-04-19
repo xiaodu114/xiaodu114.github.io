@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *,
+        *:before,
+        *:after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .wrapper {
+            flex: 1;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .dnd-container {
+            height: 100%;
+            background-color: bisque;
+            overflow: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <span>说名</span>
+    </div>
+    <div class="wrapper">
+        <div id="dnd-container" class="dnd-container">
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+            <p>我们都是好孩子，😄😄😄</p>
+        </div>
+    </div>
+    <script>
+        var dndContainerDom = document.getElementById("dnd-container");
+        var tempStartClientY = 0;
+        dndContainerDom.addEventListener("touchmove", function (event) {
+            var dndContainerRect = dndContainerDom.getBoundingClientRect();
+            var currentEvent = event.touches[0];
+            if (currentEvent.pageY + 15 >= dndContainerRect.bottom) {
+                dndContainerDom.scrollTop += 15;
+            }
+        });
+    </script>
+</body>
+
+</html>

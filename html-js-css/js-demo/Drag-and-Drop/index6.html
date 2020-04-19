@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <title>drag and drop demo6</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        *,
+        *:before,
+        *:after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dnd-container {
+            display: flex;
+            flex-wrap: wrap;
+            position: relative;
+            height: 100%;
+            overflow: auto;
+        }
+
+        .dnd-item {
+            height: 125px;
+            width: 125px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ccc;
+            border: 5px solid #666666;
+            border-radius: 10px;
+            margin: 15px;
+        }
+
+        .invisible {
+            opacity: 0 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <button type="button" id="btnAddOneNote">添加一个节点</button>
+        <span>在移动过程中交换位置。添加一个影子DOM</span>
+    </div>
+
+    <div id="dnd-container" class="dnd-container">
+    </div>
+    <script src="./sortable.js"></script>
+    <script>
+        //https://www.cnblogs.com/jiangxiaobo/p/6593584.html
+        //https://blog.csdn.net/qq_38128179/article/details/84647298
+        Element.prototype.putToMyBefore = function (insertNode) {
+            this.parentNode.insertBefore(insertNode, this);
+        };
+        Element.prototype.putToMyAfter = function (insertNode) {
+            if (this.parentNode.lastElementChild === this) {
+                this.parentNode.appendChild(insertNode);
+            } else {
+                this.nextElementSibling.putToMyBefore(insertNode);
+            }
+        };
+
+        class DndSortable {
+            _GetDataType = (obj) => {
+                return Object.prototype.toString
+                    .call(obj)
+                    .replace(/^\[object\s(\w+)\]$/, "$1")
+                    .toLowerCase();
+            };
+            _isHTMLElementByDataType = (obj) => {
+                var tempDataType = this._GetDataType(obj);
+                return tempDataType.endsWith("element") && obj.nodeType === 1;
+            };
+            //***************************************************************************************************************
+            container = null;
+            draggingObj = null;
+            draggingItemShadowDom = null;
+            constructor(el, option) {
+                if (!this._isHTMLElementByDataType(el)) throw "DndSortable: `el` must be an HTMLElement";
+                this.container = el;
+
+                this.container.addEventListener('touchstart', this._handleTouchStart, false);
+            };
+
+            _handleTouchStart = (event) => {
+                if (event.target.parentNode === this.container) {
+                    this.container.addEventListener('touchmove', this._handleTouchMove, false);
+                    this.container.addEventListener('touchend', this._handleTouchEnd, false);
+                    this.container.addEventListener('touchcancel', this._handleTouchEnd, false);
+
+                    this.draggingObj = {
+                        item: event.target,
+                        clientX: event.touches[0].clientX,
+                        clientY: event.touches[0].clientY,
+                        tapDistanceLeft: 0,
+                        tapDistanceTop: 0
+                    };
+                    var dragRect = SortableJSExportObj.getRect(this.draggingObj.item);
+                    this.draggingObj.tapDistanceLeft = this.draggingObj.clientX - dragRect.left;
+                    this.draggingObj.tapDistanceTop = this.draggingObj.clientY - dragRect.top;
+                }
+            };
+            _handleTouchMove = (event) => {
+                if (this.draggingObj) {
+                    var tempSliderMoveX = event.touches[0].clientX - this.draggingObj.clientX;
+                    var tempSliderMoveY = event.touches[0].clientY - this.draggingObj.clientY;
+                    if (!this.draggingItemShadowDom) {
+                        this.draggingItemShadowDom = SortableJSExportObj.getDraggingItemShadow(this.draggingObj,
+                            this.container);
+
+                        this.draggingObj.item.style.opacity = "0.5";
+                        this.draggingObj.item.style.backgroundColor = "red";
+                    }
+                    this.draggingItemShadowDom.style.transform =
+                        `translate(${tempSliderMoveX}px, ${tempSliderMoveY}px)`;
+
+                    var dragEnterItem = null,
+                        elementsFromXY = document.elementsFromPoint(event.touches[0].clientX, event.touches[0]
+                            .clientY);
+                    for (var i = 0; i < elementsFromXY.length; i++) {
+                        if (elementsFromXY[i] !== this.draggingObj.item &&
+                            elementsFromXY[i] !== this.draggingItemShadowDom &&
+                            elementsFromXY[i].parentNode === this
+                            .container) {
+                            dragEnterItem = elementsFromXY[i];
+                            break;
+                        }
+                    }
+
+                    if (dragEnterItem) {
+                        var tempDraggingItemObj = null,
+                            tempDragEnterItemObj = null;
+
+                        [].forEach.call(this.container.children, (dragItem, index) => {
+                            if (dragItem === this.draggingObj.item) {
+                                tempDraggingItemObj = {
+                                    index: index,
+                                    item: dragItem
+                                }
+                            }
+                            if (dragItem === dragEnterItem) {
+                                tempDragEnterItemObj = {
+                                    index: index,
+                                    item: dragItem
+                                };
+                            }
+                        });
+
+                        if (tempDraggingItemObj.index < tempDragEnterItemObj.index) {
+                            tempDragEnterItemObj.item.putToMyAfter(this.draggingObj.item);
+                        } else {
+                            tempDragEnterItemObj.item.putToMyBefore(this.draggingObj.item);
+                        }
+                    }
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            };
+            _handleTouchEnd = (event) => {
+                this.container.removeEventListener('touchmove', this._handleTouchMove, false);
+                this.container.removeEventListener('touchend', this._handleTouchEnd, false);
+                this.container.removeEventListener('touchcancel', this._handleTouchEnd, false);
+                if (this.draggingItemShadowDom) {
+                    this.draggingItemShadowDom.remove();
+                    this.draggingItemShadowDom = null;
+                }
+                if (this.draggingObj) {
+                    this.draggingObj.item.style.opacity = "";
+                    this.draggingObj.item.style.backgroundColor = "";
+                    this.draggingObj = null;
+                }
+            };
+        };
+
+        var addOneDragItem = (dom) => {
+            dom.appendChild(document.createRange().createContextualFragment(
+                `<div class='dnd-item'>${++dom.children.length}</div>`));
+        };
+
+        var dragContainerDom = document.getElementById("dnd-container");
+        for (var index = 1; index <= 26; index++) {
+            addOneDragItem(dragContainerDom);
+        }
+
+        document.getElementById("btnAddOneNote").addEventListener("click", function () {
+            addOneDragItem(dragContainerDom);
+        });
+        var tempDndSortableInstance = new DndSortable(dragContainerDom);
+    </script>
+</body>
+
+</html>
