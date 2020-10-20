@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeMirror 示例</title>
+    <link rel="stylesheet" href="../../../lib/codemirror/codemirror.css">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        /* 代码来源：https://cloud.tencent.com/developer/article/1144484 */
+        /* 例外：https://www.jianshu.com/p/04127d74d88c */
+        pre {
+            box-sizing: border-box;
+            /*以下样式是自动换行代码*/
+            white-space: pre-wrap;
+            /* css-3 */
+            white-space: -moz-pre-wrap;
+            /* Mozilla, since 1999 */
+            white-space: -pre-wrap;
+            /* Opera 4-6 */
+            white-space: -o-pre-wrap;
+            /* Opera 7 */
+            word-wrap: break-word;
+            /* Internet Explorer 5.5+ */
+            /*以上样式是自动换行代码，需要的加上，不需要的删除*/
+            height: 100%;
+            overflow: auto;
+            font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+            font-size: 13px;
+            padding: 9.5px;
+            margin-top: 0px;
+            margin-bottom: 10px;
+            line-height: 1.42857;
+            color: #333333;
+            word-break: break-all;
+            word-wrap: break-word;
+            border: 1px solid #CCCCCC;
+            border-radius: 4px;
+            background-color: #F5F5F5;
+        }
+
+        h5 {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .codemirror-demo1 {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .codemirror-demo1>.header {
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .codemirror-demo1>.header::after {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            height: 1px;
+            content: '';
+            -webkit-transform: scaleY(0.5);
+            transform: scaleY(0.5);
+            background-color: #ccc;
+        }
+
+        .codemirror-demo1>.main {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .codemirror-demo1>.main>.main-left {
+            width: 345px;
+            flex-shrink: 0;
+            position: relative;
+            background-color: #f1f2f3;
+            padding-left: 10px;
+            padding-right: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .codemirror-demo1>.main>.main-left::after {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            width: 1px;
+            content: '';
+            -webkit-transform: scaleX(0.5);
+            transform: scaleX(0.5);
+            background-color: #ccc;
+        }
+
+        .codemirror-demo1>.main>.main-left>.select-field-area {
+            flex-shrink: 0;
+        }
+
+        .codemirror-demo1>.main>.main-left>.select-field-area>ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 0;
+        }
+
+        .codemirror-demo1>.main>.main-left>.select-field-area>ul>li {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 36px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+            background-color: #fff;
+            box-shadow: 0 0 4px rgba(0, 0, 0, .16);
+            margin-bottom: 10px;
+            margin-right: 10px;
+            padding-left: 10px;
+            padding-right: 10px;
+            user-select: none;
+        }
+
+        .codemirror-demo1>.main>.main-left>.imitate-edit-area {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .codemirror-demo1>.main>.main-left>.imitate-edit-area>.initvalue-wrapper {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .codemirror-demo1>.main>.main-left>.imitate-edit-area>.initvalue-wrapper>textarea {
+            height: 100%;
+            width: 100%;
+        }
+
+        .codemirror-demo1>.main>.main-left>.imitate-edit-area>.initvalue-submit {
+            padding-top: 6px;
+            padding-bottom: 6px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .codemirror-demo1>.main>.main-left>.imitate-edit-area>.initvalue-submit>button {
+            padding: 6px 12px;
+            cursor: pointer;
+            user-select: none;
+            border: 1px solid transparent;
+            border-radius: 4px;
+
+            color: #333;
+            background-color: #fff;
+            border-color: #ccc;
+        }
+
+        .codemirror-demo1>.main>.main-left>.imitate-edit-area>.initvalue-submit>button:focus {
+            outline: none;
+        }
+
+        .codemirror-demo1>.main>.main-left>.imitate-edit-area>.initvalue-submit>button:active {
+            background-color: #e6e6e6;
+            border-color: #adadad;
+        }
+
+        .codemirror-demo1>.main>.main-content {
+            flex: 1;
+        }
+
+        .codemirror-demo1>.main>.main-content>.codemirror-wrapper {
+            width: 456px;
+            min-height: 36px;
+            max-height: 456px;
+            font-size: 14px;
+            line-height: 2;
+            border: 1px solid #ccc;
+            margin-top: 50px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .codemirror-demo1>.main>.main-right {
+            width: 345px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .codemirror-demo1>.main>.main-right::after {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 1px;
+            content: '';
+            -webkit-transform: scaleX(0.5);
+            transform: scaleX(0.5);
+            background-color: #ccc;
+        }
+
+        .codemirror-demo1>.main>.main-right>#btnCopy {
+            position: absolute;
+            right: 25px;
+            top: 15px;
+        }
+
+
+        .codemirror-demo1 .CodeMirror {
+            font-family: inherit !important;
+            box-sizing: border-box;
+            height: auto;
+        }
+
+        .selected-field {
+            background-color: rebeccapurple;
+            display: inline-block;
+            margin: 2px 4px 2px 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="codemirror-demo1">
+        <div class="header">
+            <h1>CodeMirror 示例</h1>
+        </div>
+        <div class="main">
+            <div class="main-left">
+                <div class="select-field-area">
+                    <h5>表单字段</h5>
+                    <ul id="ulSelctSomeFiled">
+                    </ul>
+                </div>
+                <div class="imitate-edit-area">
+                    <h5>输入需要JSON数据模拟编辑页面</h5>
+                    <div class="initvalue-wrapper">
+                        <textarea id="textareaInitValue"></textarea>
+                    </div>
+                    <div class="initvalue-submit">
+                        <button type="button" id="goToLookResult">确定</button>
+                    </div>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="codemirror-wrapper">
+                    <textarea id="codemirror-textarea-1" style="display: none;"></textarea>
+                </div>
+            </div>
+            <div class="main-right">
+                <button id="btnCopy" type="button">复制</button>
+                <pre id="showRealTimeValue"></pre>
+            </div>
+        </div>
+    </div>
+    <script src="../../../lib/codemirror/codemirror.js"></script>
+    <script>
+        // https://www.360totalsecurity.com/zh-cn/360zip/
+        //  1、准备可以选择的字段并添加到页面中
+        var youCanSelectFields = [{
+            fieldId: "1572493551001",
+            fieldName: "车辆品牌名称"
+        },
+        {
+            fieldId: "1572493551002",
+            fieldName: "车辆品牌型号"
+        },
+        {
+            fieldId: "1572493551003",
+            fieldName: "车辆牌照"
+        },
+        {
+            fieldId: "1572493551004",
+            fieldName: "车辆购买日期"
+        },
+        {
+            fieldId: "1572493551005",
+            fieldName: "车辆购买价格"
+        },
+        {
+            fieldId: "1572493551006",
+            fieldName: "备注"
+        },
+        ],
+            youCanSelectFieldObj = {};
+        var ulSelctSomeFiledDom = document.getElementById("ulSelctSomeFiled");
+        youCanSelectFields.forEach(function (field) {
+            youCanSelectFieldObj[field.fieldId] = field;
+            var tempFieldLiDom = document.createElement("li");
+            // data-filedid中filedid不区分大小写,Element.dataset中都是小写
+            tempFieldLiDom.setAttribute("data-filedid", field.fieldId);
+            tempFieldLiDom.textContent = field.fieldName;
+            ulSelctSomeFiledDom.appendChild(tempFieldLiDom);
+        });
+
+        //  2、使用CodeMirror
+        var textareaDom = document.getElementById('codemirror-textarea-1');
+        var word = CodeMirror.fromTextArea(textareaDom, {
+            mode: "text/html",
+            lineWrapping: true,
+            cursorHeight: 1
+        });
+        word.on("change", function (a, b) {
+            if (Array.isArray(b.text) &&
+                b.text.length &&
+                (b.text[0].startsWith("【") && b.text[0].endsWith("】") && b.text[0].length > 2)) {
+                return;
+            }
+            handleCodeMirrorToMyNeed();
+        });
+        //  3、一些方法
+        function assembleReplaceDom(text) {
+            var tempDiv = document.createElement("div");
+            tempDiv.classList.add("selected-field");
+            tempDiv.appendChild(document.createTextNode(text));
+            return tempDiv;
+        };
+        var preShowRealTimeValueDom = document.getElementById("showRealTimeValue");
+        //  读取CodeMirror的值并转换成我们需要的格式（业务数据）
+        function handleCodeMirrorToMyNeed() {
+            var myNeedValue = [];
+            var tempAllMarks = word.getAllMarks();
+            var tempGetCMValue = word.getValue().trim();
+            if (tempGetCMValue) {
+                if (!tempAllMarks.length) {
+                    myNeedValue.push({
+                        type: "Fixed",
+                        value: tempGetCMValue,
+                        extend: {}
+                    });
+                } else {
+                    var tempAllSortMarkPos = [].map.call(tempAllMarks, function (mark) {
+                        return mark.find();
+                    });
+                    [].sort.call(tempAllSortMarkPos, function (a, b) {
+                        if (a.from.line === b.from.line) {
+                            return a.from.ch - b.from.ch;
+                        } else {
+                            return a.from.line - b.from.line;
+                        }
+                    });
+                    var tempFirstFixedValue = word.getRange({
+                        line: 0,
+                        ch: 0
+                    }, {
+                        line: tempAllSortMarkPos[0].from.line,
+                        ch: tempAllSortMarkPos[0].from.ch
+                    });
+                    if (tempFirstFixedValue) {
+                        myNeedValue.push({
+                            type: "Fixed",
+                            value: tempFirstFixedValue,
+                            extend: {}
+                        });
+                    }
+                    tempAllSortMarkPos.forEach(function (markPos, index, arr) {
+                        var tempCMLineValue = word.getLine(markPos.from.line);
+                        var tempFieldReplaceFlag = tempCMLineValue.slice(markPos.from.ch, markPos.to.ch);
+                        var tempFieldId = tempFieldReplaceFlag.slice(1, -1);
+                        if (youCanSelectFieldObj.hasOwnProperty(tempFieldId)) {
+                            myNeedValue.push({
+                                type: "Field",
+                                value: tempFieldId,
+                                extend: {
+                                    fieldId: tempFieldId,
+                                    fieldName: youCanSelectFieldObj[tempFieldId].fieldName,
+                                    pos: markPos
+                                }
+                            });
+                        }
+                        var nextMarkPos = arr[index + 1];
+                        if (nextMarkPos) {
+                            var tempTwoMarkMiddleValue = word.getRange({
+                                line: markPos.to.line,
+                                ch: markPos.to.ch
+                            }, {
+                                line: nextMarkPos.from.line,
+                                ch: nextMarkPos.from.ch
+                            });
+                            if (tempTwoMarkMiddleValue) {
+                                myNeedValue.push({
+                                    type: "Fixed",
+                                    value: tempTwoMarkMiddleValue,
+                                    extend: {}
+                                });
+                            }
+                        }
+                    });
+                    var tempCMLineCount = word.lineCount();
+                    var tempLastLineValue = word.getLine(tempCMLineCount - 1);
+                    var tempLastFixedValue = word.getRange({
+                        line: tempAllSortMarkPos[tempAllSortMarkPos.length - 1].to.line,
+                        ch: tempAllSortMarkPos[tempAllSortMarkPos.length - 1].to.ch,
+                    }, {
+                        line: tempCMLineCount - 1,
+                        ch: tempLastLineValue.length
+                    });
+                    if (tempLastFixedValue) {
+                        myNeedValue.push({
+                            type: "Fixed",
+                            value: tempLastFixedValue,
+                            extend: {}
+                        });
+                    }
+                }
+            }
+            preShowRealTimeValueDom.innerHTML = JSON.stringify(myNeedValue, null, 4);
+        };
+        ulSelctSomeFiledDom.addEventListener('click', function (event) {
+            if (!(event.target.tagName === "LI" && event.target.dataset.filedid && youCanSelectFieldObj[
+                event
+                    .target.dataset.filedid])) return;
+
+            var tempFieldReplaceFlag = "【" + event.target.dataset.filedid + "】";
+            var pos = word.getCursor(true);
+            word.replaceRange(tempFieldReplaceFlag, pos, pos);
+            word.markText(pos, {
+                line: pos.line,
+                ch: pos.ch + tempFieldReplaceFlag.length
+            }, {
+                handleMouseEvents: true,
+                replacedWith: assembleReplaceDom(youCanSelectFieldObj[event.target.dataset.filedid]
+                    .fieldName)
+            });
+            handleCodeMirrorToMyNeed();
+        }, false);
+        //  将业务数据赋值给CodeMirror
+        function handleMyNeedValueToCodeMirror(initNeedValue) {
+            var tempPosMarkValue = [],
+                tempSetCMValue = "";
+            initNeedValue.forEach(function (item) {
+                switch (item.type) {
+                    case "Fixed": {
+                        tempSetCMValue += item.value;
+                        break;
+                    }
+                    case "Field": {
+                        tempSetCMValue += "【" + item.value + "】";
+                        tempPosMarkValue.push({
+                            pos: item.extend.pos,
+                            value: item.value
+                        });
+                        break;
+                    }
+                }
+            });
+            word.setValue(tempSetCMValue);
+            tempPosMarkValue.forEach(function (posMark) {
+                word.markText(posMark.pos.from, posMark.pos.to, {
+                    handleMouseEvents: true,
+                    replacedWith: assembleReplaceDom(youCanSelectFieldObj[posMark.value].fieldName)
+                });
+            });
+            handleCodeMirrorToMyNeed();
+        };
+        var btnGoToLookResultDom = document.getElementById("goToLookResult");
+        var textareaInitValueDom = document.getElementById("textareaInitValue");
+        btnGoToLookResultDom.addEventListener('click', function (event) {
+            if (!textareaInitValueDom.value) {
+                alert("请输入");
+                return;
+            }
+            var tempInitNeedValue = null;
+            try {
+                tempInitNeedValue = JSON.parse(textareaInitValueDom.value);
+            } catch (error) {
+                alert("反序列化失败：" + error.message);
+                return;
+            }
+            if (!Array.isArray(tempInitNeedValue)) {
+                alert("这里需要的是数组");
+                return;
+            }
+            handleMyNeedValueToCodeMirror(tempInitNeedValue);
+        }, false);
+        //  复制功能相关
+        //      参考：
+        //          https://developer.mozilla.org/zh-CN/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard
+        //          https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
+        function copyTextToClipboardByCommandCopy(text) {
+            if (!document.execCommand('copy')) return;
+            var tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.focus();
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert("已复制");
+        }
+        function copyTextToClipboard(text) {
+            if (!navigator.clipboard) {
+                copyTextToClipboardByCommandCopy(text);
+                return;
+            }
+            navigator.clipboard.writeText(text).then(function () {
+                alert("已复制");
+            }, function (err) {
+                copyTextToClipboardByCommandCopy(text);
+            });
+        }
+        document.getElementById("btnCopy").addEventListener("click", function () {
+            if (!preShowRealTimeValueDom.innerHTML) return;
+            copyTextToClipboard(preShowRealTimeValueDom.innerHTML);
+        });
+    </script>
+</body>
+
+</html>
