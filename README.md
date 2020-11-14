@@ -5,7 +5,7 @@
 这里都是angularjs 1.X下的一些小例子
 #### input 清空组件
 示例1：[浏览](https://xiaodu114.github.io/angular/angular1/angularjs-clear-input/demo1.html)
-#### 我的音乐
+#### 我的音乐(异常……)
 示例：[浏览](https://xiaodu114.github.io/angular/angular1/angularjs-music/index.html)
 #### 我的音乐 V2
 示例：[浏览](https://xiaodu114.github.io/angular/angular1/angularjs-music-table/index.html)
@@ -14,7 +14,7 @@
 #### 列表组件
 示例：[浏览](https://xiaodu114.github.io/angular/angular1/angularjs-table/index.html)
 ## WebComponents相关
-### 滑块组件
+### 双滑块组件
 示例：[浏览](https://xiaodu114.github.io/WebComponents/SingleSlider/index.html)
 ## HTML-JavaScript-CSS相关
 ### CSS相关
@@ -31,7 +31,7 @@
 示例2：[浏览-unpkg](https://xiaodu114.github.io/html-js-css/js-demo/CodeMirror/index-unpkg.html)
 ## Vue相关
 ### Vue 2.X相关
-#### Dashboard
+#### 拖拉拽Dashboard
 示例：[浏览](https://xiaodu114.github.io/vue/vue2.x/DashboardByGridStack/www/index.html)
-#### Dashboard
-示例：[浏览](https://xiaodu114.github.io/vue/vue2.x/DashboardByGridStack/www/index.html)
+#### 列表项定制实现机制
+示例：[浏览](https://xiaodu114.github.io/vue/vue2.x/FormBuilderRuntime/www/index.html)
