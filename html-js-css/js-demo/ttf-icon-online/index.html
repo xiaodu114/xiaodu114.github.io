@@ -78,18 +78,18 @@
 <body>
     <div class="font-demo">
         <div class="demo-header">
-            <h1>选择一个ttf格式的字体图标文件</h1>
-            <input type="file" accept="application/x-font-truetype" onchange="selectFontFile(this);" />
-            <!-- <select name="" id="">
+            <h1>你可以上传或者选择一个ttf格式的字体图标文件</h1>
+            <input type="file" accept="application/x-font-truetype" onchange="selectFontFileUpload(this);" />
+            <select id="selectFontFile">
                 <option>请选择</option>
-                <option value="">Material Design Icons</option>
-                <option value="">Font Awesome</option>
-                <option value="">icomoon-free</option>
-                <option value="">weather-icons</option>
-                <option value="">ionicons</option>
-                <option value="">themify-icons</option>
-                <option value="">simple-line-icons</option>
-            </select> -->
+                <option value="materialdesignicons-webfont.ttf">Material Design Icons</option>
+                <option value="fontawesome-webfont.ttf">Font Awesome</option>
+                <option value="icomoon.ttf">icomoon-free</option>
+                <option value="weathericons-regular-webfont.ttf">weather-icons</option>
+                <option value="ionicons.ttf">ionicons</option>
+                <option value="Simple-Line-Icons.ttf">simple-line-icons</option>
+            </select>
+            <span>选择文件时有点慢，请耐心等待</span>
         </div>
         <div class="demo-main" id="fontIconContainer"></div>
     </div>
@@ -106,9 +106,60 @@
         // http://blog.luckly-mjw.cn/tool-show/iconfont-preview/index.html
         // https://fontdrop.info/
         // https://kekee000.github.io/fonteditor/
+        var tempStyleId = "custom-font-icon-style";
         var fontIconContainerDom = document.getElementById("fontIconContainer");
+        var selectFontFileDom = document.getElementById("selectFontFile");
 
-        function selectFontFile(element) {
+        function fetchAttfFile(fileName) {
+            return fetch('https://xiaodu114.github.io/html-js-css/js-demo/ttf-icon-online/ttf/' + fileName)
+                .then(function (response) {
+                    return response.arrayBuffer();
+                });
+        }
+
+        function handleFontFileArrayBuffer(arrBuffer) {
+            var tempStyleForFontIcon = document.getElementById(tempStyleId);
+            if (tempStyleForFontIcon) {
+                tempStyleForFontIcon.remove();
+            }
+            fontIconContainerDom.innerHTML = "";
+            var font = opentype.parse(arrBuffer);
+            var iconsStyleFragment = "";
+            if (font && font.glyphs && font.glyphs.glyphs) {
+                for (var key in font.glyphs.glyphs) {
+                    if (font.glyphs.glyphs.hasOwnProperty(key)) {
+                        var glyph = font.glyphs.glyphs[key];
+                        if (!glyph.unicode) continue;
+                        var tempIconName = glyph.name || glyph.unicode;
+                        var temp16Value = glyph.unicode.toString(16).toUpperCase();
+                        fontIconContainerDom.appendChild(document.createRange().createContextualFragment(
+                            `<div class="icon-wrapper">
+                                    <i class="icon custom-font-${tempIconName}"></i> 
+                                    <code>${temp16Value}</code>
+                                    <span>${tempIconName}</span>
+                                </div>`));
+                        iconsStyleFragment +=
+                            `.custom-font-${tempIconName}::before { content: "\\${temp16Value}"; }  `;
+                    }
+                }
+            }
+            addFontToStyle("you-custom-font-" + new Date().valueOf(), arrBuffer, iconsStyleFragment);
+        }
+
+        selectFontFileDom.addEventListener('change', (event) => {
+            //event.target.options[event.target.options.selectedIndex].value
+            if (event.target.value) {
+                fetch('https://xiaodu114.github.io/html-js-css/js-demo/ttf-icon-online/ttf/' + event.target
+                        .value)
+                    .then(function (response) {
+                        return response.arrayBuffer();
+                    }).then(function (arrBuffer) {
+                        handleFontFileArrayBuffer(arrBuffer);
+                    });
+            }
+        });
+
+        function selectFontFileUpload(element) {
             if (!element.files) {
                 return;
             }
@@ -118,27 +169,7 @@
                 console.error('Error: ', error);
             };
             fileReader.onload = () => {
-                var font = opentype.parse(fileReader.result);
-                var iconsStyleFragment = "";
-                if (font && font.glyphs && font.glyphs.glyphs) {
-                    for (var key in font.glyphs.glyphs) {
-                        if (font.glyphs.glyphs.hasOwnProperty(key)) {
-                            var glyph = font.glyphs.glyphs[key];
-                            if (!glyph.unicode) continue;
-                            var tempIconName = glyph.name || glyph.unicode;
-                            var temp16Value = glyph.unicode.toString(16).toUpperCase();
-                            fontIconContainerDom.appendChild(document.createRange().createContextualFragment(
-                                `<div class="icon-wrapper">
-                                    <i class="icon custom-font-${tempIconName}"></i> 
-                                    <code>${temp16Value}</code>
-                                    <span>${tempIconName}</span>
-                                </div>`));
-                            iconsStyleFragment +=
-                                `.custom-font-${tempIconName}::before { content: "\\${temp16Value}"; }  `;
-                        }
-                    }
-                }
-                addFontToStyle("you custom font", fileReader.result, iconsStyleFragment);
+                handleFontFileArrayBuffer(fileReader.result);
             };
         }
 
@@ -151,6 +182,8 @@
                 document.fonts.add(loadedFace);
                 fontIconContainerDom.style.fontFamily = fontFamilyName;
                 var newStyle = document.createElement('style');
+                tempStyleId = fontFamilyName;
+                newStyle.id = tempStyleId;
                 newStyle.appendChild(document.createRange().createContextualFragment(styleFragment));
                 document.head.appendChild(newStyle);
             }).catch(function (error) {});
