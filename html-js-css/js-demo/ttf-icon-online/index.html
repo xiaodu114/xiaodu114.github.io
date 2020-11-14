@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线预览字体图标(*.ttf)</title>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body,
+        .font-demo {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .font-demo {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .font-demo>.demo-header {
+            flex-shrink: 0;
+            padding: 10px;
+        }
+
+        .font-demo>.demo-main {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .font-demo>.demo-main>.icon-wrapper {
+            width: 20%;
+            line-height: 2em;
+            padding-right: 10px;
+        }
+
+        .font-demo>.demo-main>.icon-wrapper>i.icon {
+            width: 32px;
+            display: inline-block;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .font-demo>.demo-main>.icon-wrapper>code {
+            border: 1px solid #DDD;
+            width: 46px;
+            border-radius: 4px;
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+            line-height: 24px;
+            cursor: pointer;
+        }
+
+        .font-demo>.demo-main>.icon-wrapper>span {
+            font-size: 14px;
+            text-overflow: ellipsis;
+            display: inline-block;
+            max-width: calc(100% - 90px);
+            overflow: hidden;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="font-demo">
+        <div class="demo-header">
+            <h1>选择一个ttf格式的字体图标文件</h1>
+            <input type="file" accept="application/x-font-truetype" onchange="selectFontFile(this);" />
+            <!-- <select name="" id="">
+                <option>请选择</option>
+                <option value="">Material Design Icons</option>
+                <option value="">Font Awesome</option>
+                <option value="">icomoon-free</option>
+                <option value="">weather-icons</option>
+                <option value="">ionicons</option>
+                <option value="">themify-icons</option>
+                <option value="">simple-line-icons</option>
+            </select> -->
+        </div>
+        <div class="demo-main" id="fontIconContainer"></div>
+    </div>
+    <script src="../../../lib/opentypejs/opentype.js"></script>
+    <script>
+        //  https://www.coder.work/article/3792939
+        //  https://www.w3schools.com/cssref/css3_pr_font-face_rule.asp
+
+        // 采用的图标
+        //  http://materialdesignicons.com/
+        //  https://fontawesome.com/cheatsheet
+
+        //  在线预览工具
+        // http://blog.luckly-mjw.cn/tool-show/iconfont-preview/index.html
+        // https://fontdrop.info/
+        // https://kekee000.github.io/fonteditor/
+        var fontIconContainerDom = document.getElementById("fontIconContainer");
+
+        function selectFontFile(element) {
+            if (!element.files) {
+                return;
+            }
+            const fileReader = new FileReader();
+            fileReader.readAsArrayBuffer(element.files[0]);
+            fileReader.onerror = (error) => {
+                console.error('Error: ', error);
+            };
+            fileReader.onload = () => {
+                var font = opentype.parse(fileReader.result);
+                var iconsStyleFragment = "";
+                if (font && font.glyphs && font.glyphs.glyphs) {
+                    for (var key in font.glyphs.glyphs) {
+                        if (font.glyphs.glyphs.hasOwnProperty(key)) {
+                            var glyph = font.glyphs.glyphs[key];
+                            if (!glyph.unicode) continue;
+                            var tempIconName = glyph.name || glyph.unicode;
+                            var temp16Value = glyph.unicode.toString(16).toUpperCase();
+                            fontIconContainerDom.appendChild(document.createRange().createContextualFragment(
+                                `<div class="icon-wrapper">
+                                    <i class="icon custom-font-${tempIconName}"></i> 
+                                    <code>${temp16Value}</code>
+                                    <span>${tempIconName}</span>
+                                </div>`));
+                            iconsStyleFragment +=
+                                `.custom-font-${tempIconName}::before { content: "\\${temp16Value}"; }  `;
+                        }
+                    }
+                }
+                addFontToStyle("you custom font", fileReader.result, iconsStyleFragment);
+            };
+        }
+
+        function addFontToStyle(fontFamilyName, fontFileArraybuffer, styleFragment) {
+            var currentFont = new FontFace(fontFamilyName, fontFileArraybuffer, {
+                style: 'normal',
+                weight: 'normal'
+            });
+            currentFont.loaded.then(function (loadedFace) {
+                document.fonts.add(loadedFace);
+                fontIconContainerDom.style.fontFamily = fontFamilyName;
+                var newStyle = document.createElement('style');
+                newStyle.appendChild(document.createRange().createContextualFragment(styleFragment));
+                document.head.appendChild(newStyle);
+            }).catch(function (error) {});
+            document.fonts.ready.then(function () {
+                document.body.appendChild(document.createRange().createContextualFragment(`<i></i>`));
+            });
+        }
+    </script>
+</body>
+
+</html>
