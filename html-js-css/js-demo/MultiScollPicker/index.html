@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多级滚动选择</title>
+    <style>
+        #currentResultP {
+            text-align: center;
+        }
+
+        #demo1 {
+            width: 345px;
+            height: 180px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .wheels-container {
+            height: 100%;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            background-color: #fff;
+            display: flex;
+        }
+
+        .wheels-container>.wheel {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .wheels-container>.wheel>.rim {
+            height: 100%;
+            width: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 18px;
+            box-sizing: content-box;
+        }
+
+        .wheels-container>.wheel>.rim>.hub {
+            padding: 0;
+            text-align: center;
+        }
+
+        .wheels-container>.wheel>.rim>.hub>.spoke {
+            height: 32px;
+            line-height: 32px;
+            cursor: pointer;
+        }
+
+        .wheels-container>.dividing-line-box {
+            width: 100%;
+            position: absolute;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .wheels-container>.dividing-line-box.top {
+            top: 0;
+            border-bottom: 1px solid #eeeeee;
+            background: -webkit-linear-gradient(bottom, rgba(255, 255, 255, 0.5) 0%, rgb(255, 255, 255) 95%, rgb(255, 255, 255) 100%);
+        }
+
+        .wheels-container>.dividing-line-box.bottom {
+            bottom: 0;
+            border-top: 1px solid #eeeeee;
+            background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.5) 0%, rgb(255, 255, 255) 95%, rgb(255, 255, 255) 100%);
+        }
+    </style>
+</head>
+
+<body>
+    <p>
+        <span>参考：</span>
+        <a href="https://github.com/ustbhuangyi/picker" target="_blank">picker</a>
+        <a href="https://github.com/facebookarchive/fixed-data-table/blob/master/src/vendor_upstream/dom/normalizeWheel.js"
+            target="_blank">normalizeWheel.js</a>
+        <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Element/wheel_event" target="_blank">wheel_event</a>
+    </p>
+    <p id="currentResultP">
+    </p>
+    <div id="demo1"></div>
+    <script src="./MultiScollPicker.js"></script>
+    <script>
+        function handleSourceDataForPicker(sourceData, targetWheels, level) {
+            if (!Array.isArray(sourceData)) throw new Error("data参数异常");
+            if (!Array.isArray(targetWheels)) targetWheels = [];
+            if (!Number.isInteger(level)) level = 0;
+            var tempWheelItem = {
+                    spokeDataType: "string",
+                    spokes: [],
+                    selectedIndex: 0
+                },
+                tempSelectedItem = null;
+            if (targetWheels[level] &&
+                targetWheels[level].hasOwnProperty("selectedIndex") &&
+                Array.isArray(targetWheels[level].spokes) &&
+                targetWheels[level].spokes.length > targetWheels[level].selectedIndex) {
+                tempSelectedItem = targetWheels[level].spokes[targetWheels[level].selectedIndex];
+            }
+            [].forEach.call(sourceData, (item, index) => {
+                tempWheelItem.spokes.push(item.name);
+                if (tempSelectedItem === item.name) {
+                    tempWheelItem.selectedIndex = index;
+                }
+            });
+            targetWheels[level] = tempWheelItem;
+            var tempChildLevel = ++level;
+            if (Array.isArray(sourceData[tempWheelItem.selectedIndex].sub) &&
+                sourceData[tempWheelItem.selectedIndex].sub.length) {
+                handleSourceDataForPicker(sourceData[tempWheelItem.selectedIndex].sub, targetWheels, tempChildLevel);
+            } else {
+                targetWheels.splice(tempChildLevel, 1);
+            }
+            return targetWheels;
+        }
+
+        var currentResultPDom = document.getElementById("currentResultP");
+
+        function getCurrentSelected(wheels) {
+            var result = [];
+            [].forEach.call(wheels, wheel => {
+                result.push(wheel.spokes[wheel.selectedIndex]);
+            });
+            currentResultPDom.innerHTML = "你选择的是：" + result.join("->");
+        }
+
+        function initPicker(administrativeDivisions) {
+            var currentDivisionWheels = handleSourceDataForPicker(administrativeDivisions);
+            var multiScollPicker1 = new MultiScollPicker(document.getElementById("demo1"), {
+                wheels: currentDivisionWheels
+            });
+            multiScollPicker1.on('picker.change', function (currentWheelIndex, currentSpokeIndex) {
+                currentDivisionWheels[currentWheelIndex].selectedIndex = currentSpokeIndex;
+                var newDivisionWheels = handleSourceDataForPicker(administrativeDivisions,
+                    currentDivisionWheels);
+                multiScollPicker1.resetWheels(newDivisionWheels);
+                getCurrentSelected(currentDivisionWheels);
+            });
+            getCurrentSelected(currentDivisionWheels);
+        }
+
+        fetch("./divisions.json").then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+        }).then(responseData => {
+            initPicker(responseData);
+        });
+    </script>
+</body>
+
+</html>
