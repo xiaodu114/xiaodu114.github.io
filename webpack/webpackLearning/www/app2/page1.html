@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>应用2：页面1</title>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+<link href="/common/css/commons.css?4ca18a0a5417d4e2a504" rel="stylesheet"><link href="/app2/css/page1.css?4ca18a0a5417d4e2a504" rel="stylesheet"></head>
+
+<body>
+    <div id="app2page1Vue" v-cloak>
+        <article>
+            <header>
+                <img src="/common/images/logo.png">
+                <strong>{{msg}}</strong>
+                <span>现在时间：{{dateNow}}</span>
+            </header>
+            <section>
+                <displaytext :value="'通用文本组件：我在应用2页面1中使用'"></displaytext>
+                <app2page1></app2page1>
+            </section>
+        </article>
+    </div>
+<script src="/lib/vue/vue.js?4ca18a0a5417d4e2a504"></script><script src="/common/js/commons.js?4ca18a0a5417d4e2a504"></script><script src="/app2/js/page1.js?4ca18a0a5417d4e2a504"></script></body>
+
+</html>

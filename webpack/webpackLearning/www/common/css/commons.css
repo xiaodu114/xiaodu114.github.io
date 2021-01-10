@@ -1,0 +1,35 @@
+/*! common.css  跨应用通用样式 */
+/**************** common.css 开始 ****************/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+header {
+  position: relative;
+  padding: 15px;
+}
+header::after {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 1px;
+  content: '';
+  transform: scaleY(0.5);
+  background-color: black;
+}
+section {
+  padding: 20px;
+}
+/**************** common.css 结束 ****************/
+
+
+/*# sourceMappingURL=commons.css.map*/

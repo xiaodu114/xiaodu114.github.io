@@ -1,0 +1,17 @@
+/*! page2.css  应用2页面2样式 */
+/**************** 应用2页面2样式    开始 ****************/
+body {
+  background: url(/app2/images/app2page2-bg.png) repeat-x;
+}
+/**************** 应用2页面2样式    结束 ****************/
+
+/*! page2.vue  应用2页面2组件样式 */
+/**************** 应用2页面2组件样式    开始 ****************/
+.app2-page2-comp-container {
+  border: 8px solid cornflowerblue;
+  padding: 10px;
+}
+/**************** 应用2页面2组件样式    结束 ****************/
+
+
+/*# sourceMappingURL=page2.css.map*/
