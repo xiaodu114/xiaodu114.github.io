@@ -80,7 +80,9 @@ var tempModuleExportsObj = {
     output: {
         filename: '[name].js',
         path: path.resolve(__dirname, './www'),
-        publicPath: '/'
+        //publicPath: '/'
+        //  为了可以在github上可以浏览，这里做下面的修改
+        publicPath: '/webpack/webpackLearning/www/'
     },
     module: {
         rules: [{

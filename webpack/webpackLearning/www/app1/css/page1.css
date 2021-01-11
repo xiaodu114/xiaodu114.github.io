@@ -1,7 +1,7 @@
 /*! page1.css  应用1页面1样式 */
 /**************** 应用1页面1样式    开始 ****************/
 body {
-  background: url(/app1/images/app1pag1-bg.png) repeat-x;
+  background: url(/webpack/webpackLearning/www/app1/images/app1pag1-bg.png) repeat-x;
 }
 /**************** 应用1页面1样式    结束 ****************/
 
