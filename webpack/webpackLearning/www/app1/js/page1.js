@@ -508,8 +508,10 @@ var app1page1Vue = new (vue__WEBPACK_IMPORTED_MODULE_9___default())({
 
     this.asyncFn1().then(function (responseData) {
       console.log(responseData);
-    });
-    this.loadJSONFile("/mock/app1/page1.json").then(function (responseData) {
+    }); //  这里为了在github上正常显示也要做一下修改
+    //  /mock/app1/page1.json -> /webpack/webpackLearning/www/mock/app1/page1.json
+
+    this.loadJSONFile("/webpack/webpackLearning/www/mock/app1/page1.json").then(function (responseData) {
       _this.jsonContent = responseData;
     });
   }

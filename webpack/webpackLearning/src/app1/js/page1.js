@@ -39,7 +39,9 @@ var app1page1Vue = new Vue({
         this.asyncFn1().then(responseData => {
             console.log(responseData);
         });
-        this.loadJSONFile("/mock/app1/page1.json").then(responseData => {
+        //  这里为了在github上正常显示也要做一下修改
+        //  /mock/app1/page1.json -> /webpack/webpackLearning/www/mock/app1/page1.json
+        this.loadJSONFile("/webpack/webpackLearning/www/mock/app1/page1.json").then(responseData => {
             this.jsonContent = responseData;
         });
     },
