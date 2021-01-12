@@ -31,7 +31,7 @@ let multiPageConfig = [{
 ];
 
 let tempModuleExportsObj = {
-    mode: 'development',
+    //mode: 'development',
     entry: {},
     output: {
         filename: '[name].js',
@@ -96,7 +96,7 @@ let tempModuleExportsObj = {
             }
         }]
     },
-    devtool: "source-map",
+    //devtool: "source-map",
     resolve: {
         alias: {
             'vue': 'vue/dist/vue.js'

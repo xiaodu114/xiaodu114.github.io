@@ -251,7 +251,9 @@ var myVueApp = new Vue({
         }
     },
     created() {
-        fetch("/mock/layout/wordtable/crf.json").then(response => {
+        //  这里为了在github上正常显示也要做一下修改
+        //  /mock/layout/wordtable/crf.json -> /vue/vue2.x/MainProject/www/mock/layout/wordtable/crf.json
+        fetch("/vue/vue2.x/MainProject/www/mock/layout/wordtable/crf.json").then(response => {
             if (response.ok) {
                 return response.json();
             }
