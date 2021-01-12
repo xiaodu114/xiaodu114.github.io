@@ -92,6 +92,9 @@ var tempModuleExportsObj = {
             test: /\.html$/,
             use: ['html-loader']
         }, {
+            test: /\.css$/,
+            use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        }, {
             test: /\.less$/,
             use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader']
         }, {
@@ -101,7 +104,8 @@ var tempModuleExportsObj = {
                 loader: "babel-loader",
                 options: {
                     // //  第一种方式
-                    // //      @babel/preset-env(devDependencies) + core-js + regenerator-runtime
+                    // //      dependencies: core-js regenerator-runtime
+                    // //      devDependencies: @babel/preset-env
                     // presets: [
                     //     ["@babel/preset-env", {
                     //         modules: false,
@@ -117,7 +121,8 @@ var tempModuleExportsObj = {
                     //     }]
                     // ],
                     //  第二种方式
-                    //      @babel/plugin-transform-runtime(devDependencies) + @babel/preset-env(devDependencies) + @babel/runtime + @babel/runtime-corejs3
+                    //      dependencies: @babel/runtime @babel/runtime-corejs3
+                    //      devDependencies: @babel/plugin-transform-runtime  @babel/preset-env
                     presets: [
                         ["@babel/preset-env"]
                     ],
