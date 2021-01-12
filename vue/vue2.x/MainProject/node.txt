@@ -1,0 +1,127 @@
+ddz:
+1、首先写一个容器组件，外部使用时传入HTML代码片段，通过Vue.compile函数来定制模板，这是HTML，可以是一个.html文件；那如何处理Script呢,可以是一个js文件，约定好规范，这样我们就可以利用对应模块加载器js了,之后我们可以将一些属性和方法动态绑定到Vue实例中（已验证，可行），我们甚至可以模拟组件的生命周期，在钩子函数中调用对应的函数，但是一些computed、watch等就不知道怎么弄了，还没有来的及研究，这是将JS放在一个单独的文件中，当然我们还可以将JS代码放在html文件中，同样也可以放置style，这样我们首先就需要分隔开html、script、style，区分开没有什么难度，但是如何使用文本格式JS代码，你可能会说eval、new Function()……普通的JS可能没有问题，但是人家可能写的是es6+的代码甚至是ts,这个单独的文件也有同样的问题，也就是说我们需要转换、解释对应的代码，好在babel提供了浏览器环境，来处理转换；但是还有一个问题就是如果代码中要引入其他的vue组件或者JS库
+
+ddz:
+先说一下这篇文章的诞生原因。我们有一个这样的项目，类似或者说就是仪表板-Dashboard。要实现这样一个功能，想了好几种方式实现（后面的笔记详说），在组件化非常流行的今天，首先想到的就是其中的每一块都是一个组件，之后就是如何加载组件的问题了……
+
+
+【requirejs】
+    读RequireJS — 加载系统 https://www.cnblogs.com/zhujl/archive/2011/12/30/2298732.html
+    RequireJs运行原理  https://www.cnblogs.com/axl234/p/5295307.html
+【模块化编程】理解requireJS-实现一个简单的模块加载器 https://www.cnblogs.com/yexiaochai/p/3961291.html
+    一个缩小版的requireJS实现，主要用于学习requireJS的运行原理。 https://github.com/CODE7070/tinRequireJS
+    requireJs 原理探究以及demo实现 https://www.jianshu.com/p/5a39535909e4
+    Requirejs学习以及简单实现 https://www.jianshu.com/p/f6a384954f7c
+    requirejs 源码简析 https://cloud.tencent.com/developer/article/1014554
+【ES6 Module】
+    es6-Module 的加载实现 https://www.cnblogs.com/vs1435/p/6553139.html
+    页面是如何加载ES6 Modules https://www.jianshu.com/p/73061b5effd1
+    ES6 Module Transpiler https://github.com/esnext/es6-module-transpiler
+    ES6标准解读：Module的加载实现 https://blog.csdn.net/chenqiuge1984/article/details/80131371
+    script-type-module https://github.com/matthewp/script-type-module
+    An ES6 Module Loader polyfill based on the latest spec.  https://github.com/lukehoban/es6-module-loader
+    Polyfill for the ES Module Loader https://github.com/ModuleLoader/es-module-loader https://www.npmjs.com/package/es6-module-loader
+    Module 的加载实现 http://es6.ruanyifeng.com/#docs/module-loader
+【SystemJS】
+    SystemJS Babel Transform https://github.com/systemjs/systemjs-transform-babel
+
+
+
+https://androidappsapk.co/apkdownloader/
+https://sameapk.com/
+https://www.apkturbo.com/
+
+https://www.moerats.com/archives/112/
+https://www.inansi.com/2018/08/04/google-play-apk/
+https://www.crx4chrome.com/
+
+whistle
+https://www.tuicool.com/articles/FvqEZvz
+https://www.tuicool.com/articles/VniqIbj
+https://www.tuicool.com/articles/E7RZniv
+https://www.tuicool.com/articles/Yj6Z7jU
+
+
+1、比较工具
+https://text-compare.com/
+https://www.quickdiff.com/
+https://www.diffchecker.com/diff
+http://www.mergely.com/editor
+https://www.git-tower.com/blog/diff-tools-windows/
+https://www.jotform.com/blog/25-useful-document-and-file-comparison-tools/
+https://merabheja.com/12-best-free-file-comparison-tools-for-windows-10/
+
+2、表单构造器
+https://mdbootstrap.com/docs/jquery/forms/builder/ 
+https://bootsnipp.com/forms 
+https://forms.app/myforms
+https://secure.wufoo.com/form-builder/
+https://www.cognitoforms.com/forms/build
+
+
+https://mobirise.com/
+http://try.sppagebuilder.com/
+https://try.themeum.com/plugins/wp-pagebuilder/
+https://athemes.com/reviews/best-wordpress-page-builder-plugins-compared/
+https://www.websitetooltester.com/en/blog/best-free-website-builders/
+
+3、右键菜单
+https://github.com/xunleif2e/vue-context-menu
+https://github.com/snokier/v-contextmenu/
+https://github.com/chIIC/vue-contextmenu
+https://github.com/zgj233/vue-mouse-menu
+https://github.com/BillionChen/ContextMenu
+
+4、滚动条
+https://github.com/utatti/perfect-scrollbar
+https://github.com/idiotWu/smooth-scrollbar
+https://github.com/Diokuz/baron
+https://github.com/malihu/malihu-custom-scrollbar-plugin
+https://github.com/Grsmto/simplebar
+https://github.com/KingSora/OverlayScrollbars
+https://github.com/wieringen/tinyscrollbar
+https://github.com/buzinas/simple-scrollbar
+https://github.com/SzymonLisowiec/Sheepbar
+https://github.com/wallet616/wScroll
+https://github.com/cubiq/iscroll
+
+
+https://www.cssscript.com/best-custom-scrollbar-javascript-libraries/
+https://www.jqueryscript.net/blog/Best-Custom-Scroll-Bar-jQuery-Plugins.html
+http://blog.dynamicdrive.com/top-7-custom-scrollbar-javascript-and-jquery-plugins/
+https://www.cssscript.com/tag/scrollbar/
+
+5、CDN(对比：https://c7sky.com/javascript-libraries-cdn.html)
+https://www.bootcdn.cn/
+http://www.staticfile.org/
+https://cdnjs.com/
+http://www.jsdelivr.com/
+https://cdn.baomitu.com/
+https://cdn.bytedance.com/
+https://css.loli.net/
+https://unpkg.com/
+
+6、国内开源镜像站
+汇总：https://www.cnblogs.com/aksir/p/9098056.html、https://www.linuxde.net/the_china_open_source_mirror_site
+https://mirrors.tuna.tsinghua.edu.cn/
+http://mirror.hust.edu.cn/
+http://mirrors.zju.edu.cn/
+http://mirrors.ustc.edu.cn/
+http://mirror.lzu.edu.cn/
+
+http://mirrors.163.com/
+https://mirrors.huaweicloud.com/
+https://opsx.alibaba.com/
+http://mirrors.sohu.com/
+
+7、页面构造器
+http://try.sppagebuilder.com/
+https://try.themeum.com/plugins/wp-pagebuilder/
+https://athemes.com/reviews/best-wordpress-page-builder-plugins-compared/
+https://www.websitetooltester.com/en/blog/best-free-website-builders/
+http://demo.pagebuildersandwich.com/
+https://www.wpbeaverbuilder.com/
+https://carrd.co/
+https://enjoycss.com/
+https://gitee.com/iteaj/ivzone
+https://github.com/rxwater/rxeditor

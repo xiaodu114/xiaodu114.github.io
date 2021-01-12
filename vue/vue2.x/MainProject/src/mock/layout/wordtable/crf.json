@@ -1,0 +1,4737 @@
+{
+    "EFB0679B-CA01-4D2B-8A64-609828C7288B": {
+        "pos": {
+            "id": "EFB0679B-CA01-4D2B-8A64-609828C7288B",
+            "rowStart": 3,
+            "rowEnd": 4,
+            "columnStart": 1,
+            "columnEnd": 5
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "姓名",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid",
+                    "borderLeft": "1px solid"
+                }
+            }
+        }
+    },
+    "52844B40-8F37-49B0-9EC0-ABC2AB781560": {
+        "pos": {
+            "id": "52844B40-8F37-49B0-9EC0-ABC2AB781560",
+            "rowStart": 3,
+            "rowEnd": 4,
+            "columnStart": 5,
+            "columnEnd": 9
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "EB97E40A-4EE1-425F-B03E-889B48604631": {
+        "pos": {
+            "id": "EB97E40A-4EE1-425F-B03E-889B48604631",
+            "rowStart": 3,
+            "rowEnd": 4,
+            "columnStart": 9,
+            "columnEnd": 11
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "性别",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "D9F58F9C-4382-4FBB-B5A3-9CD4EB1DC9F8": {
+        "pos": {
+            "id": "D9F58F9C-4382-4FBB-B5A3-9CD4EB1DC9F8",
+            "rowStart": 3,
+            "rowEnd": 4,
+            "columnStart": 11,
+            "columnEnd": 15
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "5DD1F0AF-C34A-4C9D-B1CB-87236198C6F8": {
+        "pos": {
+            "id": "5DD1F0AF-C34A-4C9D-B1CB-87236198C6F8",
+            "rowStart": 3,
+            "rowEnd": 4,
+            "columnStart": 15,
+            "columnEnd": 19
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "出生年月",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "F85B7A54-F3C0-4B75-958D-5EED266E0229": {
+        "pos": {
+            "id": "F85B7A54-F3C0-4B75-958D-5EED266E0229",
+            "rowStart": 4,
+            "rowEnd": 5,
+            "columnStart": 1,
+            "columnEnd": 5
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "政治面貌",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid",
+                    "borderLeft": "1px solid"
+                }
+            }
+        }
+    },
+    "03EDC77D-287B-4524-B8A2-A008262A1418": {
+        "pos": {
+            "id": "03EDC77D-287B-4524-B8A2-A008262A1418",
+            "rowStart": 5,
+            "rowEnd": 6,
+            "columnStart": 1,
+            "columnEnd": 5
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "专长兴趣",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid",
+                    "borderLeft": "1px solid"
+                }
+            }
+        }
+    },
+    "2BAEED6B-E12E-4C84-ABEF-6195F2FD539F": {
+        "pos": {
+            "id": "2BAEED6B-E12E-4C84-ABEF-6195F2FD539F",
+            "rowStart": 6,
+            "rowEnd": 7,
+            "columnStart": 1,
+            "columnEnd": 5
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "在职情况",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid",
+                    "borderLeft": "1px solid"
+                }
+            }
+        }
+    },
+    "A88FAA09-105F-4C39-B59B-95335236E436": {
+        "pos": {
+            "id": "A88FAA09-105F-4C39-B59B-95335236E436",
+            "rowStart": 7,
+            "rowEnd": 8,
+            "columnStart": 1,
+            "columnEnd": 5
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "应聘职位",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid",
+                    "borderLeft": "1px solid"
+                }
+            }
+        }
+    },
+    "46713F97-FBF6-4BEC-AA06-59DDF5FAE4C7": {
+        "pos": {
+            "id": "46713F97-FBF6-4BEC-AA06-59DDF5FAE4C7",
+            "rowStart": 4,
+            "rowEnd": 5,
+            "columnStart": 5,
+            "columnEnd": 9
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "920B1093-CFB1-4ABB-A4AB-1072062D7447": {
+        "pos": {
+            "id": "920B1093-CFB1-4ABB-A4AB-1072062D7447",
+            "rowStart": 4,
+            "rowEnd": 5,
+            "columnStart": 9,
+            "columnEnd": 13
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "身份证号码",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "023C836B-C59A-487B-A6E4-87AB535FEB11": {
+        "pos": {
+            "id": "023C836B-C59A-487B-A6E4-87AB535FEB11",
+            "rowStart": 3,
+            "rowEnd": 4,
+            "columnStart": 19,
+            "columnEnd": 25
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "5A1F3B57-ABB7-4659-8A48-39FE42BFE3A1": {
+        "pos": {
+            "id": "5A1F3B57-ABB7-4659-8A48-39FE42BFE3A1",
+            "rowStart": 4,
+            "rowEnd": 5,
+            "columnStart": 23,
+            "columnEnd": 25
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "3B6DDE28-92A2-408A-852B-BF5B62F4A788": {
+        "pos": {
+            "id": "3B6DDE28-92A2-408A-852B-BF5B62F4A788",
+            "rowStart": 4,
+            "rowEnd": 5,
+            "columnStart": 21,
+            "columnEnd": 23
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "婚否",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "D8F706CD-6A86-4E73-91FE-59D149F4DD49": {
+        "pos": {
+            "id": "D8F706CD-6A86-4E73-91FE-59D149F4DD49",
+            "rowStart": 4,
+            "rowEnd": 5,
+            "columnStart": 13,
+            "columnEnd": 21
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "16E26E8C-1D1C-41E6-B5A1-6FF5404FCD07": {
+        "pos": {
+            "id": "16E26E8C-1D1C-41E6-B5A1-6FF5404FCD07",
+            "rowStart": 5,
+            "rowEnd": 6,
+            "columnStart": 23,
+            "columnEnd": 25
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "5F17BE65-A95A-456B-BD3C-5583A5068C14": {
+        "pos": {
+            "id": "5F17BE65-A95A-456B-BD3C-5583A5068C14",
+            "rowStart": 5,
+            "rowEnd": 6,
+            "columnStart": 19,
+            "columnEnd": 23
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "希望收入",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "BDDC9674-9AE1-40FE-98E8-F7B3C267ACA5": {
+        "pos": {
+            "id": "BDDC9674-9AE1-40FE-98E8-F7B3C267ACA5",
+            "rowStart": 5,
+            "rowEnd": 6,
+            "columnStart": 17,
+            "columnEnd": 19
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "68127C02-EC77-45C2-86C6-38FE1BA0868B": {
+        "pos": {
+            "id": "68127C02-EC77-45C2-86C6-38FE1BA0868B",
+            "rowStart": 5,
+            "rowEnd": 6,
+            "columnStart": 15,
+            "columnEnd": 17
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "民族",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "A5159206-BFF3-4F9B-99AB-14A73F37D584": {
+        "pos": {
+            "id": "A5159206-BFF3-4F9B-99AB-14A73F37D584",
+            "rowStart": 5,
+            "rowEnd": 6,
+            "columnStart": 5,
+            "columnEnd": 15
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "05F62857-7FE6-4BDF-868A-62B090ADCC6D": {
+        "pos": {
+            "id": "05F62857-7FE6-4BDF-868A-62B090ADCC6D",
+            "rowStart": 6,
+            "rowEnd": 7,
+            "columnStart": 23,
+            "columnEnd": 25
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "F1FB9DF4-5785-4AC7-A905-1174C4445C9C": {
+        "pos": {
+            "id": "F1FB9DF4-5785-4AC7-A905-1174C4445C9C",
+            "rowStart": 6,
+            "rowEnd": 7,
+            "columnStart": 19,
+            "columnEnd": 23
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "立即上班",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "9AB9DD47-F81C-4D50-AFD1-F00F9B57FE09": {
+        "pos": {
+            "id": "9AB9DD47-F81C-4D50-AFD1-F00F9B57FE09",
+            "rowStart": 6,
+            "rowEnd": 7,
+            "columnStart": 5,
+            "columnEnd": 19
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "4EF49AD4-AB88-4C51-A2C5-7D11A169C739": {
+        "pos": {
+            "id": "4EF49AD4-AB88-4C51-A2C5-7D11A169C739",
+            "rowStart": 7,
+            "rowEnd": 8,
+            "columnStart": 19,
+            "columnEnd": 25
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "68BAB9D6-1181-453B-BD8F-CF36F0263088": {
+        "pos": {
+            "id": "68BAB9D6-1181-453B-BD8F-CF36F0263088",
+            "rowStart": 7,
+            "rowEnd": 8,
+            "columnStart": 12,
+            "columnEnd": 19
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "是否会开车",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "432ED557-A46C-4FBF-A698-909FC80C5224": {
+        "pos": {
+            "id": "432ED557-A46C-4FBF-A698-909FC80C5224",
+            "rowStart": 7,
+            "rowEnd": 8,
+            "columnStart": 5,
+            "columnEnd": 12
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "82B8BAB9-E1E4-4302-A96A-65B3D1163373": {
+        "pos": {
+            "id": "82B8BAB9-E1E4-4302-A96A-65B3D1163373",
+            "rowStart": 8,
+            "rowEnd": 11,
+            "columnStart": 1,
+            "columnEnd": 5
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "联系方式",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "16px",
+                    "height": "90px",
+                    "writingMode": "vertical-rl",
+                    "width": "100%",
+                    "display": "flex",
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid",
+                    "borderLeft": "1px solid"
+                }
+            }
+        }
+    },
+    "071C844C-A407-4AE2-B4A4-649666D4245E": {
+        "pos": {
+            "id": "071C844C-A407-4AE2-B4A4-649666D4245E",
+            "rowStart": 11,
+            "rowEnd": 12,
+            "columnStart": 1,
+            "columnEnd": 5
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "住址区域",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid",
+                    "borderLeft": "1px solid"
+                }
+            }
+        }
+    },
+    "F9D9D66C-8E88-4676-AF4C-C782CE89D545": {
+        "pos": {
+            "id": "F9D9D66C-8E88-4676-AF4C-C782CE89D545",
+            "rowStart": 11,
+            "rowEnd": 12,
+            "columnStart": 5,
+            "columnEnd": 12
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "5FBD5E06-64B5-4428-81CD-1448D525AAC0": {
+        "pos": {
+            "id": "5FBD5E06-64B5-4428-81CD-1448D525AAC0",
+            "rowStart": 8,
+            "rowEnd": 9,
+            "columnStart": 5,
+            "columnEnd": 8
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "移动电话",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "69E9C447-9D39-40B2-8BB8-AC7FB4D53A03": {
+        "pos": {
+            "id": "69E9C447-9D39-40B2-8BB8-AC7FB4D53A03",
+            "rowStart": 9,
+            "rowEnd": 10,
+            "columnStart": 5,
+            "columnEnd": 8
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "住宅电话",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "E3A9546B-2633-4A2E-8CDE-C4844336B292": {
+        "pos": {
+            "id": "E3A9546B-2633-4A2E-8CDE-C4844336B292",
+            "rowStart": 10,
+            "rowEnd": 11,
+            "columnStart": 5,
+            "columnEnd": 8
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "邮箱",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "E5BD686C-C82D-4371-BFB1-B246B6EB7274": {
+        "pos": {
+            "id": "E5BD686C-C82D-4371-BFB1-B246B6EB7274",
+            "rowStart": 8,
+            "rowEnd": 9,
+            "columnStart": 8,
+            "columnEnd": 12
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "FD002522-2FF1-4D9E-9F84-0AFA307E997A": {
+        "pos": {
+            "id": "FD002522-2FF1-4D9E-9F84-0AFA307E997A",
+            "rowStart": 9,
+            "rowEnd": 10,
+            "columnStart": 8,
+            "columnEnd": 12
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "E6B3AF39-3B25-4786-979C-0136D34B23F4": {
+        "pos": {
+            "id": "E6B3AF39-3B25-4786-979C-0136D34B23F4",
+            "rowStart": 10,
+            "rowEnd": 11,
+            "columnStart": 8,
+            "columnEnd": 12
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "23B948A3-BD01-4DA2-B6A3-78E8D855987A": {
+        "pos": {
+            "id": "23B948A3-BD01-4DA2-B6A3-78E8D855987A",
+            "rowStart": 8,
+            "rowEnd": 10,
+            "columnStart": 19,
+            "columnEnd": 31
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "16px",
+                    "height": "60px",
+                    "width": "100%",
+                    "display": "flex",
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "188671C4-D5E7-497B-A165-CF98F1F5F356": {
+        "pos": {
+            "id": "188671C4-D5E7-497B-A165-CF98F1F5F356",
+            "rowStart": 8,
+            "rowEnd": 10,
+            "columnStart": 12,
+            "columnEnd": 19
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "现详细地址",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "16px",
+                    "height": "60px",
+                    "width": "100%",
+                    "display": "flex",
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "AC119AE7-5544-4448-904E-CC87F148548C": {
+        "pos": {
+            "id": "AC119AE7-5544-4448-904E-CC87F148548C",
+            "rowStart": 3,
+            "rowEnd": 8,
+            "columnStart": 25,
+            "columnEnd": 31
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "照片",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "16px",
+                    "width": "100%",
+                    "height": "150px",
+                    "writingMode": "vertical-rl",
+                    "display": "flex",
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "70002BA8-FE5F-49A6-96A7-D00F7A221455": {
+        "pos": {
+            "id": "70002BA8-FE5F-49A6-96A7-D00F7A221455",
+            "rowStart": 10,
+            "rowEnd": 12,
+            "columnStart": 12,
+            "columnEnd": 19
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "户籍地址",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "16px",
+                    "height": "60px",
+                    "width": "100%",
+                    "display": "flex",
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "372F743D-A37B-493E-A5DE-8C9D8184A059": {
+        "pos": {
+            "id": "372F743D-A37B-493E-A5DE-8C9D8184A059",
+            "rowStart": 10,
+            "rowEnd": 12,
+            "columnStart": 19,
+            "columnEnd": 31
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "16px",
+                    "height": "60px",
+                    "width": "100%",
+                    "display": "flex",
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "D96538F1-1370-422B-8E87-3D1C9B5D61D6": {
+        "pos": {
+            "id": "D96538F1-1370-422B-8E87-3D1C9B5D61D6",
+            "rowStart": 12,
+            "rowEnd": 13,
+            "columnStart": 1,
+            "columnEnd": 5
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "所会语种",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid",
+                    "borderLeft": "1px solid"
+                }
+            }
+        }
+    },
+    "6FFBF684-15F2-42EF-8B68-30DEDB4FAB0D": {
+        "pos": {
+            "id": "6FFBF684-15F2-42EF-8B68-30DEDB4FAB0D",
+            "rowStart": 12,
+            "rowEnd": 13,
+            "columnStart": 21,
+            "columnEnd": 31
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "38B46AD3-9D09-4E82-BF8A-57168AA8C451": {
+        "pos": {
+            "id": "38B46AD3-9D09-4E82-BF8A-57168AA8C451",
+            "rowStart": 12,
+            "rowEnd": 13,
+            "columnStart": 17,
+            "columnEnd": 21
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "出生地",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "FC5A7C80-0244-4C4A-A773-D6605F9CEA26": {
+        "pos": {
+            "id": "FC5A7C80-0244-4C4A-A773-D6605F9CEA26",
+            "rowStart": 12,
+            "rowEnd": 13,
+            "columnStart": 5,
+            "columnEnd": 17
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "195F501B-A2A7-44C1-AF62-AF0ABFA8BB6C": {
+        "pos": {
+            "id": "195F501B-A2A7-44C1-AF62-AF0ABFA8BB6C",
+            "rowStart": 13,
+            "rowEnd": 14,
+            "columnStart": 1,
+            "columnEnd": 5
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "最高学历",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid",
+                    "borderLeft": "1px solid"
+                }
+            }
+        }
+    },
+    "B02E8F0E-2F71-444B-B990-C58DF04A3E84": {
+        "pos": {
+            "id": "B02E8F0E-2F71-444B-B990-C58DF04A3E84",
+            "rowStart": 13,
+            "rowEnd": 14,
+            "columnStart": 5,
+            "columnEnd": 9
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "C312BF0A-3CF6-4048-9D52-E485FB826143": {
+        "pos": {
+            "id": "C312BF0A-3CF6-4048-9D52-E485FB826143",
+            "rowStart": 13,
+            "rowEnd": 14,
+            "columnStart": 9,
+            "columnEnd": 13
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "专业",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "424A946B-C884-4F3A-9F2D-16BE71A0AEC7": {
+        "pos": {
+            "id": "424A946B-C884-4F3A-9F2D-16BE71A0AEC7",
+            "rowStart": 13,
+            "rowEnd": 14,
+            "columnStart": 13,
+            "columnEnd": 17
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "8741EBC5-164E-4C6D-A474-686ED8D1B843": {
+        "pos": {
+            "id": "8741EBC5-164E-4C6D-A474-686ED8D1B843",
+            "rowStart": 13,
+            "rowEnd": 14,
+            "columnStart": 27,
+            "columnEnd": 31
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "8B9D3DE4-C52B-46C6-8FF0-53724C52CF0B": {
+        "pos": {
+            "id": "8B9D3DE4-C52B-46C6-8FF0-53724C52CF0B",
+            "rowStart": 13,
+            "rowEnd": 14,
+            "columnStart": 23,
+            "columnEnd": 27
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "获得时间",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "65D7EFC5-522C-44B2-AD0B-70023E7510F3": {
+        "pos": {
+            "id": "65D7EFC5-522C-44B2-AD0B-70023E7510F3",
+            "rowStart": 13,
+            "rowEnd": 14,
+            "columnStart": 19,
+            "columnEnd": 23
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "71E03DC4-9D6E-4FEC-B087-ED745B477F73": {
+        "pos": {
+            "id": "71E03DC4-9D6E-4FEC-B087-ED745B477F73",
+            "rowStart": 13,
+            "rowEnd": 14,
+            "columnStart": 17,
+            "columnEnd": 19
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "学校",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "AB066FEB-4EB4-4184-B8DE-0D16D40339A9": {
+        "pos": {
+            "id": "AB066FEB-4EB4-4184-B8DE-0D16D40339A9",
+            "rowStart": 14,
+            "rowEnd": 18,
+            "columnStart": 1,
+            "columnEnd": 3
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "教育经历",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "16px",
+                    "height": "120px",
+                    "writingMode": "vertical-rl",
+                    "width": "100%",
+                    "display": "flex",
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid",
+                    "borderLeft": "1px solid"
+                }
+            }
+        }
+    },
+    "6965F89B-6620-4EF4-AA57-C94EA446DC24": {
+        "pos": {
+            "id": "6965F89B-6620-4EF4-AA57-C94EA446DC24",
+            "rowStart": 14,
+            "rowEnd": 15,
+            "columnStart": 3,
+            "columnEnd": 7
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "性质",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "F30C7C6E-1B67-4AE4-AF12-6E15BD8D93DB": {
+        "pos": {
+            "id": "F30C7C6E-1B67-4AE4-AF12-6E15BD8D93DB",
+            "rowStart": 15,
+            "rowEnd": 16,
+            "columnStart": 3,
+            "columnEnd": 7
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "708F26F1-0D5B-47E6-8967-CE8DD85515CF": {
+        "pos": {
+            "id": "708F26F1-0D5B-47E6-8967-CE8DD85515CF",
+            "rowStart": 16,
+            "rowEnd": 17,
+            "columnStart": 3,
+            "columnEnd": 7
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "F8483167-F39B-4D5C-B7DE-C16DFA530A0D": {
+        "pos": {
+            "id": "F8483167-F39B-4D5C-B7DE-C16DFA530A0D",
+            "rowStart": 17,
+            "rowEnd": 18,
+            "columnStart": 3,
+            "columnEnd": 7
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "1A152406-4EEA-46E0-A786-988E6E50F39B": {
+        "pos": {
+            "id": "1A152406-4EEA-46E0-A786-988E6E50F39B",
+            "rowStart": 14,
+            "rowEnd": 15,
+            "columnStart": 24,
+            "columnEnd": 31
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "备注",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "2109BB88-675B-4A13-8BE7-EFCB2E81333E": {
+        "pos": {
+            "id": "2109BB88-675B-4A13-8BE7-EFCB2E81333E",
+            "rowStart": 14,
+            "rowEnd": 15,
+            "columnStart": 19,
+            "columnEnd": 24
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "专业",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "7EA02469-D222-4E62-9793-71198F492D6E": {
+        "pos": {
+            "id": "7EA02469-D222-4E62-9793-71198F492D6E",
+            "rowStart": 14,
+            "rowEnd": 15,
+            "columnStart": 15,
+            "columnEnd": 19
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "年月至年月",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "326C4137-5BE9-480D-925C-548F30CED1A2": {
+        "pos": {
+            "id": "326C4137-5BE9-480D-925C-548F30CED1A2",
+            "rowStart": 14,
+            "rowEnd": 15,
+            "columnStart": 7,
+            "columnEnd": 15
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "学校名称",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "65BC79B3-D01A-4DFB-8D41-55D7C74C463A": {
+        "pos": {
+            "id": "65BC79B3-D01A-4DFB-8D41-55D7C74C463A",
+            "rowStart": 15,
+            "rowEnd": 16,
+            "columnStart": 7,
+            "columnEnd": 15
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "F29A9E6F-0E6D-45C5-9044-F21927AD2819": {
+        "pos": {
+            "id": "F29A9E6F-0E6D-45C5-9044-F21927AD2819",
+            "rowStart": 16,
+            "rowEnd": 17,
+            "columnStart": 7,
+            "columnEnd": 15
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "1DD8A6B9-FF04-4623-A502-D518ABE99A25": {
+        "pos": {
+            "id": "1DD8A6B9-FF04-4623-A502-D518ABE99A25",
+            "rowStart": 17,
+            "rowEnd": 18,
+            "columnStart": 7,
+            "columnEnd": 15
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "8ACFE13F-992F-4078-B9F9-703654C904FD": {
+        "pos": {
+            "id": "8ACFE13F-992F-4078-B9F9-703654C904FD",
+            "rowStart": 15,
+            "rowEnd": 16,
+            "columnStart": 15,
+            "columnEnd": 19
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "96E70D15-C491-41FA-93C3-C322D1C22784": {
+        "pos": {
+            "id": "96E70D15-C491-41FA-93C3-C322D1C22784",
+            "rowStart": 16,
+            "rowEnd": 17,
+            "columnStart": 15,
+            "columnEnd": 19
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "60D7C44C-78CC-4387-89D6-B831579800BB": {
+        "pos": {
+            "id": "60D7C44C-78CC-4387-89D6-B831579800BB",
+            "rowStart": 17,
+            "rowEnd": 18,
+            "columnStart": 15,
+            "columnEnd": 19
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "1065FF5A-9E6B-495A-9AFE-1E63D4A70B8E": {
+        "pos": {
+            "id": "1065FF5A-9E6B-495A-9AFE-1E63D4A70B8E",
+            "rowStart": 15,
+            "rowEnd": 16,
+            "columnStart": 19,
+            "columnEnd": 24
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "94918F77-4CB1-402A-B879-0A8E177094E5": {
+        "pos": {
+            "id": "94918F77-4CB1-402A-B879-0A8E177094E5",
+            "rowStart": 16,
+            "rowEnd": 17,
+            "columnStart": 19,
+            "columnEnd": 24
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "F402616C-C66B-4955-AFE8-07BAD9FE3879": {
+        "pos": {
+            "id": "F402616C-C66B-4955-AFE8-07BAD9FE3879",
+            "rowStart": 17,
+            "rowEnd": 18,
+            "columnStart": 19,
+            "columnEnd": 24
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "E0D4A2BC-7CAA-4005-8A87-524D268089F3": {
+        "pos": {
+            "id": "E0D4A2BC-7CAA-4005-8A87-524D268089F3",
+            "rowStart": 15,
+            "rowEnd": 18,
+            "columnStart": 24,
+            "columnEnd": 31
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "16px",
+                    "height": "90px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "07681CCD-FE43-4337-9762-329BA8130F7A": {
+        "pos": {
+            "id": "07681CCD-FE43-4337-9762-329BA8130F7A",
+            "rowStart": 18,
+            "rowEnd": 23,
+            "columnStart": 1,
+            "columnEnd": 3
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "工作经历",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "16px",
+                    "height": "150px",
+                    "writingMode": "vertical-rl",
+                    "width": "100%",
+                    "display": "flex",
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid",
+                    "borderLeft": "1px solid"
+                }
+            }
+        }
+    },
+    "C1A622B4-7181-4FEA-88A1-78C585388C09": {
+        "pos": {
+            "id": "C1A622B4-7181-4FEA-88A1-78C585388C09",
+            "rowStart": 18,
+            "rowEnd": 19,
+            "columnStart": 24,
+            "columnEnd": 31
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "重大奖惩",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "961A600A-5DAE-4FA7-B42D-3B281DE7E845": {
+        "pos": {
+            "id": "961A600A-5DAE-4FA7-B42D-3B281DE7E845",
+            "rowStart": 19,
+            "rowEnd": 20,
+            "columnStart": 24,
+            "columnEnd": 31
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "DC76B12F-2437-4964-9AC1-5668FA4AF123": {
+        "pos": {
+            "id": "DC76B12F-2437-4964-9AC1-5668FA4AF123",
+            "rowStart": 20,
+            "rowEnd": 21,
+            "columnStart": 24,
+            "columnEnd": 31
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "614D8DFB-1993-401F-82E5-2CD5230357A8": {
+        "pos": {
+            "id": "614D8DFB-1993-401F-82E5-2CD5230357A8",
+            "rowStart": 21,
+            "rowEnd": 22,
+            "columnStart": 24,
+            "columnEnd": 31
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "2C6AF130-A93A-4F00-ABA8-92F91F5BBA44": {
+        "pos": {
+            "id": "2C6AF130-A93A-4F00-ABA8-92F91F5BBA44",
+            "rowStart": 22,
+            "rowEnd": 23,
+            "columnStart": 24,
+            "columnEnd": 31
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "540D25BB-D846-473D-B671-2CBC7D629B33": {
+        "pos": {
+            "id": "540D25BB-D846-473D-B671-2CBC7D629B33",
+            "rowStart": 23,
+            "rowEnd": 26,
+            "columnStart": 24,
+            "columnEnd": 31
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "16px",
+                    "height": "90px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "3D7986F6-6DC9-4562-BD8E-91CFAEADBA8D": {
+        "pos": {
+            "id": "3D7986F6-6DC9-4562-BD8E-91CFAEADBA8D",
+            "rowStart": 18,
+            "rowEnd": 19,
+            "columnStart": 22,
+            "columnEnd": 24
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "收入",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "5A6938C1-E770-4D13-A7FA-9956342FDF25": {
+        "pos": {
+            "id": "5A6938C1-E770-4D13-A7FA-9956342FDF25",
+            "rowStart": 19,
+            "rowEnd": 20,
+            "columnStart": 22,
+            "columnEnd": 24
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "A1DFECFF-02A9-41C0-8E91-6E7C267994A2": {
+        "pos": {
+            "id": "A1DFECFF-02A9-41C0-8E91-6E7C267994A2",
+            "rowStart": 20,
+            "rowEnd": 21,
+            "columnStart": 22,
+            "columnEnd": 24
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "8C95706B-66C7-468C-AB46-69FC343BF8DE": {
+        "pos": {
+            "id": "8C95706B-66C7-468C-AB46-69FC343BF8DE",
+            "rowStart": 21,
+            "rowEnd": 22,
+            "columnStart": 22,
+            "columnEnd": 24
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "5DE04F35-818F-4982-A6BE-9AFF00349CF3": {
+        "pos": {
+            "id": "5DE04F35-818F-4982-A6BE-9AFF00349CF3",
+            "rowStart": 22,
+            "rowEnd": 23,
+            "columnStart": 22,
+            "columnEnd": 24
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "351FDF81-71D4-4EA2-973C-AED478060BB1": {
+        "pos": {
+            "id": "351FDF81-71D4-4EA2-973C-AED478060BB1",
+            "rowStart": 18,
+            "rowEnd": 19,
+            "columnStart": 19,
+            "columnEnd": 22
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "联系电话",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "8ABBBFFD-E304-47F3-855C-CC69D5AEEC2E": {
+        "pos": {
+            "id": "8ABBBFFD-E304-47F3-855C-CC69D5AEEC2E",
+            "rowStart": 19,
+            "rowEnd": 20,
+            "columnStart": 19,
+            "columnEnd": 22
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "75897F74-439E-4207-9B94-413F0DE41019": {
+        "pos": {
+            "id": "75897F74-439E-4207-9B94-413F0DE41019",
+            "rowStart": 20,
+            "rowEnd": 21,
+            "columnStart": 19,
+            "columnEnd": 22
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "3FF9216D-3143-4B24-94CD-B703BED777AF": {
+        "pos": {
+            "id": "3FF9216D-3143-4B24-94CD-B703BED777AF",
+            "rowStart": 21,
+            "rowEnd": 22,
+            "columnStart": 19,
+            "columnEnd": 22
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "FCC6896F-CE3A-433C-A883-FD98A13BFB2B": {
+        "pos": {
+            "id": "FCC6896F-CE3A-433C-A883-FD98A13BFB2B",
+            "rowStart": 22,
+            "rowEnd": 23,
+            "columnStart": 19,
+            "columnEnd": 22
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "C725DC57-1139-4F33-B3F3-D9D0F7B60942": {
+        "pos": {
+            "id": "C725DC57-1139-4F33-B3F3-D9D0F7B60942",
+            "rowStart": 18,
+            "rowEnd": 19,
+            "columnStart": 16,
+            "columnEnd": 19
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "证明人",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "339FE5A9-D3E7-4BF5-81BA-2485455FC7F3": {
+        "pos": {
+            "id": "339FE5A9-D3E7-4BF5-81BA-2485455FC7F3",
+            "rowStart": 19,
+            "rowEnd": 20,
+            "columnStart": 16,
+            "columnEnd": 19
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "6A13A865-DC97-459E-BFD1-B32313E09712": {
+        "pos": {
+            "id": "6A13A865-DC97-459E-BFD1-B32313E09712",
+            "rowStart": 20,
+            "rowEnd": 21,
+            "columnStart": 16,
+            "columnEnd": 19
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "8E5BC36D-D0D9-4E5C-A42C-E7A29C621B21": {
+        "pos": {
+            "id": "8E5BC36D-D0D9-4E5C-A42C-E7A29C621B21",
+            "rowStart": 21,
+            "rowEnd": 22,
+            "columnStart": 16,
+            "columnEnd": 19
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "09634624-5AB2-4584-8D1A-D767BE77E67C": {
+        "pos": {
+            "id": "09634624-5AB2-4584-8D1A-D767BE77E67C",
+            "rowStart": 22,
+            "rowEnd": 23,
+            "columnStart": 16,
+            "columnEnd": 19
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "DCF6FFD6-80F9-46D1-A0F5-8A35C98D7AAF": {
+        "pos": {
+            "id": "DCF6FFD6-80F9-46D1-A0F5-8A35C98D7AAF",
+            "rowStart": 18,
+            "rowEnd": 19,
+            "columnStart": 3,
+            "columnEnd": 8
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "年月至年月",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "C1FA7915-0011-4A97-931A-099D8CCDEB58": {
+        "pos": {
+            "id": "C1FA7915-0011-4A97-931A-099D8CCDEB58",
+            "rowStart": 19,
+            "rowEnd": 20,
+            "columnStart": 3,
+            "columnEnd": 8
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "27911D10-E726-4051-BBF9-68F7D7690D70": {
+        "pos": {
+            "id": "27911D10-E726-4051-BBF9-68F7D7690D70",
+            "rowStart": 20,
+            "rowEnd": 21,
+            "columnStart": 3,
+            "columnEnd": 8
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "F3A47066-14C6-499B-B07F-510F41F1A893": {
+        "pos": {
+            "id": "F3A47066-14C6-499B-B07F-510F41F1A893",
+            "rowStart": 21,
+            "rowEnd": 22,
+            "columnStart": 3,
+            "columnEnd": 8
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "B3A5F61A-583D-4E51-AA1B-4D302F8D8C30": {
+        "pos": {
+            "id": "B3A5F61A-583D-4E51-AA1B-4D302F8D8C30",
+            "rowStart": 22,
+            "rowEnd": 23,
+            "columnStart": 3,
+            "columnEnd": 8
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "D02FC9BD-DB88-4FA2-B1EC-B9EC3AC9AA68": {
+        "pos": {
+            "id": "D02FC9BD-DB88-4FA2-B1EC-B9EC3AC9AA68",
+            "rowStart": 18,
+            "rowEnd": 19,
+            "columnStart": 8,
+            "columnEnd": 16
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "单位名称及职务职称",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "C96AC2DD-3C9B-421E-83EA-77EEC5267AE3": {
+        "pos": {
+            "id": "C96AC2DD-3C9B-421E-83EA-77EEC5267AE3",
+            "rowStart": 19,
+            "rowEnd": 20,
+            "columnStart": 8,
+            "columnEnd": 16
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "FAFBAEFC-13D3-44A0-89A8-7CC60F730B00": {
+        "pos": {
+            "id": "FAFBAEFC-13D3-44A0-89A8-7CC60F730B00",
+            "rowStart": 20,
+            "rowEnd": 21,
+            "columnStart": 8,
+            "columnEnd": 16
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "C6805BEA-9FAE-4BC4-9833-AA4CA46E4466": {
+        "pos": {
+            "id": "C6805BEA-9FAE-4BC4-9833-AA4CA46E4466",
+            "rowStart": 21,
+            "rowEnd": 22,
+            "columnStart": 8,
+            "columnEnd": 16
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "03209A4D-91AE-4A0C-8052-555C6E275965": {
+        "pos": {
+            "id": "03209A4D-91AE-4A0C-8052-555C6E275965",
+            "rowStart": 22,
+            "rowEnd": 23,
+            "columnStart": 8,
+            "columnEnd": 16
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "EEF91F58-B6C1-4AE0-B275-E0A0057A3A94": {
+        "pos": {
+            "id": "EEF91F58-B6C1-4AE0-B275-E0A0057A3A94",
+            "rowStart": 23,
+            "rowEnd": 26,
+            "columnStart": 1,
+            "columnEnd": 3
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "身体状况",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "16px",
+                    "height": "90px",
+                    "writingMode": "vertical-rl",
+                    "width": "100%",
+                    "display": "flex",
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid",
+                    "borderLeft": "1px solid"
+                }
+            }
+        }
+    },
+    "EAD818E9-6FBE-401B-A4F9-A308493048E3": {
+        "pos": {
+            "id": "EAD818E9-6FBE-401B-A4F9-A308493048E3",
+            "rowStart": 26,
+            "rowEnd": 31,
+            "columnStart": 1,
+            "columnEnd": 3
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "家庭成员与社会关系",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "150px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid",
+                    "borderLeft": "1px solid"
+                }
+            }
+        }
+    },
+    "57D271D7-021A-44FC-A47E-EF0BEBBFDDC7": {
+        "pos": {
+            "id": "57D271D7-021A-44FC-A47E-EF0BEBBFDDC7",
+            "rowStart": 23,
+            "rowEnd": 26,
+            "columnStart": 22,
+            "columnEnd": 24
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "个人缺点",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "display": "table-cell",
+                    "height": "90px",
+                    "verticalAlign": "middle",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "5533469E-05D8-4833-B3BD-E9754716149C": {
+        "pos": {
+            "id": "5533469E-05D8-4833-B3BD-E9754716149C",
+            "rowStart": 23,
+            "rowEnd": 26,
+            "columnStart": 9,
+            "columnEnd": 11
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "个人优点",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "display": "table-cell",
+                    "height": "90px",
+                    "verticalAlign": "middle",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "EB0E6AEF-A9B9-4BC7-8F51-36BBC177A470": {
+        "pos": {
+            "id": "EB0E6AEF-A9B9-4BC7-8F51-36BBC177A470",
+            "rowStart": 23,
+            "rowEnd": 24,
+            "columnStart": 3,
+            "columnEnd": 6
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "身高",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "1DDA09A1-3928-43C6-B732-2935E48E7C2B": {
+        "pos": {
+            "id": "1DDA09A1-3928-43C6-B732-2935E48E7C2B",
+            "rowStart": 24,
+            "rowEnd": 25,
+            "columnStart": 3,
+            "columnEnd": 6
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "体重",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "1BCBFFD8-9741-4B05-A5A4-A3C20D2B45EE": {
+        "pos": {
+            "id": "1BCBFFD8-9741-4B05-A5A4-A3C20D2B45EE",
+            "rowStart": 25,
+            "rowEnd": 26,
+            "columnStart": 3,
+            "columnEnd": 6
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "视力",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "E70E5AC9-D374-4688-97D4-0E23A12D08FF": {
+        "pos": {
+            "id": "E70E5AC9-D374-4688-97D4-0E23A12D08FF",
+            "rowStart": 23,
+            "rowEnd": 24,
+            "columnStart": 6,
+            "columnEnd": 9
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "2569D2D9-0915-455F-9568-A34F3D7654EF": {
+        "pos": {
+            "id": "2569D2D9-0915-455F-9568-A34F3D7654EF",
+            "rowStart": 24,
+            "rowEnd": 25,
+            "columnStart": 6,
+            "columnEnd": 9
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "7D973C28-77BF-4AA8-8DCA-3459364B20F8": {
+        "pos": {
+            "id": "7D973C28-77BF-4AA8-8DCA-3459364B20F8",
+            "rowStart": 25,
+            "rowEnd": 26,
+            "columnStart": 6,
+            "columnEnd": 9
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "44E45010-12F5-475E-B4A1-F011BE4C41A6": {
+        "pos": {
+            "id": "44E45010-12F5-475E-B4A1-F011BE4C41A6",
+            "rowStart": 23,
+            "rowEnd": 26,
+            "columnStart": 11,
+            "columnEnd": 22
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "height": "90px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "9DD717CC-0536-473B-B3B3-847E72ABB0AB": {
+        "pos": {
+            "id": "9DD717CC-0536-473B-B3B3-847E72ABB0AB",
+            "rowStart": 26,
+            "rowEnd": 27,
+            "columnStart": 22,
+            "columnEnd": 31
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "住址及电话",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "8F5DEEC2-A661-442C-8048-11DD11EE84AE": {
+        "pos": {
+            "id": "8F5DEEC2-A661-442C-8048-11DD11EE84AE",
+            "rowStart": 26,
+            "rowEnd": 27,
+            "columnStart": 3,
+            "columnEnd": 6
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "称谓",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "8F6A11C0-21A2-4AD8-9F4D-A3CACDB74954": {
+        "pos": {
+            "id": "8F6A11C0-21A2-4AD8-9F4D-A3CACDB74954",
+            "rowStart": 26,
+            "rowEnd": 27,
+            "columnStart": 6,
+            "columnEnd": 9
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "姓名",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "BF957B10-AE18-46BF-ACB0-99A99738218E": {
+        "pos": {
+            "id": "BF957B10-AE18-46BF-ACB0-99A99738218E",
+            "rowStart": 26,
+            "rowEnd": 27,
+            "columnStart": 9,
+            "columnEnd": 11
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "年龄",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "00F55355-7B74-479A-81F9-714E88BC4372": {
+        "pos": {
+            "id": "00F55355-7B74-479A-81F9-714E88BC4372",
+            "rowStart": 26,
+            "rowEnd": 27,
+            "columnStart": 11,
+            "columnEnd": 18
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "单位",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "6BFD6F93-2581-42C2-B18C-08E6C06A2352": {
+        "pos": {
+            "id": "6BFD6F93-2581-42C2-B18C-08E6C06A2352",
+            "rowStart": 26,
+            "rowEnd": 27,
+            "columnStart": 18,
+            "columnEnd": 22
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "职务",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "ACB74557-82E3-44AA-A70B-E49A9E9674D0": {
+        "pos": {
+            "id": "ACB74557-82E3-44AA-A70B-E49A9E9674D0",
+            "rowStart": 27,
+            "rowEnd": 28,
+            "columnStart": 3,
+            "columnEnd": 6
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "F986D722-E744-440C-BAB5-7E2F354AAAA5": {
+        "pos": {
+            "id": "F986D722-E744-440C-BAB5-7E2F354AAAA5",
+            "rowStart": 28,
+            "rowEnd": 29,
+            "columnStart": 3,
+            "columnEnd": 6
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "02CAA113-77B7-45D9-9A1E-58CA9A07F6CC": {
+        "pos": {
+            "id": "02CAA113-77B7-45D9-9A1E-58CA9A07F6CC",
+            "rowStart": 29,
+            "rowEnd": 30,
+            "columnStart": 3,
+            "columnEnd": 6
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "C865E175-A8AB-4A6E-B7A9-D29113A13C13": {
+        "pos": {
+            "id": "C865E175-A8AB-4A6E-B7A9-D29113A13C13",
+            "rowStart": 30,
+            "rowEnd": 31,
+            "columnStart": 3,
+            "columnEnd": 6
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "6837EE07-9BDA-4D51-9FA3-67C73579D936": {
+        "pos": {
+            "id": "6837EE07-9BDA-4D51-9FA3-67C73579D936",
+            "rowStart": 27,
+            "rowEnd": 28,
+            "columnStart": 6,
+            "columnEnd": 9
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "D0C2756D-9C1B-4540-9DF7-B9CA224C5469": {
+        "pos": {
+            "id": "D0C2756D-9C1B-4540-9DF7-B9CA224C5469",
+            "rowStart": 28,
+            "rowEnd": 29,
+            "columnStart": 6,
+            "columnEnd": 9
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "69FF8086-07F7-4C33-996A-ACAD888AB27E": {
+        "pos": {
+            "id": "69FF8086-07F7-4C33-996A-ACAD888AB27E",
+            "rowStart": 29,
+            "rowEnd": 30,
+            "columnStart": 6,
+            "columnEnd": 9
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "3607B5C8-AB29-4CD7-90D5-E152B1AEB1FD": {
+        "pos": {
+            "id": "3607B5C8-AB29-4CD7-90D5-E152B1AEB1FD",
+            "rowStart": 30,
+            "rowEnd": 31,
+            "columnStart": 6,
+            "columnEnd": 9
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "BD5342E9-9CF4-42EC-981E-6EF876ABEA3C": {
+        "pos": {
+            "id": "BD5342E9-9CF4-42EC-981E-6EF876ABEA3C",
+            "rowStart": 27,
+            "rowEnd": 28,
+            "columnStart": 9,
+            "columnEnd": 11
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "009D0BC0-4C41-4FF4-AB72-6A76DA962C93": {
+        "pos": {
+            "id": "009D0BC0-4C41-4FF4-AB72-6A76DA962C93",
+            "rowStart": 28,
+            "rowEnd": 29,
+            "columnStart": 9,
+            "columnEnd": 11
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "CBF1B620-A4EA-4B13-86AF-92C70AE9F1FB": {
+        "pos": {
+            "id": "CBF1B620-A4EA-4B13-86AF-92C70AE9F1FB",
+            "rowStart": 29,
+            "rowEnd": 30,
+            "columnStart": 9,
+            "columnEnd": 11
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "7AA925C2-8FBC-45FE-8DE3-7A9A1185B6D1": {
+        "pos": {
+            "id": "7AA925C2-8FBC-45FE-8DE3-7A9A1185B6D1",
+            "rowStart": 30,
+            "rowEnd": 31,
+            "columnStart": 9,
+            "columnEnd": 11
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "71CDC8EB-B412-42DF-A414-095B3623235A": {
+        "pos": {
+            "id": "71CDC8EB-B412-42DF-A414-095B3623235A",
+            "rowStart": 27,
+            "rowEnd": 28,
+            "columnStart": 11,
+            "columnEnd": 18
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "B6AE175F-36BB-42D2-B1CA-3349CEB0E39D": {
+        "pos": {
+            "id": "B6AE175F-36BB-42D2-B1CA-3349CEB0E39D",
+            "rowStart": 28,
+            "rowEnd": 29,
+            "columnStart": 11,
+            "columnEnd": 18
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "FD2242B2-DA46-4116-9F8B-7886808D59AD": {
+        "pos": {
+            "id": "FD2242B2-DA46-4116-9F8B-7886808D59AD",
+            "rowStart": 29,
+            "rowEnd": 30,
+            "columnStart": 11,
+            "columnEnd": 18
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "35FF538C-1026-4B21-81EF-2D3BA487888D": {
+        "pos": {
+            "id": "35FF538C-1026-4B21-81EF-2D3BA487888D",
+            "rowStart": 30,
+            "rowEnd": 31,
+            "columnStart": 11,
+            "columnEnd": 18
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "94EF7B57-FF59-4A4D-8F52-3159FC4526E2": {
+        "pos": {
+            "id": "94EF7B57-FF59-4A4D-8F52-3159FC4526E2",
+            "rowStart": 27,
+            "rowEnd": 28,
+            "columnStart": 18,
+            "columnEnd": 22
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "D2A337F3-BBE5-4DD7-95EB-F5930458D7F0": {
+        "pos": {
+            "id": "D2A337F3-BBE5-4DD7-95EB-F5930458D7F0",
+            "rowStart": 28,
+            "rowEnd": 29,
+            "columnStart": 18,
+            "columnEnd": 22
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "A387AC92-D27F-42F7-B6F3-D4B32560660F": {
+        "pos": {
+            "id": "A387AC92-D27F-42F7-B6F3-D4B32560660F",
+            "rowStart": 29,
+            "rowEnd": 30,
+            "columnStart": 18,
+            "columnEnd": 22
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "930C5233-4C8B-48C7-93E3-27BC20E58632": {
+        "pos": {
+            "id": "930C5233-4C8B-48C7-93E3-27BC20E58632",
+            "rowStart": 30,
+            "rowEnd": 31,
+            "columnStart": 18,
+            "columnEnd": 22
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "A6360660-581E-44B1-84D8-1EAECB99F072": {
+        "pos": {
+            "id": "A6360660-581E-44B1-84D8-1EAECB99F072",
+            "rowStart": 27,
+            "rowEnd": 28,
+            "columnStart": 22,
+            "columnEnd": 31
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "35705DE0-01ED-4C88-B384-CF0BD7260EC0": {
+        "pos": {
+            "id": "35705DE0-01ED-4C88-B384-CF0BD7260EC0",
+            "rowStart": 28,
+            "rowEnd": 29,
+            "columnStart": 22,
+            "columnEnd": 31
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "997EA483-BE1B-4115-924E-9EC2BFABA1F9": {
+        "pos": {
+            "id": "997EA483-BE1B-4115-924E-9EC2BFABA1F9",
+            "rowStart": 29,
+            "rowEnd": 30,
+            "columnStart": 22,
+            "columnEnd": 31
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "D139620B-69BF-4162-BB66-E4429684C7A8": {
+        "pos": {
+            "id": "D139620B-69BF-4162-BB66-E4429684C7A8",
+            "rowStart": 30,
+            "rowEnd": 31,
+            "columnStart": 22,
+            "columnEnd": 31
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid",
+                    "borderRight": "1px solid"
+                }
+            }
+        }
+    },
+    "31A40531-DD86-4964-BB1A-209FA381874F": {
+        "pos": {
+            "id": "31A40531-DD86-4964-BB1A-209FA381874F",
+            "rowStart": 2,
+            "rowEnd": 3,
+            "columnStart": 1,
+            "columnEnd": 5
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "填表日期：",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "fontWeight": "bold",
+                    "height": "30px",
+                    "borderBottom": "1px solid"
+                }
+            }
+        }
+    },
+    "E6437BB9-DF7D-4B77-B06C-4B0A8878EB48": {
+        "pos": {
+            "id": "E6437BB9-DF7D-4B77-B06C-4B0A8878EB48",
+            "rowStart": 2,
+            "rowEnd": 3,
+            "columnStart": 5,
+            "columnEnd": 31
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "16px",
+                    "lineHeight": "30px",
+                    "height": "30px",
+                    "borderBottom": "1px solid"
+                }
+            }
+        }
+    },
+    "09E2B65C-50AC-4AFF-86A9-C9A8B55657FC": {
+        "pos": {
+            "id": "09E2B65C-50AC-4AFF-86A9-C9A8B55657FC",
+            "rowStart": 1,
+            "rowEnd": 2,
+            "columnStart": 1,
+            "columnEnd": 31
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "displayName": "展示文本",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "props": {
+                "value": "应聘人员登记表",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "20px",
+                    "lineHeight": "40px",
+                    "fontWeight": "bold",
+                    "height": "42px"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>单级悬浮菜单</title>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #singleStageFloatMenuDemo {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .click-area {
+            flex: 1;
+            background-color: antiquewhite;
+            margin: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 页面相对地址：/demo/float-menu/single-stage/index.html -->
+    <div id="singleStageFloatMenuDemo" v-cloak>
+        <h1>{{msg}}</h1>
+        <div class="click-area" @contextmenu.prevent="divRightClickFn($event)">
+            <div class="info">
+                <h3>你可以点击右键试试</h3>
+                <p>{{clickItemMsg}}</p>
+            </div>
+            <ss v-if="isShowContextmenu" :show-items="allContextmenuItems" :pos="contextmenuPosConfig"
+                @item-click="contextmenuItemClickFn"></ss>
+        </div>
+    </div>
+</body>
+
+</html>

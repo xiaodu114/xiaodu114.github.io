@@ -1,0 +1,2869 @@
+{
+    "80CCC6BD-CA07-4071-ABBB-55491594E6F2": {
+        "pos": {
+            "id": "80CCC6BD-CA07-4071-ABBB-55491594E6F2",
+            "rowStart": 1,
+            "rowEnd": 2,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "杜东志",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "26pt",
+                    "fontWeight": "bold",
+                    "textAlign": "center",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "DE5EEEB9-63F3-414F-A619-A588A5929FA5": {
+        "pos": {
+            "id": "DE5EEEB9-63F3-414F-A619-A588A5929FA5",
+            "rowStart": 2,
+            "rowEnd": 3,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "13381334305 | mine_job@126.com | 微信：ddz001 | 男 | 生日：1988/09",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "332DC0AD-EB97-4C00-BD70-B1801C5C4A7A": {
+        "pos": {
+            "id": "332DC0AD-EB97-4C00-BD70-B1801C5C4A7A",
+            "rowStart": 3,
+            "rowEnd": 4,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "北京 | 在职 | 7年工作经验 | 期望薪资：30-35K",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "textAlign": "center",
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "9B7D0203-41D0-485D-A74A-579D385F4E10": {
+        "pos": {
+            "id": "9B7D0203-41D0-485D-A74A-579D385F4E10",
+            "rowStart": 4,
+            "rowEnd": 5,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "社交主页",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "15pt",
+                    "fontWeight": "bold",
+                    "borderBottom": "1pt solid",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "3110FAB5-5EF3-4EF5-A53F-90AE11E06703": {
+        "pos": {
+            "id": "3110FAB5-5EF3-4EF5-A53F-90AE11E06703",
+            "rowStart": 5,
+            "rowEnd": 6,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "https://github.com/xiaodu114",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "14pt",
+                    "lineHeight": "30pt",
+                    "textDecoration": "underline"
+                }
+            }
+        }
+    },
+    "2B8E1FFC-6181-48EF-B37B-52BE3B87296B": {
+        "pos": {
+            "id": "2B8E1FFC-6181-48EF-B37B-52BE3B87296B",
+            "rowStart": 6,
+            "rowEnd": 7,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "https://www.cnblogs.com/du-blog",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "14pt",
+                    "lineHeight": "30pt",
+                    "textDecoration": "underline"
+                }
+            }
+        }
+    },
+    "67102615-77BE-42F4-A023-522EAFB1F6E9": {
+        "pos": {
+            "id": "67102615-77BE-42F4-A023-522EAFB1F6E9",
+            "rowStart": 7,
+            "rowEnd": 8,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "个人技能",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "15pt",
+                    "fontWeight": "bold",
+                    "borderBottom": "1pt solid",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "7D080BA0-4163-4E73-AEDB-D8C586DD4D71": {
+        "pos": {
+            "id": "7D080BA0-4163-4E73-AEDB-D8C586DD4D71",
+            "rowStart": 8,
+            "rowEnd": 9,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 熟练使用c#、.net webapi",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "2F0BFDBA-FC19-49D1-9B4B-805828098339": {
+        "pos": {
+            "id": "2F0BFDBA-FC19-49D1-9B4B-805828098339",
+            "rowStart": 9,
+            "rowEnd": 10,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 熟练使用mongodb",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "67CD976B-7D1A-49E0-B8C6-7390DB23C54F": {
+        "pos": {
+            "id": "67CD976B-7D1A-49E0-B8C6-7390DB23C54F",
+            "rowStart": 10,
+            "rowEnd": 11,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 了解RabbitMQ、Redis",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "D1ACC7BF-A9AE-469B-A652-F213176D5753": {
+        "pos": {
+            "id": "D1ACC7BF-A9AE-469B-A652-F213176D5753",
+            "rowStart": 11,
+            "rowEnd": 12,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 熟练使用HTML、Javascript、CSS、LESS",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "2AE0A9A3-2B4C-47D0-910F-9F4B9F1C8B2C": {
+        "pos": {
+            "id": "2AE0A9A3-2B4C-47D0-910F-9F4B9F1C8B2C",
+            "rowStart": 12,
+            "rowEnd": 13,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 熟练使用Angularjs、Vuejs",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "988A9F3D-79A9-4872-BA34-993526483832": {
+        "pos": {
+            "id": "988A9F3D-79A9-4872-BA34-993526483832",
+            "rowStart": 13,
+            "rowEnd": 14,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 熟练使用前端调试工具Whistle",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "96F2F211-DB7F-4D66-AEB4-F00375AD416F": {
+        "pos": {
+            "id": "96F2F211-DB7F-4D66-AEB4-F00375AD416F",
+            "rowStart": 14,
+            "rowEnd": 15,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 项目中使用svn、webpack",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "C4CE2FCB-F1B2-4859-91D4-F8FAB10AEA26": {
+        "pos": {
+            "id": "C4CE2FCB-F1B2-4859-91D4-F8FAB10AEA26",
+            "rowStart": 15,
+            "rowEnd": 16,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 可以使用Xamarin.Android、Xamarin.Forms",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "21AD9442-0DD7-4E32-87F8-811F9544D0A4": {
+        "pos": {
+            "id": "21AD9442-0DD7-4E32-87F8-811F9544D0A4",
+            "rowStart": 16,
+            "rowEnd": 17,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 了解一定的docker",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "1809C4C6-37F4-489E-964C-C115C60FB0C8": {
+        "pos": {
+            "id": "1809C4C6-37F4-489E-964C-C115C60FB0C8",
+            "rowStart": 17,
+            "rowEnd": 18,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "毕业学校",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "15pt",
+                    "lineHeight": "30pt",
+                    "fontWeight": "bold",
+                    "borderBottom": "1pt solid"
+                }
+            }
+        }
+    },
+    "0D4A64E7-734B-4F26-9442-4959620DCAA2": {
+        "pos": {
+            "id": "0D4A64E7-734B-4F26-9442-4959620DCAA2",
+            "rowStart": 18,
+            "rowEnd": 19,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": {},
+        "contentConfig": {
+            "displayType": "FlexContainer",
+            "displayName": "flex水平容器",
+            "componentName": "FlexContainer",
+            "setComponentName": "flexHContainerSet",
+            "props": {
+                "value": [
+                    {
+                        "pos": {
+                            "id": "1608975605453"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "防灾科技学院",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "fontWeight": "bold",
+                                    "paddingRight": "22pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608975606381"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "本科",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "paddingRight": "22pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608975606710"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "信息管理与信息系统",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "paddingRight": "22pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608975607083"
+                        },
+                        "containerConfig": {
+                            "uStyle": {
+                                "marginLeft": "auto"
+                            }
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "2009-2013",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "85F6FBBF-1522-4CF0-88CC-EBB9BC6435E2": {
+        "pos": {
+            "id": "85F6FBBF-1522-4CF0-88CC-EBB9BC6435E2",
+            "rowStart": 19,
+            "rowEnd": 20,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "工作经历",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "15pt",
+                    "lineHeight": "30pt",
+                    "fontWeight": "bold",
+                    "borderBottom": "1pt solid"
+                }
+            }
+        }
+    },
+    "DD10DC2C-B868-4D81-AC80-00701196612B": {
+        "pos": {
+            "id": "DD10DC2C-B868-4D81-AC80-00701196612B",
+            "rowStart": 20,
+            "rowEnd": 21,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": {},
+        "contentConfig": {
+            "displayType": "FlexContainer",
+            "displayName": "flex水平容器",
+            "componentName": "FlexContainer",
+            "setComponentName": "flexHContainerSet",
+            "props": {
+                "value": [
+                    {
+                        "pos": {
+                            "id": "1608985352350"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "北京理正人信息技术有限公司",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "fontWeight": "bold",
+                                    "paddingRight": "22pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608985363117"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "Web工程师",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "paddingRight": "22pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608985371855"
+                        },
+                        "containerConfig": {
+                            "uStyle": {
+                                "marginLeft": "auto"
+                            }
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "2015/10-至今",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "B010FA72-916A-4AC7-9412-96C8ACA07FEE": {
+        "pos": {
+            "id": "B010FA72-916A-4AC7-9412-96C8ACA07FEE",
+            "rowStart": 21,
+            "rowEnd": 22,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "工作内容：带领新人 / 安排小组任务 / 自己的开发维护工作",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "F66BD9E9-5299-4A4E-B2FD-6CB251497362": {
+        "pos": {
+            "id": "F66BD9E9-5299-4A4E-B2FD-6CB251497362",
+            "rowStart": 22,
+            "rowEnd": 23,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": {},
+        "contentConfig": {
+            "displayType": "FlexContainer",
+            "displayName": "flex水平容器",
+            "componentName": "FlexContainer",
+            "setComponentName": "flexHContainerSet",
+            "props": {
+                "value": [
+                    {
+                        "pos": {
+                            "id": "1608985972643"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "北京宏科高软科技有限公司",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "fontWeight": "bold",
+                                    "paddingRight": "22pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608985978257"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "Web工程师",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "paddingRight": "22pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608985980769"
+                        },
+                        "containerConfig": {
+                            "uStyle": {
+                                "marginLeft": "auto"
+                            }
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "2014/10-2015/10",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "77B341D1-BD3A-476D-B2B4-89E9DBC0018D": {
+        "pos": {
+            "id": "77B341D1-BD3A-476D-B2B4-89E9DBC0018D",
+            "rowStart": 23,
+            "rowEnd": 24,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "工作内容：负责整个项目的开发工作",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "4DE94FC0-EE58-494B-A07E-05E3FCBEEF96": {
+        "pos": {
+            "id": "4DE94FC0-EE58-494B-A07E-05E3FCBEEF96",
+            "rowStart": 24,
+            "rowEnd": 25,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "FlexContainer",
+            "displayName": "flex水平容器",
+            "componentName": "FlexContainer",
+            "setComponentName": "flexHContainerSet",
+            "props": {
+                "value": [
+                    {
+                        "pos": {
+                            "id": "1608986214464"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "北京海立信信息咨询有限公司",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "fontWeight": "bold",
+                                    "paddingRight": "22pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608986241712"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "Web工程师",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "paddingRight": "22pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608986250576"
+                        },
+                        "containerConfig": {
+                            "uStyle": {
+                                "marginLeft": "auto"
+                            }
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "2013/07-2014/09",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "F3E0D44D-2805-49D1-944D-343D29656539": {
+        "pos": {
+            "id": "F3E0D44D-2805-49D1-944D-343D29656539",
+            "rowStart": 25,
+            "rowEnd": 26,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "工作内容：负责整个项目的开发工作",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "1680793D-F389-469F-8AD1-00FBEFDDEBC5": {
+        "pos": {
+            "id": "1680793D-F389-469F-8AD1-00FBEFDDEBC5",
+            "rowStart": 26,
+            "rowEnd": 27,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "项目经历",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "15pt",
+                    "lineHeight": "30pt",
+                    "fontWeight": "bold",
+                    "borderBottom": "1pt solid"
+                }
+            }
+        }
+    },
+    "5B866D9C-DE76-47BE-9865-78251AAAD6A8": {
+        "pos": {
+            "id": "5B866D9C-DE76-47BE-9865-78251AAAD6A8",
+            "rowStart": 27,
+            "rowEnd": 28,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "FlexContainer",
+            "displayName": "flex水平容器",
+            "componentName": "FlexContainer",
+            "setComponentName": "flexHContainerSet",
+            "props": {
+                "value": [
+                    {
+                        "pos": {
+                            "id": "1608986458974"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "我的学习笔记",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "fontWeight": "bold",
+                                    "paddingRight": "22pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608986462953"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "开发工程师",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "paddingRight": "22pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608986465319"
+                        },
+                        "containerConfig": {
+                            "uStyle": {
+                                "marginLeft": "auto"
+                            }
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "2018/06-至今",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "304C966C-269C-4A6E-9A4B-4C2DCF4255F7": {
+        "pos": {
+            "id": "304C966C-269C-4A6E-9A4B-4C2DCF4255F7",
+            "rowStart": 28,
+            "rowEnd": 29,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "FlexContainer",
+            "displayName": "flex水平容器",
+            "componentName": "FlexContainer",
+            "setComponentName": "flexHContainerSet",
+            "props": {
+                "value": [
+                    {
+                        "pos": {
+                            "id": "1608987571796"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "项目链接：",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "marginLeft": "21pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608987575023"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "https://github.com/xiaodu114/xiaodu114.github.io",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "textDecoration": "underline",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "D90783E4-6782-462B-8F1B-01B744CDD754": {
+        "pos": {
+            "id": "D90783E4-6782-462B-8F1B-01B744CDD754",
+            "rowStart": 29,
+            "rowEnd": 30,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "项目描述：自己业余练习项目",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "21pt"
+                }
+            }
+        }
+    },
+    "2AD4F3B2-0560-44CC-AF07-FBB5F18E1436": {
+        "pos": {
+            "id": "2AD4F3B2-0560-44CC-AF07-FBB5F18E1436",
+            "rowStart": 30,
+            "rowEnd": 31,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "项目职责：",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "21pt"
+                }
+            }
+        }
+    },
+    "FB9F0F7A-E7AE-455E-9AA1-3BDF2FB4153C": {
+        "pos": {
+            "id": "FB9F0F7A-E7AE-455E-9AA1-3BDF2FB4153C",
+            "rowStart": 31,
+            "rowEnd": 32,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 基于vuejs+gridstack.js的仪表盘",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "42pt"
+                }
+            }
+        }
+    },
+    "7D87D448-8C70-45E6-BCB3-514DFA6C3CFC": {
+        "pos": {
+            "id": "7D87D448-8C70-45E6-BCB3-514DFA6C3CFC",
+            "rowStart": 32,
+            "rowEnd": 33,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 基于angularjs的在线音乐播放",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "42pt"
+                }
+            }
+        }
+    },
+    "E6EC1AA3-4A9B-4ED3-9966-97746C9FA246": {
+        "pos": {
+            "id": "E6EC1AA3-4A9B-4ED3-9966-97746C9FA246",
+            "rowStart": 33,
+            "rowEnd": 34,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 基于Video.js的在线视频播放",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "42pt"
+                }
+            }
+        }
+    },
+    "3FA08232-B939-4AC4-9357-D8D7936E6073": {
+        "pos": {
+            "id": "3FA08232-B939-4AC4-9357-D8D7936E6073",
+            "rowStart": 34,
+            "rowEnd": 35,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 基于CodeMirror实现的支持用户输入和选择的示例",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "42pt"
+                }
+            }
+        }
+    },
+    "10C19055-AAA6-4153-BFB5-286C106A8903": {
+        "pos": {
+            "id": "10C19055-AAA6-4153-BFB5-286C106A8903",
+            "rowStart": 35,
+            "rowEnd": 36,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "FlexContainer",
+            "displayName": "flex水平容器",
+            "componentName": "FlexContainer",
+            "setComponentName": "flexHContainerSet",
+            "props": {
+                "value": [
+                    {
+                        "pos": {
+                            "id": "1608986753445"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "产品生产线",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "fontWeight": "bold",
+                                    "paddingRight": "22pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608986764091"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "开发工程师",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "paddingRight": "22pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608986773699"
+                        },
+                        "containerConfig": {
+                            "uStyle": {
+                                "marginLeft": "auto"
+                            }
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "2019/05-至今",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "EE1AD912-94FF-4AEC-9BFB-D16E37697246": {
+        "pos": {
+            "id": "EE1AD912-94FF-4AEC-9BFB-D16E37697246",
+            "rowStart": 36,
+            "rowEnd": 37,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "FlexContainer",
+            "displayName": "flex水平容器",
+            "componentName": "FlexContainer",
+            "setComponentName": "flexHContainerSet",
+            "props": {
+                "value": [
+                    {
+                        "pos": {
+                            "id": "1608987761187"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "项目链接：",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "marginLeft": "21pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608987762961"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "https://app.jiansheyun.com.cn/",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "textDecoration": "underline",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608987764245"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": " (需注册)",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "D5770955-F0A4-41C0-B7D8-E570D2427FBE": {
+        "pos": {
+            "id": "D5770955-F0A4-41C0-B7D8-E570D2427FBE",
+            "rowStart": 37,
+            "rowEnd": 38,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "项目描述：",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "21pt"
+                }
+            }
+        }
+    },
+    "8D31924D-43A9-4C03-AEC8-26CD907672E4": {
+        "pos": {
+            "id": "8D31924D-43A9-4C03-AEC8-26CD907672E4",
+            "rowStart": 39,
+            "rowEnd": 40,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "基于信息登记模型、审批模型、协作任务模型三大模型和文本、图片、分组、Web等组件快速的制造产品，其中“疫情防控管理与协作”就是公司需要以及当时环境下快制造出来的产品。",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "21pt",
+                    "textIndent": "21pt"
+                }
+            }
+        }
+    },
+    "DFADAD5C-DB5E-406B-A871-1AB2CD6082DD": {
+        "pos": {
+            "id": "DFADAD5C-DB5E-406B-A871-1AB2CD6082DD",
+            "rowStart": 40,
+            "rowEnd": 41,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "项目职责：",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "21pt"
+                }
+            }
+        }
+    },
+    "5A57C5C6-C3AB-4FD9-8A93-5928DB74F260": {
+        "pos": {
+            "id": "5A57C5C6-C3AB-4FD9-8A93-5928DB74F260",
+            "rowStart": 41,
+            "rowEnd": 42,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 移动端基于vuejs的实现机制",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "42pt"
+                }
+            }
+        }
+    },
+    "DB2C6A2B-6FC6-4096-8878-CB9DAA4B80B9": {
+        "pos": {
+            "id": "DB2C6A2B-6FC6-4096-8878-CB9DAA4B80B9",
+            "rowStart": 42,
+            "rowEnd": 43,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 引入whistle方便移动端的调试",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "42pt"
+                }
+            }
+        }
+    },
+    "3CC9A2FA-1871-45F1-9EF8-1031BD46C3D0": {
+        "pos": {
+            "id": "3CC9A2FA-1871-45F1-9EF8-1031BD46C3D0",
+            "rowStart": 43,
+            "rowEnd": 44,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 模型支持模块级别的联动",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "42pt"
+                }
+            }
+        }
+    },
+    "84B8EDDC-80E6-40A2-BE3D-FF87B69D3062": {
+        "pos": {
+            "id": "84B8EDDC-80E6-40A2-BE3D-FF87B69D3062",
+            "rowStart": 44,
+            "rowEnd": 45,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 模型支持表单关联",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "42pt"
+                }
+            }
+        }
+    },
+    "D28A27C3-E3E4-4605-B8E6-8D00EB1864F5": {
+        "pos": {
+            "id": "D28A27C3-E3E4-4605-B8E6-8D00EB1864F5",
+            "rowStart": 45,
+            "rowEnd": 46,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 模型支持打印模板",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "42pt"
+                }
+            }
+        }
+    },
+    "DFD54258-21A1-4B72-A5C9-E6F82941066F": {
+        "pos": {
+            "id": "DFD54258-21A1-4B72-A5C9-E6F82941066F",
+            "rowStart": 46,
+            "rowEnd": 47,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "FlexContainer",
+            "displayName": "flex水平容器",
+            "componentName": "FlexContainer",
+            "setComponentName": "flexHContainerSet",
+            "props": {
+                "value": [
+                    {
+                        "pos": {
+                            "id": "1608986935615"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "信息登记模型",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "fontWeight": "bold",
+                                    "paddingRight": "22pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608986937786"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "开发工程师",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "paddingRight": "22pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608986940206"
+                        },
+                        "containerConfig": {
+                            "uStyle": {
+                                "marginLeft": "auto"
+                            }
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "2018/06-至今",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "095D096E-6E31-4340-9B15-F77E211009C7": {
+        "pos": {
+            "id": "095D096E-6E31-4340-9B15-F77E211009C7",
+            "rowStart": 47,
+            "rowEnd": 48,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "FlexContainer",
+            "displayName": "flex水平容器",
+            "componentName": "FlexContainer",
+            "setComponentName": "flexHContainerSet",
+            "props": {
+                "value": [
+                    {
+                        "pos": {
+                            "id": "1608987852780"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "项目链接：",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "marginLeft": "21pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608987854928"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "https://app.jiansheyun.com.cn/",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "textDecoration": "underline",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608987855978"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": " (需注册)",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "7FB28506-A46E-46AF-9920-27CDE69BBF7E": {
+        "pos": {
+            "id": "7FB28506-A46E-46AF-9920-27CDE69BBF7E",
+            "rowStart": 48,
+            "rowEnd": 49,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "项目描述：",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "21pt"
+                }
+            }
+        }
+    },
+    "E0E2DE49-AE19-43E3-AE78-E1554AA05DE3": {
+        "pos": {
+            "id": "E0E2DE49-AE19-43E3-AE78-E1554AA05DE3",
+            "rowStart": 49,
+            "rowEnd": 50,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "基于公司自己的表单构造器快速的生成表单，并支持标题列、显示列、搜索列等列表配置和一定的详情页面配置，从而快速的制造模块。该配置同时支持不同层级的配置。自带支持分享、导出、打印、移交等功能，并且支持功能和数据授权，可以提供日志和消息提醒功能。对于复杂的功能可以使用二次开发来实现。",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "21pt",
+                    "textIndent": "21pt"
+                }
+            }
+        }
+    },
+    "C23A3A8D-26F0-460C-8C48-CA767D2D85CF": {
+        "pos": {
+            "id": "C23A3A8D-26F0-460C-8C48-CA767D2D85CF",
+            "rowStart": 50,
+            "rowEnd": 51,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "项目职责：",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "21pt"
+                }
+            }
+        }
+    },
+    "C4D1AA68-F810-40D9-9E68-A74F568250A1": {
+        "pos": {
+            "id": "C4D1AA68-F810-40D9-9E68-A74F568250A1",
+            "rowStart": 51,
+            "rowEnd": 52,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 服务器端的实现",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "42pt"
+                }
+            }
+        }
+    },
+    "0C43D00F-0033-425C-BE73-F1F2C18FCE12": {
+        "pos": {
+            "id": "0C43D00F-0033-425C-BE73-F1F2C18FCE12",
+            "rowStart": 52,
+            "rowEnd": 53,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 移动端的设计与实现",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "42pt"
+                }
+            }
+        }
+    },
+    "90B4AB56-B5B9-43AF-9069-D3AA855260B6": {
+        "pos": {
+            "id": "90B4AB56-B5B9-43AF-9069-D3AA855260B6",
+            "rowStart": 53,
+            "rowEnd": 54,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● PC端列表功能的实现",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "42pt"
+                }
+            }
+        }
+    },
+    "DB9E7EBC-45A6-492F-879E-656D2223C42F": {
+        "pos": {
+            "id": "DB9E7EBC-45A6-492F-879E-656D2223C42F",
+            "rowStart": 54,
+            "rowEnd": 55,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "FlexContainer",
+            "displayName": "flex水平容器",
+            "componentName": "FlexContainer",
+            "setComponentName": "flexHContainerSet",
+            "props": {
+                "value": [
+                    {
+                        "pos": {
+                            "id": "1608987041954"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "经营管理和协作",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "fontWeight": "bold",
+                                    "paddingRight": "22pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608987044041"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "开发工程师",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "paddingRight": "22pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608987045413"
+                        },
+                        "containerConfig": {
+                            "uStyle": {
+                                "marginLeft": "auto"
+                            }
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "2018/07-2019/07",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "D39F4A6E-53CD-4EB9-9206-ED75CFEB171D": {
+        "pos": {
+            "id": "D39F4A6E-53CD-4EB9-9206-ED75CFEB171D",
+            "rowStart": 55,
+            "rowEnd": 56,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "FlexContainer",
+            "displayName": "flex水平容器",
+            "componentName": "FlexContainer",
+            "setComponentName": "flexHContainerSet",
+            "props": {
+                "value": [
+                    {
+                        "pos": {
+                            "id": "1608987913402"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "项目链接：",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "marginLeft": "21pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608987915319"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "https://app.jiansheyun.com.cn/",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "textDecoration": "underline",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608987918056"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": " (需注册)",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "97555372-EA2C-47F8-92FE-B7BAB7C4494E": {
+        "pos": {
+            "id": "97555372-EA2C-47F8-92FE-B7BAB7C4494E",
+            "rowStart": 56,
+            "rowEnd": 57,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "项目描述：",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "21pt"
+                }
+            }
+        }
+    },
+    "C782B4E4-F992-42AD-82F7-CEF7F80D7E2D": {
+        "pos": {
+            "id": "C782B4E4-F992-42AD-82F7-CEF7F80D7E2D",
+            "rowStart": 57,
+            "rowEnd": 58,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "基于信息登记模型创建的应用，包含商机、投标、委托、收入合同、支出合同、客户、供应商、费用等模块，收入合同和支出合同中又包含协作和审批等功能。",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "21pt",
+                    "textIndent": "21pt"
+                }
+            }
+        }
+    },
+    "1DE752B9-3A61-4552-A935-0E6C86875009": {
+        "pos": {
+            "id": "1DE752B9-3A61-4552-A935-0E6C86875009",
+            "rowStart": 58,
+            "rowEnd": 59,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "项目职责：",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "21pt"
+                }
+            }
+        }
+    },
+    "1C7698C0-AB31-4B1F-BFCB-E0BD9DE36B50": {
+        "pos": {
+            "id": "1C7698C0-AB31-4B1F-BFCB-E0BD9DE36B50",
+            "rowStart": 59,
+            "rowEnd": 60,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 针对该应用的服务器端API编写",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "42pt"
+                }
+            }
+        }
+    },
+    "AD3918F8-8E5F-4AD2-AA4A-7A3D85FB097B": {
+        "pos": {
+            "id": "AD3918F8-8E5F-4AD2-AA4A-7A3D85FB097B",
+            "rowStart": 60,
+            "rowEnd": 61,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 针对该应用的PC端、移动端的部分二次开发的编写",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "42pt"
+                }
+            }
+        }
+    },
+    "CF02C032-2C52-496E-BA0D-7F91C88CACF6": {
+        "pos": {
+            "id": "CF02C032-2C52-496E-BA0D-7F91C88CACF6",
+            "rowStart": 61,
+            "rowEnd": 62,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "FlexContainer",
+            "displayName": "flex水平容器",
+            "componentName": "FlexContainer",
+            "setComponentName": "flexHContainerSet",
+            "props": {
+                "value": [
+                    {
+                        "pos": {
+                            "id": "1608987190452"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "车辆管理",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "fontWeight": "bold",
+                                    "paddingRight": "22pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608987192852"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "开发工程师",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "paddingRight": "22pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608987194909"
+                        },
+                        "containerConfig": {
+                            "uStyle": {
+                                "marginLeft": "auto"
+                            }
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "2018/09-2019/02",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "4BC7BB86-FA34-4594-B4F1-DE5AD4EC761C": {
+        "pos": {
+            "id": "4BC7BB86-FA34-4594-B4F1-DE5AD4EC761C",
+            "rowStart": 62,
+            "rowEnd": 63,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "FlexContainer",
+            "displayName": "flex水平容器",
+            "componentName": "FlexContainer",
+            "setComponentName": "flexHContainerSet",
+            "props": {
+                "value": [
+                    {
+                        "pos": {
+                            "id": "1608987962183"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "项目链接：",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "marginLeft": "21pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608987966165"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": "https://app.jiansheyun.com.cn/",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "textDecoration": "underline",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "pos": {
+                            "id": "1608987968171"
+                        },
+                        "containerConfig": {
+                            "uStyle": {}
+                        },
+                        "contentConfig": {
+                            "displayType": "display-text",
+                            "displayName": "展示文本设置",
+                            "componentName": "DisplayText",
+                            "setComponentName": "DisplayTextSet",
+                            "props": {
+                                "value": " (需注册)",
+                                "uStyle": {
+                                    "fontSize": "12pt",
+                                    "lineHeight": "30pt"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "DEA3D4DA-F241-46BB-9558-ED2F19B72526": {
+        "pos": {
+            "id": "DEA3D4DA-F241-46BB-9558-ED2F19B72526",
+            "rowStart": 63,
+            "rowEnd": 64,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "项目描述：",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "21pt"
+                }
+            }
+        }
+    },
+    "5D73D52C-7A65-4E5D-8DF4-92BE71E47E53": {
+        "pos": {
+            "id": "5D73D52C-7A65-4E5D-8DF4-92BE71E47E53",
+            "rowStart": 64,
+            "rowEnd": 65,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "基于信息登记模型的车辆管理系统，包括：车辆信息维护、车辆使用登记、车辆信息查询、用车数据导出等功能。。",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "21pt",
+                    "textIndent": "21pt"
+                }
+            }
+        }
+    },
+    "9575AAEC-5207-43B6-9DD0-7C74C9440197": {
+        "pos": {
+            "id": "9575AAEC-5207-43B6-9DD0-7C74C9440197",
+            "rowStart": 65,
+            "rowEnd": 66,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "项目职责：",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "21pt"
+                }
+            }
+        }
+    },
+    "A655576D-4523-44E2-86F9-0D8109797A8D": {
+        "pos": {
+            "id": "A655576D-4523-44E2-86F9-0D8109797A8D",
+            "rowStart": 66,
+            "rowEnd": 67,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 针对该应用PC端、移动端部分功能二次开发的编写",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt",
+                    "marginLeft": "42pt"
+                }
+            }
+        }
+    },
+    "CB47F462-E492-4594-B481-20227D188066": {
+        "pos": {
+            "id": "CB47F462-E492-4594-B481-20227D188066",
+            "rowStart": 67,
+            "rowEnd": 68,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "资格证书",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "15pt",
+                    "fontWeight": "bold",
+                    "borderBottom": "1pt solid",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "2CE4DF26-5EB9-4A4F-A2BD-596E95B6600B": {
+        "pos": {
+            "id": "2CE4DF26-5EB9-4A4F-A2BD-596E95B6600B",
+            "rowStart": 68,
+            "rowEnd": 69,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "大学英语四级",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "14pt",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "34EC39A8-8AAA-462F-8102-815146FC4C6C": {
+        "pos": {
+            "id": "34EC39A8-8AAA-462F-8102-815146FC4C6C",
+            "rowStart": 69,
+            "rowEnd": 70,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "自我评价",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "15pt",
+                    "fontWeight": "bold",
+                    "borderBottom": "1pt solid",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "690DCB7F-85F0-486F-BD2E-759AA5A10529": {
+        "pos": {
+            "id": "690DCB7F-85F0-486F-BD2E-759AA5A10529",
+            "rowStart": 70,
+            "rowEnd": 71,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 诚恳踏实，吃苦耐劳，可以很快适应工作，融入集体",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "BC69DA7D-67ED-4378-9D24-1538783A3E89": {
+        "pos": {
+            "id": "BC69DA7D-67ED-4378-9D24-1538783A3E89",
+            "rowStart": 71,
+            "rowEnd": 72,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 乐于与人交流技术知识",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    },
+    "C52F90CA-5C10-40E0-B809-2BD8E3426E0F": {
+        "pos": {
+            "id": "C52F90CA-5C10-40E0-B809-2BD8E3426E0F",
+            "rowStart": 72,
+            "rowEnd": 73,
+            "columnStart": 1,
+            "columnEnd": 2
+        },
+        "containerConfig": null,
+        "contentConfig": {
+            "displayType": "display-text",
+            "componentName": "DisplayText",
+            "setComponentName": "DisplayTextSet",
+            "displayName": "展示文本设置",
+            "props": {
+                "value": "● 喜欢学习新技术、新知识",
+                "label": {
+                    "show": false,
+                    "text": "",
+                    "direction": "left"
+                },
+                "uStyle": {
+                    "fontSize": "12pt",
+                    "lineHeight": "30pt"
+                }
+            }
+        }
+    }
+}

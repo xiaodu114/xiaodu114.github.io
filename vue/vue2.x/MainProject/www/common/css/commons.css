@@ -1,0 +1,30 @@
+.single-stage-float-menu {
+  position: fixed;
+  width: 150px;
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  list-style: none;
+  box-shadow: 0 15px 35px rgba(50, 50, 90, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+  overflow: hidden;
+  z-index: 999999;
+}
+.single-stage-float-menu > li {
+  transition: ease 0.2s;
+}
+.single-stage-float-menu > li > div {
+  padding: 10px;
+  color: #5e5e5e;
+  transition: ease 0.2s;
+  font-size: 14px;
+  cursor: pointer;
+}
+.single-stage-float-menu > li:hover {
+  background: #c5c5c5;
+}
+.single-stage-float-menu > li:hover > div {
+  color: #2b2b2b;
+}
+
+
+/*# sourceMappingURL=commons.css.map*/
