@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>word table 示例项目</title>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #wordTableDemo {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            background-color: #e6e6e6;
+        }
+
+        #wordTableDemo>.word-table-container {
+            width: 992px;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #fff;
+            padding-left: 150px;
+            padding-right: 150px;
+            padding-top: 30px;
+            padding-bottom: 30px;
+        }
+
+        .form-item-wrapper>.form-item-null {
+            min-height: 60px;
+        }
+
+        .form-item-wrapper>.form-control-container {
+            display: flex;
+        }
+
+        .form-item-wrapper>.form-control-container>.form-control-label {
+            font-size: 14px;
+            color: #606266;
+            width: 100px;
+            flex-shrink: 0;
+            margin-right: 12px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            line-height: 40px;
+        }
+
+        .form-item-wrapper>.form-item-toolbar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            cursor: pointer;
+            display: none;
+        }
+
+        .form-item-wrapper:hover>.form-item-toolbar {
+            display: block;
+        }
+
+        .display-text-container {
+            font-family: 等线;
+        }
+
+        .el-drawer__body {
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 页面相对地址：/demo/component/layout/wordtable/index.html -->
+    <!-- https://enjoycss.com/start -->
+    <!-- https://angrytools.com/css-generator/ -->
+    <div id="wordTableDemo" v-cloak>
+        <div class="controls-select">
+            <button type="button" v-if="wordTableMode==='RunTime'"
+                @click="toggleWordTableMode('DesignTime')">设计模式</button>
+            <button type="button" v-if="wordTableMode==='DesignTime'"
+                @click="toggleWordTableMode('RunTime')">运行模式</button>
+            <button type="button" @click="getTableCellConfig">获取配置</button>
+            <input type="file" accept="application/json" @change="selectJSONFileUpload" />
+        </div>
+        <div class="word-table-container">
+            <wordtable v-model="wordTableCells" :mode="wordTableMode">
+                <template v-slot:celltemplate="{ wordtablecell: cell }">
+                    <div class="form-item-wrapper">
+                        <div class="form-item-toolbar" v-if="wordTableMode==='DesignTime'">
+                            <i class="el-icon-refresh" @click="openDialogToSelectControl(cell.id)"></i>
+                            <i class="el-icon-setting" @click="openControlSetting(cell)"></i>
+                        </div>
+                        <component v-if="wordTableCellContentObj[cell.id].contentConfig"
+                            :is="wordTableCellContentObj[cell.id].contentConfig.componentName"
+                            v-bind="wordTableCellContentObj[cell.id].contentConfig.props"
+                            v-model="wordTableCellContentObj[cell.id].contentConfig.props.value"></component>
+                        <div class="form-item-null" v-else></div>
+                        <!-- <form-item v-if="wordTableCellContentObj[cell.id].contentConfig.componentName"
+                            :show-label="wordTableCellContentObj[cell.id].contentConfig.props.label.show">
+                            <template #label>
+                                {{wordTableCellContentObj[cell.id].contentConfig.props.label.text}}
+                            </template>
+                            <template #default>
+                                <component :is="wordTableCellContentObj[cell.id].contentConfig.componentName"
+                                    v-bind="wordTableCellContentObj[cell.id].contentConfig.props"
+                                    v-model="wordTableCellContentObj[cell.id].contentConfig.props.value"></component>
+                            </template>
+                        </form-item> -->
+                    </div>
+                </template>
+                <template v-slot:nulltemplate>
+                    <button type="button">添加</button>
+                </template>
+            </wordtable>
+        </div>
+
+        <el-dialog title="选择一个控件" :visible.sync="isShowSelectFormItemControlDialog">
+            <el-select v-model="tempSelectedItemObj.type" placeholder="请选择">
+                <el-option :label="'展示文本'" :value="'display-text'"></el-option>
+                <el-option :label="'flex水平容器'" :value="'flex-container'"></el-option>
+                <el-option :label="'单行文本框'" :value="'text'"></el-option>
+                <el-option :label="'多行文本框'" :value="'textarea'"></el-option>
+                <el-option :label="'数值'" :value="'number'"></el-option>
+                <el-option :label="'邮箱'" :value="'email'"></el-option>
+                <el-option :label="'计数器'" :value="'counter'"></el-option>
+                <el-option :label="'开关'" :value="'switch'"></el-option>
+                <el-option :label="'时间选择器'" :value="'timeselect'"></el-option>
+                <el-option :label="'日期时间选择器'" :value="'datepicker'"></el-option>
+            </el-select>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancalToselectOneControlToCell">取 消</el-button>
+                <el-button type="primary" @click="selectOneControlToCell">确 定</el-button>
+            </div>
+        </el-dialog>
+
+        <el-drawer v-if="controlSet.isOpen" :title="controlSet.title" :visible.sync="controlSet.isOpen"
+            :direction="'rtl'">
+            <component :is="wordTableCellContentObj[controlSet.cellId].contentConfig.setComponentName"
+                :config="wordTableCellContentObj[controlSet.cellId].contentConfig.props">
+            </component>
+        </el-drawer>
+    </div>
+</body>
+
+</html>

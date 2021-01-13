@@ -10,28 +10,29 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 let multiPageConfig = [{
         entry: {
             // key中以'/'分割，最后一项是文件的名称，前面的都是目录
-            key: "demo/float-menu/single-stage/js/index",
-            path: "./src/demo/float-menu/single-stage/js/index.js"
+            key: "demo/component/float-menu/single-stage/js/index",
+            path: "./src/demo/component/float-menu/single-stage/js/index.js"
         },
         html: {
-            template: './src/demo/float-menu/single-stage/index.html',
-            filename: `demo/float-menu/single-stage/index.html`
+            template: './src/demo/component/float-menu/single-stage/index.html',
+            filename: `demo/component/float-menu/single-stage/index.html`
         }
     },
     {
         entry: {
-            key: "demo/layout/wordtable/js/index",
-            path: "./src/demo/layout/wordtable/js/index.js"
+            key: "demo/component/layout/wordtable/js/index",
+            path: "./src/demo/component/layout/wordtable/js/index.js"
         },
         html: {
-            template: './src/demo/layout/wordtable/index.html',
-            filename: `demo/layout/wordtable/index.html`
+            template: './src/demo/component/layout/wordtable/index.html',
+            filename: `demo/component/layout/wordtable/index.html`
         }
     }
 ];
 
 let tempModuleExportsObj = {
-    //mode: 'development',
+    mode: 'production', // production | development
+    //devtool: "source-map",
     entry: {},
     output: {
         filename: '[name].js',
@@ -96,7 +97,6 @@ let tempModuleExportsObj = {
             }
         }]
     },
-    //devtool: "source-map",
     resolve: {
         alias: {
             'vue': 'vue/dist/vue.js'
@@ -112,8 +112,8 @@ let tempModuleExportsObj = {
                 //     minChunks: 2, // 这个代码引用多少次才需要抽离
                 //     filename: 'common/js/[name].js'
                 // },
-                'self-commons': { // 自己整理的通用方法
-                    name: "common/js/commons", // 以'/'分割，最后一项是文件的名称，前面的都是目录
+                'self-common': { // 自己整理的通用方法
+                    name: "common/js/common", // 以'/'分割，最后一项是文件的名称，前面的都是目录
                     chunks: 'initial',
                     minSize: 0,
                     minChunks: 2,
@@ -153,8 +153,14 @@ let tempModuleExportsObj = {
         new CleanWebpackPlugin(),
         new CopyWebpackPlugin({
             patterns: [{
-                from: 'src/mock',
-                to: 'mock'
+                from: 'src/**/*.json',
+                //to: 'mock'
+                to({
+                    context,
+                    absoluteFilename
+                }) {
+                    return Promise.resolve(path.relative(path.join(context, "src"), absoluteFilename).split(path.sep).join("/"));
+                },
             }, ]
         }),
         new MiniCssExtractPlugin({
