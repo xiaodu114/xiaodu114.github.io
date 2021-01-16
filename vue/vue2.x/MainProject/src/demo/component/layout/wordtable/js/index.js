@@ -22,7 +22,8 @@ var myVueApp = new Vue({
     el: "#wordTableDemo",
     data() {
         return {
-            wordTableMode: "RunTime",
+            wordTableMode: "runtime", // designtime | runtime
+            wordTableLayoutMode: "height", // auto | height
             wordTableCells: [],
             wordTableCellContentObj: {},
             isShowSelectFormItemControlDialog: false,
@@ -92,8 +93,7 @@ var myVueApp = new Vue({
                         componentName: "FlexContainer",
                         setComponentName: "FlexContainerSet",
                         props: {
-                            value: [],
-                            mode: "DesignTime",
+                            value: []
                         },
                     };
                     break;
@@ -226,7 +226,13 @@ var myVueApp = new Vue({
             this.wordTableMode = mode;
         },
         getTableCellConfig() {
-            console.log(JSON.stringify(this.wordTableCellContentObj));
+            let realValidConfig = {};
+            this.wordTableCells.forEach(cell => {
+                if (this.wordTableCellContentObj.hasOwnProperty(cell.id)) {
+                    realValidConfig[cell.id] = this.wordTableCellContentObj[cell.id];
+                }
+            });
+            console.log(JSON.stringify(realValidConfig));
         },
         selectJSONFileUpload(event) {
             if (!event.target.files.length) return;

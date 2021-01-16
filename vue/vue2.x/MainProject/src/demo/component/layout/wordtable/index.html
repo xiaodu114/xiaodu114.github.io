@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>word table 示例项目</title>
+    <title>web wordtable 示例项目</title>
     <style>
         [v-cloak] {
             display: none;
@@ -28,13 +28,23 @@
             height: 100%;
             width: 100%;
             margin: 0;
-            overflow: auto;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             background-color: #e6e6e6;
         }
 
+        #wordTableDemo>.controls-select {
+            flex-shrink: 0;
+            padding: 10px;
+        }
+
         #wordTableDemo>.word-table-container {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        #wordTableDemo>.word-table-container>.wt-demo {
             width: 992px;
             margin-left: auto;
             margin-right: auto;
@@ -43,6 +53,14 @@
             padding-right: 150px;
             padding-top: 30px;
             padding-bottom: 30px;
+        }
+
+        #wordTableDemo>.word-table-container>.wt-demo.layoutmode-auto {
+            height: 100%;
+        }
+
+        #wordTableDemo>.word-table-container>.wt-demo.layoutmode-auto>.word-table-cell {
+            overflow: hidden;
         }
 
         .form-item-wrapper>.form-item-null {
@@ -90,22 +108,28 @@
 
 <body>
     <!-- 页面相对地址：/demo/component/layout/wordtable/index.html -->
+    <!-- github访问地址：/vue/vue2.x/MainProject/www/demo/component/layout/wordtable/index.html -->
     <!-- https://enjoycss.com/start -->
     <!-- https://angrytools.com/css-generator/ -->
     <div id="wordTableDemo" v-cloak>
         <div class="controls-select">
-            <button type="button" v-if="wordTableMode==='RunTime'"
-                @click="toggleWordTableMode('DesignTime')">设计模式</button>
-            <button type="button" v-if="wordTableMode==='DesignTime'"
-                @click="toggleWordTableMode('RunTime')">运行模式</button>
+            <button type="button" v-if="wordTableMode==='runtime'"
+                @click="toggleWordTableMode('designtime')">设计模式</button>
+            <button type="button" v-if="wordTableMode==='designtime'"
+                @click="toggleWordTableMode('runtime')">运行模式</button>
             <button type="button" @click="getTableCellConfig">获取配置</button>
+            <label for="wordTableLayoutMode-auto"><input id="wordTableLayoutMode-auto" type="radio"
+                    name="wordTableLayoutMode" value="auto" v-model='wordTableLayoutMode'>自适应</label>
+            <label for="wordTableLayoutMode-height"><input id="wordTableLayoutMode-height" type="radio"
+                    name="wordTableLayoutMode" value="height" v-model='wordTableLayoutMode'>实际高度</label>
             <input type="file" accept="application/json" @change="selectJSONFileUpload" />
         </div>
         <div class="word-table-container">
-            <wordtable v-model="wordTableCells" :mode="wordTableMode">
+            <wordtable class="wt-demo" v-model="wordTableCells" :mode="wordTableMode" :class="{
+                'layoutmode-auto': wordTableLayoutMode==='auto'}">
                 <template v-slot:celltemplate="{ wordtablecell: cell }">
                     <div class="form-item-wrapper">
-                        <div class="form-item-toolbar" v-if="wordTableMode==='DesignTime'">
+                        <div class="form-item-toolbar" v-if="wordTableMode==='designtime'">
                             <i class="el-icon-refresh" @click="openDialogToSelectControl(cell.id)"></i>
                             <i class="el-icon-setting" @click="openControlSetting(cell)"></i>
                         </div>

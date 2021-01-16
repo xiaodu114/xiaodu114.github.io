@@ -497,7 +497,7 @@
         },
         "containerConfig": {},
         "contentConfig": {
-            "displayType": "FlexContainer",
+            "displayType": "flex-container",
             "displayName": "flex水平容器",
             "componentName": "FlexContainer",
             "setComponentName": "flexHContainerSet",
@@ -637,7 +637,7 @@
         },
         "containerConfig": {},
         "contentConfig": {
-            "displayType": "FlexContainer",
+            "displayType": "flex-container",
             "displayName": "flex水平容器",
             "componentName": "FlexContainer",
             "setComponentName": "flexHContainerSet",
@@ -753,7 +753,7 @@
         },
         "containerConfig": {},
         "contentConfig": {
-            "displayType": "FlexContainer",
+            "displayType": "flex-container",
             "displayName": "flex水平容器",
             "componentName": "FlexContainer",
             "setComponentName": "flexHContainerSet",
@@ -869,7 +869,7 @@
         },
         "containerConfig": null,
         "contentConfig": {
-            "displayType": "FlexContainer",
+            "displayType": "flex-container",
             "displayName": "flex水平容器",
             "componentName": "FlexContainer",
             "setComponentName": "flexHContainerSet",
@@ -1015,7 +1015,7 @@
         },
         "containerConfig": null,
         "contentConfig": {
-            "displayType": "FlexContainer",
+            "displayType": "flex-container",
             "displayName": "flex水平容器",
             "componentName": "FlexContainer",
             "setComponentName": "flexHContainerSet",
@@ -1103,7 +1103,7 @@
         },
         "containerConfig": null,
         "contentConfig": {
-            "displayType": "FlexContainer",
+            "displayType": "flex-container",
             "displayName": "flex水平容器",
             "componentName": "FlexContainer",
             "setComponentName": "flexHContainerSet",
@@ -1341,7 +1341,7 @@
         },
         "containerConfig": null,
         "contentConfig": {
-            "displayType": "FlexContainer",
+            "displayType": "flex-container",
             "displayName": "flex水平容器",
             "componentName": "FlexContainer",
             "setComponentName": "flexHContainerSet",
@@ -1429,7 +1429,7 @@
         },
         "containerConfig": null,
         "contentConfig": {
-            "displayType": "FlexContainer",
+            "displayType": "flex-container",
             "displayName": "flex水平容器",
             "componentName": "FlexContainer",
             "setComponentName": "flexHContainerSet",
@@ -1747,7 +1747,7 @@
         },
         "containerConfig": null,
         "contentConfig": {
-            "displayType": "FlexContainer",
+            "displayType": "flex-container",
             "displayName": "flex水平容器",
             "componentName": "FlexContainer",
             "setComponentName": "flexHContainerSet",
@@ -1835,7 +1835,7 @@
         },
         "containerConfig": null,
         "contentConfig": {
-            "displayType": "FlexContainer",
+            "displayType": "flex-container",
             "displayName": "flex水平容器",
             "componentName": "FlexContainer",
             "setComponentName": "flexHContainerSet",
@@ -2095,7 +2095,7 @@
         },
         "containerConfig": null,
         "contentConfig": {
-            "displayType": "FlexContainer",
+            "displayType": "flex-container",
             "displayName": "flex水平容器",
             "componentName": "FlexContainer",
             "setComponentName": "flexHContainerSet",
@@ -2183,7 +2183,7 @@
         },
         "containerConfig": null,
         "contentConfig": {
-            "displayType": "FlexContainer",
+            "displayType": "flex-container",
             "displayName": "flex水平容器",
             "componentName": "FlexContainer",
             "setComponentName": "flexHContainerSet",
@@ -2414,7 +2414,7 @@
         },
         "containerConfig": null,
         "contentConfig": {
-            "displayType": "FlexContainer",
+            "displayType": "flex-container",
             "displayName": "flex水平容器",
             "componentName": "FlexContainer",
             "setComponentName": "flexHContainerSet",
@@ -2502,7 +2502,7 @@
         },
         "containerConfig": null,
         "contentConfig": {
-            "displayType": "FlexContainer",
+            "displayType": "flex-container",
             "displayName": "flex水平容器",
             "componentName": "FlexContainer",
             "setComponentName": "flexHContainerSet",
