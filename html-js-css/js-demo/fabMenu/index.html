@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>fab 菜单</title>
+    <title>fab 菜单 - xiaodu114.github.io</title>
+    <meta name="keywords" content="material design,fab menu,菜单">
+    <meta name="description" content="material design风格的菜单，由fab按钮触发菜单（该按钮可拖动），根据不同的位置，展示不同样式的菜单（圆形、半圆、扇形、射线等）">
     <link rel="stylesheet" href="./index.css">
 </head>
 
@@ -16,7 +18,8 @@
                 <center>
                     说明：该示例仅支持手机浏览或者桌面浏览器手机模式。你看到那个圆形按钮可以随意拖动，并且可以点击哦！不同的位置点击会有不同的显示效果（环状、半圆形、扇形、直线、射线）。
                 </center>
-                <center>图标来源：<a href="https://materialdesignicons.com/" target="_blank">Material Design Icons</a></center>
+                <center>图标来源：<a href="https://materialdesignicons.com/" target="_blank">Material Design Icons</a>
+                </center>
             </p>
         </div>
         <div class="fab-menu-container">
@@ -57,7 +60,7 @@
             maxMoveY = bodyHeight - floatBtnDomHeight,
             isClickFloatButton = true,
             minCompareDistance = 60;
-        fixedActionContainerDom.addEventListener("touchstart", function(event) {
+        fixedActionContainerDom.addEventListener("touchstart", function (event) {
             // event.stopPropagation();
             // event.preventDefault();
             if (!(event.target === fabTriggerDom || event.target === fabTriggerIconDom)) {
@@ -71,7 +74,7 @@
                 oldBottomPX = parseFloat(floatBtnDomStyle.bottom);
 
             fixedActionContainerDom.classList.add("transition-none");
-            document.ontouchmove = function(event) {
+            document.ontouchmove = function (event) {
                 fabActionContainerDom.style.display = "none";
                 fixedActionContainerDom.classList.remove("open", "circle", "top-semi-circle",
                     "right-semi-circle", "bottom-semi-circle", "left-semi-circle", "left-top-sector",
@@ -96,7 +99,7 @@
                     fixedActionContainerDom.style.bottom = `${tempSliderMoveY}px`;
                 }
             };
-            document.ontouchend = function(event) {
+            document.ontouchend = function (event) {
                 isRealDrag = false;
                 fixedActionContainerDom.classList.remove("transition-none");
                 document.ontouchmove = null;
@@ -197,7 +200,7 @@
                 }
             };
         });
-        fabTriggerDom.addEventListener("click", function() {
+        fabTriggerDom.addEventListener("click", function () {
             if (isClickFloatButton) {
                 if (fixedActionContainerDom.classList.contains("open")) {
                     fixedActionContainerDom.classList.remove("open");
@@ -206,29 +209,25 @@
                 }
             }
         });
-        fabActionContainerDom.addEventListener("click", function(event) {
+        fabActionContainerDom.addEventListener("click", function (event) {
             if (event.target.classList.contains("action-content")) {
                 switch (event.target.dataset.operateType) {
-                    case "ScanCode":
-                        {
-                            alert("扫描二维码");
-                            break;
-                        }
-                    case "AddHomeNav":
-                        {
-                            alert("添加导航");
-                            break;
-                        }
-                    case "OffLinePage":
-                        {
-                            alert("离线页面");
-                            break;
-                        }
-                    case "More":
-                        {
-                            alert("更多");
-                            break;
-                        }
+                    case "ScanCode": {
+                        alert("扫描二维码");
+                        break;
+                    }
+                    case "AddHomeNav": {
+                        alert("添加导航");
+                        break;
+                    }
+                    case "OffLinePage": {
+                        alert("离线页面");
+                        break;
+                    }
+                    case "More": {
+                        alert("更多");
+                        break;
+                    }
                 }
             }
         });
