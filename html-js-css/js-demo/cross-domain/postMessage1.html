@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>postMessage + iframe 跨域测试1</title>
+
+</head>
+
+<body>
+    <p>
+        postMessage + iframe跨域测试，用于iframe子页面1
+    </p>
+    <p>
+        接收消息：<span id="postMessageMsg"></span>
+    </p>
+    <script>
+        window.addEventListener("message", function (event) {
+            if (!event.origin.endsWith("ddz.com")) return;
+            document.getElementById("postMessageMsg").innerHTML = event.data;
+        }, false);
+    </script>
+</body>
+
+</html>

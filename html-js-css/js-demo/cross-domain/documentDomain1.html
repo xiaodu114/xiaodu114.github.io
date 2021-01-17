@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>document.domain + iframe 跨域测试1</title>
+    <script>
+        document.domain = 'ddz.com';
+        window.dd = "documentDomain1.html";
+        alert('获取父页面变量(dd)的值：' + window.parent.dd + ";我也可以拿到父页面的hash值：" + window.parent.location.hash);
+    </script>
+</head>
+
+<body>
+    <p>
+        document.domain + iframe跨域测试，用于iframe子页面1
+    </p>
+</body>
+
+</html>
