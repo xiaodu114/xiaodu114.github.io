@@ -33,9 +33,15 @@
 示例：[浏览](https://xiaodu114.github.io/html-js-css/js-demo/ttf-icon-online/index.html)  
 #### 多级滚动选择
 示例：[浏览](https://xiaodu114.github.io/html-js-css/js-demo/MultiScollPicker/index.html) 
+#### 跨域问题测试
+示例：[浏览](https://xiaodu114.github.io/html-js-css/js-demo/cross-domain/index.html) 
 ## Vue相关
 ### Vue 2.X相关
 #### 拖拉拽Dashboard
 示例：[浏览](https://xiaodu114.github.io/vue/vue2.x/DashboardByGridStack/www/index.html)
 #### 列表项定制实现机制
 示例：[浏览](https://xiaodu114.github.io/vue/vue2.x/FormBuilderRuntime/www/index.html)
+#### web版 word 表格
+示例：[浏览](https://xiaodu114.github.io/vue/vue2.x/MainProject/www/demo/component/layout/wordtable/index.html)
+#### 单级悬浮菜单 实例
+示例：[浏览](https://xiaodu114.github.io/vue/vue2.x/MainProject/www/demo/component/float-menu/single-stage/index.html)
