@@ -163,6 +163,21 @@
                     <div class="help-text">这里使用iframe嵌入<strong>百度</strong></div>
                     <iframe src="https://www.baidu.com" frameborder="0" width="100%"></iframe>
                 </dd>
+                <dt>cookie(有限制)</dt>
+                <dd>
+                    <div class="help-text indent-text">
+                        cookie未遵循严格的同源策略,但是也是有限制的。ddz.com下的index.html页面设置cookie时如果不指定"domain",iframe中"c1.ddz.com/cookie1.html"该页面也是读取不打父页面的cookie。
+                    </div>
+                    <script>
+                        document.cookie = "name=index.html;domain=ddz.com";
+                    </script>
+                    <iframe id="iframeCookie1" src="//c1.ddz.com/cookie1.html" width="100%"></iframe>
+                    <script>
+                        document.getElementById("iframeCookie1").onload = function () {
+                            alert("如果c1.ddz.com/cookie1.html页面设置cookie时制定了domain，我也可以读到：" + document.cookie);
+                        }
+                    </script>
+                </dd>
             </dl>
         </fieldset>
         <p></p>

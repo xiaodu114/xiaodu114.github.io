@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cookie 跨域测试</title>
+</head>
+
+<body>
+    <p>
+        cookie 跨域测试，用于iframe子页面1。
+    </p>
+    <p>
+        本页面设置cookie => <code>document.cookie = "age=18;domain=ddz.com";</code>
+        是在原有的基础上添加了age,并不是将cookie重置为age。
+    </p>
+    <script>
+        alert("获取父页面ddz.com/index.html设置cookie：" + document.cookie);
+        document.cookie = "age=18;domain=ddz.com";
+    </script>
+</body>
+
+</html>
