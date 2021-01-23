@@ -1,0 +1,67 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    background-color: #e6e6e6;
+}
+
+body {
+    font-size: 16px;
+    color: #2c3e50;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    line-height: 1.45;
+}
+
+p {
+    line-height: 1.7;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+table tr {
+    border-bottom: 1px solid #dcdfe6;
+}
+
+table th,
+table td {
+    padding: 0.5rem;
+    max-width: 250px;
+    text-align: left;
+}
+
+.blog-page {
+    max-width: 992px;
+    min-height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 120px 150px 120px 150px;
+    background-color: #fff;
+}
+
+.blog-page h2 {
+    padding-bottom: .3rem;
+    border-bottom: 1px solid #eaecef;
+}
+
+.here-need-to-handle-by-highlight {
+    display: none;
+}
