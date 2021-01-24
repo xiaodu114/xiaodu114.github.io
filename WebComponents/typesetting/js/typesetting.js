@@ -11,7 +11,7 @@ customElements.define('marked-block',
                     sideColor: "#007bff",
                 },
                 "warning": {
-                    explain: "警告",
+                    explain: "注意",
                     sideColor: "#f4cd00",
                 },
                 "error": {

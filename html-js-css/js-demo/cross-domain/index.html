@@ -4,18 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>跨域 cross domain - xiaodu114.github.io</title>
     <meta name="keywords" content="跨域,cross domain,同源,cors,postMessage">
     <meta name="description"
         content="跨域测试页面。主要测试了 iframe + document.domain | location.hash | window.name 方式、postMessage方式和JSONP方式，代理服务器、WebSocket、CORS等方式稍后介绍……">
-    <link rel="stylesheet"
-        href="https://unpkg.zhimg.com/material-components-web@latest/dist/material-components-web.css">
+
+    <link rel="stylesheet" href="//unpkg.zhimg.com/material-components-web@latest/dist/material-components-web.css">
     <style>
         @font-face {
             font-family: 'Material Icons';
             font-style: normal;
             font-weight: 400;
-            src: url(https://fonts.gstatic.com/s/materialicons/v70/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
+            src: url(//fonts.gstatic.com/s/materialicons/v70/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
         }
 
         .material-icons {
@@ -33,281 +34,467 @@
             -webkit-font-smoothing: antialiased;
         }
     </style>
-    <style>
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-        }
 
-        html,
-        body {
-            height: 100%;
-            width: 100%;
-            margin: 0;
-        }
-
-        body {
-            background-color: #e6e6e6;
-            overflow-y: auto;
-        }
-
-        .cross-domain-demo {
-            width: 992px;
-            margin-left: auto;
-            margin-right: auto;
-            background-color: #fff;
-            padding-left: 150px;
-            padding-right: 150px;
-            padding-top: 30px;
-            padding-bottom: 30px;
-        }
-
-        .help-text {
-            color: #737373;
-        }
-
-        .indent-text {
-            text-indent: 2em;
-        }
-    </style>
+    <link rel="stylesheet" href="/lib/normalize/normalize.css">
+    <link rel="stylesheet" href="/lib/highlight/github.css">
+    <link rel="stylesheet" href="/lib/highlight/lang-label.css">
+    <link rel="stylesheet" href="/WebComponents/typesetting/css/typesetting.css">
+    <script src="/WebComponents/typesetting/js/typesetting.js"></script>
 </head>
 
 <body>
-    <!-- github访问地址：/html-js-css/js-demo/cross-domain/index.html -->
-    <div class="cross-domain-demo">
-        <fieldset>
-            <legend>参考链接</legend>
-            <ul>
-                <li>
-                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy"
-                        target="_blank">浏览器的同源策略 - Web 安全 | MDN</a>
-                </li>
-                <li>
-                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS"
-                        target="_blank">跨源资源共享（CORS） - HTTP | MDN</a>
-                </li>
-                <li>
-                    <a href="https://segmentfault.com/a/1190000011145364" target="_blank">前端常见跨域解决方案（全）-
-                        SegmentFault</a>
-                </li>
-                <li>
-                    <a href="http://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html"
-                        target="_blank">浏览器同源政策及其规避方法 - 阮一峰的网络日志</a>
-                </li>
-            </ul>
-        </fieldset>
-        <p></p>
-        <fieldset>
-            <legend>有些还是可以跨域的</legend>
-            <dl>
-                <dt>link标签和url函数(图片、字体文件等)</dt>
-                <dd>
-                    <button class="mdc-fab" type="button">
-                        <div class="mdc-fab__ripple"></div>
-                        <span class="material-icons mdc-fab__icon">add</span>
-                        <div class="mdc-fab__touch"></div>
-                    </button>
-                    <span class="help-text">这里使用了
-                        <strong>
-                            material-components-web样式
-                        </strong>
-                        和
-                        <strong>
-                            Material Icons字体图标（url中请求的字体图标）
-                        </strong>
-                    </span>
-                </dd>
-                <dt>script标签</dt>
-                <dd>
-                    <span class="help-text">这里使用了<strong>material-components-web JS</strong></span>
-                    <div class="mdc-slider mdc-slider--discrete">
-                        <input class="mdc-slider__input" type="range" min="0" max="100" value="50" name="volume"
-                            step="10" aria-label="Discrete slider demo">
-                        <div class="mdc-slider__track">
-                            <div class="mdc-slider__track--inactive"></div>
-                            <div class="mdc-slider__track--active">
-                                <div class="mdc-slider__track--active_fill"></div>
-                            </div>
-                        </div>
-                        <div class="mdc-slider__thumb">
-                            <div class="mdc-slider__value-indicator-container" aria-hidden="true">
-                                <div class="mdc-slider__value-indicator">
-                                    <span class="mdc-slider__value-indicator-text">
-                                        50
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="mdc-slider__thumb-knob"></div>
-                        </div>
-                    </div>
-                </dd>
-                <dt>img标签</dt>
-                <dd>
-                    <img src="https://www.baidu.com/img/flexible/logo/pc/result.png" alt="">
-                    <span class="help-text">这里使用了<strong>百度LOGO</strong></span>
-                </dd>
-                <dt>video\audio标签（音乐来自咪咕音乐 music.migu.cn）</dt>
-                <dd>
-                    <video controls="" loop="" height="55px" width="100%" style="outline: none;">
-                        <source
-                            src="http://freetyst.nf.migu.cn/public/product8th/product38/2020/03/0216/2015%E5%B9%B409%E6%9C%8815%E6%97%A510%E7%82%B943%E5%88%86%E5%86%85%E5%AE%B9%E5%87%86%E5%85%A5%E7%9B%9B%E5%94%90%E6%97%B6%E7%A9%BA999%E9%A6%96/%E5%85%A8%E6%9B%B2%E8%AF%95%E5%90%AC/Mp3_64_22_16/60054041260.mp3"
-                            type="audio/mpeg">
-                    </video>
-                </dd>
-                <dt>iframe标签</dt>
-                <dd>
-                    <div class="help-text">
-                        这种方式也是可以禁止的，<a href="https://developer.mozilla.org/zh-CN/" target="_blank">MDN Web 文档</a>就不行
-                    </div>
-                    <div class="help-text">这里使用iframe嵌入<strong>百度</strong></div>
-                    <iframe src="https://www.baidu.com" frameborder="0" width="100%"></iframe>
-                </dd>
-                <dt>cookie(有限制)</dt>
-                <dd>
-                    <div class="help-text indent-text">
-                        cookie未遵循严格的同源策略,但是也是有限制的。ddz.com下的index.html页面设置cookie时如果不指定"domain",iframe中"c1.ddz.com/cookie1.html"该页面也是读取不打父页面的cookie。
-                    </div>
-                    <script>
-                        document.cookie = "name=index.html;domain=ddz.com";
-                    </script>
-                    <iframe id="iframeCookie1" src="//c1.ddz.com/cookie1.html" width="100%"></iframe>
-                    <script>
-                        document.getElementById("iframeCookie1").onload = function () {
-                            alert("如果c1.ddz.com/cookie1.html页面设置cookie时制定了domain，我也可以读到：" + document.cookie);
-                        }
-                    </script>
-                </dd>
-            </dl>
-        </fieldset>
-        <p></p>
-        <fieldset>
-            <legend>你不能做哪些事情</legend>
-            <dl>
-                <dt>Cookie、LocalStorage 和 IndexDB 无法读取。</dt>
-                <dt>DOM 无法获得。</dt>
-                <dt>AJAX 请求不能发送。</dt>
-            </dl>
-        </fieldset>
-        <p></p>
-        <fieldset>
-            <legend>怎么解决</legend>
-            <dl>
-                <dt>document.domain + iframe</dt>
-                <dd>
-                    <div class="help-text indent-text">
-                        我是这样搭建测试环境的：搭建了一个站点，里面就两个页面：本页面和documentDomain1.html；之后需要修改hosts文件。
-                        <ul>
-                            <li>127.0.0.1 ddz.com</li>
-                            <li>127.0.0.1 c1.ddz.com</li>
-                            <li>127.0.0.1 c2.ddz.com</li>
-                        </ul>
-                    </div>
-                    <div class="help-text indent-text">
-                        ddz.com下的页面不能将“document.domain”设置为：c1.ddz.com
-                        <span style="color: red;">
-                            Uncaught DOMException: Failed to set the 'domain' property on 'Document': 'c1.ddz.com' is
-                            not a suffix of 'ddz.com'.
-                        </span>
-                    </div>
-                    <div class="help-text indent-text">
-                        注意父子页面设置“document.domain”的顺序。如果子页面早于父页面设置并立即读取父页面的window的值，这时候还是会报跨域错误:
-                        <span style="color: red;">
-                            Uncaught DOMException: Blocked a frame with origin "http://c1.ddz.com" from accessing a
-                            cross-origin frame.
-                        </span>
-                        也就是说在读取值之前，“document.domain”已经设置完成。
-                    </div>
-                    <div class="help-text indent-text">
-                        即使ddz.com下的页面“document.domain”的值本身就是“ddz.com”，但是也必须显示设置
-                    </div>
-                    <!-- <script>
-                        document.domain = 'ddz.com';
-                        window.dd = "index.html";
-                    </script>
-                    <iframe id="frameDocumentDomain1" src="//c1.ddz.com/documentDomain1.html" width="100%"
-                        onload="iframeDocumentDomain1Load()"></iframe>
-                    <script>
-                        var frameDocumentDomain1Dom = document.getElementById("frameDocumentDomain1");
+    <div class="blog-page">
+        <h1>实战跨域</h1>
+        <h2>还是有一些漏网之鱼的</h2>
+        <h3>
+            HTML<inline-code>link</inline-code>标签和CSS<inline-code>url</inline-code>函数
+        </h3>
+        <p>
+            <inline-code>link</inline-code>引入一个外部样式表。<inline-code>url</inline-code>指向一个资源，许多css属性都可以使用它，例如 <inline-code>
+                @font-face</inline-code>
+            <inline-code>list-style</inline-code>
+            <inline-code>cursor</inline-code>等。
+            <button class="mdc-fab" type="button">
+                <div class="mdc-fab__ripple"></div>
+                <span class="material-icons mdc-fab__icon">add</span>
+                <div class="mdc-fab__touch"></div>
+            </button>
+            这是一个<strong>Material Design</strong>风格的按钮，这里通过<inline-code>link</inline-code>
+            引入<strong>material-components-web</strong>样式，<inline-code>@font-face</inline-code>引入<strong>Material
+                Icons</strong>字体文件。
+        </p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
+<link rel="stylesheet" href="//unpkg.zhimg.com/material-components-web@latest/dist/material-components-web.css">
+        </pre>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="css">
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url(//fonts.gstatic.com/s/materialicons/v70/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
+}
 
-                        function iframeDocumentDomain1Load() {
-                            alert('获取子页面变量(dd)的值:' + frameDocumentDomain1Dom.contentWindow.dd);
-                        }
-                    </script> -->
-                </dd>
-                <dt>location.hash + iframe</dt>
-                <dd>
-                    <div class="help-text indent-text">
-                        index.html页面可以通过"location.hash +
-                        iframe"给跨域的页面locationHash1.html传值这个没有问题，问题是iframe中的页面怎么应答……他可以也通过"location.hash +
-                        iframe"的方式传值给父页面同源的一个页面locationHash0.html，这个页面就可以操作他爷爷辈儿的"location.hash"了
+.material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+}
+        </pre>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
+<button class="mdc-fab" type="button">
+    <div class="mdc-fab__ripple"></div>
+    <span class="material-icons mdc-fab__icon">add</span>
+    <div class="mdc-fab__touch"></div>
+</button>
+        </pre>
+        <h3>
+            HTML<inline-code>script</inline-code>标签
+        </h3>
+        <p>
+            <inline-code>script</inline-code>
+            可以嵌入和引入外部可执行脚本,这里主要说的是引入跨域的JS。下面还是<strong>material-components-web</strong>的一个示例，只不过依赖JS：
+        </p>
+        <div class="mdc-slider mdc-slider--discrete">
+            <input class="mdc-slider__input" type="range" min="0" max="100" value="50" name="volume" step="10"
+                aria-label="Discrete slider demo">
+            <div class="mdc-slider__track">
+                <div class="mdc-slider__track--inactive"></div>
+                <div class="mdc-slider__track--active">
+                    <div class="mdc-slider__track--active_fill"></div>
+                </div>
+            </div>
+            <div class="mdc-slider__thumb">
+                <div class="mdc-slider__value-indicator-container" aria-hidden="true">
+                    <div class="mdc-slider__value-indicator">
+                        <span class="mdc-slider__value-indicator-text">
+                            50
+                        </span>
                     </div>
-                    <iframe src="//c1.ddz.com/locationHash1.html#comeFromIndexPage" width="100%"></iframe>
-                    <script>
-                        location.hash = "";
-                        window.onhashchange = function () { //检测hash的变化
-                            alert("我间接收到了locationHash1页面的hash反馈：" + location.hash);
-                        }
-                    </script>
-                </dd>
-                <dt>window.name + iframe</dt>
-                <dd>
-                    <div class="help-text indent-text">
-                        index.html页面首先利用iframe加载跨域的页面"//ddz.com/windowName0.html"（设置"window.name"），onload之后再利用该iframe去加载和index.html同源的页面"//ddz.com/windowName0.html"，这时就可以利用iframe读取"contentWindow.name"，这里读到的就是跨域页面的"window.name"；注意：同源的页面不要设置"window.name"，要不然读到的就是他的值了。
-                    </div>
-                    <script>
-                        window.name = "我的名字是： index.html";
-                    </script>
-                    <iframe id="frameWindowName1" src="//c1.ddz.com/windowName1.html" width="100%"></iframe>
-                    <script>
-                        var frameWindowName1Dom = document.getElementById("frameWindowName1"),
-                            frameWindowNameIsSameDomain = false;
-                        frameWindowName1Dom.onload = function () {
-                            if (!frameWindowNameIsSameDomain) {
-                                frameWindowName1Dom.src = '//ddz.com/windowName0.html';
-                                frameWindowNameIsSameDomain = true;
-                            } else {
-                                alert("读取这个值好难啊：" + frameWindowName1Dom.contentWindow.name);
-                            }
-                        }
-                    </script>
-                </dd>
-                <dt>postMessage</dt>
-                <dd>
-                    <button type="button" id="btnPostMessage1">发送消息</button>
-                    <iframe id="framePostMessage1" src="//c1.ddz.com/postMessage1.html" width="100%"></iframe>
-                    <script>
-                        document.getElementById("btnPostMessage1").onclick = function () {
-                            document.getElementById('framePostMessage1').contentWindow.postMessage(
-                                '大家好，我是index.html',
-                                'http://c1.ddz.com');
-                        }
-                    </script>
-                </dd>
-                <dt>JSONP</dt>
-                <dd>
-                    <div class="help-text">这里调用<strong>JSONP 教程 | 菜鸟教程</strong>获取数据</div>
-                    <div id="divCustomers"></div>
-                </dd>
-                <dt>代理服务器、WebSocket、CORS</dt>
-                <dd>这几种方式都和服务器端相关并且不太好测试，这里暂时就不写了……以后再说</dd>
-            </dl>
-        </fieldset>
+                </div>
+                <div class="mdc-slider__thumb-knob"></div>
+            </div>
+        </div>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
+<script src="//unpkg.zhimg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+<script src="//unpkg.zhimg.com/jquery"></script>
+        </pre>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
+<div class="mdc-slider mdc-slider--discrete">
+    <input class="mdc-slider__input" type="range" min="0" max="100" value="50" name="volume" step="10"
+        aria-label="Discrete slider demo">
+    <div class="mdc-slider__track">
+        <div class="mdc-slider__track--inactive"></div>
+        <div class="mdc-slider__track--active">
+            <div class="mdc-slider__track--active_fill"></div>
+        </div>
     </div>
-    <script src="https://unpkg.zhimg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
-    <script src="https://unpkg.zhimg.com/jquery"></script>
+    <div class="mdc-slider__thumb">
+        <div class="mdc-slider__value-indicator-container" aria-hidden="true">
+            <div class="mdc-slider__value-indicator">
+                <span class="mdc-slider__value-indicator-text">
+                    50
+                </span>
+            </div>
+        </div>
+        <div class="mdc-slider__thumb-knob"></div>
+    </div>
+</div>
+        </pre>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+var slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
+        </pre>
+        <h3>
+            HTML<inline-code>img</inline-code>标签
+        </h3>
+        <p>
+            <inline-code>img</inline-code>标签可以嵌入图像。 <img src="https://www.baidu.com/img/flexible/logo/pc/result.png"
+                alt="百度一下" width="100" height="33">这里使用了<strong>百度</strong>的图片。
+        </p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
+<img src="https://www.baidu.com/img/flexible/logo/pc/result.png" alt="百度一下" width="100" height="33">
+        </pre>
+        <h3>
+            HTML<inline-code>video</inline-code>
+            <inline-code>audio</inline-code>标签
+        </h3>
+        <video controls="" loop="" height="55px" width="100%" style="outline: none;">
+            <source
+                src="http://freetyst.nf.migu.cn/public/product8th/product38/2020/03/0216/2015%E5%B9%B409%E6%9C%8815%E6%97%A510%E7%82%B943%E5%88%86%E5%86%85%E5%AE%B9%E5%87%86%E5%85%A5%E7%9B%9B%E5%94%90%E6%97%B6%E7%A9%BA999%E9%A6%96/%E5%85%A8%E6%9B%B2%E8%AF%95%E5%90%AC/Mp3_64_22_16/60054041260.mp3"
+                type="audio/mpeg">
+        </video>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
+<video controls="" loop="" height="55px" width="100%" style="outline: none;">
+    <source 
+        src="http://freetyst.nf.migu.cn/public/product8th/product38/2020/03/0216/2015%E5%B9%B409%E6%9C%8815%E6%97%A510%E7%82%B943%E5%88%86%E5%86%85%E5%AE%B9%E5%87%86%E5%85%A5%E7%9B%9B%E5%94%90%E6%97%B6%E7%A9%BA999%E9%A6%96/%E5%85%A8%E6%9B%B2%E8%AF%95%E5%90%AC/Mp3_64_22_16/60054041260.mp3"
+        type="audio/mpeg">
+</video>
+        </pre>
+        <h3>
+            HTML<inline-code>iframe</inline-code>标签
+        </h3>
+        <p>
+            这种方式也是可以禁止的，<a href="https://developer.mozilla.org/zh-CN/" target="_blank">MDN Web 文档</a>就不可以。这里使用
+            <inline-code>iframe</inline-code>嵌入<strong>多吉搜索</strong>
+        </p>
+        <iframe src="https://www.dogedoge.com" frameborder="0" width="100%" height="235"></iframe>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
+<iframe src="https://www.dogedoge.com" frameborder="0" width="100%" height="235"></iframe>
+        </pre>
+        <h3>
+            <inline-code>cookie</inline-code>(有限制)
+        </h3>
+        <p>
+            <inline-code>cookie</inline-code>
+            未遵循严格的同源策略,但是也是有限制的。//ddz.com/index.html 页面设置cookie时如果不指定<inline-code>domain</inline-code>
+            ,<inline-code>iframe</inline-code>中 c1.ddz.com/cookie1.html 该页面不获取父页面的<inline-code>cookie</inline-code>。
+        </p>
+        <div ddz-class="here-need-to-handle-by-highlight-and-replace-one" ddz-replaceid="cookie-demo-1" ddz-lang="html">
+            <!-- 下面是 //ddz.com/index.html 页面中的代码片段，测试：cookie  -->
+            <script>
+                document.cookie = "name=index.html;domain=ddz.com";
+            </script>
+            <iframe id="iframeCookie1" src="//c1.ddz.com/cookie1.html" width="100%"></iframe>
+            <script>
+                document.getElementById("iframeCookie1").onload = function () {
+                    alert("如果c1.ddz.com/cookie1.html页面设置cookie时制定了domain，我也可以读到：" + document.cookie);
+                }
+            </script>
+        </div>
+        <div id="cookie-demo-1"></div>
+        <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
+            data-url="/html-js-css/js-demo/cross-domain/cookie1.html" ddz-lang="html"></div>
+        <marked-block type="warning">
+            <p>
+                ● 主域名是不给子域名设置<inline-code>cookie</inline-code>的。例如：//ddz.com/index.html => document.cookie =
+                "name=index.html;domain=c1.ddz.com";
+            </p>
+            <p>
+                ● 主域名不设置<inline-code>domain</inline-code>，子域名是不能访问的。例如：//ddz.com/index.html => document.cookie =
+                "name=index.html;";之后 //c1.ddz.com/cookie1.html => document.cookie，这里不能获取主域名设置的<inline-code>cookie
+                </inline-code>
+            </p>
+            <p>
+                ● 主域名设置<inline-code>domain</inline-code>，子域名可以能访问。例如：//ddz.com/index.html => document.cookie =
+                "name=index.html;domain=ddz.com";之后 //c1.ddz.com/cookie1.html => document.cookie
+                这就就可以获取到了。如果你在浏览器F12中查看，你会发现主域名设置<inline-code>cookie</inline-code>会同时添加到子域名下
+            </p>
+            <p>
+                ● 子域名设置<inline-code>domain</inline-code>，主域名可以能访问。例如：//c1.ddz.com/cookie1.html => document.cookie =
+                "age=18;domain=ddz.com";之后 //ddz.com/index.html => document.cookie 就可以取到
+            </p>
+        </marked-block>
+        <h2>你不能做的一些事情</h2>
+        <blockquote>
+            <p>（1） Cookie、LocalStorage 和 IndexDB 无法读取。</p>
+            <p>（2） DOM 无法获得。</p>
+            <p>（3） AJAX 请求不能发送。</p>
+            <div class="comefrom">出自：<a href="http://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html"
+                    target="_blank">浏览器同源政策及其规避方法 - 阮一峰的网络日志</a></div>
+        </blockquote>
+        <h2>上面的问题可以解决吗？</h2>
+        <p>先介绍一下测试环境。服务器用的是IIS，搭了一个站点，路径为"/html-js-css/js-demo/cross-domain"；之后修改<inline-code>hosts</inline-code>文件，如下：
+        </p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="">
+127.0.0.1 ddz.com
+127.0.0.1 c1.ddz.com
+127.0.0.1 c2.ddz.com
+        </pre>
+        <h3>
+            <inline-code>iframe</inline-code>搭配
+            <inline-code>document.domain</inline-code>
+        </h3>
+        <p>先说一下，主域名下的页面不能设置<inline-code>document.domain</inline-code>为子域名，否则会报错。例如： //ddz.com/index.html =>
+            document.domain = 'c1.ddz.com';</p>
+
+        <marked-block type="error">
+            <p style="color: red;">
+                Uncaught DOMException: Failed to set the 'domain' property on 'Document': 'c1.ddz.com' is not a suffix
+                of 'ddz.com'.
+            </p>
+        </marked-block>
+        <p>
+            还有一点就是相应页面设置<inline-code>document.domain</inline-code>的时机，一定保证在跨域读取之前已经设置完成，否则还是会报跨域错误。
+        </p>
+        <marked-block type="error">
+            <p style="color: red;">
+                Uncaught DOMException: Blocked a frame with origin "http://c1.ddz.com" from accessing a cross-origin
+                frame.
+            </p>
+        </marked-block>
+        <p>
+            最后一点就是你可以在 //ddz.com/index.html 页面打印输出<inline-code>document.domain</inline-code>
+            ，值为："ddz.com"。但是如果你不显示设置他的值，照样是跨域错误。
+        </p>
+        <marked-block type="error">
+            <p style="color: red;">
+                documentDomain1.html:11 Uncaught DOMException: Blocked a frame with origin "http://c1.ddz.com" from
+                accessing a cross-origin frame.
+            </p>
+            <p style="color: red;">
+                index.html:232 Uncaught DOMException: Blocked a frame with origin "http://ddz.com" from accessing a
+                cross-origin frame.
+            </p>
+        </marked-block>
+        <div ddz-class="here-need-to-handle-by-highlight-and-replace-one" ddz-replaceid="documentdomain-demo-1"
+            ddz-lang="html">
+            <!-- 下面是 //ddz.com/index.html 页面中的代码片段，测试：iframe + document.domain  -->
+            <script>
+                //document.domain = 'ddz.com'; // 如果不显示设置会报错
+                window.dd = "index.html";
+            </script>
+            <iframe id="frameDocumentDomain1" src="//c1.ddz.com/documentDomain1.html" width="100%"></iframe>
+            <script>
+                document.getElementById("frameDocumentDomain1").onload = function (event) {
+                    alert('获取子页面变量(dd)的值:' + this.contentWindow.dd);
+                }
+            </script>
+        </div>
+        <div id="documentdomain-demo-1"></div>
+        <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
+            data-url="/html-js-css/js-demo/cross-domain/documentDomain1.html" ddz-lang="html"></div>
+        <h3>
+            <inline-code>iframe</inline-code>搭配
+            <inline-code>location.hash</inline-code>
+        </h3>
+        <p>
+            在 //ddz.com/index.html 页面通过使用<inline-code>iframe</inline-code>并且设置路径时带上<inline-code>hash</inline-code>
+            值的方式给跨域页面传值，这并没有什么问题。问题是<inline-code>iframe</inline-code>
+            中的页面应答，该页面也可以通过上面的方式将相应传给与父页面同源的页面，例如：'//ddz.com/locationHash0.html#' + new Date().valueOf(); ，在
+            //ddz.com/locationHash0.html 这个页面就是通过<inline-code>window.parent.parent.location.hash</inline-code>设置
+            //ddz.com/index.html 页面的<inline-code>hash</inline-code>了。这可真够费劲的，子页面不能像<inline-code>parent.location.href =
+                parent.location.href + "#" + new Date().valueOf();</inline-code>或者<inline-code>parent.location.hash =
+                new Date().valueOf();</inline-code>这样
+            修改父页面的<inline-code>hash</inline-code>吗？答案是不可以的，虽然是主域和子域的关系，会报下面的错误。
+        </p>
+        <marked-block type="error">
+            <p style="color: red;">
+                locationHash1.html:17 Uncaught DOMException: Blocked a frame with origin "http://c1.ddz.com" from
+                accessing a cross-origin frame.
+            </p>
+        </marked-block>
+        <marked-block type="warning">
+            <p>
+                此处的测试想要成功需要将上文中的<inline-code>document.domain = 'ddz.com';</inline-code>这句代码屏蔽掉。
+            </p>
+        </marked-block>
+        <div ddz-class="here-need-to-handle-by-highlight-and-replace-one" ddz-replaceid="locationhash-demo-1"
+            ddz-lang="html">
+            <!-- 下面是 //ddz.com/index.html 页面中的代码片段，测试：iframe + location.hash  -->
+            <iframe src="//c1.ddz.com/locationHash1.html#comeFromIndexPage" width="100%"></iframe>
+            <script>
+                location.hash = "";
+                window.onhashchange = function () { //检测hash的变化
+                    alert("我间接收到了locationHash1页面的hash反馈：" + location.hash);
+                }
+            </script>
+        </div>
+        <div id="locationhash-demo-1"></div>
+        <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
+            data-url="/html-js-css/js-demo/cross-domain/locationHash1.html" ddz-lang="html"></div>
+        <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
+            data-url="/html-js-css/js-demo/cross-domain/locationHash0.html" ddz-lang="html"></div>
+        <h3>
+            <inline-code>iframe</inline-code>搭配
+            <inline-code>window.name</inline-code>
+        </h3>
+        <p>
+            在 //ddz.com/index.html 页面通过使用<inline-code>iframe</inline-code>嵌入 //c1.ddz.com/windowName1.html 页面（该页面设置
+            <inline-code>window.name</inline-code>），onload之后再利用该iframe去加载和 //ddz.com/index.html
+            页面同源的页面：//ddz.com/windowName0.html。这时读取<inline-code>iframe</inline-code>
+            <inline-code>contentWindow.name
+            </inline-code>的值，这里获取到的就是第一次加载跨域页面设置的<inline-code>window.name</inline-code>。注意：第二次加载的同源页面不要设置<inline-code>
+                window.name</inline-code>，否则获取到的就是他的值了。
+        </p>
+        <marked-block type="warning">
+            <p>
+                此处的测试想要成功需要将上文中的<inline-code>document.domain = 'ddz.com';</inline-code>这句代码屏蔽掉。
+            </p>
+        </marked-block>
+        <div ddz-class="here-need-to-handle-by-highlight-and-replace-one" ddz-replaceid="windowname1-demo-1"
+            ddz-lang="html">
+            <!-- 下面是 //ddz.com/index.html 页面中的代码片段，测试：iframe + window.name  -->
+            <script>
+                window.name = "我的名字是： index.html";
+            </script>
+            <iframe id="frameWindowName1" src="//c1.ddz.com/windowName1.html" width="100%"></iframe>
+            <script>
+                var frameWindowName1Dom = document.getElementById("frameWindowName1"),
+                    frameWindowNameIsSameDomain = false;
+                frameWindowName1Dom.onload = function () {
+                    if (!frameWindowNameIsSameDomain) {
+                        frameWindowName1Dom.src = '//ddz.com/windowName0.html';
+                        frameWindowNameIsSameDomain = true;
+                    } else {
+                        alert("读取这个值好难啊：" + frameWindowName1Dom.contentWindow.name);
+                    }
+                }
+            </script>
+        </div>
+        <div id="windowname1-demo-1"></div>
+        <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
+            data-url="/html-js-css/js-demo/cross-domain/windowName1.html" ddz-lang="html"></div>
+        <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
+            data-url="/html-js-css/js-demo/cross-domain/windowName0.html" ddz-lang="html"></div>
+        <h3>
+            安全的跨源通信<inline-code>postMessage</inline-code>
+        </h3>
+        <div ddz-class="here-need-to-handle-by-highlight-and-replace-one" ddz-replaceid="postMessage-demo-1"
+            ddz-lang="html">
+            <!-- 下面是 //ddz.com/index.html 页面中的代码片段，测试：postMessage  -->
+            <button type="button" id="btnPostMessage1">发送消息</button>
+            <iframe id="framePostMessage1" src="//c1.ddz.com/postMessage1.html" width="100%"></iframe>
+            <script>
+                document.getElementById("btnPostMessage1").onclick = function () {
+                    document.getElementById('framePostMessage1').contentWindow.postMessage(
+                        '大家好，我是index.html，现在时间：' + new Date(),
+                        'http://c1.ddz.com');
+                }
+            </script>
+        </div>
+        <div id="postMessage-demo-1"></div>
+        <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
+            data-url="/html-js-css/js-demo/cross-domain/postMessage1.html" ddz-lang="html"></div>
+        <h3>JSONP</h3>
+        <p>这里调用<strong>JSONP 教程 | 菜鸟教程</strong>获取数据</p>
+        <div ddz-class="here-need-to-handle-by-highlight-and-replace-one" ddz-replaceid="jsonp-demo-1" ddz-lang="html">
+            <!-- 下面是 //ddz.com/index.html 页面中的代码片段，测试：jsonp  -->
+            <div id="divCustomers"></div>
+            <script src="//unpkg.zhimg.com/jquery"></script>
+            <script>
+                $.getJSON("https://www.runoob.com/try/ajax/jsonp.php?jsoncallback=?", function (data) {
+                    var html = '<ul>';
+                    for (var i = 0; i < data.length; i++) {
+                        html += '<li>' + data[i] + '</li>';
+                    }
+                    html += '</ul>';
+                    $('#divCustomers').html(html);
+                });
+            </script>
+        </div>
+        <div id="jsonp-demo-1"></div>
+        <h3>代理服务器、WebSocket、CORS等</h3>
+        <p>这几种方式都和服务器端相关并且不太好测试，这里暂时就不写了……以后再说</p>
+        <h2>参考链接</h2>
+        <div>
+            <p>
+                <a href="https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy"
+                    target="_blank">浏览器的同源策略 - Web 安全 | MDN</a>
+            </p>
+            <p>
+                <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS"
+                    target="_blank">跨源资源共享（CORS） - HTTP | MDN</a>
+            </p>
+            <p>
+                <a href="https://segmentfault.com/a/1190000011145364" target="_blank">前端常见跨域解决方案（全）-
+                    SegmentFault</a>
+            </p>
+            <p>
+                <a href="http://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html" target="_blank">浏览器同源政策及其规避方法 -
+                    阮一峰的网络日志</a>
+            </p>
+            <p>
+                <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/url" target="_blank">&lt;url&gt; - CSS（层叠样式表）
+                    |
+                    MDN</a>
+            </p>
+            <p>
+                <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/script"
+                    target="_blank">&lt;script&gt; -
+                    HTML（超文本标记语言） | MDN</a>
+            </p>
+            <p>
+                <a href="https://developer.mozilla.org/zh-CN/docs/Learn/HTML/Multimedia_and_embedding/Images_in_HTML"
+                    target="_blank">HTML中的图片 - 学习 Web 开发 | MDN</a>
+            </p>
+            <p>
+                <a href="https://developer.mozilla.org/zh-cn/docs/web/html/element/img"
+                    target="_blank">&lt;img&gt;：图像嵌入元素 -
+                    HTML（超文本标记语言） | MDN</a>
+            </p>
+        </div>
+    </div>
+    <script src="/lib/highlight/highlight.pack.js"></script>
+    <script src="//unpkg.zhimg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
     <script>
-        var slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
-        $.getJSON("https://www.runoob.com/try/ajax/jsonp.php?jsoncallback=?", function (data) {
-            var html = '<ul>';
-            for (var i = 0; i < data.length; i++) {
-                html += '<li>' + data[i] + '</li>';
-            }
-            html += '</ul>';
-            $('#divCustomers').html(html);
+        let slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
+        // https://highlightjs.org/static/demo/
+        const myRange = document.createRange();
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll("pre[ddz-class='here-need-to-handle-by-highlight']").forEach((block) => {
+                block.replaceWith(myRange.createContextualFragment(
+                    `<pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${block.getAttribute("ddz-lang")} hljs">${hljs.highlightAuto(block.innerHTML.trim()).value}</code></pre>`
+                ));
+            });
+            document.querySelectorAll("[ddz-class='here-need-to-handle-by-highlight-and-replace-one']").forEach(
+                (block) => {
+                    document.getElementById(block.getAttribute("ddz-replaceid")).replaceWith(myRange
+                        .createContextualFragment(
+                            `<pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${block.getAttribute("ddz-lang")} hljs">${hljs.highlightAuto(block.innerHTML).value}</code></pre>`
+                        ));
+                });
+            document.querySelectorAll("[ddz-class='here-need-to-handle-by-highlight-and-request-html']")
+                .forEach((block) => {
+                    fetch(block.getAttribute("data-url")).then(response => {
+                        if (response.ok) {
+                            return response.text();
+                        }
+                    }).then(responseData => {
+                        block.replaceWith(myRange.createContextualFragment(
+                            `<pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${block.getAttribute("ddz-lang")} hljs">${hljs.highlightAuto(responseData.trim()).value}</code></pre>`
+                        ));
+                    });
+                });
         });
     </script>
-
 </body>
 
 </html>

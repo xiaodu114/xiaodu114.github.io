@@ -17,6 +17,16 @@ body {
     color: #2c3e50;
 }
 
+blockquote {
+    margin-left: 0;
+    margin-right: 0;
+    color: #737373;
+}
+
+blockquote>div.comefrom {
+    text-align: right;
+}
+
 h1,
 h2,
 h3,
@@ -62,6 +72,6 @@ table td {
     border-bottom: 1px solid #eaecef;
 }
 
-.here-need-to-handle-by-highlight {
+pre[ddz-class="here-need-to-handle-by-highlight"] {
     display: none;
 }
