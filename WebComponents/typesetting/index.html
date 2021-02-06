@@ -104,9 +104,68 @@
                 </tr>
             </tfoot>
         </table>
+        <h2>返回顶部<inline-code>back-to-top</inline-code>
+        </h2>
+        <p>
+            这个组件就不用过多的介绍了，功能比较常见，在N多网站中都有这个功能。这里自己实现了一下，支持在整个页面或者某一个滚动容器中使用。
+        </p>
+        <h3>运行效果</h3>
+        <div class="back-to-top-demo" style="height: 235px; overflow-y: auto; overflow-x: hidden;">
+            <p>祈祷 王杰|王韵禅</p>
+            <p>祈祷 王杰|王韵禅</p>
+            <p>祈祷 王杰|王韵禅</p>
+            <p>祈祷 王杰|王韵禅</p>
+            <p>祈祷 王杰|王韵禅</p>
+            <p>祈祷 王杰|王韵禅</p>
+            <p>祈祷 王杰|王韵禅</p>
+            <p>祈祷 王杰|王韵禅</p>
+            <p>祈祷 王杰|王韵禅</p>
+            <p>祈祷 王杰|王韵禅</p>
+            <p>祈祷 王杰|王韵禅</p>
+            <p>祈祷 王杰|王韵禅</p>
+            <p>祈祷 王杰|王韵禅</p>
+            <p>祈祷 王杰|王韵禅</p>
+            <p>祈祷 王杰|王韵禅</p>
+            <p>祈祷 王杰|王韵禅</p>
+            <p>祈祷 王杰|王韵禅</p>
+            <back-to-top scroll-selector=".back-to-top-demo"></back-to-top>
+        </div>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
+<!-- 在某一个容器中使用：上面的示例 -->
+<back-to-top scroll-selector=".back-to-top-demo"></back-to-top>
+        </pre>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
+<!-- 默认：本页面右下角的“返回顶部” -->
+<back-to-top></back-to-top>
+        </pre>
+        <h3>属性</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>参数</th>
+                    <th>说明</th>
+                    <th>默认值</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>scroll-selector</td>
+                    <td>选择器</td>
+                    <td>document.querySelector支持的选择器</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">
+                        说明：该属性可以不设置，此时监听<inline-code>window</inline-code>滚动事件；设置时（如果找不到会报错）监听对应元素的滚动事件。
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
         <h2>其他组件正在进行中……</h2>
+        <back-to-top></back-to-top>
     </div>
-    <script src="/lib/highlight/highlight.pack.js"></script>zz
+    <script src="/lib/highlight/highlight.pack.js"></script>
     <script>
         // https://highlightjs.org/static/demo/
         document.addEventListener('DOMContentLoaded', (event) => {
