@@ -96,6 +96,8 @@
             };
             _handleTouchMove = (event) => {
                 if (this.draggingObj) {
+                    var dndContainerRect = this.container.getBoundingClientRect();
+
                     var currentEvent = event.touches[0];
                     var tempSliderMoveX = currentEvent.clientX - this.draggingObj.clientX;
                     var tempSliderMoveY = currentEvent.clientY - this.draggingObj.clientY;
@@ -176,7 +178,7 @@
             ));
         };
         var dragContainerDom = document.getElementById("dnd-container");
-        for (var index = 1; index <= 14; index++) {
+        for (var index = 1; index <= 40; index++) {
             addOneDragItem(dragContainerDom);
         }
 
