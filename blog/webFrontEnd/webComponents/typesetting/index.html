@@ -162,6 +162,192 @@
                 </tr>
             </tfoot>
         </table>
+        <h2>单滑块进度条<inline-code>single-slider</inline-code>
+        </h2>
+        <p>
+            这是我写的第一个Web Component，当时是为了音乐播放器的进度条，当然也用在了我的音乐播放器项目中（<a
+                href="/angular/angular1/angularjs-music-table/index.html" target="_blank">🎵 Music Online
+                Angularjs</a>）。
+        </p>
+        <h3>运行效果</h3>
+        <div>
+            <single-slider id="singleSliderDemo1"></single-slider>
+        </div>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
+<!-- 本文single-slider示例代码，html部分 -->
+<single-slider id="singleSliderDemo1"></single-slider>
+        </pre>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+<!-- 本文single-slider示例代码，javascript部分 -->
+var singleSliderDemo1Dom = document.getElementById("singleSliderDemo1");
+singleSliderDemo1Dom.addEventListener("input", (inputEvent) => {
+    document.getElementById("singleSliderDemo1_preSingleSliderValueByInput").innerHTML = JSON
+        .stringify(inputEvent
+            .target
+            .value, null, 1);
+});
+singleSliderDemo1Dom.addEventListener("change", (customEvent) => {
+    document.getElementById("singleSliderDemo1_preSingleSliderValueByChange").innerHTML = JSON
+        .stringify(customEvent
+            .detail.value, null, 1);
+});
+
+function singleSliderDemo1_inputOnChangeEvent(input) {
+    if (input.name) {
+        singleSliderDemo1Dom.setAttribute(input.name, input.value);
+    }
+}
+
+function singleSliderDemo1_inputRangeOnChangeEvent(range) {
+    var sliderValue = singleSliderDemo1Dom.value;
+    sliderValue[range.name] = range.value;
+    singleSliderDemo1Dom.value = sliderValue;
+}
+        </pre>
+        <h3>使用说明</h3>
+        <dl>
+            <dt>滑道设置</dt>
+            <dd>
+                <p>
+                    <label>背景颜色：<input type="color" name="slider-color"
+                            onchange="singleSliderDemo1_inputOnChangeEvent(this)"></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label>划过颜色：<input type="color" name="slid-color"
+                            onchange="singleSliderDemo1_inputOnChangeEvent(this)"></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label>加载颜色：<input type="color" name="load-color"
+                            onchange="singleSliderDemo1_inputOnChangeEvent(this)"></label>
+                </p>
+            </dd>
+            <dd>
+                <p>
+                    <label>轨道高度：<input type="number" name="slider-height"
+                            onchange="singleSliderDemo1_inputOnChangeEvent(this)"></label>
+                </p>
+            </dd>
+            <dt>滑块设置</dt>
+            <dd>
+                <p>
+                    <label>
+                        颜色：<input type="color" name="dot-color" onchange="singleSliderDemo1_inputOnChangeEvent(this)">
+                    </label>
+                </p>
+            </dd>
+            <dd>
+                <p>
+                    <label>
+                        大小：<input type="number" name="dot-size" onchange="singleSliderDemo1_inputOnChangeEvent(this)">
+                    </label>
+                </p>
+            </dd>
+            <dd>
+                <p>
+                    <label>
+                        圆角：<input type="number" name="dot-radius" onchange="singleSliderDemo1_inputOnChangeEvent(this)">
+                    </label>
+                </p>
+            </dd>
+            <dt>设置滑块的某些值</dt>
+            <dd>
+                <p>
+                    <label>进度值：<input type="range" name="slidValue" value="0"
+                            onchange="singleSliderDemo1_inputRangeOnChangeEvent(this)"></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label>加载值：<input type="range" name="loadValue" value="0"
+                            onchange="singleSliderDemo1_inputRangeOnChangeEvent(this)"></label>
+                </p>
+            </dd>
+            <dt>你也可以监听值的变化</dt>
+            <dd>
+                <p>
+                    input监听：
+                    <pre id="singleSliderDemo1_preSingleSliderValueByInput"></pre>
+                </p>
+            </dd>
+            <dd>
+                <p>
+                    change监听：
+                    <pre id="singleSliderDemo1_preSingleSliderValueByChange"></pre>
+                </p>
+            </dd>
+        </dl>
+        <script>
+            var singleSliderDemo1Dom = document.getElementById("singleSliderDemo1");
+            singleSliderDemo1Dom.addEventListener("input", (inputEvent) => {
+                document.getElementById("singleSliderDemo1_preSingleSliderValueByInput").innerHTML = JSON
+                    .stringify(inputEvent
+                        .target
+                        .value, null, 1);
+            });
+            singleSliderDemo1Dom.addEventListener("change", (customEvent) => {
+                document.getElementById("singleSliderDemo1_preSingleSliderValueByChange").innerHTML = JSON
+                    .stringify(customEvent
+                        .detail.value, null, 1);
+            });
+
+            function singleSliderDemo1_inputOnChangeEvent(input) {
+                if (input.name) {
+                    singleSliderDemo1Dom.setAttribute(input.name, input.value);
+                }
+            }
+
+            function singleSliderDemo1_inputRangeOnChangeEvent(range) {
+                var sliderValue = singleSliderDemo1Dom.value;
+                sliderValue[range.name] = range.value;
+                singleSliderDemo1Dom.value = sliderValue;
+            }
+        </script>
+        <h3>属性</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>参数</th>
+                    <th>说明</th>
+                    <th>默认值</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>slider-color</td>
+                    <td>滑道颜色</td>
+                    <td>这个比较好理解</td>
+                </tr>
+                <tr>
+                    <td>slid-color</td>
+                    <td>滑过颜色</td>
+                    <td>进度颜色（例如：播放进度）</td>
+                </tr>
+                <tr>
+                    <td>load-color</td>
+                    <td>加载颜色</td>
+                    <td>加载颜色（例如：加载进度），按需使用</td>
+                </tr>
+                <tr>
+                    <td>slider-height</td>
+                    <td>滑道高度</td>
+                    <td>这个也比较好理解</td>
+                </tr>
+                <tr>
+                    <td>dot-color</td>
+                    <td>滑块颜色</td>
+                    <td>设置滑块颜色</td>
+                </tr>
+                <tr>
+                    <td>dot-size</td>
+                    <td>滑块大小</td>
+                    <td>设置滑块大小</td>
+                </tr>
+                <tr>
+                    <td>dot-radius</td>
+                    <td>滑块圆角</td>
+                    <td>设置滑块圆角</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">
+                        你可以监听值的改变，支持<inline-code>input</inline-code>和<inline-code>change</inline-code>,你还可以设置滑过和加载的值……
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
         <h2>其他组件正在进行中……</h2>
         <back-to-top></back-to-top>
     </div>
