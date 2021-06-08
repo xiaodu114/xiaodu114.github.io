@@ -58,6 +58,10 @@ table td {
     text-align: left;
 }
 
+ul li {
+    line-height: 1.6;
+}
+
 .blog-page {
     max-width: 992px;
     min-height: 100%;
@@ -74,4 +78,10 @@ table td {
 
 pre[ddz-class="here-need-to-handle-by-highlight"] {
     display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .blog-page {
+        padding: 50px 25px 50px 25px;
+    }
 }
