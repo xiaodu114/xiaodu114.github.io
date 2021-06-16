@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Samsung Galaxy Note 4(N9109W) - 救砖、ROOT、TWRP、刷机 - xiaodu114.github.io</title>
+    <meta name="keywords" content="Web Components,Typesetting,Typesetting series">
+    <meta name="description" content="Samsung Galaxy Note 4(N9109W) -  救砖、ROOT、TWRP、刷机">
+    <link rel="stylesheet" href="/lib/normalize/normalize.css">
+    <link rel="stylesheet" href="/lib/highlight/github.css">
+    <link rel="stylesheet" href="/lib/highlight/lang-label.css">
+    <link rel="stylesheet" href="/blog/blogCss/typesetting.css">
+    <style>
+        img {
+            max-width: 100%;
+        }
+    </style>
+    <script src="/myLib/webComponents.js"></script>
+</head>
+
+<body>
+    <!-- github访问地址：/blog/flashPhone/n9109w/index.html -->
+    <div class="blog-page">
+        <h1>Samsung Galaxy Note 4(N9109W) - 救砖、ROOT、TWRP、刷机</h1>
+        <p>俗话说：“常在河边走哪有不湿鞋”。刷机更是如此，这不上次一不小心就把N9109W弄成板砖了,一直停在下面的画面。不过恰好这次从板砖刷起，真是废了老鼻子劲儿了（其中的关键是需要找对一个线刷包）……</p>
+        <dl>
+            <dd>
+                <img src="./images/0-1.jpg">
+            </dd>
+        </dl>
+        <h2>寻找线刷包</h2>
+        <p>都变砖了，卡刷是不可能了，只能线刷了，因此首先找一个线刷包。之前我记得在三星官网还能找到，但是这次再去查找没有找到，不知道是不是没有找对地方……只能google，这里找到了一个地址还不错：<a
+                href="https://samfw.com/firmware/SM-N9109W" target="_blank" rel="noopener noreferrer">Samsung
+                GALAXY
+                Note 4 Firmware Download SM-N9109W Free Download</a> ,之后下载就好了。</p>
+        <dl>
+            <dd>
+                <img src="./images/1-1.png">
+            </dd>
+        </dl>
+        <h2>寻找刷机工具</h2>
+        <p>之前习惯了使用奇兔刷机，感觉还不错，但是现在下载ROM好多都需要收费了，虽然郁闷但也没办法（毕竟需要生存），这不是关键，关键是刷机失败了（忘记了是不是使用的提到的网址了）……就开始寻找其他的工具了，找到了 <a
+                href="https://odindownload.com/" target="_blank" rel="noopener noreferrer">odin</a>
+            这个神器——一款用于三星手机刷机的软件。</p>
+        <dl>
+            <dd>
+                <img src="./images/2-1.png">
+            </dd>
+        </dl>
+        <h2>开始救砖</h2>
+        <h3>进入挖煤模式</h3>
+        <dl>
+            <dt>
+                <p>同时按住 ”音量-“+”HOME键“+”电源键“</p>
+            </dt>
+            <dd><img src="./images/3-1-1-1.jpg"></dd>
+            <dt>
+                <p>按下 ”音量+“</p>
+            </dt>
+            <dd><img src="./images/3-1-2-1.jpg"></dd>
+        </dl>
+        <h3>手机连接电脑-》打开odin</h3>
+        <dl>
+            <dd>
+                <img src="./images/3-2-1.png">
+            </dd>
+        </dl>
+        <h3>操作</h3>
+        <ol>
+            <li>AP或者PDA选择上面下载的线刷包（下载的是ZIP格式的，需要解压）</li>
+            <li>"Options"选项卡-》去掉"F.Reset Time"</li>
+            <li>点击“Start”</li>
+            <img src="./images/3-3-1.png">
+            <img src="./images/3-3-2.png">
+            <img src="./images/3-3-3.jpg">
+            <img src="./images/3-3-4.png">
+            <img src="./images/3-3-5.jpg">
+            <img src="./images/3-3-6.jpg">
+            <img src="./images/3-3-7.jpg">
+            <img src="./images/3-3-8.jpg">
+            <img src="./images/3-3-9.jpg">
+        </ol>
+        <h2>重新认识一下你的手机</h2>
+        <p>这里使用adb检测一些信息</p>
+        <h3>adb shell</h3>
+        <p>
+            使用该命令可以得到这个值：trltechn。感觉像是电脑名称（或者像是进入linux终端），trlte这个前缀在后面的刷机过程中会经常看到，但是trltechn这个全称的信息有点少，chn感觉像是中国版……
+        </p>
+        <h3>查看手机型号</h3>
+        <p>>adb shell </p>
+        <p>>getprop ro.product.model</p>
+        <marked-block>
+            <p>也可以直接 >adb shell getprop ro.product.model</p>
+        </marked-block>
+        <h3>查看CPU位数</h3>
+        <p>>adb shell </p>
+        <p>>getprop ro.product.cpu.abi</p>
+        <marked-block>
+            <p>也可以直接 >adb shell getprop ro.product.cpu.abi</p>
+        </marked-block>
+        <h3>查看CPU信息</h3>
+        <p>>adb shell </p>
+        <p>>cat /proc/cpuinfo</p>
+        <marked-block>
+            <p>也可以直接 >adb shell cat /proc/cpuinfo</p>
+        </marked-block>
+        <dl>
+            <dd>
+                <img src="./images/4-1.png">
+                <img src="./images/4-2.png">
+            </dd>
+        </dl>
+        <h2>ROOT</h2>
+        <p>刚刷完机肯定没有ROOT（不是自带ROOT的），来张截图</p>
+        <dl>
+            <dd>
+                <img src="./images/5-1.png">
+                <img src="./images/5-2.png">
+            </dd>
+        </dl>
+        <p>这里又难住了，费了半天劲，试了好多root工具，什么kingo root、Dr.Fone - Root、iRoot等都没有搞定，哭了……下面是找的一些ROOT工具，这里只是试了一部分支持PC的，</p>
+        <ul>
+            <li><a href="https://technastic.com/6-popular-universal-root-tools-android/" target="_blank"
+                    rel="noopener noreferrer">6 Most Popular Universal Root Tools for Android | Technastic</a></li>
+            <li><a href="https://drfone.wondershare.com/root/android-root-tool.html" target="_blank"
+                    rel="noopener noreferrer">Best 8 Android Root Tools to Get Root Access with or without Computer-
+                    Dr.Fone</a></li>
+            <li><a href="https://joyofandroid.com/android-root-software/" target="_blank" rel="noopener noreferrer">7
+                    Best Android Root Software (With and Without Computer) - JoyofAndroid.com</a>
+            </li>
+            <li><a href="https://www.guru99.com/best-root-apps-android.html" target="_blank"
+                    rel="noopener noreferrer">10+ BEST Root Apps for Android Phone (2021 APK Update)</a></li>
+        </ul>
+        <p>最后在这里找到答案：</p>
+        <ul>
+            <li><a href="https://www.rootdroids.com/how-to-root-samsung-galaxy-note-4-sm-n9109w-odin-tool/"
+                    target="_blank" rel="noopener noreferrer">How to Root Samsung Galaxy Note 4 SM-N9109W | Odin Tool -
+                    Root Guide</a></li>
+            <li><a href="https://www.rootdroids.com/download-all-cf-root-files-for-samsung-galaxy/" target="_blank"
+                    rel="noopener noreferrer">Download All CF Root files for Samsung
+                    galaxy - Root Guide</a></li>
+            <li><a href="https://autoroot.chainfire.eu/" target="_blank" rel="noopener noreferrer">CF-Auto-Root</a></li>
+        </ul>
+        <ol>
+            <li>下载odin工具root包</li>
+            <p><a href="https://autoroot.chainfire.eu/" target="_blank"
+                    rel="noopener noreferrer">CF-Auto-Root</a>这简直是三星手机大集会啊，太多了，搜索一下找到自己手机对应的并下载</p>
+            <li>将手机进入到挖煤模式-》downing（和上文的线刷一样），只不过这里选择的是ROOT包，弄好之后点击开始吧</li>
+        </ol>
+        <img src="./images/5-3.png">
+        <img src="./images/5-4.png">
+        <img src="./images/5-5.png">
+        <img src="./images/5-6.png">
+        <img src="./images/5-7.png">
+        <img src="./images/5-8.png">
+        <h2>查找手机对应的TWRP</h2>
+        <p>官网：<a href="https://twrp.me/" target="_blank" rel="noopener noreferrer">TeamWin - TWRP</a></p>
+        <p>N9109W的TWRP： <a href="https://twrp.me/samsung/samsunggalaxynote4qualcomm.html" target="_blank"
+                rel="noopener noreferrer">Samsung Galaxy Note 4 (Qualcomm)</a>、<a href="https://dl.twrp.me/trlteduos/"
+                target="_blank" rel="noopener noreferrer">Download TWRP for trlteduos</a></p>
+        <p>找到之后下载就好了，待用</p>
+        <marked-block>
+            <p>写着这篇教程的时候才发现上面链接中写着Odin Install Method (No Root Required)，我去算了吧，以后有机会在试试，这里一直用的是奇兔</p>
+            <img src="./images/6-1.png">
+        </marked-block>
+        <h2>刷入TWRP</h2>
+        <p>本来想用adb命令刷入，但是失败了（如果大神了解请赐教，谢谢）……最后用的奇兔刷机刷入的。</p>
+        <dl>
+            <dd>
+                <img src="./images/7-1.png">
+                <img src="./images/7-2.png">
+                <img src="./images/7-3.png">
+                <img src="./images/7-4.png">
+                <img src="./images/7-5.png">
+                <img src="./images/7-6.jpg">
+            </dd>
+        </dl>
+        <h2>找到你想要的ROM</h2>
+        <p>N9109W这是一台很老机子了，当时用的时候还可以，虽然内置的APP很多（当时没有ROOT，也卸载不掉），但是后来越用越卡，安装个APP慢的不行……所以想刷一个纯净的ROM，于是就找到下面的论坛。<a
+                href="https://forum.xda-developers.com" target="_blank" rel="noopener noreferrer">XDA Developers
+                Forums</a>这是个很膜拜的论坛。无论是之前的红米note刷机还是这次，都是在这里找到的ROM，感谢大神们的奉献……这里还有一个android 11的设备列表：<a
+                href="https://www.xda-developers.com/android-11-custom-rom-list/" target="_blank"
+                rel="noopener noreferrer">Android 11 Custom ROM List - Unofficially Update Your Android
+                Phone!</a>之后找打自己的设备：<a href="https://forum.xda-developers.com/c/samsung-galaxy-note-4.3508/"
+                target="_blank" rel="noopener noreferrer">Samsung Galaxy Note 4 | XDA Developers
+                Forums</a>这里感觉还有一个分组（不知道是根据什么划分的），这里刷机的ROM是在这里找到的：<a
+                href="https://forum.xda-developers.com/f/galaxy-note-4-android-development-snapdragon.3690/"
+                target="_blank" rel="noopener noreferrer">Galaxy Note 4 Android Development (Snapdragon) | XDA
+                Developers Forums</a>之后很显眼的你就可以看到LineageOS 18.1，他就是基于android 11了，之后就是参考这篇文章刷机的：<a
+                href="https://forum.xda-developers.com/t/rom-unofficial-11-lineageos-18-1-tblte-trlte-trlteduos.4067663/"
+                target="_blank" rel="noopener noreferrer">[ROM][UNOFFICIAL][11] LineageOS 18.1 [tblte][trlte][trlteduos]
+                | XDA Developers Forums</a>这个帖子中有ROM的下载地址，“- SM-N9100ZC/ZH/6W/9W: trlteduos”
+            我也不知道这里是不是包含我的N9109W，不太清楚这种写法，反正我下载的就是这个。最终ROM的下载地址：<a
+                href="https://drive.google.com/drive/folders/1Aps0D2H5L2q4zpg2ESYqcPPdgKH3r2Do" target="_blank"
+                rel="noopener noreferrer">LineageOS - Google 云端硬盘</a></p>
+        <marked-block>
+            <p>注意：最后多下载几个，有的不一定能成功。当时这里的LineageOS 18.1都是4月份的，有5个，但是就刷成功了一个……虽然最新日期的没有成功，但是执行以下"Cache & Dalvik
+                Wipe"操作之后返回竟然显示成功了（下面有截图），这个操作也是无意之举。</p>
+        </marked-block>
+        <h2>刷入你想要的ROM</h2>
+        <dl>
+            <dt>
+                <p>将下载的ROM放入手机中（这里是SD卡）</p>
+            </dt>
+            <dd>
+                <img src="./images/8-1.jpg">
+            </dd>
+            <dt>
+                <p>进入recovery</p>
+            </dt>
+            <dd>
+                <ul>
+                    <li>使用abd进入：adb reboot recovery</li>
+                    <li>你也可以使用奇兔刷机进入，上面截图已经红框圈出</li>
+                </ul>
+            </dd>
+            <dt>wipe</dt>
+            <dd>
+                <ol>
+                    <li>Format Data</li>
+                    <li>Advanced Wipe</li>
+                </ol>
+                <img src="./images/8-2.jpg">
+                <img src="./images/8-3.jpg">
+                <img src="./images/8-4.jpg">
+                <img src="./images/8-5.jpg">
+                <img src="./images/8-6.jpg">
+            </dd>
+            <dt>install</dt>
+            <dd>
+                <img src="./images/8-7.jpg">
+                <img src="./images/8-8.jpg">
+                <img src="./images/8-9.jpg">
+                <img src="./images/8-10.jpg">
+                <img src="./images/8-11.jpg">
+                <img src="./images/8-12.jpg">
+                <img src="./images/8-13.jpg">
+                <img src="./images/8-14.jpg">
+                <img src="./images/8-15.jpg">
+            </dd>
+        </dl>
+        <back-to-top></back-to-top>
+    </div>
+    <script src="/lib/highlight/highlight.pack.js"></script>
+</body>
+
+</html>
