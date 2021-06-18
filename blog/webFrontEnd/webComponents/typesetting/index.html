@@ -348,6 +348,245 @@ function singleSliderDemo1_inputRangeOnChangeEvent(range) {
                 </tr>
             </tfoot>
         </table>
+        <h2>刻度表（腕表）<inline-code>scale-clock</inline-code>
+        </h2>
+        <p>这组件的起因是Material
+            Design的FAB，点击辐射出一些二级菜单……之后便想到了圆形，钟表等（对应的实现github中有示例代码）。之前都是样式实现的，现在想着是想一个JS版本的，便做成了组件，方便做一些定制。</p>
+        <h3>运行效果</h3>
+        <scale-clock></scale-clock>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
+<!-- 默认 -->
+<scale-clock></scale-clock>
+        </pre>
+        <scale-clock id="scaleClockDemo2" radius="234" hour-hand-width="8" minute-hand-width="6" second-hand-width="4"
+            scale-length="15" scale-big-width="4" scale-small-width="2" num12-size="18" num60-show="true"
+            num60-size="18">
+        </scale-clock>
+        <script>
+            let scaleClockDemo2Dom = document.getElementById("scaleClockDemo2");
+            scaleClockDemo2Dom.updateClockOption("centerPoint", "size", 30);
+            scaleClockDemo2Dom.updateClockOption("centerPoint", "style", {
+                backgroundColor: "#6DE195"
+            });
+            scaleClockDemo2Dom.updateClockOption("hourHand", "style", {
+                backgroundColor: "blue"
+            });
+            scaleClockDemo2Dom.updateClockOption("minuteHand", "style", {
+                backgroundColor: "orange"
+            });
+            scaleClockDemo2Dom.updateClockOption("secondHand", "style", {
+                backgroundColor: "red"
+            });
+            scaleClockDemo2Dom.updateClockOption("scale", "bigStyle", {
+                backgroundColor: "rebeccapurple"
+            });
+            scaleClockDemo2Dom.updateClockOption("scale", "smallStyle", {
+                backgroundColor: "yellow"
+            });
+            scaleClockDemo2Dom.updateClockOption("scale", "numStyle", {
+                1: {
+                    backgroundColor: "blue"
+                },
+                29: {
+                    backgroundColor: "blue"
+                },
+                31: {
+                    backgroundColor: "blue"
+                },
+                59: {
+                    backgroundColor: "blue"
+                }
+            });
+            scaleClockDemo2Dom.updateClockOption("num12", "style", {
+                color: "black"
+            });
+            scaleClockDemo2Dom.updateClockOption("num12", "numStyle", {
+                3: {
+                    color: "red"
+                },
+                6: {
+                    color: "red"
+                },
+                9: {
+                    color: "red"
+                },
+                12: {
+                    color: "red"
+                }
+            });
+            scaleClockDemo2Dom.updateClockOption("num60", "style", {
+                color: "gray"
+            });
+            scaleClockDemo2Dom.updateClockOption("num60", "numStyle", {
+                10: {
+                    color: "red"
+                },
+                20: {
+                    color: "red"
+                },
+                40: {
+                    color: "red"
+                },
+                50: {
+                    color: "red"
+                }
+            });
+        </script>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
+<!-- 个性化定制 -->
+<scale-clock id="scaleClockDemo2" radius="234" hour-hand-width="8" minute-hand-width="6" second-hand-width="4"
+    scale-length="15" scale-big-width="4" scale-small-width="2" num12-size="18" num60-show="true"
+    num60-size="18">
+</scale-clock>
+        </pre>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+<!-- 本文个性化定制钟表，javascript部分 -->
+let scaleClockDemo2Dom = document.getElementById("scaleClockDemo2");
+scaleClockDemo2Dom.updateClockOption("centerPoint", "size", 30);
+scaleClockDemo2Dom.updateClockOption("centerPoint", "style", {
+    backgroundColor: "#6DE195"
+});
+scaleClockDemo2Dom.updateClockOption("hourHand", "style", {
+    backgroundColor: "blue"
+});
+scaleClockDemo2Dom.updateClockOption("minuteHand", "style", {
+    backgroundColor: "orange"
+});
+scaleClockDemo2Dom.updateClockOption("secondHand", "style", {
+    backgroundColor: "red"
+});
+scaleClockDemo2Dom.updateClockOption("scale", "bigStyle", {
+    backgroundColor: "rebeccapurple"
+});
+scaleClockDemo2Dom.updateClockOption("scale", "smallStyle", {
+    backgroundColor: "yellow"
+});
+scaleClockDemo2Dom.updateClockOption("scale", "numStyle", {
+    1: {
+        backgroundColor: "blue"
+    },
+    29: {
+        backgroundColor: "blue"
+    },
+    31: {
+        backgroundColor: "blue"
+    },
+    59: {
+        backgroundColor: "blue"
+    }
+});
+scaleClockDemo2Dom.updateClockOption("num12", "style", {
+    color: "black"
+});
+scaleClockDemo2Dom.updateClockOption("num12", "numStyle", {
+    3: {
+        color: "red"
+    },
+    6: {
+        color: "red"
+    },
+    9: {
+        color: "red"
+    },
+    12: {
+        color: "red"
+    }
+});
+scaleClockDemo2Dom.updateClockOption("num60", "style", {
+    color: "gray"
+});
+scaleClockDemo2Dom.updateClockOption("num60", "numStyle", {
+    10: {
+        color: "red"
+    },
+    20: {
+        color: "red"
+    },
+    40: {
+        color: "red"
+    },
+    50: {
+        color: "red"
+    }
+});
+        </pre>
+        <h3>属性</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>参数</th>
+                    <th>说明</th>
+                    <th>默认值</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>radius</td>
+                    <td>钟表半径</td>
+                    <td>60</td>
+                </tr>
+                <tr>
+                    <td>hour-hand-width</td>
+                    <td>时针宽度</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td>minute-hand-width</td>
+                    <td>分针宽度</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>second-hand-hide</td>
+                    <td>秒针是否隐藏</td>
+                    <td>false</td>
+                </tr>
+                <tr>
+                    <td>second-hand-width</td>
+                    <td>秒针宽度</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>scale-length</td>
+                    <td>刻度长度</td>
+                    <td>6</td>
+                </tr>
+                <tr>
+                    <td>scale-big-width</td>
+                    <td>大刻度宽度——小时</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>scale-small-width</td>
+                    <td>小刻度宽度——分钟</td>
+                    <td>0.8</td>
+                </tr>
+                <tr>
+                    <td>num12-size</td>
+                    <td>刻度内圈小时数字(1-12)的大小</td>
+                    <td>12</td>
+                </tr>
+                <tr>
+                    <td>num60-show</td>
+                    <td>刻度外圈数字(1-60)是否显示</td>
+                    <td>false</td>
+                </tr>
+                <tr>
+                    <td>num60-size</td>
+                    <td>刻度外圈数字(1-60)的大小</td>
+                    <td>无（默认不显示）</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">
+                        说明：你可以通过获取DOM元素调用<inline-code>updateClockOption</inline-code>
+                        方法，设置钟表中心圆点的大小，颜色；时针、分针、秒针的颜色；刻度盘、1-12、1-60的颜色（可以整体设置，也可以单个控制），这些在上面的定制钟表中都有体现。
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        <h3>待处理</h3>
+        <p>该钟表组件支持的还不是很完善，涉及到计算的部分（例如：半径）还不支持动态更新，只支持开始时设置</p>
         <h2>其他组件正在进行中……</h2>
         <back-to-top></back-to-top>
     </div>

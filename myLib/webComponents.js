@@ -559,3 +559,562 @@ customElements.define('single-slider',
         }
     }
 );
+
+customElements.define('scale-clock',
+    class ScaleClock extends HTMLElement {
+
+        constructor() {
+            super();
+            const shadowRoot = this.attachShadow({
+                mode: 'open'
+            });
+
+            //#region 组件模板
+            shadowRoot.innerHTML = `
+                    <style>
+                        .clock-container {
+                            position: relative;
+                        }
+
+                        .clock-container>.clock-num-60-dial-container,
+                        .clock-container>.clock-num-60-dial-container>.clock-num-60-item-base-container,
+                        .clock-container>.clock-scale-dial-container,
+                        .clock-container>.clock-scale-dial-container>.clock-scale-item-base-container,
+                        .clock-container>.clock-num-12-dial-container,
+                        .clock-container>.clock-num-12-dial-container>.clock-num-12-item-base-container {
+                            height: 0;
+                            width: 0;
+                            position: absolute;
+                        }
+
+                        .clock-container>.clock-num-60-dial-container>.clock-num-60-item-base-container>.num-60-content {
+                            position: absolute;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+
+                        .clock-container>.clock-scale-dial-container>.clock-scale-item-base-container>.scale-content {
+                            background-color: black;
+                        }
+
+                        .clock-container>.clock-num-12-dial-container>.clock-num-12-item-base-container>.num-12-content {
+                            position: absolute;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+
+                        .clock-container>.clock-center-axis-container {
+                            position: absolute;
+                            height: 0;
+                            width: 0;
+                        }
+
+                        .clock-container>.clock-center-axis-container>.clock-center-point {
+                            position: absolute;
+                            border-radius: 50%;
+                            background-color: rebeccapurple;
+                        }
+
+                        .hour-hand,
+                        .minute-hand,
+                        .second-hand {
+                            position: absolute;
+                            background-color: black;
+                        }
+
+                        .hour-hand {
+                            z-index: 1;
+                        }
+
+                        .minute-hand {
+                            z-index: 2;
+                        }
+
+                        .second-hand {
+                            z-index: 3;
+                        }
+                    </style>
+                    <div class="clock-container">
+                        <div class="clock-center-axis-container">
+                            <div class="clock-center-point"></div>
+                            <div class="hour-hand"></div>
+                            <div class="minute-hand"></div>
+                            <div class="second-hand"></div>
+                        </div>
+                        <div class="clock-num-60-dial-container"></div>
+                        <div class="clock-scale-dial-container"></div>
+                        <div class="clock-num-12-dial-container"></div>
+                    </div>
+                    `;
+            //#endregion
+
+            //  这里获取不到传入的属性值,可以获取dom结构
+            this.clockContainerDom = this.shadowRoot.querySelector(".clock-container");
+            this.clockCenterAxisContainerDom = this.shadowRoot.querySelector(
+                ".clock-center-axis-container");
+            this.clockCenterPointDom = this.shadowRoot.querySelector(".clock-center-point");
+            this.hourHandDom = this.shadowRoot.querySelector(".hour-hand");
+            this.minuteHandDom = this.shadowRoot.querySelector(".minute-hand");
+            this.secondHandDom = this.shadowRoot.querySelector(".second-hand");
+
+            //  一些配置项
+            this.defaultClockOptions = {
+                radius: 60, // 表盘半径
+                centerPoint: {
+                    size: 10,
+                    style: {}
+                },
+                hourHand: {
+                    width: 3,
+                    style: {}
+                },
+                minuteHand: {
+                    width: 2,
+                    style: {}
+                },
+                secondHand: {
+                    isShow: true,
+                    width: 1,
+                    style: {}
+                },
+                scale: {
+                    length: 6,
+                    bigWidth: 2,
+                    smallWidth: 0.8,
+                    bigStyle: {},
+                    smallStyle: {},
+                    numStyle: {}
+                },
+                num12: {
+                    size: 12,
+                    style: {},
+                    numStyle: {}
+                },
+                num60: {
+                    isShow: true,
+                    size: 12,
+                    style: {},
+                    numStyle: {}
+                }
+            };
+        }
+
+        //#region  生命周期回调
+
+        /**
+         *  当自定义元素第一次被连接到文档DOM时被调用（没有参数）
+         */
+        connectedCallback() {
+
+            //#region   读取属性值
+            let attrRadius = Number(this.getAttribute("radius"));
+            if (!isNaN(attrRadius) && attrRadius > 0) {
+                this.defaultClockOptions.radius = attrRadius;
+            }
+
+            let attrHourHandWidth = Number(this.getAttribute("hour-hand-width"));
+            if (!isNaN(attrHourHandWidth) && attrHourHandWidth > 0) {
+                this.defaultClockOptions.hourHand.width = attrHourHandWidth;
+            }
+
+            let attrMinuteHandWidth = Number(this.getAttribute("minute-hand-width"));
+            if (!isNaN(attrMinuteHandWidth) && attrMinuteHandWidth > 0) {
+                this.defaultClockOptions.minuteHand.width = attrMinuteHandWidth;
+            }
+
+            let attrSecondHandhide = this.getAttribute("second-hand-hide") === "true";
+            this.defaultClockOptions.secondHand.isShow = !attrSecondHandhide;
+            let attrSecondHandWidth = Number(this.getAttribute("second-hand-width"));
+            if (!isNaN(attrSecondHandWidth) && attrSecondHandWidth > 0) {
+                this.defaultClockOptions.secondHand.width = attrSecondHandWidth;
+            }
+
+            let attrScaleLength = Number(this.getAttribute("scale-length"));
+            if (!isNaN(attrScaleLength) && attrScaleLength > 0) {
+                this.defaultClockOptions.scale.length = attrScaleLength;
+            }
+            let attrScaleBigWidth = Number(this.getAttribute("scale-big-width"));
+            if (!isNaN(attrScaleBigWidth) && attrScaleBigWidth > 0) {
+                this.defaultClockOptions.scale.bigWidth = attrScaleBigWidth;
+            }
+            let attrScaleSmallWidth = Number(this.getAttribute("scale-small-width"));
+            if (!isNaN(attrScaleSmallWidth) && attrScaleSmallWidth > 0) {
+                this.defaultClockOptions.scale.smallWidth = attrScaleSmallWidth;
+            }
+
+            let attrNum12Size = Number(this.getAttribute("num12-size"));
+            if (!isNaN(attrNum12Size) && attrNum12Size > 0) {
+                this.defaultClockOptions.num12.size = attrNum12Size;
+            }
+
+            let attrNum60Show = this.getAttribute("num60-show") === "true";
+            this.defaultClockOptions.num60.isShow = attrNum60Show;
+            let attrNum60Size = Number(this.getAttribute("num60-size"));
+            if (!isNaN(attrNum60Size) && attrNum60Size > 0) {
+                this.defaultClockOptions.num60.size = attrNum60Size;
+            }
+            //#endregion
+
+            //  1、钟表最外层容器
+            this.clockContainerDom.style.height = this.clockContainerDom.style.width = this
+                .defaultClockOptions.radius * 2 + "px";
+
+            //  2、钟表中心圆点容器（容器中放置：中心圆片、时针、分针、秒针）
+            this.clockCenterAxisContainerDom.style.left = this.clockCenterAxisContainerDom.style.top =
+                this.defaultClockOptions.radius + "px";
+            //      2.1、钟表中心圆点容器之 中心圆片
+            this.clockCenterPointDom.style.height = this.clockCenterPointDom.style.width = this
+                .defaultClockOptions.centerPoint.size + "px";
+            this.clockCenterPointDom.style.left = this.clockCenterPointDom.style.top = (0 - this
+                .defaultClockOptions.centerPoint.size / 2) + "px";
+            //      2.2、钟表中心圆点容器之 时针
+            let hourHandTailLength = this.defaultClockOptions.radius * 0.1,
+                hourHandTransformDistance = this.defaultClockOptions.radius - this.defaultClockOptions
+                .num60.size * this.defaultClockOptions.num60.isShow - this.defaultClockOptions.scale
+                .length - this.defaultClockOptions.num12.size;
+            this.hourHandDom.style.width = this.defaultClockOptions.hourHand.width + "px";
+            this.hourHandDom.style.height = hourHandTransformDistance + hourHandTailLength + "px";
+            this.hourHandDom.style.left = (0 - this.defaultClockOptions.hourHand.width / 2) + "px";
+            this.hourHandDom.style.bottom = (0 - hourHandTailLength) + "px";
+            this.hourHandDom.style.transformOrigin = "center " + hourHandTransformDistance + "px";
+            //      2.3、钟表中心圆点容器之 分针
+            let minuteHandTailLength = this.defaultClockOptions.radius * 0.15,
+                minuteHandTransformDistance = this.defaultClockOptions.radius - this.defaultClockOptions
+                .num60.size * this.defaultClockOptions.num60.isShow - this.defaultClockOptions.scale
+                .length;
+            this.minuteHandDom.style.width = this.defaultClockOptions.minuteHand.width + "px";
+            this.minuteHandDom.style.height = minuteHandTransformDistance + minuteHandTailLength + "px";
+            this.minuteHandDom.style.left = (0 - this.defaultClockOptions.minuteHand.width / 2) + "px";
+            this.minuteHandDom.style.bottom = (0 - minuteHandTailLength) + "px";
+            this.minuteHandDom.style.transformOrigin = "center " + minuteHandTransformDistance + "px";
+            //      2.4、钟表中心圆点容器之 秒针
+            if (this.defaultClockOptions.secondHand.isShow) {
+                let secondHandTailLength = this.defaultClockOptions.radius * 0.2,
+                    secondHandTransformDistance = this.defaultClockOptions.radius;
+                if (this.defaultClockOptions.num60.isShow) {
+                    secondHandTransformDistance -= this.defaultClockOptions.num60.size / 2;
+                } else {
+                    secondHandTransformDistance -= this.defaultClockOptions.scale.length / 2;
+                }
+                this.secondHandDom.style.width = this.defaultClockOptions.secondHand.width + "px";
+                this.secondHandDom.style.height = secondHandTransformDistance + secondHandTailLength +
+                    "px";
+                this.secondHandDom.style.left = (0 - this.defaultClockOptions.secondHand.width / 2) +
+                    "px";
+                this.secondHandDom.style.bottom = (0 - secondHandTailLength) + "px";
+                this.secondHandDom.style.transformOrigin = "center " + secondHandTransformDistance +
+                    "px";
+            }
+
+            //  3、钟表边缘???盘
+            //      3.1、刻度盘
+            let clockScaleDialContainerDom = this.clockContainerDom.querySelector(
+                    ".clock-scale-dial-container"),
+                fragmentForClockScales = document.createDocumentFragment();
+            clockScaleDialContainerDom.style.left = clockScaleDialContainerDom.style.top = this
+                .defaultClockOptions.radius + "px";
+            //      3.2、12数字盘：1-12
+            let clockNum12DialContainerDom = this.clockContainerDom.querySelector(
+                    ".clock-num-12-dial-container"),
+                fragmentForClock12Nums = document.createDocumentFragment();
+            clockNum12DialContainerDom.style.left = clockNum12DialContainerDom.style.top = this
+                .defaultClockOptions.radius + "px";
+            //      3.3、60数字盘：1-60
+            let clockNum60DialContainerDom = this.clockContainerDom.querySelector(
+                    ".clock-num-60-dial-container"),
+                fragmentForClock60Nums = document.createDocumentFragment();
+            clockNum60DialContainerDom.style.left = clockNum60DialContainerDom.style.top = this
+                .defaultClockOptions.radius + "px";
+
+            for (let index = 1; index <= 60; index++) {
+                let needCalcDeg = (index - 15) * 6 * Math.PI / 180;
+                //  1、组装分秒数字盘（1-60）
+                if (this.defaultClockOptions.num60.isShow) {
+                    let numItemContentDomFor60 = document.createElement("div");
+                    numItemContentDomFor60.classList.add("num-60-content");
+                    numItemContentDomFor60.innerHTML = index;
+                    numItemContentDomFor60.style.height = numItemContentDomFor60.style.width = this
+                        .defaultClockOptions.num60.size + "px";
+                    numItemContentDomFor60.style.top = numItemContentDomFor60.style.left = (0 - this
+                        .defaultClockOptions.num60.size / 2) + "px";
+                    numItemContentDomFor60.style.fontSize = this.defaultClockOptions.num60.size + "px";
+                    let numItemDomFor60 = document.createElement("div");
+                    numItemDomFor60.classList.add("clock-num-60-item-base-container");
+                    numItemDomFor60.style.top = Math.sin(needCalcDeg) * this.defaultClockOptions
+                        .radius + "px";
+                    numItemDomFor60.style.left = Math.cos(needCalcDeg) * this.defaultClockOptions
+                        .radius + "px";
+                    numItemDomFor60.appendChild(numItemContentDomFor60);
+                    fragmentForClock60Nums.appendChild(numItemDomFor60);
+                }
+
+                //  2、组装刻度盘
+                let scaleItemContentDom = document.createElement("div"),
+                    scaleItemContentHeight = (index % 5 === 0) ? this.defaultClockOptions.scale
+                    .bigWidth : this.defaultClockOptions.scale.smallWidth;
+                scaleItemContentDom.classList.add("scale-content");
+                scaleItemContentDom.style.width = this.defaultClockOptions.scale.length + "px";
+                scaleItemContentDom.style.height = scaleItemContentHeight + "px";
+                scaleItemContentDom.style.marginTop = (0 - scaleItemContentHeight / 2) + "px";
+                let scaleItemDom = document.createElement("div");
+                scaleItemDom.classList.add("clock-scale-item-base-container");
+                scaleItemDom.classList.add((index % 5 === 0) ? "big-scale" : "small-scale");
+                scaleItemDom.style.transform = `rotate(${90 + index * 6}deg)`;
+                scaleItemDom.style.top = Math.sin(needCalcDeg) * (this.defaultClockOptions.radius - this
+                    .defaultClockOptions.num60.size * this.defaultClockOptions.num60.isShow) + "px";
+                scaleItemDom.style.left = Math.cos(needCalcDeg) * (this.defaultClockOptions.radius -
+                        this.defaultClockOptions.num60.size * this.defaultClockOptions.num60.isShow) +
+                    "px";
+                scaleItemDom.appendChild(scaleItemContentDom);
+                fragmentForClockScales.appendChild(scaleItemDom);
+
+                //  3、组装小时数字盘（1-12）
+                if (index % 5 === 0) {
+                    let numItemContentDomFor12 = document.createElement("div");
+                    numItemContentDomFor12.classList.add("num-12-content");
+                    numItemContentDomFor12.innerHTML = index / 5;
+                    numItemContentDomFor12.style.height = numItemContentDomFor12.style.width = this
+                        .defaultClockOptions.num12.size + "px";
+                    numItemContentDomFor12.style.top = numItemContentDomFor12.style.left = (0 - this
+                        .defaultClockOptions.num12.size / 2) + "px";
+                    numItemContentDomFor12.style.fontSize = this.defaultClockOptions.num12.size + "px";
+                    let numItemDom = document.createElement("div");
+                    numItemDom.classList.add("clock-num-12-item-base-container");
+                    numItemDom.style.top = Math.sin(needCalcDeg) * (this.defaultClockOptions.radius - (
+                            this.defaultClockOptions.num60.isShow ? 1 : 2) * this
+                        .defaultClockOptions.scale.length - 2 * this.defaultClockOptions.num60
+                        .size * this.defaultClockOptions.num60.isShow) + "px";
+                    numItemDom.style.left = Math.cos(needCalcDeg) * (this.defaultClockOptions.radius - (
+                            this.defaultClockOptions.num60.isShow ? 1 : 2) * this
+                        .defaultClockOptions.scale.length - 2 * this.defaultClockOptions.num60
+                        .size * this.defaultClockOptions.num60.isShow) + "px";
+                    numItemDom.appendChild(numItemContentDomFor12);
+                    fragmentForClock12Nums.appendChild(numItemDom);
+                }
+            }
+            clockNum60DialContainerDom.appendChild(fragmentForClock60Nums);
+            clockScaleDialContainerDom.appendChild(fragmentForClockScales);
+            clockNum12DialContainerDom.appendChild(fragmentForClock12Nums);
+            this._CurrentClockStartUp();
+        }
+
+        /**
+         *  当自定义元素与文档DOM断开连接时被调用
+         */
+        disconnectedCallback() {}
+
+        /**
+         *  当自定义元素被移动到新文档时被调用
+         */
+        adoptedCallback() {}
+
+        /**
+         * 当自定义元素的一个属性被增加、移除或更改时被调用
+         */
+        attributeChangedCallback(attrName, oldValue, newValue) {}
+
+        //#endregion
+
+        //#region  公共方法
+
+        updateClockOption(clockPart, attrName, attrValue) {
+            switch (clockPart) {
+                case "centerPoint": {
+                    switch (attrName) {
+                        case "size": {
+                            if (!isNaN(Number(attrValue))) {
+                                this.clockCenterPointDom.style.height = this.clockCenterPointDom.style
+                                    .width = Number(attrValue) + "px";
+                                this.clockCenterPointDom.style.left = this.clockCenterPointDom.style
+                                    .top = (0 - Number(attrValue) / 2) + "px";
+                            }
+                            break;
+                        }
+                        case "style": {
+                            this._UpdateEleStyle(this.clockCenterPointDom, attrValue);
+                            break;
+                        }
+                    }
+                    break;
+                }
+                case "hourHand": {
+                    switch (attrName) {
+                        case "style": {
+                            this._UpdateEleStyle(this.hourHandDom, attrValue);
+                            break;
+                        }
+                    }
+                    break;
+                }
+                case "minuteHand": {
+                    switch (attrName) {
+                        case "style": {
+                            this._UpdateEleStyle(this.minuteHandDom, attrValue);
+                            break;
+                        }
+                    }
+                    break;
+                }
+                case "secondHand": {
+                    switch (attrName) {
+                        case "style": {
+                            this._UpdateEleStyle(this.secondHandDom, attrValue);
+                            break;
+                        }
+                    }
+                    break;
+                }
+                case "scale": {
+                    switch (attrName) {
+                        case "bigStyle": {
+                            this._BatchUpdateEleStyle(
+                                ".clock-container>.clock-scale-dial-container>.clock-scale-item-base-container.big-scale>.scale-content",
+                                attrValue);
+                            break;
+                        }
+                        case "smallStyle": {
+                            this._BatchUpdateEleStyle(
+                                ".clock-container>.clock-scale-dial-container>.clock-scale-item-base-container.small-scale>.scale-content",
+                                attrValue);
+                            break;
+                        }
+                        case "numStyle": {
+                            this._BatchUpdateEleStyleByCustom(
+                                ".clock-container>.clock-scale-dial-container>.clock-scale-item-base-container>.scale-content",
+                                attrValue);
+                            break;
+                        }
+                    }
+                    break;
+                }
+                case "num12": {
+                    switch (attrName) {
+                        case "style": {
+                            this._BatchUpdateEleStyle(
+                                ".clock-container>.clock-num-12-dial-container>.clock-num-12-item-base-container>.num-12-content",
+                                attrValue);
+                            break;
+                        }
+                        case "numStyle": {
+                            this._BatchUpdateEleStyleByCustom(
+                                ".clock-container>.clock-num-12-dial-container>.clock-num-12-item-base-container>.num-12-content",
+                                attrValue);
+                            break;
+                        }
+                    }
+                    break;
+                }
+                case "num60": {
+                    switch (attrName) {
+                        case "style": {
+                            this._BatchUpdateEleStyle(
+                                ".clock-container>.clock-num-60-dial-container>.clock-num-60-item-base-container>.num-60-content",
+                                attrValue);
+                            break;
+                        }
+                        case "numStyle": {
+                            this._BatchUpdateEleStyleByCustom(
+                                ".clock-container>.clock-num-60-dial-container>.clock-num-60-item-base-container>.num-60-content",
+                                attrValue);
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        //#endregion
+
+        //#region   私有方法（想弄成私有，但是不知道怎么弄,你当做不能访问就行了）
+        _GetDataType(obj) {
+            return Object.prototype.toString.call(obj).replace(/^\[object\s(\w+)\]$/, '$1')
+                .toLowerCase();
+        }
+
+        _BatchUpdateEleStyleByCustom(selectors, eleAndStyleObj) {
+            if (this._GetDataType(eleAndStyleObj) === "object" && Object.getOwnPropertyNames(
+                    eleAndStyleObj).length) {
+                let targetEles = this.shadowRoot.querySelectorAll(selectors);
+                if (targetEles.length === 0) return;
+                for (const key in eleAndStyleObj) {
+                    if (Object.hasOwnProperty.call(eleAndStyleObj, key)) {
+                        const numKey = Number(key);
+                        if (Number.isInteger(numKey) &&
+                            numKey >= 1 &&
+                            numKey <= targetEles.length) {}
+                        this._UpdateEleStyle(targetEles[numKey - 1], eleAndStyleObj[key]);
+                    }
+                }
+            }
+        }
+
+        _BatchUpdateEleStyle(selectors, styleObj) {
+            let targetEles = this.shadowRoot.querySelectorAll(selectors);
+            [].forEach.call(targetEles, (targetEle) => {
+                this._UpdateEleStyle(targetEle, styleObj);
+            });
+        }
+
+        _UpdateEleStyle(targetEle, styleObj) {
+            if (this._GetDataType(styleObj) === "object") {
+                for (const key in styleObj) {
+                    if (Object.hasOwnProperty.call(styleObj, key) &&
+                        Object.hasOwnProperty.call(targetEle.style, key)) {
+                        targetEle.style[key] = styleObj[key];
+                    }
+                }
+
+            }
+        }
+
+        _Update3HandPos(currentDateTime) {
+            let currentHour = currentDateTime.getHours(),
+                currentMinute = currentDateTime.getMinutes(),
+                currentSecond = currentDateTime.getSeconds();
+            this.defaultClockOptions.secondHand.isShow && (this.secondHandDom.style.transform =
+                `rotate(${currentSecond * 6}deg)`);
+            this.minuteHandDom.style.transform =
+                `rotate(${currentMinute * 6 + 0.1 * currentSecond}deg)`;
+            this.hourHandDom.style.transform =
+                `rotate(${currentHour * 30 + (currentMinute * 60 + currentSecond) / 120}deg)`;
+        }
+
+        _CurrentClockStartUp() {
+            // //  第一版使用 setInterval 实现
+            // function updateDateTimeToView() {
+            //     _Update3HandPos(new Date());
+            // }
+            // updateDateTimeToView();
+            // setInterval(updateDateTimeToView, 1000);
+
+            // //  第二版使用 requestAnimationFrame 实现
+            // let rafId = null;
+            // (function updateDateTimeToView() {
+            //     cancelAnimationFrame(rafId);
+            //     /**
+            //      *  测试输出 console.log(currentSecond);
+            //      *  1秒内会输出60次，即1秒钟调用updateDateTime方法60次，即60FPS
+            //      */
+            //     _Update3HandPos(new Date());
+            //     rafId = requestAnimationFrame(updateDateTimeToView);
+            // })();
+
+            //  第三版使用 requestAnimationFrame 实现，并控制刷新率
+            let _this = this,
+                rafId = null,
+                lastExecTime = Date.now() - 1000;
+            (function updateDateTimeToView() {
+                cancelAnimationFrame(rafId);
+                let currentDateTime = new Date();
+                if (currentDateTime.valueOf() - lastExecTime > 999) {
+                    lastExecTime = currentDateTime.valueOf();
+                    _this._Update3HandPos(currentDateTime);
+                }
+                rafId = requestAnimationFrame(updateDateTimeToView);
+            })();
+        }
+        //#endregion
+    }
+);
