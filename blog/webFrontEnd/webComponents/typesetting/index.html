@@ -258,13 +258,13 @@ function singleSliderDemo1_inputRangeOnChangeEvent(range) {
             <dd>
                 <p>
                     input监听：
-                    <pre id="singleSliderDemo1_preSingleSliderValueByInput"></pre>
+                <pre id="singleSliderDemo1_preSingleSliderValueByInput"></pre>
                 </p>
             </dd>
             <dd>
                 <p>
                     change监听：
-                    <pre id="singleSliderDemo1_preSingleSliderValueByChange"></pre>
+                <pre id="singleSliderDemo1_preSingleSliderValueByChange"></pre>
                 </p>
             </dd>
         </dl>
@@ -587,8 +587,42 @@ scaleClockDemo2Dom.updateClockOption("num60", "numStyle", {
         </table>
         <h3>待处理</h3>
         <p>该钟表组件支持的还不是很完善，涉及到计算的部分（例如：半径）还不支持动态更新，只支持开始时设置</p>
+        <h2>自动生成目录<inline-code>auto-generate-directory</inline-code>
+        </h2>
+        <p>为了方便的阅读文章，更加快速的查找到自己想要的章节，这便是这个组件的由来。</p>
+        <p>简单介绍一下实现方式：查找<inline-code>body</inline-code>或者指定容器下的h1~h6子元素，之后通过样式控制缩进；支持点击跳转；支持滚动时选中对应的章节</p>
+        <h3>运行效果</h3>
+        <p>请查看文章右侧（如果没有，则某些情况下还没有适配）</p>
+        <h3>属性</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>参数</th>
+                    <th>说明</th>
+                    <th>默认值</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>generate-source-selector</td>
+                    <td>容器选择器，如果没有找到对应的元素则使用<inline-code>body</inline-code>
+                    </td>
+                    <td>
+                        <inline-code>.blog-page</inline-code>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">
+                        样式不太美观；小屏下暂时不支持；如果出现滚动条并且最后一屏章节目录比较多，目录选中时有问题
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
         <h2>其他组件正在进行中……</h2>
         <back-to-top></back-to-top>
+        <auto-generate-directory></auto-generate-directory>
     </div>
     <script src="/lib/highlight/highlight.pack.js"></script>
     <script>
