@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>maui 入门demo - xiaodu114.github.io</title>
+    <meta name="keywords" content=".net,.net 6,.net maui,maui">
+    <meta name="description" content=".net maui 入门 demo">
+    <link rel="stylesheet" href="/lib/normalize/normalize.css">
+    <link rel="stylesheet" href="/lib/highlight/github.css">
+    <link rel="stylesheet" href="/lib/highlight/lang-label.css">
+    <link rel="stylesheet" href="/blog/blogCss/typesetting.css">
+
+    <script src="/myLib/webComponents.js"></script>
+</head>
+
+<body>
+    <!-- github访问地址：/blog/dotnet/maui/0demo/index.html -->
+    <div class="blog-page">
+        <h1>maui初体验</h1>
+        <p>因为主攻的不是<inline-code>java</inline-code>，<inline-code>Eclipse</inline-code>这个IDE也用着不习惯，没有<inline-code>Visual
+                Studio</inline-code>用着顺手，所以呢，开发一个android
+            app或者弄个demo就变成了奢望（虽然也用<inline-code>java</inline-code>弄过一个）……因为一直对移动端应用不死心，一直留意着这方面的信息，出现好多迂回策略，像什么：
+            <inline-code>Apache Cordova</inline-code>
+            <inline-code>Phonegap</inline-code>
+            <inline-code>Ionic</inline-code>
+            等,还有国内的正益无线。也写过一些对应的demo，但是觉得有些麻烦，弄个环境就挺费劲，其次就是调用原生，严重依赖插件，还有就是新能问题了（这个说的有点远了），觉得唯一的好处就是使用web前端的东西……直到后来了解到了
+            <inline-code>Xamarin</inline-code>，有<inline-code>Xamarin.Android</inline-code>
+            <inline-code>Xamarin.IOS
+            </inline-code>和<inline-code>Xamarin Forms</inline-code>，具说接近原生的速度，关键是可以用<inline-code>C#</inline-code>
+            写，感觉很牛逼，开始都是用<inline-code>Xamarin.Android
+            </inline-code>
+            ，但是后来觉得怎么着也是写，要不用<inline-code>Xamarin Forms</inline-code>？嗯，就用它。再到后来就有了<inline-code>React Native
+            </inline-code>
+            <inline-code>Weex</inline-code>等，还有就是最近很火的<inline-code>Flutter</inline-code>，自己也弄了个<inline-code>Flutter
+            </inline-code>的demo，可能是我先入为主也可能我是外行，感觉他的开发体验太差了……最近<inline-code>Flutter</inline-code>
+            也支持Web了，感觉这是要全能啊！这里不得不说一下<a href="https://platform.uno/" target="_blank">Uno
+                Platform</a>，这个是从同学那里了解到的，感觉这个就更牛逼了，感觉就是everywhere。
+        </p>
+        <p>相对于<inline-code>Flutter</inline-code>的大火，觉得Xamarin就太那啥了，甚至好多人都不知道<inline-code>C#</inline-code>
+            还可以开发android、ios的app😓😓😓。
+            虽然这样，我还在一直坚守着……<inline-code>Xamarin Forms</inline-code>还没有学的怎么样呢？又出现了<inline-code>MAUI</inline-code>
+            ，说是下一代。虐我千百遍啊，我还是我，我等着……她终于来了，记得<inline-code>.net</inline-code>第一个预览版的时候不支持<inline-code>maui</inline-code>
+            ；第二版就开始支持了，便开始折腾了，但是一直没有搞定；直到第三个预览版，有了检测工具<inline-code>maui-check</inline-code>
+            ，在他的帮助之下，我的demo跑通了，于是就是准备写笔记记录一下，还没有写，下一个版本就来了；直到写这个笔记的时候已经是预览版6了……
+        </p>
+        <p>我去，又说了一大推废话，关键是想记录一下我的历程，下面赶紧进入正题。</p>
+        <h2>.NET SDKs和.NET Runtimes</h2>
+        <p>先看一下安装的.NET SDKs和.NET Runtimes，最近.NET CLI确实是用的比较多，当然也很方便。更多你可以去官网看看：<a
+                href="https://docs.microsoft.com/zh-cn/dotnet/core/tools/" target="_blank">.NET CLI | Microsoft Docs</a>
+        </p>
+        <h3>打印出已安装的 .NET SDK 的列表</h3>
+        <p>> dotnet --list-sdks</p>
+        <h3>打印出已安装的 .NET 运行时的列表</h3>
+        <p>> dotnet --list-runtimes</p>
+        <h3>同时打印.NET SDKs和.NET Runtimes</h3>
+        <p>> dotnet sdk check</p>
+        <p>
+            <img src="./images/1.png" width="100%">
+        </p>
+        <marked-block type="info">
+            <p>.NET SDK和.NET 运行时列出里一大堆，各个版本的都有，怎么删除呢？如下：</p>
+            <ul>
+                <li>
+                    <a href="https://docs.microsoft.com/zh-cn/dotnet/core/install/remove-runtime-sdk-versions"
+                        target="_blank">删除 .NET 运行时和 SDK | Microsoft Docs</a>
+                </li>
+                <li>
+                    <a href="https://docs.microsoft.com/zh-cn/dotnet/core/additional-tools/uninstall-tool"
+                        target="_blank">卸载工具 - .NET | Microsoft Docs</a>
+                </li>
+            </ul>
+        </marked-block>
+        <h2>
+            <inline-code>maui-check</inline-code>相关
+        </h2>
+        <p>
+            <inline-code>maui-check</inline-code>是一个<inline-code>.net maui</inline-code>
+            检查工具，帮助我们检查依赖的环境，如果没有，你可以选择安装，这样就不用去找安装包了。<inline-code>.net maui</inline-code>所依赖的环境有很多，这里也没有完全利用它。因为之前弄过
+            <inline-code>Xamarin Forms</inline-code>，所以一些开发android的环境已经安装好了。这里只是用来安装一些<inline-code>.net maui
+            </inline-code>的依赖。更多你可以去官网看看：<a href="https://github.com/Redth/dotnet-maui-check" target="_blank">GitHub -
+                Redth/dotnet-maui-check: .NET MAUI Check tool</a>
+        </p>
+        <dl>
+            <dt>安装maui-check</dt>
+            <dd>
+                <p>
+                    > dotnet tool install -g redth.net.maui.check
+                </p>
+            </dd>
+            <dt>更新maui-check</dt>
+            <dd>
+                <p>
+                    > dotnet tool update -g redth.net.maui.check
+                </p>
+            </dd>
+        </dl>
+        <p>
+            <img src="./images/2-1.png" width="100%">
+            <img src="./images/2-2.png" width="100%">
+            <img src="./images/3-1.png" width="100%">
+            <img src="./images/3-2.png" width="100%">
+        </p>
+        <h2>
+            <inline-code>.net maui</inline-code>模板相关
+        </h2>
+        <p>弄好依赖之后，我们看一下对应的模板，创建一个项目，我们需要他。看一下已经安装的模板：</p>
+        <p>> dotnet new --list</p>
+        <p>> dotnet new -l</p>
+        <p><img src="./images/4.png" width="100%"></p>
+        <p>如果没有maui模板，可以自己安装。<a href="https://docs.microsoft.com/zh-cn/dotnet/core/install/templates"
+                target="_blank">安装和管理 SDK 模板 - .NET Core | Microsoft Docs</a></p>
+        <dl>
+            <dt>安装/更新Maui模板</dt>
+            <dd>
+                <p>
+                    > dotnet new --install Microsoft.Maui.Templates::6.0.100-preview.6.1003
+                </p>
+            </dd>
+            <dd>
+                <p>
+                    > dotnet new -i Microsoft.Maui.Templates::6.0.100-preview.6.1003
+                </p>
+            </dd>
+        </dl>
+        <h2>创建项目</h2>
+        <h3>使用命令创建</h3>
+        <p>忘了从哪个预览版开始就是开始支持<inline-code>Visual Studio</inline-code>了，但是得是2022，还是预览版……算了，还是用<inline-code>.NET CLI
+            </inline-code>创建吧！
+        </p>
+        <p>
+            > dotnet new maui -n demo1
+        </p>
+        <marked-block type="info">
+            <p>如果提示安装的maui模板不是最新版，可以根据提示或者上面的章节目录中的命令更新maui模板。</p>
+        </marked-block>
+        <p>
+            <img src="./images/5-1.png" width="100%">
+            <img src="./images/5-2.png" width="100%">
+        </p>
+        <h3>查看目录结构</h3>
+        <p>> tree /f >tree.txt</p>
+        <p>
+            <img src="./images/5-3.png" width="100%">
+        </p>
+        <marked-block type="info">
+            <p>这里查看目录结构的目的是留痕，稍后会删改模板文件</p>
+        </marked-block>
+        <h3>阉割项目</h3>
+        <p>记得之前创建模板是没有<inline-code>sln</inline-code>解决方案，也证实了开始不支持<inline-code>Visual Studio</inline-code>
+            ，因为没有安装2022，还有就是只面向<inline-code>Android</inline-code>，所以修改一下模板项目。
+        </p>
+        <ol>
+            <li>将项目目录下的非“demo1”文件夹删除，只保留“demo1”文件夹</li>
+            <li>将保留的“demo1”文件夹中“Platforms”文件夹中的“IOS”和“MacCatalyst”文件夹删掉</li>
+            <li>将保留的“demo1”文件夹中的内容剪切到项目根目录下并将“demo1”文件夹删掉</li>
+            <li>修改项目工程文件(.csproj),删除“IOS”和“MacCatalyst”相关的配置</li>
+        </ol>
+        <p>
+            <img src="./images/5-4.png" width="100%">
+            <img src="./images/5-5.png" width="100%">
+            <img src="./images/5-6.png" width="100%">
+        </p>
+        <h2>还原项目</h2>
+        <p>模板项目阉割之后，试试能不能跑起来。以试，还真不行，报错了，提示工作负载（<inline-code>workload</inline-code>）没有安装全。之后就是按照错误提示安装了一下</p>
+        <p>> dotnet restore</p>
+        <p>
+            <img src="./images/5-7.png" width="100%">
+        </p>
+        <marked-block>
+            <p>> dotnet workload install maui-core</p>
+            <p>这个还有权限问题，需要管理员权限，这里又开了一个窗口</p>
+        </marked-block>
+        <p>
+            <img src="./images/5-8.png" width="100%">
+            <img src="./images/5-9.png" width="100%">
+            <img src="./images/5-10.png" width="100%">
+            <img src="./images/5-11.png" width="100%">
+        </p>
+        <p>安装成功之后，再看一下工作负载和还原项目就没有问题了。</p>
+        <h2>真机调试</h2>
+        <p>项目还原成功了，之后就真机调试了。首先将手机连接好，你可以使用下面的命令查看：</p>
+        <p>> adb devices</p>
+        <p>设备连接正常之后就是启动项目了：</p>
+        <p>> dotnet build -t:Run -f net6.0-android</p>
+        <p>果然一切都不是那么顺利，又报错了</p>
+        <p><img src="./images/5-12.png" width="100%"></p>
+        <marked-block type="error">
+            <p>Mono.AndroidTools.IncompatibleCpuAbiExceptiopn: The package does not support the CPU architecture of this
+                device.</p>
+        </marked-block>
+        <p>随后就搜索了一下：</p>
+        <ul>
+            <li>
+                <a href="https://docs.microsoft.com/zh-cn/xamarin/android/errors-and-warnings/adb0020"
+                    target="_blank">Xamarin.Android error ADB0020 - Xamarin | Microsoft Docs</a>
+            </li>
+            <li>
+                <a href="https://stackoverflow.com/questions/56196973/invalid-value-armeabi-in-androidsupportedabis-this-abi-is-no-longer-suppor"
+                    target="_blank">Invalid value 'armeabi' in $(AndroidSupportedAbis). This ABI is no longer supported.
+                    Xamarin.Forms - VS2019 - Stack
+                    Overflow</a>
+            </li>
+            <li>
+                <a href="https://vladislavantonyuk.azurewebsites.net/articles/The-first-project-with-.NET-MAUI"
+                    target="_blank">The
+                    first project with .NET MAUI</a>
+            </li>
+        </ul>
+        <p>上面的两个连接感觉和<inline-code>maui</inline-code>对不上号，猜测应该是针对<inline-code>xamarin</inline-code>
+            的，参照第三个连接，修改*.csproj项目工程文件，添加上就没有问题了。
+        </p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="xml">
+<PropertyGroup>
+    <!-- …… -->
+    <RuntimeIdentifiers Condition="'$(TargetFramework)' == 'net6.0-android'">android-arm;android-arm64;
+    </RuntimeIdentifiers>
+    <!-- …… -->
+</PropertyGroup>
+        </pre>
+        <p><img src="./images/5-13.png" width="100%"></p>
+        <p><img src="./images/5-14.png" width="100%"></p>
+        <h2>参考链接</h2>
+        <ul>
+            <li>
+                <a href="https://docs.microsoft.com/zh-cn/dotnet/maui/" target="_blank">.NET Multi-Platform App UI
+                    documentation | Microsoft Docs</a>
+            </li>
+            <li>
+                <a href="https://github.com/dotnet/maui" target="_blank">GitHub - dotnet/maui: .NET MAUI is the .NET
+                    Multi-platform App UI, a framework for building native device applications
+                    spanning mobile, tablet, and desktop.</a>
+            </li>
+            <li>
+                <a href="https://github.com/dotnet/maui/wiki/Getting-Started" target="_blank">Getting Started ·
+                    dotnet/maui Wiki · GitHub</a>
+            </li>
+
+            <li>
+                <a href="https://github.com/dotnet/maui-samples" target="_blank">GitHub - dotnet/maui-samples: .NET 6
+                    preview samples. Not for production use. The main branch tracks the current preview
+                    release, and develop tracks the upcoming preview.</a>
+            </li>
+            <li>
+                <a href="https://dotnet.microsoft.com/download/dotnet/6.0" target="_blank">Download .NET 6.0 (Linux,
+                    macOS, and Windows)</a>
+            </li>
+            <li>
+                <a href="https://docs.microsoft.com/zh-cn/dotnet/core/project-sdk/msbuild-props"
+                    target="_blank">Microsoft.NET.Sdk 的
+                    MSBuild 属性 - .NET | Microsoft Docs</a>
+            </li>
+            <li>
+                <a href="https://docs.microsoft.com/zh-cn/dotnet/core/rid-catalog" target="_blank">.NET 运行时标识符 (RID) 目录
+                    | Microsoft Docs</a>
+            </li>
+        </ul>
+        <back-to-top></back-to-top>
+        <auto-generate-directory></auto-generate-directory>
+    </div>
+    <script src="/lib/highlight/highlight.pack.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll("[ddz-class='here-need-to-handle-by-highlight']").forEach((block) => {
+                block.replaceWith(document.createRange().createContextualFragment(
+                    `
+                            <pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${block.getAttribute("ddz-lang")} hljs">${hljs.highlightAuto(block.innerHTML.trim()).value}</code></pre>
+                            `
+                ));
+            });
+        });
+    </script>
+</body>
+
+</html>
