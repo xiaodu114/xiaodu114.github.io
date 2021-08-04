@@ -114,7 +114,7 @@ customElements.define('marked-block',
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
          */
-        attributeChangedCallback(attrName, oldValue, newValue) { }
+        attributeChangedCallback(attrName, oldValue, newValue) {}
 
         //#endregion
 
@@ -251,7 +251,7 @@ customElements.define('back-to-top',
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
          */
-        attributeChangedCallback(attrName, oldValue, newValue) { }
+        attributeChangedCallback(attrName, oldValue, newValue) {}
 
         //#endregion
 
@@ -772,8 +772,8 @@ customElements.define('scale-clock',
             //      2.2、钟表中心圆点容器之 时针
             let hourHandTailLength = this.defaultClockOptions.radius * 0.1,
                 hourHandTransformDistance = this.defaultClockOptions.radius - this.defaultClockOptions
-                    .num60.size * this.defaultClockOptions.num60.isShow - this.defaultClockOptions.scale
-                        .length - this.defaultClockOptions.num12.size;
+                .num60.size * this.defaultClockOptions.num60.isShow - this.defaultClockOptions.scale
+                .length - this.defaultClockOptions.num12.size;
             this.hourHandDom.style.width = this.defaultClockOptions.hourHand.width + "px";
             this.hourHandDom.style.height = hourHandTransformDistance + hourHandTailLength + "px";
             this.hourHandDom.style.left = (0 - this.defaultClockOptions.hourHand.width / 2) + "px";
@@ -782,8 +782,8 @@ customElements.define('scale-clock',
             //      2.3、钟表中心圆点容器之 分针
             let minuteHandTailLength = this.defaultClockOptions.radius * 0.15,
                 minuteHandTransformDistance = this.defaultClockOptions.radius - this.defaultClockOptions
-                    .num60.size * this.defaultClockOptions.num60.isShow - this.defaultClockOptions.scale
-                        .length;
+                .num60.size * this.defaultClockOptions.num60.isShow - this.defaultClockOptions.scale
+                .length;
             this.minuteHandDom.style.width = this.defaultClockOptions.minuteHand.width + "px";
             this.minuteHandDom.style.height = minuteHandTransformDistance + minuteHandTailLength + "px";
             this.minuteHandDom.style.left = (0 - this.defaultClockOptions.minuteHand.width / 2) + "px";
@@ -811,19 +811,19 @@ customElements.define('scale-clock',
             //  3、钟表边缘???盘
             //      3.1、刻度盘
             let clockScaleDialContainerDom = this.clockContainerDom.querySelector(
-                ".clock-scale-dial-container"),
+                    ".clock-scale-dial-container"),
                 fragmentForClockScales = document.createDocumentFragment();
             clockScaleDialContainerDom.style.left = clockScaleDialContainerDom.style.top = this
                 .defaultClockOptions.radius + "px";
             //      3.2、12数字盘：1-12
             let clockNum12DialContainerDom = this.clockContainerDom.querySelector(
-                ".clock-num-12-dial-container"),
+                    ".clock-num-12-dial-container"),
                 fragmentForClock12Nums = document.createDocumentFragment();
             clockNum12DialContainerDom.style.left = clockNum12DialContainerDom.style.top = this
                 .defaultClockOptions.radius + "px";
             //      3.3、60数字盘：1-60
             let clockNum60DialContainerDom = this.clockContainerDom.querySelector(
-                ".clock-num-60-dial-container"),
+                    ".clock-num-60-dial-container"),
                 fragmentForClock60Nums = document.createDocumentFragment();
             clockNum60DialContainerDom.style.left = clockNum60DialContainerDom.style.top = this
                 .defaultClockOptions.radius + "px";
@@ -853,7 +853,7 @@ customElements.define('scale-clock',
                 //  2、组装刻度盘
                 let scaleItemContentDom = document.createElement("div"),
                     scaleItemContentHeight = (index % 5 === 0) ? this.defaultClockOptions.scale
-                        .bigWidth : this.defaultClockOptions.scale.smallWidth;
+                    .bigWidth : this.defaultClockOptions.scale.smallWidth;
                 scaleItemContentDom.classList.add("scale-content");
                 scaleItemContentDom.style.width = this.defaultClockOptions.scale.length + "px";
                 scaleItemContentDom.style.height = scaleItemContentHeight + "px";
@@ -865,7 +865,7 @@ customElements.define('scale-clock',
                 scaleItemDom.style.top = Math.sin(needCalcDeg) * (this.defaultClockOptions.radius - this
                     .defaultClockOptions.num60.size * this.defaultClockOptions.num60.isShow) + "px";
                 scaleItemDom.style.left = Math.cos(needCalcDeg) * (this.defaultClockOptions.radius -
-                    this.defaultClockOptions.num60.size * this.defaultClockOptions.num60.isShow) +
+                        this.defaultClockOptions.num60.size * this.defaultClockOptions.num60.isShow) +
                     "px";
                 scaleItemDom.appendChild(scaleItemContentDom);
                 fragmentForClockScales.appendChild(scaleItemDom);
@@ -883,13 +883,13 @@ customElements.define('scale-clock',
                     let numItemDom = document.createElement("div");
                     numItemDom.classList.add("clock-num-12-item-base-container");
                     numItemDom.style.top = Math.sin(needCalcDeg) * (this.defaultClockOptions.radius - (
-                        this.defaultClockOptions.num60.isShow ? 1 : 2) * this
-                            .defaultClockOptions.scale.length - 2 * this.defaultClockOptions.num60
-                                .size * this.defaultClockOptions.num60.isShow) + "px";
+                            this.defaultClockOptions.num60.isShow ? 1 : 2) * this
+                        .defaultClockOptions.scale.length - 2 * this.defaultClockOptions.num60
+                        .size * this.defaultClockOptions.num60.isShow) + "px";
                     numItemDom.style.left = Math.cos(needCalcDeg) * (this.defaultClockOptions.radius - (
-                        this.defaultClockOptions.num60.isShow ? 1 : 2) * this
-                            .defaultClockOptions.scale.length - 2 * this.defaultClockOptions.num60
-                                .size * this.defaultClockOptions.num60.isShow) + "px";
+                            this.defaultClockOptions.num60.isShow ? 1 : 2) * this
+                        .defaultClockOptions.scale.length - 2 * this.defaultClockOptions.num60
+                        .size * this.defaultClockOptions.num60.isShow) + "px";
                     numItemDom.appendChild(numItemContentDomFor12);
                     fragmentForClock12Nums.appendChild(numItemDom);
                 }
@@ -903,17 +903,17 @@ customElements.define('scale-clock',
         /**
          *  当自定义元素与文档DOM断开连接时被调用
          */
-        disconnectedCallback() { }
+        disconnectedCallback() {}
 
         /**
          *  当自定义元素被移动到新文档时被调用
          */
-        adoptedCallback() { }
+        adoptedCallback() {}
 
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
          */
-        attributeChangedCallback(attrName, oldValue, newValue) { }
+        attributeChangedCallback(attrName, oldValue, newValue) {}
 
         //#endregion
 
@@ -1035,7 +1035,7 @@ customElements.define('scale-clock',
 
         _BatchUpdateEleStyleByCustom(selectors, eleAndStyleObj) {
             if (this._GetDataType(eleAndStyleObj) === "object" && Object.getOwnPropertyNames(
-                eleAndStyleObj).length) {
+                    eleAndStyleObj).length) {
                 let targetEles = this.shadowRoot.querySelectorAll(selectors);
                 if (targetEles.length === 0) return;
                 for (const key in eleAndStyleObj) {
@@ -1043,7 +1043,7 @@ customElements.define('scale-clock',
                         const numKey = Number(key);
                         if (Number.isInteger(numKey) &&
                             numKey >= 1 &&
-                            numKey <= targetEles.length) { }
+                            numKey <= targetEles.length) {}
                         this._UpdateEleStyle(targetEles[numKey - 1], eleAndStyleObj[key]);
                     }
                 }
@@ -1204,12 +1204,12 @@ customElements.define('auto-generate-directory',
         /**
          *  当自定义元素被移动到新文档时被调用
          */
-        adoptedCallback() { }
+        adoptedCallback() {}
 
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
          */
-        attributeChangedCallback(attrName, oldValue, newValue) { }
+        attributeChangedCallback(attrName, oldValue, newValue) {}
 
         //#endregion
 
@@ -1233,14 +1233,12 @@ customElements.define('auto-generate-directory',
                 let posTop = sourceHDom.getBoundingClientRect().top;
                 if (posTop >= 0 && posTop <= 5) {
                     priority1Dom = sourceHDom;
-                }
-                else if (posTop < 0) {
+                } else if (posTop < 0) {
                     if (priority2Dom) {
                         if (posTop > priority2Dom.getBoundingClientRect().top) {
                             priority2Dom = sourceHDom;
                         }
-                    }
-                    else {
+                    } else {
                         priority2Dom = sourceHDom;
                     }
                 }
@@ -1248,8 +1246,7 @@ customElements.define('auto-generate-directory',
             // sourceHDom.classList.remove("selected");
             if (priority1Dom) {
                 this.containerDom.querySelector(`[href='#${priority1Dom.id}']`).classList.add("selected");
-            }
-            else if (priority2Dom) {
+            } else if (priority2Dom) {
                 this.containerDom.querySelector(`[href='#${priority2Dom.id}']`).classList.add("selected");
             }
         }
@@ -1260,11 +1257,9 @@ customElements.define('auto-generate-directory',
                 if (!document.querySelector(this.sourceSelector)) {
                     this.sourceSelector = "body";
                 }
-            }
-            else if (document.querySelector(".blog-page")) {
+            } else if (document.querySelector(".blog-page")) {
                 this.sourceSelector = ".blog-page";
-            }
-            else {
+            } else {
                 this.sourceSelector = "body";
             }
             const containerWidth = 247,
@@ -1283,7 +1278,8 @@ customElements.define('auto-generate-directory',
                     if (tempSourceHDoms.length) {
                         [].forEach.call(tempSourceHDoms, (sourceHDom, index) => {
                             sourceHDom.id = idPrefix + index + sourceHDom.tagName;
-                            let tempDirectoryA = document.createElement("a"), tempLevelH = parseFloat(sourceHDom.tagName.replace("H", ""));
+                            let tempDirectoryA = document.createElement("a"),
+                                tempLevelH = parseFloat(sourceHDom.tagName.replace("H", ""));
                             tempDirectoryA.href = "#" + sourceHDom.id;
                             tempDirectoryA.innerHTML = sourceHDom.innerHTML;
                             tempDirectoryA.style.paddingLeft = (tempLevelH - 1) * 20 + "px";
@@ -1296,6 +1292,8 @@ customElements.define('auto-generate-directory',
                     this.containerDom.appendChild(tempDirectoryItems);
                     window.removeEventListener('scroll', this.listenerScrollEvent);
                     window.addEventListener("scroll", this.listenerScrollEvent);
+                } else {
+                    this.containerDom.style.display = "none";
                 }
             }
         }
