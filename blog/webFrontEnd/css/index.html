@@ -68,6 +68,7 @@
 
 <body>
     <!-- github访问地址：/blog/webFrontEnd/css/index.html -->
+    <link-icon></link-icon>
     <div class="blog-page">
         <h1>当 position: fixed 遇上 transform</h1>
         <p>项目中模态对话框很普遍，时不时的就会来个弹窗……我们的项目中遇到了一个场景：模态框中的页面需要全屏的支持。全屏处理很简单，其中的这个页面也在其他的场景中实现过，此时到了这里却失灵了，😭😭😭，最终经同事提醒，发现是父容器的样式使用了“transform”
@@ -257,6 +258,7 @@ btnExitFullScreenNODom.addEventListener("click", maskLayerNOExitFullScreen);
             btnFullScreenOKDom = document.getElementById("btnFullScreenOK"),
             btnExitFullScreenOKDom = document.getElementById("btnExitFullScreenOK"),
             businessLogicCodeOKDom = document.querySelector(".business-logic-code-ok");
+
         function maskLayerOKExitFullScreen() {
             businessLogicCodeOKDom.classList.remove("full-screen");
             btnExitFullScreenOKDom.style.display = "none";
@@ -288,6 +290,7 @@ btnExitFullScreenNODom.addEventListener("click", maskLayerNOExitFullScreen);
             btnFullScreenNODom = document.getElementById("btnFullScreenNO"),
             btnExitFullScreenNODom = document.getElementById("btnExitFullScreenNO"),
             businessLogicCodeNODom = document.querySelector(".business-logic-code-no");
+
         function maskLayerNOExitFullScreen() {
             businessLogicCodeNODom.classList.remove("full-screen");
             btnExitFullScreenNODom.style.display = "none";

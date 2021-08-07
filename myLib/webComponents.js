@@ -1300,3 +1300,68 @@ customElements.define('auto-generate-directory',
         //#endregion
     }
 );
+
+customElements.define('link-icon',
+    class LinkIcon extends HTMLElement {
+
+        constructor() {
+            super();
+
+            //#region 组件模板
+            //#endregion
+
+            //  这里获取不到传入的属性值
+            //  可以获取dom结构
+        }
+
+        //#region  生命周期回调
+
+        /**
+         *  当自定义元素第一次被连接到文档DOM时被调用（没有参数）
+         */
+        connectedCallback() {
+            let customRel = this.getAttribute("rel"),
+                customType = this.getAttribute("type"),
+                customHref = this.getAttribute("href");
+            if (!customRel) {
+                customRel = "icon";
+            }
+            if (!customType) {
+                customType = "image/x-icon";
+            }
+            // //  补全路径（相对路径-》绝对路径）
+            // var aEle = document.createElement("a");
+            // aEle.href = customHref;
+            if (!customHref) {
+                customHref = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEMAAABlCAMAAAAh4a5qAAAAsVBMVEUAAAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AAD/AADtkuLCAAAAOnRSTlMA/IkF1Mxv0S7bvWZCKhTfwOqYMgn18MawWiUboz03DwvYqHZI+eXDt397VVFOIZONYV2eHbKEahes30e8bAAAA3NJREFUWMPNl+l2okAUhBsBWRVBQcRdFDUucY1a7/9ggzoKqI1O7p+pcxJNGr/TS91bLfu/1VtsDKMYGoYxM9Vm7VeMJTKy5cF0Fvwjo4YX8vZF9V8gp5ZTiOU4LV2JRglHK/Ax+Wq2jZXu4ap6Q2S/VqnouxdKv8EIqs19AbH0gFHULHgA3AYjqfwtACgwmqp90CG9CYAiESLugVGVCKkpgMyIClxgToUUAJ27VF8elD4xigChyRkz5c5Wnn0A0YENZ6joxz/K4T3jC/jmDK2c+NdMen/6C2DCGWpN2RnSfzsTlX+6++sM1i8rvL3KNEyJw5isr69hv/2MsMIUgz+PyuxmACV4rDWtmP6Lb5Dx8PZuUC9nG5n29bCnAw6jfl9CTz9l3K39ZB4MgSmP0bm/3SmpTzX7q+yDA37BjKspz0p3w5alR0NFwJLHUNOmVUp/16U4j20esBjvXNSM4yrdS7uQBy+s7nzG6I2351qu+0/PScDwMwYrSUb8v+fC6AC2+CGDbaTqvvL8tJNULfdcEk3tyTOi6wLxdvP9kZXjFl40j8ToXJ8m2sodxXhq6zZg8hnj7G47SpcZkvrY7PKToZIx8Eo6XlzSy+acnR8MerrR/ki7i9Hrq+w2vwmoiZHaOS24Fc4iHQsuYOYx/GKyaq16n5DczFSsz/LUujcaw+okB6EnBTMEhPwU+17dDGqZWc/fcNbby8d0e32dW4vscSrBPWitXj7D2F8nbD1mw2ly+WRVSAqWp/n4mgJP3tzV1+eV9IHW2/iqi3FlWy+ycrc8bxdgH98xRDmIUyDkjA4BLD64E5jlPq/pl6OkA+YeTEX+4ZoY0HofMLqDQ86VQ+gwkkwBCGmIpg34NIQ4BrQujeEArkpDFAGsaYihAHzTEIEH6CIJ0dXI+ynqgBcwklqAYJK/IuBAQxzo394aAFrEQhsBPu1UOy5Qr5EQqg1oZZo9IyBa0jqGBdglEuKoAV6VhChLgNsmI0YmDaEAwpyOmNERDTpiTUPIZMRRihEbEmLXJ+/F0gJGNEQpihELcrG7QxKiGiM8Wo20vRjRISEWLmDTin0tABGt5YQAtCU5zeQjKZa3ACqkaK/5AHxSjnQrALYiqcokciyrEaiXV9MjF+pmBHi0DPgCYJHMKToAlCaj6ARA75IvSi2RERUWqIQ/LuNxuHW2AiYAAAAASUVORK5CYII=`;
+            }
+            let linkEle = document.createElement('link');
+            linkEle.rel = customRel;
+            linkEle.type = customType;
+            linkEle.href = customHref;
+            document.head.appendChild(linkEle);
+            //  只设置一次，将其删除
+            this.remove();
+        }
+
+        /**
+         *  当自定义元素与文档DOM断开连接时被调用
+         */
+        disconnectedCallback() {}
+
+        /**
+         *  当自定义元素被移动到新文档时被调用
+         */
+        adoptedCallback() {}
+
+        /**
+         * 当自定义元素的一个属性被增加、移除或更改时被调用
+         */
+        attributeChangedCallback(attrName, oldValue, newValue) {}
+
+        //#endregion
+
+        //#region   私有方法（想弄成私有，但是不知道怎么弄,你当做不能访问就行了）
+        //#endregion
+    }
+);
