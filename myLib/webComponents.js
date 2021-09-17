@@ -1265,6 +1265,8 @@ customElements.define('auto-generate-directory',
          *  当自定义元素与文档DOM断开连接时被调用
          */
         disconnectedCallback() {
+            this.triggerDom.removeEventListener("click", this.listenerTriggerClickEvent);
+            this.triggerCoverDom.removeEventListener("click", this.listenerTriggerCoverClickEvent);
             document.removeEventListener('DOMContentLoaded', this.init);
             window.removeEventListener('scroll', this.listenerScrollEvent);
         }
