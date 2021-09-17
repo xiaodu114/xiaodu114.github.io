@@ -114,7 +114,7 @@ customElements.define('marked-block',
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
          */
-        attributeChangedCallback(attrName, oldValue, newValue) {}
+        attributeChangedCallback(attrName, oldValue, newValue) { }
 
         //#endregion
 
@@ -251,7 +251,7 @@ customElements.define('back-to-top',
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
          */
-        attributeChangedCallback(attrName, oldValue, newValue) {}
+        attributeChangedCallback(attrName, oldValue, newValue) { }
 
         //#endregion
 
@@ -772,8 +772,8 @@ customElements.define('scale-clock',
             //      2.2、钟表中心圆点容器之 时针
             let hourHandTailLength = this.defaultClockOptions.radius * 0.1,
                 hourHandTransformDistance = this.defaultClockOptions.radius - this.defaultClockOptions
-                .num60.size * this.defaultClockOptions.num60.isShow - this.defaultClockOptions.scale
-                .length - this.defaultClockOptions.num12.size;
+                    .num60.size * this.defaultClockOptions.num60.isShow - this.defaultClockOptions.scale
+                        .length - this.defaultClockOptions.num12.size;
             this.hourHandDom.style.width = this.defaultClockOptions.hourHand.width + "px";
             this.hourHandDom.style.height = hourHandTransformDistance + hourHandTailLength + "px";
             this.hourHandDom.style.left = (0 - this.defaultClockOptions.hourHand.width / 2) + "px";
@@ -782,8 +782,8 @@ customElements.define('scale-clock',
             //      2.3、钟表中心圆点容器之 分针
             let minuteHandTailLength = this.defaultClockOptions.radius * 0.15,
                 minuteHandTransformDistance = this.defaultClockOptions.radius - this.defaultClockOptions
-                .num60.size * this.defaultClockOptions.num60.isShow - this.defaultClockOptions.scale
-                .length;
+                    .num60.size * this.defaultClockOptions.num60.isShow - this.defaultClockOptions.scale
+                        .length;
             this.minuteHandDom.style.width = this.defaultClockOptions.minuteHand.width + "px";
             this.minuteHandDom.style.height = minuteHandTransformDistance + minuteHandTailLength + "px";
             this.minuteHandDom.style.left = (0 - this.defaultClockOptions.minuteHand.width / 2) + "px";
@@ -811,19 +811,19 @@ customElements.define('scale-clock',
             //  3、钟表边缘???盘
             //      3.1、刻度盘
             let clockScaleDialContainerDom = this.clockContainerDom.querySelector(
-                    ".clock-scale-dial-container"),
+                ".clock-scale-dial-container"),
                 fragmentForClockScales = document.createDocumentFragment();
             clockScaleDialContainerDom.style.left = clockScaleDialContainerDom.style.top = this
                 .defaultClockOptions.radius + "px";
             //      3.2、12数字盘：1-12
             let clockNum12DialContainerDom = this.clockContainerDom.querySelector(
-                    ".clock-num-12-dial-container"),
+                ".clock-num-12-dial-container"),
                 fragmentForClock12Nums = document.createDocumentFragment();
             clockNum12DialContainerDom.style.left = clockNum12DialContainerDom.style.top = this
                 .defaultClockOptions.radius + "px";
             //      3.3、60数字盘：1-60
             let clockNum60DialContainerDom = this.clockContainerDom.querySelector(
-                    ".clock-num-60-dial-container"),
+                ".clock-num-60-dial-container"),
                 fragmentForClock60Nums = document.createDocumentFragment();
             clockNum60DialContainerDom.style.left = clockNum60DialContainerDom.style.top = this
                 .defaultClockOptions.radius + "px";
@@ -853,7 +853,7 @@ customElements.define('scale-clock',
                 //  2、组装刻度盘
                 let scaleItemContentDom = document.createElement("div"),
                     scaleItemContentHeight = (index % 5 === 0) ? this.defaultClockOptions.scale
-                    .bigWidth : this.defaultClockOptions.scale.smallWidth;
+                        .bigWidth : this.defaultClockOptions.scale.smallWidth;
                 scaleItemContentDom.classList.add("scale-content");
                 scaleItemContentDom.style.width = this.defaultClockOptions.scale.length + "px";
                 scaleItemContentDom.style.height = scaleItemContentHeight + "px";
@@ -865,7 +865,7 @@ customElements.define('scale-clock',
                 scaleItemDom.style.top = Math.sin(needCalcDeg) * (this.defaultClockOptions.radius - this
                     .defaultClockOptions.num60.size * this.defaultClockOptions.num60.isShow) + "px";
                 scaleItemDom.style.left = Math.cos(needCalcDeg) * (this.defaultClockOptions.radius -
-                        this.defaultClockOptions.num60.size * this.defaultClockOptions.num60.isShow) +
+                    this.defaultClockOptions.num60.size * this.defaultClockOptions.num60.isShow) +
                     "px";
                 scaleItemDom.appendChild(scaleItemContentDom);
                 fragmentForClockScales.appendChild(scaleItemDom);
@@ -883,13 +883,13 @@ customElements.define('scale-clock',
                     let numItemDom = document.createElement("div");
                     numItemDom.classList.add("clock-num-12-item-base-container");
                     numItemDom.style.top = Math.sin(needCalcDeg) * (this.defaultClockOptions.radius - (
-                            this.defaultClockOptions.num60.isShow ? 1 : 2) * this
-                        .defaultClockOptions.scale.length - 2 * this.defaultClockOptions.num60
-                        .size * this.defaultClockOptions.num60.isShow) + "px";
+                        this.defaultClockOptions.num60.isShow ? 1 : 2) * this
+                            .defaultClockOptions.scale.length - 2 * this.defaultClockOptions.num60
+                                .size * this.defaultClockOptions.num60.isShow) + "px";
                     numItemDom.style.left = Math.cos(needCalcDeg) * (this.defaultClockOptions.radius - (
-                            this.defaultClockOptions.num60.isShow ? 1 : 2) * this
-                        .defaultClockOptions.scale.length - 2 * this.defaultClockOptions.num60
-                        .size * this.defaultClockOptions.num60.isShow) + "px";
+                        this.defaultClockOptions.num60.isShow ? 1 : 2) * this
+                            .defaultClockOptions.scale.length - 2 * this.defaultClockOptions.num60
+                                .size * this.defaultClockOptions.num60.isShow) + "px";
                     numItemDom.appendChild(numItemContentDomFor12);
                     fragmentForClock12Nums.appendChild(numItemDom);
                 }
@@ -903,17 +903,17 @@ customElements.define('scale-clock',
         /**
          *  当自定义元素与文档DOM断开连接时被调用
          */
-        disconnectedCallback() {}
+        disconnectedCallback() { }
 
         /**
          *  当自定义元素被移动到新文档时被调用
          */
-        adoptedCallback() {}
+        adoptedCallback() { }
 
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
          */
-        attributeChangedCallback(attrName, oldValue, newValue) {}
+        attributeChangedCallback(attrName, oldValue, newValue) { }
 
         //#endregion
 
@@ -1035,7 +1035,7 @@ customElements.define('scale-clock',
 
         _BatchUpdateEleStyleByCustom(selectors, eleAndStyleObj) {
             if (this._GetDataType(eleAndStyleObj) === "object" && Object.getOwnPropertyNames(
-                    eleAndStyleObj).length) {
+                eleAndStyleObj).length) {
                 let targetEles = this.shadowRoot.querySelectorAll(selectors);
                 if (targetEles.length === 0) return;
                 for (const key in eleAndStyleObj) {
@@ -1043,7 +1043,7 @@ customElements.define('scale-clock',
                         const numKey = Number(key);
                         if (Number.isInteger(numKey) &&
                             numKey >= 1 &&
-                            numKey <= targetEles.length) {}
+                            numKey <= targetEles.length) { }
                         this._UpdateEleStyle(targetEles[numKey - 1], eleAndStyleObj[key]);
                     }
                 }
@@ -1131,7 +1131,7 @@ customElements.define('auto-generate-directory',
             //#region 组件模板
             shadowRoot.innerHTML = `
             <style>
-                .ddz-auto-generate-directory-container{
+                .ddz-auto-generate-directory-items-container{
                     overflow-x: hidden;
                     overflow-y: auto;
                     background: #fff;
@@ -1140,7 +1140,7 @@ customElements.define('auto-generate-directory',
                     top: 64px;
                 }
 
-                .ddz-auto-generate-directory-container >a{
+                .ddz-auto-generate-directory-items-container >a{
                     color: #2c3e50;
                     position: relative;
                     display:block;
@@ -1150,11 +1150,11 @@ customElements.define('auto-generate-directory',
                     margin: 5px 0;
                 }
 
-                .ddz-auto-generate-directory-container >a.selected{
+                .ddz-auto-generate-directory-items-container >a.selected{
                     color:#3cb878;
                 }
 
-                .ddz-auto-generate-directory-container >a.selected::before{
+                .ddz-auto-generate-directory-items-container >a.selected::before{
                     content:'';
                     position: absolute;
                     left: 0;
@@ -1164,11 +1164,70 @@ customElements.define('auto-generate-directory',
                     background-color: #3cb878;
                 }
 
-                .ddz-auto-generate-directory-container >a:hover{
+                .ddz-auto-generate-directory-items-container >a:hover{
                     text-decoration: underline;
                 }
+
+                .ddz-auto-generate-show-directory-trigger {
+                    position: fixed;
+                    right: 15px;
+                    bottom: 60px;
+                    width: 56px;
+                    height: 56px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: #3cb878;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    box-shadow: 0 3px 5px -1px rgb(0 0 0 / 20%), 0 6px 10px 0 rgb(0 0 0 / 14%), 0 1px 18px 0 rgb(0 0 0 / 12%);
+                }
+
+                .ddz-auto-generate-show-directory-trigger >i {
+                    width: 18px;
+                    height: 16px;
+                    position: relative;
+                    display: block;
+                    border-top: 2px solid #fff;
+                }
+
+                .ddz-auto-generate-show-directory-trigger >i::before {
+                    content: "";
+                    position: absolute;
+                    top: calc(50% - 2px);
+                    width: 100%;
+                    height: 2px;
+                    background-color: #fff;
+                }
+
+                .ddz-auto-generate-show-directory-trigger >i::after {
+                    content: "";
+                    position: absolute;
+                    width: 100%;
+                    height: 2px;
+                    bottom: 0;
+                    background-color: #fff;
+                }
+
+                .ddz-auto-generate-show-directory-trigger-cover{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: fixed;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    z-index: 1050;
+                    outline: 0;
+                    background-color: rgba(0, 0, 0, 0.3);
+                }
             </style>
-            <div class="ddz-auto-generate-directory-container">
+            <div class="ddz-auto-generate-show-directory-trigger" title="点击打开章节目录">
+                <i></i>
+            </div>
+            <div class="ddz-auto-generate-show-directory-trigger-cover"></div>
+            <div class="ddz-auto-generate-directory-show-mode">
             </div>
             `;
             //#endregion
@@ -1177,11 +1236,20 @@ customElements.define('auto-generate-directory',
             //  可以获取dom结构
             this.sourceSelector = "";
             this.sourceHDoms = null;
-            this.containerDom = this.shadowRoot.querySelector(".ddz-auto-generate-directory-container");
+            this.isTriggerMode = false;
+            this.triggerDom = this.shadowRoot.querySelector(".ddz-auto-generate-show-directory-trigger");
+            this.triggerCoverDom = this.shadowRoot.querySelector(".ddz-auto-generate-show-directory-trigger-cover");
+            this.showModeDom = this.shadowRoot.querySelector(".ddz-auto-generate-directory-show-mode");
+            //this.containerDom = this.shadowRoot.querySelector(".ddz-auto-generate-directory-items-container");
 
-            this.listenerScrollEvent = this.listenerScrollEvent.bind(this);
             this.init = this.init.bind(this);
+            this.listenerScrollEvent = this.listenerScrollEvent.bind(this);
+            this.listenerTriggerClickEvent = this.listenerTriggerClickEvent.bind(this);
+            this.listenerTriggerCoverClickEvent = this.listenerTriggerCoverClickEvent.bind(this);
+
             document.addEventListener("DOMContentLoaded", this.init);
+            this.triggerDom.addEventListener("click", this.listenerTriggerClickEvent);
+            this.triggerCoverDom.addEventListener("click", this.listenerTriggerCoverClickEvent);
         }
 
         //#region  生命周期回调
@@ -1204,18 +1272,18 @@ customElements.define('auto-generate-directory',
         /**
          *  当自定义元素被移动到新文档时被调用
          */
-        adoptedCallback() {}
+        adoptedCallback() { }
 
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
          */
-        attributeChangedCallback(attrName, oldValue, newValue) {}
+        attributeChangedCallback(attrName, oldValue, newValue) { }
 
         //#endregion
 
         //#region   私有方法（想弄成私有，但是不知道怎么弄,你当做不能访问就行了）
         getDirectorySourceHDoms() {
-            if (!Array.isArray(this.sourceHDoms)) {
+            if (!this.sourceHDoms || !this.sourceHDoms.length) {
                 this.sourceHDoms = document.querySelectorAll(["h1", "h2", "h3", "h4", "h5", "h6"].map(tag => (this.sourceSelector + ">" + tag)).join(","));
             }
             return this.sourceHDoms;
@@ -1251,7 +1319,18 @@ customElements.define('auto-generate-directory',
             }
         }
 
+        listenerTriggerClickEvent() {
+            this.triggerCoverDom.style.display = "flex";
+        }
+
+        listenerTriggerCoverClickEvent(event) {
+            if (event.target.classList.contains("ddz-auto-generate-show-directory-trigger-cover") || (event.target.tagName === "A" && event.target.parentElement.classList.contains("ddz-auto-generate-directory-items-container"))) {
+                this.triggerCoverDom.style.display = "none";
+            }
+        }
+
         init() {
+            //  1、确定查询目录项的筛选器
             this.sourceSelector = this.getAttribute("generate-source-selector");
             if (this.sourceSelector) {
                 if (!document.querySelector(this.sourceSelector)) {
@@ -1262,39 +1341,48 @@ customElements.define('auto-generate-directory',
             } else {
                 this.sourceSelector = "body";
             }
+            let tempSourceDom = document.querySelector(this.sourceSelector);
+            if (!tempSourceDom) return;
+            //  2、查询所有的目录项并组装
             const containerWidth = 247,
                 containerMarginLR = 30,
                 viewingAreaWidth = document.documentElement.clientWidth || document.body.clientWidth,
                 viewingAreaHeight = document.documentElement.clientHeight || document.body.clientHeight,
                 scrollBarWidth = 18 * ((document.documentElement.scrollHeight || document.body.scrollHeight) > viewingAreaHeight);
-            let tempSourceDom = document.querySelector(this.sourceSelector);
-            if (tempSourceDom) {
-                let tempSourceDomWidth = tempSourceDom.clientWidth;
-                if ((viewingAreaWidth - tempSourceDomWidth - scrollBarWidth) / 2 - containerMarginLR > containerWidth) {
+            let tempSourceHDoms = this.getDirectorySourceHDoms();
+            if (!this.sourceHDoms || !this.sourceHDoms.length) return;
+            let idPrefix = new Date().valueOf() + "_";
+            let tempDirectoryItems = document.createDocumentFragment();
+            [].forEach.call(tempSourceHDoms, (sourceHDom, index) => {
+                sourceHDom.id = idPrefix + index + sourceHDom.tagName;
+                let tempDirectoryA = document.createElement("a"),
+                    tempLevelH = parseFloat(sourceHDom.tagName.replace("H", ""));
+                tempDirectoryA.href = "#" + sourceHDom.id;
+                tempDirectoryA.innerHTML = sourceHDom.innerHTML;
+                tempDirectoryA.style.paddingLeft = (tempLevelH - 1) * 20 + "px";
+                tempDirectoryItems.appendChild(tempDirectoryA);
+            });
+            this.containerDom = document.createElement("div");
+            this.containerDom.style.width = containerWidth + "px";
+            this.containerDom.style.maxHeight = (viewingAreaHeight - 128) + "px";
+            this.containerDom.classList.add("ddz-auto-generate-directory-items-container");
+            this.containerDom.appendChild(tempDirectoryItems);
 
-                    let idPrefix = new Date().valueOf() + "_";
-                    let tempSourceHDoms = this.getDirectorySourceHDoms();
-                    let tempDirectoryItems = document.createDocumentFragment();
-                    if (tempSourceHDoms.length) {
-                        [].forEach.call(tempSourceHDoms, (sourceHDom, index) => {
-                            sourceHDom.id = idPrefix + index + sourceHDom.tagName;
-                            let tempDirectoryA = document.createElement("a"),
-                                tempLevelH = parseFloat(sourceHDom.tagName.replace("H", ""));
-                            tempDirectoryA.href = "#" + sourceHDom.id;
-                            tempDirectoryA.innerHTML = sourceHDom.innerHTML;
-                            tempDirectoryA.style.paddingLeft = (tempLevelH - 1) * 20 + "px";
-                            tempDirectoryItems.appendChild(tempDirectoryA);
-                        });
-                    }
-                    this.containerDom.style.width = containerWidth + "px";
-                    this.containerDom.style.right = ((viewingAreaWidth - tempSourceDomWidth - scrollBarWidth) / 2 - containerWidth) / 2 + "px";
-                    this.containerDom.style.maxHeight = (viewingAreaHeight - 128) + "px";
-                    this.containerDom.appendChild(tempDirectoryItems);
-                    window.removeEventListener('scroll', this.listenerScrollEvent);
-                    window.addEventListener("scroll", this.listenerScrollEvent);
-                } else {
-                    this.containerDom.style.display = "none";
-                }
+            let tempSourceDomWidth = tempSourceDom.clientWidth;
+            if ((viewingAreaWidth - tempSourceDomWidth - scrollBarWidth) / 2 - containerMarginLR > containerWidth) {
+                this.containerDom.style.right = ((viewingAreaWidth - tempSourceDomWidth - scrollBarWidth) / 2 - containerWidth) / 2 + "px";
+                this.showModeDom.appendChild(this.containerDom);
+                window.removeEventListener('scroll', this.listenerScrollEvent);
+                window.addEventListener("scroll", this.listenerScrollEvent);
+                this.triggerDom.style.display = "none";
+                this.triggerCoverDom.style.display = "none";
+                this.showModeDom.style.display = "black";
+            } else {
+                this.isTriggerMode = true;
+                this.showModeDom.style.display = "none";
+                this.triggerDom.style.display = "flex";
+                this.triggerCoverDom.appendChild(this.containerDom);
+                this.triggerCoverDom.style.display = "none";
             }
         }
         //#endregion
@@ -1347,17 +1435,17 @@ customElements.define('link-icon',
         /**
          *  当自定义元素与文档DOM断开连接时被调用
          */
-        disconnectedCallback() {}
+        disconnectedCallback() { }
 
         /**
          *  当自定义元素被移动到新文档时被调用
          */
-        adoptedCallback() {}
+        adoptedCallback() { }
 
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
          */
-        attributeChangedCallback(attrName, oldValue, newValue) {}
+        attributeChangedCallback(attrName, oldValue, newValue) { }
 
         //#endregion
 
