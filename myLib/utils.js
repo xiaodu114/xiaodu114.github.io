@@ -30,6 +30,31 @@ export const getGUID = function () {
 }
 
 /**
+ * 获取函数形参的名称
+ * 收集来源：angular.js(1.8.2) annotate函数
+ * 例子：
+ * function fn1( a1 , b2 , p3 ){}
+ * getFunctionArgNames(fn1); => ['a1', 'b2', 'p3']
+ * @param {Function} fn 目标函数
+ * @returns {Array} 返回一个字符串数组
+ */
+export const getFunctionArgNames = function (fn) {
+    const FN_ARG_SPLIT = /,/,
+        FN_ARG = /^\s*(_?)(\S+?)\1\s*$/,
+        FN_ARGS = /^[^(]*\(\s*([^)]*)\)/m,
+        STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+    let fnText = fn.toString().replace(STRIP_COMMENTS, '');
+    let argDecl = fnText.match(FN_ARGS);
+    let retArgNames = [];
+    [].forEach.call(argDecl[1].split(FN_ARG_SPLIT), function (arg) {
+        arg.replace(FN_ARG, function (all, underscore, name) {
+            retArgNames.push(name);
+        });
+    });
+    return retArgNames;
+}
+
+/**
  * 洗牌算法（数组内元素的顺序随机打乱）
  * 收集来源：http://caibaojian.com/work-js.html
  * http://caibaojian.com/11-js-codes.html
