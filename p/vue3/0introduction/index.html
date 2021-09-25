@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue3 + webpack 多入口最简demo - xiaodu114.github.io</title>
+    <meta name="keywords" content="vuejs,vue3,webpack,多入口">
+    <meta name="description" content="Vue3 + webpack 多入口最简demo">
+    <link rel="stylesheet" href="/lib/normalize/normalize.css">
+    <link rel="stylesheet" href="/lib/highlight/github.css">
+    <link rel="stylesheet" href="/lib/highlight/lang-label.css">
+    <link rel="stylesheet" href="/p/blogCss/typesetting.css">
+
+    <script src="/myLib/webComponents.js"></script>
+</head>
+
+<body>
+    <!-- github访问地址：/p/vue3/0introduction/index.html -->
+    <link-icon></link-icon>
+    <div class="blog-page">
+        <h1>Vue3 + webpack 多入口</h1>
+        <marked-block type="info">
+            <p>写在最前面：切换npm源。</p>
+            <dl>
+                <dt>查看npm源地址(默认为： https://registry.npmjs.org)</dt>
+                <dd>
+                    <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+                        npm config get registry
+                    </pre>
+                </dd>
+                <dt>修改源地址</dt>
+                <dd>
+                    <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+                        npm config set registry https://registry.npm.taobao.org
+                    </pre>
+                </dd>
+            </dl>
+        </marked-block>
+        <p>这里简单的记录一下：Vue3 + webpack下的多入口demo。该demo并没有使用<inline-code>@vue/cli</inline-code>、<inline-code>Vite
+            </inline-code>等，而是自己搭建的，争取做到最简。
+        </p>
+        <h2>最简：跑起来就行</h2>
+        <p>这是第一步，仅仅是Vue3 + webpack的组合，只是弄了个多入口。没有使用单文件组件、
+            <inline-code>TypeScript</inline-code>、<inline-code>Less</inline-code>等，（开发）依赖也是非必要不安装，webpack配置也是非必要不添加……
+        </p>
+        <h3>目录树</h3>
+        <p>先看一下demo目录结构，编译前后做个对比：</p>
+        <p>
+            <img src="./images/1.png" width="100%">
+        </p>
+        <p>上面的对比图中，你可以忽略tree.txt文件，该文档中的内容是项目的目录结构也就是上图中的内容。你可以使用下面的命令生成目录结构文件：</p>
+        <p>
+            tree /f >tree.txt
+        </p>
+        <h3>示例代码</h3>
+        <p>这里展示一下模块1（模块1和模块2只是1和2的区别）下的入口页面html（路径为：/src/module1/index.html）和js（路径为：/src/module1/js/index.js）：</p>
+        <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
+            data-url="/p/vue3/0introduction/code/module1/index.html" ddz-lang="html"></div>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+import * as Vue from "vue";
+Vue.createApp({
+    data() {
+        return {
+            msg: "Hi，这里是 Vue3 + webpack 多入口 示例项目 模块1 入口页面"
+        }
+    }
+}).mount('#vue3Module1Entry');
+        </pre>
+        <p>下面是 package.json</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="json">
+{
+    "name": "vue3-webpack-multi-entry-demo",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+        "start": "webpack --progress --watch"
+    },
+    "dependencies": {
+        "vue": "^3.2.18"
+    },
+    "devDependencies": {
+        "html-webpack-plugin": "^5.3.2",
+        "webpack": "^5.54.0",
+        "webpack-cli": "^4.8.0"
+    }
+}              
+        </pre>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+<!-- 你可以用下面的命令安装 -->
+yarn add vue@next
+yarn add html-webpack-plugin webpack webpack-cli -D
+        </pre>
+        <p>下面是 webpack.config.js</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebPack = require('html-webpack-plugin');
+
+let multiPageConfig = [{
+    entry: {
+        sourcePath: "./src/module1/js/index.js",
+        // entry.key中以'/'分割，最后一项是文件的名称，前面的都是目录
+        targetPath: "module1/js/index"
+    },
+    htmlWebPack: {
+        sourcePath: './src/module1/index.html',
+        targetPath: 'module1/index.html'
+    }
+}, {
+    entry: {
+        sourcePath: "./src/module2/js/index.js",
+        targetPath: "module2/js/index"
+    },
+    htmlWebPack: {
+        sourcePath: './src/module2/index.html',
+        targetPath: 'module2/index.html'
+    }
+}];
+
+let tempModuleExportsObj = {
+    mode: 'development', // production | development
+    devtool: "source-map",
+    entry: {},
+    output: {
+        filename: '[name].js',
+        path: path.resolve(__dirname, './www'),
+        //publicPath: '/'
+        //  为了可以在github上可以浏览，这里做下面的修改
+        publicPath: '/vue3/www/'
+    },
+    module: {
+        rules: []
+    },
+    resolve: {
+        alias: {
+            //  [Vue warn]: Component provided template option but runtime compilation is not supported in this build of Vue. Configure your bundler to alias "vue" to "vue/dist/vue.esm-bundler.js". 
+            'vue': 'vue/dist/vue.esm-bundler.js'
+        }
+    },
+    plugins: [
+        //  Feature flags __VUE_OPTIONS_API__, __VUE_PROD_DEVTOOLS__ are not explicitly defined. You are running the esm-bundler build of Vue, which expects these compile-time feature flags to be globally injected via the bundler config in order to get better tree-shaking in the production bundle.
+        new webpack.DefinePlugin({
+            __VUE_OPTIONS_API__: true,
+            __VUE_PROD_DEVTOOLS__: false,
+        })
+    ]
+};
+multiPageConfig.forEach(singlePage => {
+    let tempEntryObj = {};
+    tempEntryObj[singlePage.entry.targetPath] = singlePage.entry.sourcePath;
+    Object.assign(tempModuleExportsObj.entry, tempEntryObj);
+    let tempHtmlWebPackOption = {
+        inject: true,
+        hash: true, //开启hash  ?[hash]
+        chunks: [singlePage.entry.targetPath], //页面要引入的包
+    };
+    Object.assign(tempHtmlWebPackOption, {
+        template: singlePage.htmlWebPack.sourcePath,
+        filename: singlePage.htmlWebPack.targetPath
+    });
+    tempModuleExportsObj.plugins.push(new HtmlWebPack(tempHtmlWebPackOption));
+});
+module.exports = tempModuleExportsObj;
+        </pre>
+        <marked-block type="error">
+            <p>我去这里出现了问题，highlight代码高亮时，js中箭头函数变身了……</p>
+        </marked-block>
+        <back-to-top></back-to-top>
+        <auto-generate-directory></auto-generate-directory>
+    </div>
+    <script src="/lib/highlight/highlight.pack.js"></script>
+    <script>
+        // https://highlightjs.org/static/demo/
+        const myRange = document.createRange();
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll("pre[ddz-class='here-need-to-handle-by-highlight']").forEach((block) => {
+                block.replaceWith(myRange.createContextualFragment(
+                    `<pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${block.getAttribute("ddz-lang")} hljs">${hljs.highlightAuto(block.innerHTML.trim()).value}</code></pre>`
+                ));
+            });
+            document.querySelectorAll("[ddz-class='here-need-to-handle-by-highlight-and-request-html']")
+                .forEach((block) => {
+                    fetch(block.getAttribute("data-url")).then(response => {
+                        if (response.ok) {
+                            return response.text();
+                        }
+                    }).then(responseData => {
+                        block.replaceWith(myRange.createContextualFragment(
+                            `<pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${block.getAttribute("ddz-lang")} hljs">${hljs.highlightAuto(responseData.trim()).value}</code></pre>`
+                        ));
+                    });
+                });
+        });
+    </script>
+</body>
+
+</html>
