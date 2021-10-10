@@ -1497,3 +1497,186 @@ customElements.define('link-icon',
         //#endregion
     }
 );
+
+customElements.define('my-dialog',
+    class MyDialog extends HTMLElement {
+
+        //#region 静态方法
+
+        //  该自定义元素支持的属性
+        static get supportAttrObj() {
+            return {
+                "title": {
+                    value: "标题",
+                    update(eleInstance, attrVal) {
+                        eleInstance.myDialogTitleDom.innerHTML = attrVal;
+                    }
+                },
+                "width": {
+                    value: "33rem",
+                    update(eleInstance, attrVal) {
+                        if (!attrVal) attrVal = "33rem";
+                        eleInstance.myDialogContentDom.style.width = attrVal;
+                    }
+                }
+            };
+        }
+
+        static get observedAttributes() {
+            return Object.getOwnPropertyNames(this.supportAttrObj);
+        };
+
+        //#endregion
+
+        constructor() {
+            super();
+
+            this.instanceSupportAttrObj = MyDialog.supportAttrObj;
+
+            const shadowRoot = this.attachShadow({
+                mode: 'open' // open | closed
+            });
+
+            //#region 组件模板
+            shadowRoot.innerHTML = `
+            <style>
+                .ddz-my-dialog-mask-layer {
+                    position: fixed;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    outline: 0;
+                    display: flex;
+                    background-color: rgba(0, 0, 0, 0.3);
+                    z-index: 1050;
+                    visibility: hidden;
+                }
+                .ddz-my-dialog-mask-layer>.my-dialog-content{
+                    display: flex;
+                    flex-direction: column;
+                    margin: auto;
+                    min-width: 360px;
+                    background-color: #fff;
+                    border-radius: 3px;
+                    box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+                }
+                .ddz-my-dialog-mask-layer>.my-dialog-content .my-dialog-content-header{
+                    position: relative;
+                    height: 54px;
+                    flex-shrink: 0;
+                    padding: 0 24px;
+                    display: flex;
+                    align-items: center;
+                }
+                .ddz-my-dialog-mask-layer>.my-dialog-content .my-dialog-content-header>.my-dialog-default-title{
+                    color: #4c5161;
+                    font-size: 18px;
+                }
+                .ddz-my-dialog-mask-layer>.my-dialog-content .my-dialog-content-header>.my-dialog-default-close{
+                    position: absolute;
+                    top: 5px;
+                    right: 10px;
+                    cursor: pointer;
+                    color: #8c8c8c;
+                    font-size: 32px;
+                    line-height: 1;
+                    outline: 0;
+                    border: 0;
+                    background-color: transparent;
+                    padding: 0;
+                }
+                .ddz-my-dialog-mask-layer>.my-dialog-content .my-dialog-content-header>.my-dialog-default-close:hover{
+                    color: #404040;
+                }
+                .ddz-my-dialog-mask-layer>.my-dialog-content .my-dialog-content-body{
+                    flex: 1;
+                }
+            </style>
+            <div class="ddz-my-dialog-mask-layer">
+                <div class="my-dialog-content">
+                    <slot name="header">
+                        <div class="my-dialog-content-header">
+                            <span class="my-dialog-default-title">标题</span>
+                            <button type="button" class="my-dialog-default-close" title="关闭">&times;</button>
+                        </div>
+                    </slot>
+                    <slot name="body">
+                        <div class="my-dialog-content-body">
+                            内容
+                        </div>
+                    </slot>
+                    <slot name="footer"></slot>
+                </div>
+            </div>
+            `;
+            //#endregion
+
+            this.closed = this.closed.bind(this);
+            //  这里获取不到传入的属性值
+            //  可以获取dom结构
+            this.maskLayerDom = this.shadowRoot.querySelector(".ddz-my-dialog-mask-layer");
+            this.myDialogContentDom = this.shadowRoot.querySelector(".ddz-my-dialog-mask-layer>.my-dialog-content");
+            this.myDialogTitleDom = this.shadowRoot.querySelector(".ddz-my-dialog-mask-layer>.my-dialog-content .my-dialog-content-header>.my-dialog-default-title");
+            this.myDialogCloseDom = this.shadowRoot.querySelector(".ddz-my-dialog-mask-layer>.my-dialog-content .my-dialog-content-header>.my-dialog-default-close");
+            this.myDialogCloseDom.addEventListener("click", this.closed);
+        }
+
+        //#region  生命周期回调
+
+        /**
+         *  当自定义元素第一次被连接到文档DOM时被调用（没有参数）
+         */
+        connectedCallback() {
+            for (const attr in this.instanceSupportAttrObj) {
+                if (Object.hasOwnProperty.call(this.instanceSupportAttrObj, attr)) {
+                    if (this.hasAttribute(attr) && this.getAttribute(attr)) {
+                        this.instanceSupportAttrObj[attr].value = this.getAttribute(attr);
+                    }
+                    this.instanceSupportAttrObj[attr].update(this, this.instanceSupportAttrObj[attr].value);
+                }
+            }
+        }
+
+        /**
+         *  当自定义元素与文档DOM断开连接时被调用
+         */
+        disconnectedCallback() {
+            console.log("disconnectedCallback");
+        }
+
+        /**
+         *  当自定义元素被移动到新文档时被调用
+         */
+        adoptedCallback() {
+            console.log("adoptedCallback");
+        }
+
+        /**
+         * 当自定义元素的一个属性被增加、移除或更改时被调用
+         */
+        attributeChangedCallback(attrName, oldValue, newValue) {
+            if (this.instanceSupportAttrObj.hasOwnProperty(attrName) && newValue) {
+                this.instanceSupportAttrObj[attrName].update(this, newValue);
+            }
+        }
+
+        //#endregion
+
+        //#region   公共方法
+
+        open() {
+            this.maskLayerDom.style.visibility = "visible";
+        }
+
+        closed() {
+            this.maskLayerDom.style.visibility = "hidden";
+        }
+
+        //#endregion
+
+
+        //#region   私有方法（想弄成私有，但是不知道怎么弄,你当做不能访问就行了）
+        //#endregion
+    }
+);
