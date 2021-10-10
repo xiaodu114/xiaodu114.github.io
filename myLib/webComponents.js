@@ -3,6 +3,7 @@ customElements.define('marked-block',
 
         //#region 静态方法
 
+        //  可以看一下：https://www.sitepoint.com/javascript-private-class-fields/
         //  该自定义元素支持的属性
         static get supportAttrObj() {
             return {
@@ -36,6 +37,7 @@ customElements.define('marked-block',
                 },
             };
         }
+
         //  不同的类型对应的默认值
         static get defaultTypeObj() {
             return {
@@ -313,9 +315,10 @@ customElements.define('back-to-top',
 
 customElements.define('single-slider',
     class SingleSlider extends HTMLElement {
-        //  可以看一下：
-        //  https://www.sitepoint.com/javascript-private-class-fields/
-        static get selfDefaultAttrObj() {
+
+        //#region 静态方法
+
+        static get supportAttrObj() {
             return {
                 "slider-color": {
                     domName: "containerDom",
@@ -366,8 +369,10 @@ customElements.define('single-slider',
         };
 
         static get observedAttributes() {
-            return Object.getOwnPropertyNames(this.selfDefaultAttrObj);
+            return Object.getOwnPropertyNames(this.supportAttrObj);
         };
+
+        //#endregion
 
         constructor() {
             super();
@@ -470,7 +475,7 @@ customElements.define('single-slider',
                         newValue += "%";
                     }
                 }
-                let attrDefaultObj = SingleSlider.selfDefaultAttrObj[attrName];
+                let attrDefaultObj = SingleSlider.supportAttrObj[attrName];
                 let tempObj = {};
                 attrDefaultObj.names.forEach(name => {
                     tempObj[name] = newValue;
@@ -506,9 +511,9 @@ customElements.define('single-slider',
         }
 
         privateInstanceInit() {
-            for (const attrName in SingleSlider.selfDefaultAttrObj) {
-                if (SingleSlider.selfDefaultAttrObj.hasOwnProperty(attrName)) {
-                    let attrDefaultObj = SingleSlider.selfDefaultAttrObj[attrName];
+            for (const attrName in SingleSlider.supportAttrObj) {
+                if (SingleSlider.supportAttrObj.hasOwnProperty(attrName)) {
+                    let attrDefaultObj = SingleSlider.supportAttrObj[attrName];
                     let tempObj = {};
                     attrDefaultObj.names.forEach(name => {
                         tempObj[name] = this.getAttribute(attrName) || attrDefaultObj.value;
