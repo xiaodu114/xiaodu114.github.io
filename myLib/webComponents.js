@@ -1,34 +1,81 @@
 customElements.define('marked-block',
     class MarkedBlock extends HTMLElement {
+
+        //#region 静态方法
+
+        //  该自定义元素支持的属性
+        static get supportAttrObj() {
+            return {
+                "type": {
+                    value: "default",
+                    update(eleInstance, attrVal) {}
+                },
+                "explain": {
+                    value: "",
+                    update(eleInstance, attrVal) {
+                        if (attrVal) {
+                            eleInstance.markedblockExplainDom.innerHTML = attrVal;
+                        } else {
+                            eleInstance.markedblockExplainDom.style.display = "none";
+                        }
+                    }
+                },
+                "bg-color": {
+                    value: "",
+                    update(eleInstance, attrVal) {
+                        if (!attrVal) return;
+                        eleInstance.containerDom.style["background-color"] = attrVal;
+                    }
+                },
+                "side-color": {
+                    value: "",
+                    update(eleInstance, attrVal) {
+                        if (!attrVal) return;
+                        eleInstance.containerDom.style["border-left-color"] = attrVal;
+                    }
+                },
+            };
+        }
+        //  不同的类型对应的默认值
         static get defaultTypeObj() {
             return {
                 "default": {
-                    explain: "提示",
-                    sideColor: "#42b983",
+                    "explain": "提示",
+                    "bg-color": "#f9f9f9",
+                    "side-color": "#42b983",
                 },
                 "info": {
-                    explain: "信息",
-                    sideColor: "#007bff",
+                    "explain": "信息",
+                    "bg-color": "#f9f9f9",
+                    "side-color": "#007bff",
                 },
                 "warning": {
-                    explain: "注意",
-                    sideColor: "#f4cd00",
+                    "explain": "注意",
+                    "bg-color": "#f9f9f9",
+                    "side-color": "#f4cd00",
                 },
                 "error": {
-                    explain: "错误",
-                    sideColor: "#c00",
+                    "explain": "错误",
+                    "bg-color": "#f9f9f9",
+                    "side-color": "#c00",
                 },
             }
         };
 
         static get observedAttributes() {
-            return ["explain", "bg-color", "type", "side-color"];
+            return Object.getOwnPropertyNames(this.supportAttrObj);
         };
+
+        //#endregion
 
         constructor() {
             super();
+
+            this.instanceSupportAttrObj = MarkedBlock.supportAttrObj;
+            this.instanceDefaultTypeObj = MarkedBlock.defaultTypeObj;
+
             const shadowRoot = this.attachShadow({
-                mode: 'open'
+                mode: 'open' // open | closed
             });
 
             //#region 组件模板
@@ -63,7 +110,6 @@ customElements.define('marked-block',
             //  可以获取dom结构
             this.containerDom = this.shadowRoot.querySelector(".ddz-typesetting-markedblock-container");
             this.markedblockExplainDom = this.shadowRoot.querySelector(".ddz-typesetting-markedblock-container>.ddz-typesetting-markedblock-explain");
-            this.markedblockBodyDom = this.shadowRoot.querySelector(".ddz-typesetting-markedblock-container>.ddz-typesetting-markedblock-body");
         }
 
         //#region  生命周期回调
@@ -72,28 +118,15 @@ customElements.define('marked-block',
          *  当自定义元素第一次被连接到文档DOM时被调用（没有参数）
          */
         connectedCallback() {
-            let typeValue = this.getAttribute("type"),
-                explainValue = this.getAttribute("explain"),
-                bgColorValue = this.getAttribute("bg-color"),
-                sideColorValue = this.getAttribute("side-color");
-            if (typeValue == null) {
-                typeValue = "default";
-            }
-            if (MarkedBlock.defaultTypeObj.hasOwnProperty(typeValue)) {
-                this.markedblockExplainDom.innerHTML = MarkedBlock.defaultTypeObj[typeValue].explain;
-                this.containerDom.style["border-left-color"] = MarkedBlock.defaultTypeObj[typeValue].sideColor;
-            }
-            if (explainValue !== null) {
-                this.markedblockExplainDom.innerHTML = explainValue;
-            }
-            if (sideColorValue != null) {
-                this.containerDom.style["border-left-color"] = sideColorValue;
-            }
-            if (bgColorValue != null) {
-                this.containerDom.style["background-color"] = bgColorValue;
-            }
-            if (!this.markedblockExplainDom.innerHTML.trim()) {
-                this.markedblockExplainDom.style.display = "none";
+            let userSet_Type = (this.hasAttribute("type") && this.instanceDefaultTypeObj.hasOwnProperty(this.getAttribute("type"))) ? this.getAttribute("type") : "default",
+                customAttrObj = this.instanceDefaultTypeObj[userSet_Type];
+            for (const attr in customAttrObj) {
+                if (Object.hasOwnProperty.call(customAttrObj, attr)) {
+                    if (this.hasAttribute(attr) && this.getAttribute(attr)) {
+                        customAttrObj[attr] = this.getAttribute(attr);
+                    }
+                    this.instanceSupportAttrObj[attr].update(this, customAttrObj[attr]);
+                }
             }
         }
 
@@ -114,7 +147,11 @@ customElements.define('marked-block',
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
          */
-        attributeChangedCallback(attrName, oldValue, newValue) { }
+        attributeChangedCallback(attrName, oldValue, newValue) {
+            if (this.instanceSupportAttrObj.hasOwnProperty(attrName) && newValue) {
+                this.instanceSupportAttrObj[attrName].update(this, newValue);
+            }
+        }
 
         //#endregion
 
@@ -251,7 +288,7 @@ customElements.define('back-to-top',
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
          */
-        attributeChangedCallback(attrName, oldValue, newValue) { }
+        attributeChangedCallback(attrName, oldValue, newValue) {}
 
         //#endregion
 
@@ -772,8 +809,8 @@ customElements.define('scale-clock',
             //      2.2、钟表中心圆点容器之 时针
             let hourHandTailLength = this.defaultClockOptions.radius * 0.1,
                 hourHandTransformDistance = this.defaultClockOptions.radius - this.defaultClockOptions
-                    .num60.size * this.defaultClockOptions.num60.isShow - this.defaultClockOptions.scale
-                        .length - this.defaultClockOptions.num12.size;
+                .num60.size * this.defaultClockOptions.num60.isShow - this.defaultClockOptions.scale
+                .length - this.defaultClockOptions.num12.size;
             this.hourHandDom.style.width = this.defaultClockOptions.hourHand.width + "px";
             this.hourHandDom.style.height = hourHandTransformDistance + hourHandTailLength + "px";
             this.hourHandDom.style.left = (0 - this.defaultClockOptions.hourHand.width / 2) + "px";
@@ -782,8 +819,8 @@ customElements.define('scale-clock',
             //      2.3、钟表中心圆点容器之 分针
             let minuteHandTailLength = this.defaultClockOptions.radius * 0.15,
                 minuteHandTransformDistance = this.defaultClockOptions.radius - this.defaultClockOptions
-                    .num60.size * this.defaultClockOptions.num60.isShow - this.defaultClockOptions.scale
-                        .length;
+                .num60.size * this.defaultClockOptions.num60.isShow - this.defaultClockOptions.scale
+                .length;
             this.minuteHandDom.style.width = this.defaultClockOptions.minuteHand.width + "px";
             this.minuteHandDom.style.height = minuteHandTransformDistance + minuteHandTailLength + "px";
             this.minuteHandDom.style.left = (0 - this.defaultClockOptions.minuteHand.width / 2) + "px";
@@ -811,19 +848,19 @@ customElements.define('scale-clock',
             //  3、钟表边缘???盘
             //      3.1、刻度盘
             let clockScaleDialContainerDom = this.clockContainerDom.querySelector(
-                ".clock-scale-dial-container"),
+                    ".clock-scale-dial-container"),
                 fragmentForClockScales = document.createDocumentFragment();
             clockScaleDialContainerDom.style.left = clockScaleDialContainerDom.style.top = this
                 .defaultClockOptions.radius + "px";
             //      3.2、12数字盘：1-12
             let clockNum12DialContainerDom = this.clockContainerDom.querySelector(
-                ".clock-num-12-dial-container"),
+                    ".clock-num-12-dial-container"),
                 fragmentForClock12Nums = document.createDocumentFragment();
             clockNum12DialContainerDom.style.left = clockNum12DialContainerDom.style.top = this
                 .defaultClockOptions.radius + "px";
             //      3.3、60数字盘：1-60
             let clockNum60DialContainerDom = this.clockContainerDom.querySelector(
-                ".clock-num-60-dial-container"),
+                    ".clock-num-60-dial-container"),
                 fragmentForClock60Nums = document.createDocumentFragment();
             clockNum60DialContainerDom.style.left = clockNum60DialContainerDom.style.top = this
                 .defaultClockOptions.radius + "px";
@@ -853,7 +890,7 @@ customElements.define('scale-clock',
                 //  2、组装刻度盘
                 let scaleItemContentDom = document.createElement("div"),
                     scaleItemContentHeight = (index % 5 === 0) ? this.defaultClockOptions.scale
-                        .bigWidth : this.defaultClockOptions.scale.smallWidth;
+                    .bigWidth : this.defaultClockOptions.scale.smallWidth;
                 scaleItemContentDom.classList.add("scale-content");
                 scaleItemContentDom.style.width = this.defaultClockOptions.scale.length + "px";
                 scaleItemContentDom.style.height = scaleItemContentHeight + "px";
@@ -865,7 +902,7 @@ customElements.define('scale-clock',
                 scaleItemDom.style.top = Math.sin(needCalcDeg) * (this.defaultClockOptions.radius - this
                     .defaultClockOptions.num60.size * this.defaultClockOptions.num60.isShow) + "px";
                 scaleItemDom.style.left = Math.cos(needCalcDeg) * (this.defaultClockOptions.radius -
-                    this.defaultClockOptions.num60.size * this.defaultClockOptions.num60.isShow) +
+                        this.defaultClockOptions.num60.size * this.defaultClockOptions.num60.isShow) +
                     "px";
                 scaleItemDom.appendChild(scaleItemContentDom);
                 fragmentForClockScales.appendChild(scaleItemDom);
@@ -883,13 +920,13 @@ customElements.define('scale-clock',
                     let numItemDom = document.createElement("div");
                     numItemDom.classList.add("clock-num-12-item-base-container");
                     numItemDom.style.top = Math.sin(needCalcDeg) * (this.defaultClockOptions.radius - (
-                        this.defaultClockOptions.num60.isShow ? 1 : 2) * this
-                            .defaultClockOptions.scale.length - 2 * this.defaultClockOptions.num60
-                                .size * this.defaultClockOptions.num60.isShow) + "px";
+                            this.defaultClockOptions.num60.isShow ? 1 : 2) * this
+                        .defaultClockOptions.scale.length - 2 * this.defaultClockOptions.num60
+                        .size * this.defaultClockOptions.num60.isShow) + "px";
                     numItemDom.style.left = Math.cos(needCalcDeg) * (this.defaultClockOptions.radius - (
-                        this.defaultClockOptions.num60.isShow ? 1 : 2) * this
-                            .defaultClockOptions.scale.length - 2 * this.defaultClockOptions.num60
-                                .size * this.defaultClockOptions.num60.isShow) + "px";
+                            this.defaultClockOptions.num60.isShow ? 1 : 2) * this
+                        .defaultClockOptions.scale.length - 2 * this.defaultClockOptions.num60
+                        .size * this.defaultClockOptions.num60.isShow) + "px";
                     numItemDom.appendChild(numItemContentDomFor12);
                     fragmentForClock12Nums.appendChild(numItemDom);
                 }
@@ -903,17 +940,17 @@ customElements.define('scale-clock',
         /**
          *  当自定义元素与文档DOM断开连接时被调用
          */
-        disconnectedCallback() { }
+        disconnectedCallback() {}
 
         /**
          *  当自定义元素被移动到新文档时被调用
          */
-        adoptedCallback() { }
+        adoptedCallback() {}
 
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
          */
-        attributeChangedCallback(attrName, oldValue, newValue) { }
+        attributeChangedCallback(attrName, oldValue, newValue) {}
 
         //#endregion
 
@@ -1035,7 +1072,7 @@ customElements.define('scale-clock',
 
         _BatchUpdateEleStyleByCustom(selectors, eleAndStyleObj) {
             if (this._GetDataType(eleAndStyleObj) === "object" && Object.getOwnPropertyNames(
-                eleAndStyleObj).length) {
+                    eleAndStyleObj).length) {
                 let targetEles = this.shadowRoot.querySelectorAll(selectors);
                 if (targetEles.length === 0) return;
                 for (const key in eleAndStyleObj) {
@@ -1043,7 +1080,7 @@ customElements.define('scale-clock',
                         const numKey = Number(key);
                         if (Number.isInteger(numKey) &&
                             numKey >= 1 &&
-                            numKey <= targetEles.length) { }
+                            numKey <= targetEles.length) {}
                         this._UpdateEleStyle(targetEles[numKey - 1], eleAndStyleObj[key]);
                     }
                 }
@@ -1274,12 +1311,12 @@ customElements.define('auto-generate-directory',
         /**
          *  当自定义元素被移动到新文档时被调用
          */
-        adoptedCallback() { }
+        adoptedCallback() {}
 
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
          */
-        attributeChangedCallback(attrName, oldValue, newValue) { }
+        attributeChangedCallback(attrName, oldValue, newValue) {}
 
         //#endregion
 
@@ -1437,17 +1474,17 @@ customElements.define('link-icon',
         /**
          *  当自定义元素与文档DOM断开连接时被调用
          */
-        disconnectedCallback() { }
+        disconnectedCallback() {}
 
         /**
          *  当自定义元素被移动到新文档时被调用
          */
-        adoptedCallback() { }
+        adoptedCallback() {}
 
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
          */
-        attributeChangedCallback(attrName, oldValue, newValue) { }
+        attributeChangedCallback(attrName, oldValue, newValue) {}
 
         //#endregion
 
