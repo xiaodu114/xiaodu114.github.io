@@ -72,10 +72,6 @@ customElements.define('marked-block',
 
         constructor() {
             super();
-
-            this.instanceSupportAttrObj = MarkedBlock.supportAttrObj;
-            this.instanceDefaultTypeObj = MarkedBlock.defaultTypeObj;
-
             const shadowRoot = this.attachShadow({
                 mode: 'open' // open | closed
             });
@@ -120,14 +116,14 @@ customElements.define('marked-block',
          *  当自定义元素第一次被连接到文档DOM时被调用（没有参数）
          */
         connectedCallback() {
-            let userSet_Type = (this.hasAttribute("type") && this.instanceDefaultTypeObj.hasOwnProperty(this.getAttribute("type"))) ? this.getAttribute("type") : "default",
-                customAttrObj = this.instanceDefaultTypeObj[userSet_Type];
+            let userSet_Type = (this.hasAttribute("type") && this.constructor.defaultTypeObj.hasOwnProperty(this.getAttribute("type"))) ? this.getAttribute("type") : "default",
+                customAttrObj = this.constructor.defaultTypeObj[userSet_Type];
             for (const attr in customAttrObj) {
                 if (Object.hasOwnProperty.call(customAttrObj, attr)) {
                     if (this.hasAttribute(attr) && this.getAttribute(attr)) {
                         customAttrObj[attr] = this.getAttribute(attr);
                     }
-                    this.instanceSupportAttrObj[attr].update(this, customAttrObj[attr]);
+                    this.constructor.supportAttrObj[attr].update(this, customAttrObj[attr]);
                 }
             }
         }
@@ -150,8 +146,8 @@ customElements.define('marked-block',
          * 当自定义元素的一个属性被增加、移除或更改时被调用
          */
         attributeChangedCallback(attrName, oldValue, newValue) {
-            if (this.instanceSupportAttrObj.hasOwnProperty(attrName) && newValue) {
-                this.instanceSupportAttrObj[attrName].update(this, newValue);
+            if (this.constructor.supportAttrObj.hasOwnProperty(attrName) && newValue) {
+                this.constructor.supportAttrObj[attrName].update(this, newValue);
             }
         }
 
@@ -1530,9 +1526,6 @@ customElements.define('my-dialog',
 
         constructor() {
             super();
-
-            this.instanceSupportAttrObj = MyDialog.supportAttrObj;
-
             const shadowRoot = this.attachShadow({
                 mode: 'open' // open | closed
             });
@@ -1628,12 +1621,12 @@ customElements.define('my-dialog',
          *  当自定义元素第一次被连接到文档DOM时被调用（没有参数）
          */
         connectedCallback() {
-            for (const attr in this.instanceSupportAttrObj) {
-                if (Object.hasOwnProperty.call(this.instanceSupportAttrObj, attr)) {
+            for (const attr in this.constructor.supportAttrObj) {
+                if (Object.hasOwnProperty.call(this.constructor.supportAttrObj, attr)) {
                     if (this.hasAttribute(attr) && this.getAttribute(attr)) {
-                        this.instanceSupportAttrObj[attr].value = this.getAttribute(attr);
+                        this.constructor.supportAttrObj[attr].value = this.getAttribute(attr);
                     }
-                    this.instanceSupportAttrObj[attr].update(this, this.instanceSupportAttrObj[attr].value);
+                    this.constructor.supportAttrObj[attr].update(this, this.constructor.supportAttrObj[attr].value);
                 }
             }
         }
@@ -1656,8 +1649,8 @@ customElements.define('my-dialog',
          * 当自定义元素的一个属性被增加、移除或更改时被调用
          */
         attributeChangedCallback(attrName, oldValue, newValue) {
-            if (this.instanceSupportAttrObj.hasOwnProperty(attrName) && newValue) {
-                this.instanceSupportAttrObj[attrName].update(this, newValue);
+            if (this.constructor.supportAttrObj.hasOwnProperty(attrName) && newValue) {
+                this.constructor.supportAttrObj[attrName].update(this, newValue);
             }
         }
 
