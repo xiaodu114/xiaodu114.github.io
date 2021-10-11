@@ -471,7 +471,7 @@ customElements.define('single-slider',
                         newValue += "%";
                     }
                 }
-                let attrDefaultObj = SingleSlider.supportAttrObj[attrName];
+                let attrDefaultObj = this.constructor.supportAttrObj[attrName];
                 let tempObj = {};
                 attrDefaultObj.names.forEach(name => {
                     tempObj[name] = newValue;
@@ -507,9 +507,9 @@ customElements.define('single-slider',
         }
 
         privateInstanceInit() {
-            for (const attrName in SingleSlider.supportAttrObj) {
-                if (SingleSlider.supportAttrObj.hasOwnProperty(attrName)) {
-                    let attrDefaultObj = SingleSlider.supportAttrObj[attrName];
+            for (const attrName in this.constructor.supportAttrObj) {
+                if (this.constructor.supportAttrObj.hasOwnProperty(attrName)) {
+                    let attrDefaultObj = this.constructor.supportAttrObj[attrName];
                     let tempObj = {};
                     attrDefaultObj.names.forEach(name => {
                         tempObj[name] = this.getAttribute(attrName) || attrDefaultObj.value;
@@ -1505,13 +1505,14 @@ customElements.define('my-dialog',
                 "title": {
                     value: "标题",
                     update(eleInstance, attrVal) {
+                        if (!attrVal) attrVal = this.value;
                         eleInstance.myDialogTitleDom.innerHTML = attrVal;
                     }
                 },
                 "width": {
                     value: "33rem",
                     update(eleInstance, attrVal) {
-                        if (!attrVal) attrVal = "33rem";
+                        if (!attrVal) attrVal = this.value;
                         eleInstance.myDialogContentDom.style.width = attrVal;
                     }
                 }
@@ -1623,10 +1624,7 @@ customElements.define('my-dialog',
         connectedCallback() {
             for (const attr in this.constructor.supportAttrObj) {
                 if (Object.hasOwnProperty.call(this.constructor.supportAttrObj, attr)) {
-                    if (this.hasAttribute(attr) && this.getAttribute(attr)) {
-                        this.constructor.supportAttrObj[attr].value = this.getAttribute(attr);
-                    }
-                    this.constructor.supportAttrObj[attr].update(this, this.constructor.supportAttrObj[attr].value);
+                    this.constructor.supportAttrObj[attr].update(this, this.getAttribute(attr));
                 }
             }
         }
