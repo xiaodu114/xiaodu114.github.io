@@ -114,16 +114,17 @@ customElements.define('marked-block',
 
         /**
          *  当自定义元素第一次被连接到文档DOM时被调用（没有参数）
+         *  如果监听的属性开始就设置了值,则 attributeChangedCallback 早于 connectedCallback 调用
+         *      connectedCallback中只是对开始没有设置值的属性设置默认值，如果已设置则跳过
          */
         connectedCallback() {
             let userSet_Type = (this.hasAttribute("type") && this.constructor.defaultTypeObj.hasOwnProperty(this.getAttribute("type"))) ? this.getAttribute("type") : "default",
                 customAttrObj = this.constructor.defaultTypeObj[userSet_Type];
             for (const attr in customAttrObj) {
                 if (Object.hasOwnProperty.call(customAttrObj, attr)) {
-                    if (this.hasAttribute(attr) && this.getAttribute(attr)) {
-                        customAttrObj[attr] = this.getAttribute(attr);
+                    if (!this.hasAttribute(attr)) {
+                        this.constructor.supportAttrObj[attr].update(this, customAttrObj[attr]);
                     }
-                    this.constructor.supportAttrObj[attr].update(this, customAttrObj[attr]);
                 }
             }
         }
@@ -144,6 +145,7 @@ customElements.define('marked-block',
 
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
+         * 如果监听的属性开始就设置了值,则 attributeChangedCallback 早于 connectedCallback 调用
          */
         attributeChangedCallback(attrName, oldValue, newValue) {
             if (this.constructor.supportAttrObj.hasOwnProperty(attrName) && newValue) {
@@ -238,6 +240,8 @@ customElements.define('back-to-top',
 
         /**
          *  当自定义元素第一次被连接到文档DOM时被调用（没有参数）
+         *  如果监听的属性开始就设置了值,则 attributeChangedCallback 早于 connectedCallback 调用
+         *      connectedCallback中只是对开始没有设置值的属性设置默认值，如果已设置则跳过
          */
         connectedCallback() {
             let scrollSelectorValue = this.getAttribute("scroll-selector");
@@ -285,6 +289,7 @@ customElements.define('back-to-top',
 
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
+         * 如果监听的属性开始就设置了值,则 attributeChangedCallback 早于 connectedCallback 调用
          */
         attributeChangedCallback(attrName, oldValue, newValue) {}
 
@@ -436,6 +441,8 @@ customElements.define('single-slider',
 
         /**
          *  当自定义元素第一次被连接到文档DOM时被调用（没有参数）
+         *  如果监听的属性开始就设置了值,则 attributeChangedCallback 早于 connectedCallback 调用
+         *      connectedCallback中只是对开始没有设置值的属性设置默认值，如果已设置则跳过
          */
         connectedCallback() {
             this.privateInstanceInit();
@@ -458,6 +465,7 @@ customElements.define('single-slider',
 
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
+         * 如果监听的属性开始就设置了值,则 attributeChangedCallback 早于 connectedCallback 调用
          */
         attributeChangedCallback(attrName, oldValue, newValue) {
             if (oldValue !== newValue && newValue) {
@@ -743,6 +751,8 @@ customElements.define('scale-clock',
 
         /**
          *  当自定义元素第一次被连接到文档DOM时被调用（没有参数）
+         *  如果监听的属性开始就设置了值,则 attributeChangedCallback 早于 connectedCallback 调用
+         *      connectedCallback中只是对开始没有设置值的属性设置默认值，如果已设置则跳过
          */
         connectedCallback() {
 
@@ -950,6 +960,7 @@ customElements.define('scale-clock',
 
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
+         * 如果监听的属性开始就设置了值,则 attributeChangedCallback 早于 connectedCallback 调用
          */
         attributeChangedCallback(attrName, oldValue, newValue) {}
 
@@ -1294,6 +1305,8 @@ customElements.define('auto-generate-directory',
 
         /**
          *  当自定义元素第一次被连接到文档DOM时被调用（没有参数）
+         *  如果监听的属性开始就设置了值,则 attributeChangedCallback 早于 connectedCallback 调用
+         *      connectedCallback中只是对开始没有设置值的属性设置默认值，如果已设置则跳过
          */
         connectedCallback() {
 
@@ -1316,6 +1329,7 @@ customElements.define('auto-generate-directory',
 
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
+         * 如果监听的属性开始就设置了值,则 attributeChangedCallback 早于 connectedCallback 调用
          */
         attributeChangedCallback(attrName, oldValue, newValue) {}
 
@@ -1446,6 +1460,8 @@ customElements.define('link-icon',
 
         /**
          *  当自定义元素第一次被连接到文档DOM时被调用（没有参数）
+         *  如果监听的属性开始就设置了值,则 attributeChangedCallback 早于 connectedCallback 调用
+         *      connectedCallback中只是对开始没有设置值的属性设置默认值，如果已设置则跳过
          */
         connectedCallback() {
             let customRel = this.getAttribute("rel"),
@@ -1484,6 +1500,7 @@ customElements.define('link-icon',
 
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
+         * 如果监听的属性开始就设置了值,则 attributeChangedCallback 早于 connectedCallback 调用
          */
         attributeChangedCallback(attrName, oldValue, newValue) {}
 
@@ -1620,11 +1637,15 @@ customElements.define('my-dialog',
 
         /**
          *  当自定义元素第一次被连接到文档DOM时被调用（没有参数）
+         *  如果监听的属性开始就设置了值,则 attributeChangedCallback 早于 connectedCallback 调用
+         *      connectedCallback中只是对开始没有设置值的属性设置默认值，如果已设置则跳过
          */
         connectedCallback() {
             for (const attr in this.constructor.supportAttrObj) {
                 if (Object.hasOwnProperty.call(this.constructor.supportAttrObj, attr)) {
-                    this.constructor.supportAttrObj[attr].update(this, this.getAttribute(attr));
+                    if (!this.hasAttribute(attr)) {
+                        this.constructor.supportAttrObj[attr].update(this, this.getAttribute(attr));
+                    }
                 }
             }
         }
@@ -1645,6 +1666,7 @@ customElements.define('my-dialog',
 
         /**
          * 当自定义元素的一个属性被增加、移除或更改时被调用
+         * 如果监听的属性开始就设置了值,则 attributeChangedCallback 早于 connectedCallback 调用
          */
         attributeChangedCallback(attrName, oldValue, newValue) {
             if (this.constructor.supportAttrObj.hasOwnProperty(attrName) && newValue) {
