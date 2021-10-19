@@ -80,7 +80,7 @@
 <body>
     <div class="font-demo">
         <div class="demo-header">
-            <h1>你可以上传或者选择一个ttf格式的字体图标文件</h1>
+            <h1>你可以上传或者选择一个ttf格式的字体图标文件 当时版本为：v1.3.3</h1>
             <input type="file" accept="application/x-font-truetype" onchange="selectFontFileUpload(this);" />
             <select id="selectFontFile">
                 <option>请选择</option>
@@ -95,7 +95,7 @@
         </div>
         <div class="demo-main" id="fontIconContainer"></div>
     </div>
-    <script src="../../../lib/opentypejs/opentype.js"></script>
+    <script src="https://unpkg.com/opentype.js"></script>
     <script>
         //  https://www.coder.work/article/3792939
         //  https://www.w3schools.com/cssref/css3_pr_font-face_rule.asp
