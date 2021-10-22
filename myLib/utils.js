@@ -230,3 +230,66 @@ export const dateExtend_Format = function (targetDate, format) {
     }
     return format;
 }
+
+/**
+ * 防抖和节流
+ * 例子： 
+ *      防抖：throttleOrDebounce(function () { }, 2000, { type: 'debounce' });
+ *      节流-立即执行：throttleOrDebounce(function () { }, 2000);
+ *      节流-不立即执行：throttleOrDebounce(function () { }, 2000, { immediate: false });
+ * @param {Function} fn 目标方法
+ * @param {Number} timeInterval 时间段
+ * @param {Object} option
+ * @returns {Function} 返回方法
+ */
+export const throttleOrDebounce = function (fn, timeInterval, option) {
+    if (getDataType(fn) !== "function")
+        throw new Error("参数异常：fn必须是函数");
+    if (getDataType(timeInterval) !== "number")
+        timeInterval = 1000;
+    const types = ["throttle", "debounce"];
+    if (getDataType(option) !== "object")
+        option = {
+            type: types[0], // throttle | debounce
+            immediate: true   // 只有当 type==="throttle" 时,该配置有效
+        };
+    let setTimeoutId = null,
+        lastDataTime = null;
+    return function () {
+        let args = arguments;
+        switch (option.type) {
+            case types[1]: {
+                /**
+                 * 防抖(debounce)
+                 * 实现：在给定的时间段之后调用目标函数。如果在未超过给定的时间段内再次触发，则从新计时（也就是说之前的等待浪费了）。
+                 * 理解：如果你在给定的时间段内一直触发（就行缝纫机一样），那么前面的触发都是在浪费力气，只有最后一次是有效的（最后一次点击开始计时，经过给的时间段，触发目标函数）
+                 */
+                clearTimeout(setTimeoutId);
+                setTimeoutId = setTimeout(() => {
+                    fn.apply(this, args);
+                }, timeInterval);
+            }
+            case types[0]:
+            default: {
+                /**
+                 * 节流(throttle)——支持是否立即触发
+                 * 实现：在给定的时间段之内只会调用目标函数一次。如果在未超过给定的时间段内再次触发，则直接返回。
+                 * 理解：如果你在给定的时间段内一直触发（就行缝纫机一样），那么我也不像防抖(debounce)一样绝情，到了时间（给定的时间段）就会触发一次目标函数。也就是降频。
+                 */
+                if (option.immediate) {
+                    if (lastDataTime !== null && Date.now() - lastDataTime < timeInterval) return;
+                    lastDataTime = Date.now();
+                    fn.apply(this, args);
+                }
+                else {
+                    if (setTimeoutId) return;
+                    setTimeoutId = setTimeout(() => {
+                        fn.apply(this, args);
+                        setTimeoutId = null;
+                    }, timeInterval);
+                }
+                break;
+            }
+        }
+    };
+}
