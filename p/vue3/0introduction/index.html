@@ -170,26 +170,7 @@ module.exports = tempModuleExportsObj;
         </marked-block>
         <h2>单文件组件支持 <a href="/p/vue3/0introduction/code/introduction-2.zip" target="_blank">代码下载</a></h2>
         <h3>新增单文件组件</h3>
-        <p>既然是单文件组件，先来一个，尽量简单（路径为：/src/common/component/HelloMsg.vue）,代码如下：</p>
-        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
-<template>
-    <div>
-        <p>Hello {{msg}}</p>
-    </div>
-</template>
-<script>
-export default {
-    props: {
-        msg: {
-            type: String,
-            default() {
-                return "Vue 3";
-            },
-        },
-    },
-};
-</script>
-        </pre>
+        <p>既然是单文件组件，先来一个，尽量简单（路径为：/src/common/component/HelloMsg.vue）。你可以点击上面的代码下载链接下载代码。</p>
         <h3>html和js的修改</h3>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
 <!-- 两个入口页面都添加如下代码： -->
@@ -215,12 +196,16 @@ Vue.createApp({
         </pre>
         <h3>package.json的更改</h3>
         <p>新增<inline-code>@vue/compiler-sfc</inline-code>
+            <inline-code>css-loader</inline-code>
+            <inline-code>less</inline-code>
+            <inline-code>less-loader</inline-code>
+            <inline-code>style-loader</inline-code>
             <inline-code>vue-loader@next</inline-code>两个开发依赖
         </p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 <!-- 你可以用下面的命令安装 -->
 yarn add vue@next
-yarn add @vue/compiler-sfc html-webpack-plugin vue-loader@next webpack webpack-cli -D
+yarn add @vue/compiler-sfc css-loader html-webpack-plugin less less-loader style-loader vue-loader webpack webpack-cli -D
         </pre>
         <h3>webpack.config.js的更改</h3>
         <p>
