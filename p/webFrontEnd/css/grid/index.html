@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>css grid 布局 - xiaodu114.github.io</title>
+    <meta name="keywords" content="css,grid,布局">
+    <meta name="description" content="css grid 布局">
+    <link rel="stylesheet" href="/lib/normalize/normalize.css">
+    <link rel="stylesheet" href="/lib/highlight/github.css">
+    <link rel="stylesheet" href="/lib/highlight/lang-label.css">
+    <link rel="stylesheet" href="/p/blogCss/typesetting.css">
+
+    <style>
+        .grid-container-layout-1 {
+            display: grid;
+            grid-template-rows: 64px 1fr 56px;
+        }
+
+        .grid-container-layout-2 {
+            display: grid;
+            grid-template-rows: 64px 1fr 56px;
+            grid-template-columns: 235px 1fr;
+        }
+
+        .grid-container-layout-2 .header {
+            grid-area: 1 / 1 / 2 / 3;
+        }
+
+        .grid-container-layout-2 .side {
+            grid-area: 2 / 1 / 3 / 2;
+        }
+
+        .grid-container-layout-2 .main {
+            grid-area: 2 / 2 / 3 / 3;
+        }
+
+        .grid-container-layout-2 .footer {
+            grid-area: 3 / 1 / 4 / 3;
+        }
+    </style>
+    <style>
+        .grid-item-problem-border {
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .grid-container-problem-border-1 {
+            display: grid;
+        }
+
+        .grid-container-problem-border-1 .grid-item-problem-border {
+            margin: 0px -1px -1px 0px;
+            border: 1px solid;
+        }
+
+        .grid-container-problem-border-2 {
+            display: grid;
+            grid-gap: 1px;
+        }
+
+        .grid-container-problem-border-2 .grid-item-problem-border {
+            outline: 1px solid;
+        }
+
+        .grid-container-problem-border-3 {
+            display: grid;
+        }
+
+        .grid-container-problem-border-3>.grid-item-problem-border {
+            position: relative;
+        }
+
+        .grid-container-problem-border-3>.grid-item-problem-border::after {
+            content: '';
+            position: absolute;
+            top: -1px;
+            right: 0px;
+            bottom: 0px;
+            left: -1px;
+            border: 1px solid;
+        }
+
+        .grid-container-problem-border-4 {
+            display: grid;
+            grid-gap: 1px;
+        }
+
+        .grid-container-problem-border-4 .grid-item-problem-border {
+            box-shadow: 0 0 0 1px;
+        }
+    </style>
+
+    <script src="/myLib/webComponents.js"></script>
+</head>
+
+<body>
+    <!-- github访问地址：/p/webFrontEnd/css/grid/index.html -->
+    <link-icon></link-icon>
+    <div class="blog-page">
+        <h1>css grid 布局相关</h1>
+        <h2>常见的布局</h2>
+        <h3>三明治</h3>
+        <div class="grid-container-layout-1" style="height: 324px; color: #fff;">
+            <div style="background-color: blueviolet;">头部-固定高度</div>
+            <div style="background-color: #3cb878;">内容部分-撑开高度</div>
+            <div style="background-color: blueviolet;">底部-固定高度</div>
+        </div>
+        <h3>圣杯布局</h3>
+        <div class="grid-container-layout-2" style="height: 324px; color: #fff;">
+            <div class="header" style="background-color: blueviolet;">头部-固定高度</div>
+            <div class="side" style="background-color:lightskyblue">中左-固定宽度</div>
+            <div class="main" style="background-color: #3cb878;">中右-撑开宽度</div>
+            <div class="footer" style="background-color: blueviolet;">底部-固定高度</div>
+        </div>
+        <h2>border重叠的问题</h2>
+        <form id="formSetGCRowAndCol">
+            <label>
+                行：<input type="number" name="rowCount" value="5">
+            </label>
+            <label>
+                列：<input type="number" name="colCount" value="5">
+            </label>
+            <button type="button" id="btnSetGCRowAndCol">确定</button>
+        </form>
+        <fieldset>
+            <legend>方式1</legend>
+            <p><strong>运行效果</strong></p>
+            <div id="gc1" class="grid-container-problem-border-1"></div>
+            <p><strong>CSS代码</strong></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="css">
+.grid-container-problem-border-1 {
+    display: grid;
+}
+
+.grid-container-problem-border-1 .grid-item-problem-border {
+    margin: 0px -1px -1px 0px;
+    border: 1px solid;
+}
+            </pre>
+        </fieldset>
+        <fieldset>
+            <legend>方式2</legend>
+            <p><strong>运行效果</strong></p>
+            <div id="gc2" class="grid-container-problem-border-2"></div>
+            <p><strong>CSS代码</strong></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="css">
+.grid-container-problem-border-2 {
+    display: grid;
+    grid-gap: 1px;
+}
+
+.grid-container-problem-border-2 .grid-item-problem-border {
+    outline: 1px solid;
+}
+            </pre>
+        </fieldset>
+        <fieldset>
+            <legend>方式3</legend>
+            <p><strong>运行效果</strong></p>
+            <div id="gc3" class="grid-container-problem-border-3"></div>
+            <p><strong>CSS代码</strong></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="css">
+.grid-container-problem-border-3 {
+    display: grid;
+}
+
+.grid-container-problem-border-3>.grid-item-problem-border {
+    position: relative;
+}
+
+.grid-container-problem-border-3>.grid-item-problem-border::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    right: 0px;
+    bottom: 0px;
+    left: -1px;
+    border: 1px solid;
+}
+            </pre>
+        </fieldset>
+        <fieldset>
+            <legend>方式4</legend>
+            <p><strong>运行效果</strong></p>
+            <div id="gc4" class="grid-container-problem-border-4"></div>
+            <p><strong>CSS代码</strong></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="css">
+.grid-container-problem-border-4 {
+    display: grid;
+    grid-gap: 1px;
+}
+
+.grid-container-problem-border-4 .grid-item-problem-border {
+    box-shadow: 0 0 0 1px;
+}
+            </pre>
+        </fieldset>
+        <p></p>
+        <marked-block>
+            <p>
+                你可以改变窗口大小，对比前后的变化。仍然会出现边框重叠的情况。暂时不知道如何解决！
+            </p>
+        </marked-block>
+        <back-to-top></back-to-top>
+        <auto-generate-directory></auto-generate-directory>
+    </div>
+    <script src="/lib/highlight/highlight.pack.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll("[ddz-class='here-need-to-handle-by-highlight']").forEach((block) => {
+                block.replaceWith(document.createRange().createContextualFragment(
+                    `
+                        <pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${block.getAttribute("ddz-lang")} hljs">${hljs.highlightAuto(block.innerHTML.trim()).value}</code></pre>
+                        `
+                ));
+            });
+        });
+    </script>
+    <script>
+        let gc1Dom = document.getElementById("gc1"),
+            gc2Dom = document.getElementById("gc2"),
+            gc3Dom = document.getElementById("gc3"),
+            gc4Dom = document.getElementById("gc4");
+
+        function resetGC1RowAndCol() {
+            let formDom = document.getElementById("formSetGCRowAndCol"),
+                rowCount = formDom.rowCount.value,
+                colCount = formDom.colCount.value;
+            gc1Dom.innerHTML = "";
+            let fragmentForGridItems = document.createDocumentFragment();
+            for (let rowIndex = 1; rowIndex <= rowCount; rowIndex++) {
+                for (let colIndex = 1; colIndex <= colCount; colIndex++) {
+                    let gridItemDom = document.createElement("div");
+                    gridItemDom.innerHTML = `第${rowIndex}行 第${colIndex}列`;
+                    gridItemDom.classList.add("grid-item-problem-border");
+                    gridItemDom.style.gridArea = `${rowIndex} / ${colIndex} / ${rowIndex+1} / ${colIndex+1}`;
+                    fragmentForGridItems.appendChild(gridItemDom);
+                }
+            }
+            gc1Dom.appendChild(fragmentForGridItems.cloneNode(true));
+            gc2Dom.appendChild(fragmentForGridItems.cloneNode(true));
+            gc3Dom.appendChild(fragmentForGridItems.cloneNode(true));
+            gc4Dom.appendChild(fragmentForGridItems.cloneNode(true));
+        }
+        let btnSetGCRowAndColDom = document.getElementById("btnSetGCRowAndCol");
+        btnSetGCRowAndColDom.addEventListener("click", resetGC1RowAndCol);
+        resetGC1RowAndCol();
+    </script>
+</body>
+
+</html>
