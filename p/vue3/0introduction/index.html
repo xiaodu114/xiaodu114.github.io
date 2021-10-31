@@ -41,7 +41,7 @@
         <p>这里简单的记录一下：Vue3 + webpack下的多入口demo。该demo并没有使用<inline-code>@vue/cli</inline-code>、<inline-code>Vite
             </inline-code>等，而是自己搭建的，争取做到最简。
         </p>
-        <h2>最简：跑起来就行</h2>
+        <h2>最简：跑起来就行 <a href="/p/vue3/0introduction/code/introduction-1.zip" target="_blank">代码下载</a></h2>
         <p>这是第一步，仅仅是Vue3 + webpack的组合，只是弄了个多入口。没有使用单文件组件、
             <inline-code>TypeScript</inline-code>、<inline-code>Less</inline-code>等，（开发）依赖也是非必要不安装，webpack配置也是非必要不添加……
         </p>
@@ -168,6 +168,64 @@ module.exports = tempModuleExportsObj;
         <marked-block type="error">
             <p>我去这里出现了问题，highlight代码高亮时，js中箭头函数变身了……</p>
         </marked-block>
+        <h2>单文件组件支持 <a href="/p/vue3/0introduction/code/introduction-2.zip" target="_blank">代码下载</a></h2>
+        <h3>新增单文件组件</h3>
+        <p>既然是单文件组件，先来一个，尽量简单（路径为：/src/common/component/HelloMsg.vue）,代码如下：</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
+<template>
+    <div>
+        <p>Hello {{msg}}</p>
+    </div>
+</template>
+<script>
+export default {
+    props: {
+        msg: {
+            type: String,
+            default() {
+                return "Vue 3";
+            },
+        },
+    },
+};
+</script>
+        </pre>
+        <h3>html和js的修改</h3>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
+<!-- 两个入口页面都添加如下代码： -->
+<hr>
+<hello-msg></hello-msg>
+<hello-msg :msg="helloMsg"></hello-msg>
+        </pre>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+<!-- JS代码替换： -->
+import * as Vue from "vue";
+import HelloMsg from '../../common/component/HelloMsg.vue';
+Vue.createApp({
+    data() {
+        return {
+            msg: "Hi，这里是 Vue3 + webpack 多入口 示例项目 模块1 入口页面",
+            helloMsg: "我是 模块1 入口页面"
+        }
+    },
+    components: {
+        HelloMsg
+    }
+}).mount('#vue3Module1Entry');
+        </pre>
+        <h3>package.json的更改</h3>
+        <p>新增<inline-code>@vue/compiler-sfc</inline-code>
+            <inline-code>vue-loader@next</inline-code>两个开发依赖
+        </p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+<!-- 你可以用下面的命令安装 -->
+yarn add vue@next
+yarn add @vue/compiler-sfc html-webpack-plugin vue-loader@next webpack webpack-cli -D
+        </pre>
+        <h3>webpack.config.js的更改</h3>
+        <p>
+            <img src="./images/2.png" width="100%">
+        </p>
         <back-to-top></back-to-top>
         <auto-generate-directory></auto-generate-directory>
     </div>
