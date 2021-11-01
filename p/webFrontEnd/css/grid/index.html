@@ -14,31 +14,130 @@
     <link rel="stylesheet" href="/p/blogCss/typesetting.css">
 
     <style>
-        .grid-container-layout-1 {
+        .grid-container-layout-h-v-center {
+            height: 324px;
+            border: 1px solid #3cb878;
+            /* 下面是关键代码 */
+            display: grid;
+            place-items: center;
+        }
+
+        .grid-container-layout-h-v-center>div {
+            height: 235px;
+            width: 50%;
+            background-color: #3cb878;
+        }
+
+        .grid-container-layout-3-row {
+            height: 324px;
+            color: #fff;
+            /* 下面是关键代码 */
             display: grid;
             grid-template-rows: 64px 1fr 56px;
         }
 
-        .grid-container-layout-2 {
+        .grid-container-layout-3-row>div:nth-child(1) {
+            background-color: blueviolet;
+        }
+
+        .grid-container-layout-3-row>div:nth-child(2) {
+            background-color: #3cb878;
+        }
+
+        .grid-container-layout-3-row>div:nth-child(3) {
+            background-color: blueviolet;
+        }
+
+        .grid-container-layout-3-col {
+            height: 324px;
+            color: #fff;
+            /* 下面是关键代码 */
+            display: grid;
+            grid-template-columns: 212px 1fr 212px;
+        }
+
+        .grid-container-layout-3-col>div:nth-child(1) {
+            background-color: blueviolet;
+        }
+
+        .grid-container-layout-3-col>div:nth-child(2) {
+            background-color: #3cb878;
+        }
+
+        .grid-container-layout-3-col>div:nth-child(3) {
+            background-color: blueviolet;
+        }
+
+        .grid-container-layout-grail {
+            height: 324px;
+            color: #fff;
+            /* 下面是关键代码 */
             display: grid;
             grid-template-rows: 64px 1fr 56px;
-            grid-template-columns: 235px 1fr;
+            grid-template-columns: 212px 1fr 212px;
         }
 
-        .grid-container-layout-2 .header {
-            grid-area: 1 / 1 / 2 / 3;
+        .grid-container-layout-grail .header {
+            background-color: blueviolet;
+            grid-area: 1 / 1 / 2 / 4;
         }
 
-        .grid-container-layout-2 .side {
+        .grid-container-layout-grail .side-left {
+            background-color: lightskyblue;
             grid-area: 2 / 1 / 3 / 2;
         }
 
-        .grid-container-layout-2 .main {
+        .grid-container-layout-grail .main {
+            background-color: #3cb878;
             grid-area: 2 / 2 / 3 / 3;
         }
 
-        .grid-container-layout-2 .footer {
-            grid-area: 3 / 1 / 4 / 3;
+        .grid-container-layout-grail .side-right {
+            background-color: lightskyblue;
+            grid-area: 2 / 3 / 3 / 4;
+        }
+
+        .grid-container-layout-grail .footer {
+            background-color: blueviolet;
+            grid-area: 3 / 1 / 4 / 4;
+        }
+
+        .grid-container-layout-grail-2 {
+            height: 324px;
+            color: #fff;
+            /* 下面是关键代码 */
+            display: grid;
+            grid-template-rows: 64px 1fr 56px;
+            grid-template-columns: 212px 1fr 212px;
+            grid-template-areas:
+                "header header header"
+                "sideleft main sideright"
+                "footer footer footer";
+        }
+
+        .grid-container-layout-grail-2 .header {
+            background-color: blueviolet;
+            grid-area: header;
+        }
+
+        .grid-container-layout-grail-2 .side-left {
+            background-color: lightskyblue;
+            grid-area: sideleft;
+        }
+
+        .grid-container-layout-grail-2 .main {
+            background-color: #3cb878;
+            grid-area: main;
+        }
+
+        .grid-container-layout-grail-2 .side-right {
+            background-color: lightskyblue;
+            grid-area: sideright;
+        }
+
+        .grid-container-layout-grail-2 .footer {
+            background-color: blueviolet;
+            grid-area: footer;
         }
     </style>
     <style>
@@ -49,33 +148,33 @@
             justify-content: center;
         }
 
-        .grid-container-problem-border-1 {
+        .grid-container-problem-1-border-1 {
             display: grid;
         }
 
-        .grid-container-problem-border-1 .grid-item-problem-border {
+        .grid-container-problem-1-border-1 .grid-item-problem-border {
             margin: 0px -1px -1px 0px;
             border: 1px solid;
         }
 
-        .grid-container-problem-border-2 {
+        .grid-container-problem-1-border-2 {
             display: grid;
             grid-gap: 1px;
         }
 
-        .grid-container-problem-border-2 .grid-item-problem-border {
+        .grid-container-problem-1-border-2 .grid-item-problem-border {
             outline: 1px solid;
         }
 
-        .grid-container-problem-border-3 {
+        .grid-container-problem-1-border-3 {
             display: grid;
         }
 
-        .grid-container-problem-border-3>.grid-item-problem-border {
+        .grid-container-problem-1-border-3 .grid-item-problem-border {
             position: relative;
         }
 
-        .grid-container-problem-border-3>.grid-item-problem-border::after {
+        .grid-container-problem-1-border-3 .grid-item-problem-border::after {
             content: '';
             position: absolute;
             top: -1px;
@@ -85,12 +184,12 @@
             border: 1px solid;
         }
 
-        .grid-container-problem-border-4 {
+        .grid-container-problem-1-border-4 {
             display: grid;
             grid-gap: 1px;
         }
 
-        .grid-container-problem-border-4 .grid-item-problem-border {
+        .grid-container-problem-1-border-4 .grid-item-problem-border {
             box-shadow: 0 0 0 1px;
         }
     </style>
@@ -104,18 +203,37 @@
     <div class="blog-page">
         <h1>css grid 布局相关</h1>
         <h2>常见的布局</h2>
-        <h3>三明治</h3>
-        <div class="grid-container-layout-1" style="height: 324px; color: #fff;">
-            <div style="background-color: blueviolet;">头部-固定高度</div>
-            <div style="background-color: #3cb878;">内容部分-撑开高度</div>
-            <div style="background-color: blueviolet;">底部-固定高度</div>
+        <h3>水平垂直居中</h3>
+        <div class="grid-container-layout-h-v-center">
+            <div></div>
         </div>
-        <h3>圣杯布局</h3>
-        <div class="grid-container-layout-2" style="height: 324px; color: #fff;">
-            <div class="header" style="background-color: blueviolet;">头部-固定高度</div>
-            <div class="side" style="background-color:lightskyblue">中左-固定宽度</div>
-            <div class="main" style="background-color: #3cb878;">中右-撑开宽度</div>
-            <div class="footer" style="background-color: blueviolet;">底部-固定高度</div>
+        <h3>三明治</h3>
+        <div class="grid-container-layout-3-row">
+            <div>头部-固定高度</div>
+            <div>内容部分-撑开高度</div>
+            <div>底部-固定高度</div>
+        </div>
+        <h3>三列布局</h3>
+        <div class="grid-container-layout-3-col">
+            <div>左侧-固定宽度</div>
+            <div>中间-撑开宽度</div>
+            <div>右侧-固定宽度</div>
+        </div>
+        <h3>圣杯布局-1</h3>
+        <div class="grid-container-layout-grail">
+            <div class="header">头部-固定高度</div>
+            <div class="side-left">中左-固定宽度</div>
+            <div class="main">中间-撑开宽度</div>
+            <div class="side-right">中右-固定宽度</div>
+            <div class="footer">底部-固定高度</div>
+        </div>
+        <h3>圣杯布局-2</h3>
+        <div class="grid-container-layout-grail-2">
+            <div class="header">头部-固定高度</div>
+            <div class="side-left">中左-固定宽度</div>
+            <div class="main">中间-撑开宽度</div>
+            <div class="side-right">中右-固定宽度</div>
+            <div class="footer">底部-固定高度</div>
         </div>
         <h2>border重叠的问题</h2>
         <form id="formSetGCRowAndCol">
@@ -130,14 +248,14 @@
         <fieldset>
             <legend>方式1</legend>
             <p><strong>运行效果</strong></p>
-            <div id="gc1" class="grid-container-problem-border-1"></div>
+            <div id="gc1" class="grid-container-problem-1-border-1"></div>
             <p><strong>CSS代码</strong></p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="css">
-.grid-container-problem-border-1 {
+.grid-container-problem-1-border-1 {
     display: grid;
 }
 
-.grid-container-problem-border-1 .grid-item-problem-border {
+.grid-container-problem-1-border-1 .grid-item-problem-border {
     margin: 0px -1px -1px 0px;
     border: 1px solid;
 }
@@ -146,15 +264,15 @@
         <fieldset>
             <legend>方式2</legend>
             <p><strong>运行效果</strong></p>
-            <div id="gc2" class="grid-container-problem-border-2"></div>
+            <div id="gc2" class="grid-container-problem-1-border-2"></div>
             <p><strong>CSS代码</strong></p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="css">
-.grid-container-problem-border-2 {
+.grid-container-problem-1-border-2 {
     display: grid;
     grid-gap: 1px;
 }
 
-.grid-container-problem-border-2 .grid-item-problem-border {
+.grid-container-problem-1-border-2 .grid-item-problem-border {
     outline: 1px solid;
 }
             </pre>
@@ -162,18 +280,18 @@
         <fieldset>
             <legend>方式3</legend>
             <p><strong>运行效果</strong></p>
-            <div id="gc3" class="grid-container-problem-border-3"></div>
+            <div id="gc3" class="grid-container-problem-1-border-3"></div>
             <p><strong>CSS代码</strong></p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="css">
-.grid-container-problem-border-3 {
+.grid-container-problem-1-border-3 {
     display: grid;
 }
 
-.grid-container-problem-border-3>.grid-item-problem-border {
+.grid-container-problem-1-border-3 .grid-item-problem-border {
     position: relative;
 }
 
-.grid-container-problem-border-3>.grid-item-problem-border::after {
+.grid-container-problem-1-border-3 .grid-item-problem-border::after {
     content: '';
     position: absolute;
     top: -1px;
@@ -187,15 +305,15 @@
         <fieldset>
             <legend>方式4</legend>
             <p><strong>运行效果</strong></p>
-            <div id="gc4" class="grid-container-problem-border-4"></div>
+            <div id="gc4" class="grid-container-problem-1-border-4"></div>
             <p><strong>CSS代码</strong></p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="css">
-.grid-container-problem-border-4 {
+.grid-container-problem-1-border-4 {
     display: grid;
     grid-gap: 1px;
 }
 
-.grid-container-problem-border-4 .grid-item-problem-border {
+.grid-container-problem-1-border-4 .grid-item-problem-border {
     box-shadow: 0 0 0 1px;
 }
             </pre>
