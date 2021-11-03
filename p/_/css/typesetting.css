@@ -68,6 +68,7 @@ ul li {
     margin-right: auto;
     padding: 120px 150px 120px 150px;
     background-color: #fff;
+    opacity: 1;
 }
 
 .blog-page h2 {
