@@ -91,3 +91,36 @@ customElements.define('p-dependence',
     }
 );
 document.documentElement.appendChild(document.createElement("p-dependence"));
+document.documentElement.appendChild(document.createElement("link-icon"));
+
+document.addEventListener('DOMContentLoaded', (event) => {
+
+    document.querySelector("body>.blog-page").appendChild(document.createElement("back-to-top"));
+    document.querySelector("body>.blog-page").appendChild(document.createElement("auto-generate-directory"));
+
+    const myRange = document.createRange();
+    document.querySelectorAll("pre[ddz-class='here-need-to-handle-by-highlight']").forEach((block) => {
+        block.replaceWith(myRange.createContextualFragment(
+            `<pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${block.getAttribute("ddz-lang")} hljs">${hljs.highlightAuto(block.innerText.trim()).value}</code></pre>`
+        ));
+    });
+    document.querySelectorAll("[ddz-class='here-need-to-handle-by-highlight-and-replace-one']").forEach(
+        (block) => {
+            document.getElementById(block.getAttribute("ddz-replaceid")).replaceWith(myRange
+                .createContextualFragment(
+                    `<pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${block.getAttribute("ddz-lang")} hljs">${hljs.highlightAuto(block.innerHTML).value}</code></pre>`
+                ));
+        });
+    document.querySelectorAll("[ddz-class='here-need-to-handle-by-highlight-and-request-html']")
+        .forEach((block) => {
+            fetch(block.getAttribute("data-url")).then(response => {
+                if (response.ok) {
+                    return response.text();
+                }
+            }).then(responseData => {
+                block.replaceWith(myRange.createContextualFragment(
+                    `<pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${block.getAttribute("ddz-lang")} hljs">${hljs.highlightAuto(responseData.trim()).value}</code></pre>`
+                ));
+            });
+        });
+});

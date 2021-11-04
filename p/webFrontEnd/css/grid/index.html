@@ -195,7 +195,6 @@
 
 <body>
     <!-- github访问地址：/p/webFrontEnd/css/grid/index.html -->
-    <link-icon></link-icon>
     <div class="blog-page">
         <h1>css grid 布局相关</h1>
         <h2>常见的布局</h2>
@@ -320,20 +319,7 @@
                 你可以改变窗口大小，对比前后的变化。仍然会出现边框重叠的情况。暂时不知道如何解决！
             </p>
         </marked-block>
-        <back-to-top></back-to-top>
-        <auto-generate-directory></auto-generate-directory>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            document.querySelectorAll("[ddz-class='here-need-to-handle-by-highlight']").forEach((block) => {
-                block.replaceWith(document.createRange().createContextualFragment(
-                    `
-                        <pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${block.getAttribute("ddz-lang")} hljs">${hljs.highlightAuto(block.innerHTML.trim()).value}</code></pre>
-                        `
-                ));
-            });
-        });
-    </script>
     <script>
         let gc1Dom = document.getElementById("gc1"),
             gc2Dom = document.getElementById("gc2"),

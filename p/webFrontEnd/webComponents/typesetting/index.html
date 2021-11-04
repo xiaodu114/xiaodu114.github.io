@@ -14,7 +14,6 @@
 
 <body>
     <!-- github访问地址：/p/webFrontEnd/webComponents/typesetting/index.html -->
-    <link-icon></link-icon>
     <div class="blog-page">
         <h1>Web Components 之排版系列</h1>
         <h2>醒目块<inline-code>marked-block</inline-code>
@@ -619,20 +618,7 @@ scaleClockDemo2Dom.updateClockOption("num60", "numStyle", {
             </tfoot>
         </table>
         <h2>其他组件正在进行中……</h2>
-        <back-to-top></back-to-top>
-        <auto-generate-directory></auto-generate-directory>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            document.querySelectorAll("[ddz-class='here-need-to-handle-by-highlight']").forEach((block) => {
-                block.replaceWith(document.createRange().createContextualFragment(
-                    `
-                    <pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${block.getAttribute("ddz-lang")} hljs">${hljs.highlightAuto(block.innerHTML.trim()).value}</code></pre>
-                    `
-                ));
-            });
-        });
-    </script>
 </body>
 
 </html>

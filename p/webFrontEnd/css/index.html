@@ -65,7 +65,6 @@
 
 <body>
     <!-- github访问地址：/p/webFrontEnd/css/index.html -->
-    <link-icon></link-icon>
     <div class="blog-page">
         <h1>当 position: fixed 遇上 transform</h1>
         <p>项目中模态对话框很普遍，时不时的就会来个弹窗……我们的项目中遇到了一个场景：模态框中的页面需要全屏的支持。全屏处理很简单，其中的这个页面也在其他的场景中实现过，此时到了这里却失灵了，😭😭😭，最终经同事提醒，发现是父容器的样式使用了“transform”
@@ -244,8 +243,6 @@ btnFullScreenNODom.addEventListener("click", function () {
 });
 btnExitFullScreenNODom.addEventListener("click", maskLayerNOExitFullScreen);
         </pre>
-        <back-to-top></back-to-top>
-        <auto-generate-directory></auto-generate-directory>
     </div>
     <script>
         //  1、运行正常的例子（可以全屏）
@@ -311,17 +308,6 @@ btnExitFullScreenNODom.addEventListener("click", maskLayerNOExitFullScreen);
             btnExitFullScreenNODom.style.display = "block";
         });
         btnExitFullScreenNODom.addEventListener("click", maskLayerNOExitFullScreen);
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            document.querySelectorAll("[ddz-class='here-need-to-handle-by-highlight']").forEach((block) => {
-                block.replaceWith(document.createRange().createContextualFragment(
-                    `
-                        <pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${block.getAttribute("ddz-lang")} hljs">${hljs.highlightAuto(block.innerHTML.trim()).value}</code></pre>
-                        `
-                ));
-            });
-        });
     </script>
 </body>
 

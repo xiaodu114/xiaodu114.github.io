@@ -14,7 +14,6 @@
 
 <body>
     <!-- github访问地址：/p/dotnet/maui/0demo/index.html -->
-    <link-icon></link-icon>
     <div class="blog-page">
         <h1>maui初体验</h1>
         <p>因为主攻的不是<inline-code>java</inline-code>，<inline-code>Eclipse</inline-code>这个IDE也用着不习惯，没有<inline-code>Visual
@@ -265,20 +264,7 @@
                     .NET MAUI Preview 9 - .NET Blog</a>
             </li>
         </ul>
-        <back-to-top></back-to-top>
-        <auto-generate-directory></auto-generate-directory>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            document.querySelectorAll("[ddz-class='here-need-to-handle-by-highlight']").forEach((block) => {
-                block.replaceWith(document.createRange().createContextualFragment(
-                    `
-                            <pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${block.getAttribute("ddz-lang")} hljs">${hljs.highlightAuto(block.innerHTML.trim()).value}</code></pre>
-                            `
-                ));
-            });
-        });
-    </script>
 </body>
 
 </html>
