@@ -34,6 +34,15 @@ customElements.define('p-dependence',
                 headEle.appendChild(linkElement);
             });
 
+            this._SyncLoadJS("/myLib/webComponents.js", (xhr) => {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    let _fn = new Function(xhr.responseText);
+                    _fn();
+                } else {
+                    this._ErrorMgs.push(`HTTP 响应代码：${xhr.status}。webComponents.js加载失败！`);
+                }
+            });
+
             /**
              *  2、博客依赖的js
              *      2.1、highlight.js
@@ -46,9 +55,7 @@ customElements.define('p-dependence',
             if (!window.hljs) {
                 //  https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest
                 //  https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status
-                let xhr = new XMLHttpRequest();
-                xhr.open("GET", "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js", false);
-                xhr.onreadystatechange = () => {
+                this._SyncLoadJS("https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js", (xhr) => {
                     if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                         let _fn = new Function("module", "exports", xhr.responseText),
                             _module = {
@@ -59,9 +66,17 @@ customElements.define('p-dependence',
                     } else {
                         this._ErrorMgs.push(`HTTP 响应代码：${xhr.status}。highlight.js加载失败！`);
                     }
-                };
-                xhr.send(null);
+                });
             }
+        }
+
+        _SyncLoadJS(url, callback) {
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", url, false);
+            xhr.onreadystatechange = () => {
+                callback(xhr);
+            };
+            xhr.send(null);
         }
 
         connectedCallback() {

@@ -9,7 +9,6 @@
     <meta name="keywords" content="vuejs,vue3,webpack,多入口">
     <meta name="description" content="Vue3 + webpack 多入口最简demo">
 
-    <script src="/myLib/webComponents.js"></script>
     <script src="/p/_/js/main.js"></script>
 </head>
 
@@ -217,7 +216,7 @@ yarn add @vue/compiler-sfc css-loader html-webpack-plugin less less-loader style
         document.addEventListener('DOMContentLoaded', (event) => {
             document.querySelectorAll("pre[ddz-class='here-need-to-handle-by-highlight']").forEach((block) => {
                 block.replaceWith(myRange.createContextualFragment(
-                    `<pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${block.getAttribute("ddz-lang")} hljs">${hljs.highlightAuto(block.innerHTML.trim()).value}</code></pre>`
+                    `<pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${block.getAttribute("ddz-lang")} hljs">${hljs.highlightAuto(block.innerText.trim()).value}</code></pre>`
                 ));
             });
             document.querySelectorAll("[ddz-class='here-need-to-handle-by-highlight-and-request-html']")
