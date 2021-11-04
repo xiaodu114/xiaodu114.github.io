@@ -1296,7 +1296,11 @@ customElements.define('auto-generate-directory',
             this.listenerTriggerClickEvent = this.listenerTriggerClickEvent.bind(this);
             this.listenerTriggerCoverClickEvent = this.listenerTriggerCoverClickEvent.bind(this);
 
-            document.addEventListener("DOMContentLoaded", this.init);
+            if (["interactive", "complete"].indexOf(document.readyState) >= 0) {
+                this.init();
+            } else {
+                document.addEventListener("DOMContentLoaded", this.init);
+            }
             this.triggerDom.addEventListener("click", this.listenerTriggerClickEvent);
             this.triggerCoverDom.addEventListener("click", this.listenerTriggerCoverClickEvent);
         }
