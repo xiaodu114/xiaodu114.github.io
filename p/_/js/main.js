@@ -35,7 +35,7 @@ customElements.define('p-dependence',
             });
 
             if (!customElements.get("marked-block")) {
-                this._SyncLoadJS("/myLib/webComponents.js", (xhr) => {
+                this._SyncLoadJS("/lib/_/webComponents.js", (xhr) => {
                     if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                         let _fn = new Function(xhr.responseText);
                         _fn();
