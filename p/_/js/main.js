@@ -34,14 +34,16 @@ customElements.define('p-dependence',
                 headEle.appendChild(linkElement);
             });
 
-            this._SyncLoadJS("/myLib/webComponents.js", (xhr) => {
-                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                    let _fn = new Function(xhr.responseText);
-                    _fn();
-                } else {
-                    this._ErrorMgs.push(`HTTP 响应代码：${xhr.status}。webComponents.js加载失败！`);
-                }
-            });
+            if (!customElements.get("marked-block")) {
+                this._SyncLoadJS("/myLib/webComponents.js", (xhr) => {
+                    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                        let _fn = new Function(xhr.responseText);
+                        _fn();
+                    } else {
+                        this._ErrorMgs.push(`HTTP 响应代码：${xhr.status}。webComponents.js加载失败！`);
+                    }
+                });
+            }
 
             /**
              *  2、博客依赖的js
@@ -100,8 +102,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     const myRange = document.createRange();
     document.querySelectorAll("pre[ddz-class='here-need-to-handle-by-highlight']").forEach((block) => {
+        let lang = block.getAttribute("ddz-lang").toLowerCase();
         block.replaceWith(myRange.createContextualFragment(
-            `<pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${block.getAttribute("ddz-lang")} hljs">${hljs.highlightAuto(block.innerText.trim()).value}</code></pre>`
+            `<pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${lang} hljs">${hljs.highlightAuto(lang==="html"?block.innerHTML.trim():block.innerText.trim()).value}</code></pre>`
         ));
     });
     document.querySelectorAll("[ddz-class='here-need-to-handle-by-highlight-and-replace-one']").forEach(
