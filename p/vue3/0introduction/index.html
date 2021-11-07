@@ -46,9 +46,9 @@
             <img src="./images/1.png" width="100%">
         </p>
         <p>上面的对比图中，你可以忽略tree.txt文件，该文档中的内容是项目的目录结构也就是上图中的内容。你可以使用下面的命令生成目录结构文件：</p>
-        <p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
             tree /f >tree.txt
-        </p>
+        </pre>
         <h3>示例代码</h3>
         <p>这里展示一下模块1（模块1和模块2只是1和2的区别）下的入口页面html（路径为：/src/module1/index.html）和js（路径为：/src/module1/js/index.js）：</p>
         <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
@@ -160,9 +160,6 @@ multiPageConfig.forEach(singlePage => {
 });
 module.exports = tempModuleExportsObj;
         </pre>
-        <marked-block type="error">
-            <p>我去这里出现了问题，highlight代码高亮时，js中箭头函数变身了……</p>
-        </marked-block>
         <h2>单文件组件支持 <a href="/p/vue3/0introduction/code/introduction-2.zip" target="_blank">代码下载</a></h2>
         <h3>新增单文件组件</h3>
         <p>既然是单文件组件，先来一个，尽量简单（路径为：/src/common/component/HelloMsg.vue）。你可以点击上面的代码下载链接下载代码。</p>
