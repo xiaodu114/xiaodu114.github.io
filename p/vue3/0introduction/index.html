@@ -90,6 +90,8 @@ yarn add html-webpack-plugin webpack webpack-cli -D
         </pre>
         <p>下面是 webpack.config.js</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+// yarn add vue@next
+// yarn add html-webpack-plugin webpack webpack-cli -D
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebPack = require('html-webpack-plugin');
@@ -161,48 +163,124 @@ multiPageConfig.forEach(singlePage => {
 module.exports = tempModuleExportsObj;
         </pre>
         <h2>单文件组件支持 <a href="/p/vue3/0introduction/code/introduction-2.zip" target="_blank">代码下载</a></h2>
+        <p>先来张图看看结构的变化</p>
+        <p>
+            <img src="./images/2.png" width="100%">
+        </p>
         <h3>新增单文件组件</h3>
-        <p>既然是单文件组件，先来一个，尽量简单（路径为：/src/common/component/HelloMsg.vue）。你可以点击上面的代码下载链接下载代码。</p>
+        <p>既然是单文件组件，先来一个，尽量简单（路径为：/src/common/component/DisplayText.vue）。你可以点击上面的代码下载链接下载代码。</p>
         <h3>html和js的修改</h3>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
 <!-- 两个入口页面都添加如下代码： -->
 <hr>
-<hello-msg></hello-msg>
-<hello-msg :msg="helloMsg"></hello-msg>
+<display-text></display-text>
+<display-text :value="displayText" :u-style="displayTextStyle"></display-text>
         </pre>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 <!-- JS代码替换： -->
 import * as Vue from "vue";
-import HelloMsg from '../../common/component/HelloMsg.vue';
+import DisplayText from '../../common/component/DisplayText.vue';
 Vue.createApp({
     data() {
         return {
             msg: "Hi，这里是 Vue3 + webpack 多入口 示例项目 模块1 入口页面",
-            helloMsg: "我是 模块1 入口页面"
+            displayText: "再说一遍，这里是 模块1 入口页面",
+            displayTextStyle: {
+                fontWeight: "bold"
+            }
         }
     },
     components: {
-        HelloMsg
+        DisplayText
     }
 }).mount('#vue3Module1Entry');
         </pre>
         <h3>package.json的更改</h3>
         <p>新增<inline-code>@vue/compiler-sfc</inline-code>
-            <inline-code>css-loader</inline-code>
-            <inline-code>less</inline-code>
-            <inline-code>less-loader</inline-code>
-            <inline-code>style-loader</inline-code>
             <inline-code>vue-loader@next</inline-code>两个开发依赖
         </p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 <!-- 你可以用下面的命令安装 -->
 yarn add vue@next
-yarn add @vue/compiler-sfc css-loader html-webpack-plugin less less-loader style-loader vue-loader webpack webpack-cli -D
+yarn add @vue/compiler-sfc html-webpack-plugin vue-loader@next webpack webpack-cli -D
         </pre>
         <h3>webpack.config.js的更改</h3>
         <p>
-            <img src="./images/2.png" width="100%">
+            <img src="./images/3.png" width="100%">
         </p>
+        <h2>LESS支持 <a href="/p/vue3/0introduction/code/introduction-3.zip" target="_blank">代码下载</a></h2>
+        <p>还是先来张图看看结构的变化</p>
+        <p>
+            <img src="./images/4.png" width="100%">
+        </p>
+        <h3>单文件组件添加LESS</h3>
+        <p>
+            <img src="./images/5.png" width="100%">
+        </p>
+        <h3>页面新增LESS和JS变化</h3>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="less">
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+#vue3Module1Entry {
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    overflow: hidden;
+    color: #fff;
+}
+        </pre>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+<!-- 页面引入样式文件 -->
+import '../css/index.less';
+        </pre>
+        <h3>package.json的更改</h3>
+        <p>新增<inline-code>css-loader</inline-code>
+            <inline-code>less</inline-code>
+            <inline-code>less-loader</inline-code>
+            <inline-code>style-loader</inline-code>四个开发依赖
+        </p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+<!-- 你可以用下面的命令安装 -->
+yarn add vue@next
+yarn add @vue/compiler-sfc css-loader html-webpack-plugin less less-loader style-loader vue-loader@next webpack webpack-cli -D
+        </pre>
+        <h3>webpack.config.js的更改</h3>
+        <p>
+            <img src="./images/6.png" width="100%">
+        </p>
+        <h2>静态文件-图片 <a href="/p/vue3/0introduction/code/introduction-4.zip" target="_blank">代码下载</a></h2>
+        <p>单文件组件引入图片、html页面引入图片、LESS样式文件引入文件……还是先来张图看看结构的变化</p>
+        <p>
+            <img src="./images/7.png" width="100%">
+        </p>
+        <p>新添加的单文件组件和一些图片就不说了，html和js也只是引入了这些……</p>
+        <h3>package.json的更改</h3>
+        <p>新增<inline-code>html-loader</inline-code>一个开发依赖
+        </p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+<!-- 你可以用下面的命令安装 -->
+yarn add vue@next
+yarn add @vue/compiler-sfc css-loader html-loader html-webpack-plugin less less-loader style-loader vue-loader@next webpack webpack-cli -D
+        </pre>
+        <h3>webpack.config.js的更改</h3>
+        <p>
+            <img src="./images/8.png" width="100%">
+        </p>
+        <p>
+            记得上次写的时候是通过<inline-code>html-loader</inline-code>和<inline-code>file-loader</inline-code>解决的，但是这次不行了……又新东西了，
+        </p>
+        <h2>JS转ES5<a href="/p/vue3/0introduction/code/introduction-5.zip" target="_blank">代码下载</a></h2>
     </div>
 </body>
 
