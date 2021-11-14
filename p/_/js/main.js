@@ -23,7 +23,7 @@ customElements.define('p-dependence',
              *  1、博客依赖的css
              */
             [
-                "/lib/normalize/normalize.css",
+                "https://unpkg.com/normalize.css",
                 "/lib/highlight/github.css",
                 "/lib/highlight/lang-label.css",
                 "/p/_/css/typesetting.css"
