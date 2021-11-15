@@ -281,6 +281,22 @@ yarn add @vue/compiler-sfc css-loader html-loader html-webpack-plugin less less-
             记得上次写的时候是通过<inline-code>html-loader</inline-code>和<inline-code>file-loader</inline-code>解决的，但是这次不行了……又新东西了，
         </p>
         <h2>JS转ES5<a href="/p/vue3/0introduction/code/introduction-5.zip" target="_blank">代码下载</a></h2>
+        <p>转ES6在真实项目中用的太多了，之前在vue2.x的时候也弄了，但是此时按照原来的方式写出现了一些问题，最后发现竟然是<inline-code>target</inline-code>的问题
+            ……还是先来张图看看结构的变化</p>
+        <p>
+            <img src="./images/9.png" width="100%">
+        </p>
+        <p>原来的vue相关的代码没有变动，只是增加了一个新的模块（module3）来测试ES5的转换。</p>
+        <h3>package.json的更改</h3>
+        <p>新增转ES5需要的依赖，这里有点多就不列了。有两种实现方式，在<inline-code>webpack.config.js</inline-code>中有说明。
+        </p>
+        <h3>webpack.config.js的更改</h3>
+        <p>
+            <img src="./images/10.png" width="100%">
+        </p>
+        <marked-block type="info">
+            <p>图片中的代码对比：一些注释代码给忽略了，看详细的你可以下载代码。</p>
+        </marked-block>
     </div>
 </body>
 
