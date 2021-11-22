@@ -297,6 +297,65 @@ yarn add @vue/compiler-sfc css-loader html-loader html-webpack-plugin less less-
         <marked-block type="info">
             <p>图片中的代码对比：一些注释代码给忽略了，看详细的你可以下载代码。</p>
         </marked-block>
+        <h2>抽取公共JS<a href="/p/vue3/0introduction/code/introduction-6.zip" target="_blank">代码下载</a></h2>
+        <p>默认打包时将依赖和业务代码都弄到一个JS中了，看着不舒服，希望打包之后的代码也有一个清晰的结构，仅仅是为了看着舒服……看一下目录变化</p>
+        <p>
+            <img src="./images/11.png" width="100%">
+        </p>
+        <h3>html和js的更改</h3>
+        <p>自己整理的一些通用JS方法，放到了utils.js中。三个入口页面都引入其中的某个方法并使用……</p>
+        <h3>package.json的更改</h3>
+        <p>这次并没有添加新的依赖，上图中的变化是版本的升级。</p>
+        <h3>webpack.config.js的更改</h3>
+        <p>
+            webpack.config.js添加下面的配置型
+        </p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="json">
+            <!-- 页面引入样式文件 -->
+{
+    optimization: { // 优化项
+        splitChunks: { //分割代码块
+            cacheGroups: { // 缓存
+                'my': { // 自己整理的通用方法
+                    priority: 100,
+                    name: "common/js/common", // 以'/'分割，最后一项是文件的名称，前面的都是目录
+                    test: /[\\/]src[\\/](common)[\\/]/,
+                    chunks: 'initial',
+                    minSize: 0,
+                    minChunks: 1,
+                    filename: '[name].js'
+                },
+                'core-js': { // 抽取第三方模块：core-js
+                    priority: 10,
+                    name: 'core-js',
+                    test: /[\\/]node_modules[\\/](core-js)[\\/]/,
+                    chunks: 'initial',
+                    minSize: 0,
+                    minChunks: 1,
+                    filename: 'lib/[name]/[name].js'
+                },
+                'vue': { // 抽取第三方模块：vue
+                    priority: 9,
+                    name: 'vue',
+                    test: /[\\/]node_modules[\\/](@vue|vue|vue-loader)[\\/]/,
+                    chunks: 'initial',
+                    minSize: 0,
+                    minChunks: 1,
+                    filename: 'lib/[name]/[name].js'
+                },
+                'other': { // 公共的代码
+                    priority: 8,
+                    name: "other",
+                    chunks: 'initial',
+                    minSize: 0,
+                    minChunks: 2, // 这个代码引用多少次才需要抽离
+                    filename: 'lib/[name]/[name].js'
+                }
+            }
+        }
+    }
+}            
+        </pre>
     </div>
 </body>
 
