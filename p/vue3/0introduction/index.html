@@ -155,22 +155,50 @@ multiPageConfig.forEach(singlePage => {
 });
 module.exports = tempModuleExportsObj;
         </pre>
-        <h2>单文件组件支持 <a href="/p/vue3/0introduction/code/introduction-2.zip" target="_blank">代码下载</a></h2>
+        <h2>添加单文件组件支持 <a href="/p/vue3/0introduction/code/introduction-2.zip" target="_blank">代码下载</a></h2>
         <p>先来张图看看结构的变化</p>
         <p>
             <img src="./images/2.png" width="100%">
         </p>
         <h3>新增单文件组件</h3>
-        <p>既然是单文件组件，先来一个，尽量简单（路径为：/src/common/component/DisplayText.vue）。你可以点击上面的代码下载链接下载代码。</p>
-        <h3>html和js的修改</h3>
+        <p>既然是单文件组件，先来一个，尽量简单（路径为：/src/common/component/DisplayText.vue）：就是展示一些文本。下面是组件代码：</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
-<!-- 两个入口页面都添加如下代码： -->
+<template>
+    <div
+        class="display-text-container"
+        :style="uStyle"
+    >
+        <span class="text">{{value}}</span>
+    </div>
+</template>
+<script>
+    export default {
+        name: "DisplayText",
+        props: {
+            value: {
+                type: String,
+                default() {
+                    return "你想写点什么……";
+                },
+            },
+            uStyle: {
+                type: Object,
+            },
+        },
+    };
+</script>
+        </pre>
+        <h3>两个html页面的修改</h3>
+        <p>两个html页面都添加下面的内容</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
+<!-- 第二版：添加的内容 -->
 <hr>
 <display-text></display-text>
 <display-text :value="displayText" :u-style="displayTextStyle"></display-text>
         </pre>
+        <h3>两个html页面对应的js的修改</h3>
+        <p>对应的js文件用下面的替换（记得改一下两个页面的区别）</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
-<!-- JS代码替换： -->
 import * as Vue from "vue";
 import DisplayText from '../../common/component/DisplayText.vue';
 Vue.createApp({
@@ -198,6 +226,30 @@ yarn add vue@next
 yarn add @vue/compiler-sfc html-webpack-plugin vue-loader@next webpack webpack-cli -D
         </pre>
         <h3>webpack.config.js的更改</h3>
+        <p>引入<inline-code>vue-loader</inline-code>；rules中添加vue处理；plugins中添加<inline-code>vue-loader</inline-code>插件
+        </p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+// 第二版：添加的内容
+const {
+    VueLoaderPlugin
+} = require('vue-loader');
+
+let tempModuleExportsObj = {
+    module: {
+        rules: [
+            // 第二版：添加的内容
+            {
+                test: /\.vue$/,
+                use: ['vue-loader']
+            }
+        ]
+    },
+    plugins: [
+        // 第二版：添加的内容
+        new VueLoaderPlugin()
+    ]
+};
+        </pre>
         <p>
             <img src="./images/3.png" width="100%">
         </p>
