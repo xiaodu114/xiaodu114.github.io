@@ -259,11 +259,26 @@ let tempModuleExportsObj = {
             <img src="./images/4.png" width="100%">
         </p>
         <h3>单文件组件添加LESS</h3>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
+<!-- 单文件组件（DisplayText.vue）新增 -->
+<style lang="less">
+    .display-text-container {
+        border: 1px solid #3cb878;
+        padding: 15px;
+        margin-bottom: 10px;
+        > .text {
+            font-size: 14px;
+        }
+    }
+</style>
+        </pre>
         <p>
             <img src="./images/5.png" width="100%">
         </p>
-        <h3>页面新增LESS和JS变化</h3>
+        <h3>页面新增LESS文件</h3>
+        <p>两个入口页面都添加<inline-code>index.less</inline-code>文件（路径为：/src/module1/css/index.less）</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="less">
+//  两个LESS文件公共部分
 *,
 *::before,
 *::after {
@@ -276,17 +291,27 @@ body {
     width: 100%;
     margin: 0;
 }
-
+//  模块1 入口页面 样式文件
 #vue3Module1Entry {
     height: 100%;
     width: 100%;
     padding: 20px;
     overflow: hidden;
-    color: #fff;
+    color: chocolate;
+}
+//  模块2 入口页面 样式文件
+#vue3Module2Entry {
+    height: 100%;
+    width: 100%;
+    padding: 10px;
+    overflow: hidden;
+    color: blue;
 }
         </pre>
+        <h3>页面引入LESS文件</h3>
+        <p>两个入口页面对应的JS文件引入LESS（这里放在了JS文件的最上方）</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
-<!-- 页面引入样式文件 -->
+//  两个入口页面对应的JS文件新增引入样式
 import '../css/index.less';
         </pre>
         <h3>package.json的更改</h3>
@@ -301,14 +326,78 @@ yarn add vue@next
 yarn add @vue/compiler-sfc css-loader html-webpack-plugin less less-loader style-loader vue-loader@next webpack webpack-cli -D
         </pre>
         <h3>webpack.config.js的更改</h3>
+        <p>rules中添加LESS文件处理</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+let tempModuleExportsObj = {
+    module: {
+        rules: [
+            // 第三版：添加的内容
+            {
+                test: /\.less$/,
+                use: ['style-loader', 'css-loader', 'less-loader']
+            }
+        ]
+    }
+};
+        </pre>
         <p>
             <img src="./images/6.png" width="100%">
         </p>
         <h2>静态文件-图片 <a href="/p/vue3/0introduction/code/introduction-4.zip" target="_blank">代码下载</a></h2>
-        <p>单文件组件引入图片、html页面引入图片、LESS样式文件引入文件……还是先来张图看看结构的变化</p>
+        <p>还是先来张图看看结构的变化</p>
         <p>
             <img src="./images/7.png" width="100%">
         </p>
+        <p>1、公共文件夹<inline-code>common</inline-code>
+            下添加一张图片（路径为：/src/common/images/logo.png），两个入口页面都引用；
+        </p>
+        <p>2、两个模块下各添加两张图片：一张作为<inline-code>body</inline-code>背景，另一张由单文件组件引入；
+        </p>
+        <P>
+            3、两个模块下都创建一个特有单文件组件（路径为：/src/module1/component/Module.vue）,这两个组件的代码相同,该组件展示一张特有的图片；
+        </P>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
+<template>
+    <div class="module-comp-container">
+        <p>单文件组件：这里展示一张图片</p>
+        <img src="../images/module.png">
+    </div>
+</template>
+<script>
+export default {
+name: "Module",
+};
+</script>
+        </pre>
+        <P>
+            4、两个入口文件对应的LESS文件以<inline-code>body</inline-code>背影的方式引入图片
+        </P>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="less">
+//  新增加的内容
+body {
+    background: url(../images/bg.png) repeat-x;
+}
+        </pre>
+        <h3>两个入口页面对应JS的修改</h3>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  引入组件
+import Module from '../component/Module.vue';
+//  注册组件
+components: {
+    Module
+}
+        </pre>
+        <h3>两个入口页面HTML的修改</h3>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
+<!-- 第四版：添加的内容 -->
+<hr>
+<p>
+    <img src="../common/images/logo.png">
+</p>
+<p>
+    <module></module>
+</p>
+        </pre>
         <p>新添加的单文件组件和一些图片就不说了，html和js也只是引入了这些……</p>
         <h3>package.json的更改</h3>
         <p>新增<inline-code>html-loader</inline-code>一个开发依赖
@@ -319,6 +408,30 @@ yarn add vue@next
 yarn add @vue/compiler-sfc css-loader html-loader html-webpack-plugin less less-loader style-loader vue-loader@next webpack webpack-cli -D
         </pre>
         <h3>webpack.config.js的更改</h3>
+        <p>rules中添加HTML文件处理以及静态文件（这里是图片）处理</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+let tempModuleExportsObj = {
+    module: {
+        rules: [
+            // 第四版：添加的内容
+            {
+                test: /\.html$/,
+                use: ['html-loader']
+            },
+            {
+                test: /\.(jpg|jpeg|png|gif|svg|eot|svg|ttf|woff|woff2)$/,
+                type: 'asset/resource',
+                generator: {
+                    filename(a, b) {
+                        // a.asdf => "src/common/images/logo.png"
+                        return path.relative(path.join(__dirname, "src"), path.resolve(a.filename)).split(path.sep).join("/");
+                    }
+                }
+            }
+        ]
+    }
+};
+        </pre>
         <p>
             <img src="./images/8.png" width="100%">
         </p>
