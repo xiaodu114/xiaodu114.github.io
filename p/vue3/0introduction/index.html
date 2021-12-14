@@ -436,19 +436,172 @@ let tempModuleExportsObj = {
             <img src="./images/8.png" width="100%">
         </p>
         <p>
-            记得上次写的时候是通过<inline-code>html-loader</inline-code>和<inline-code>file-loader</inline-code>解决的，但是这次不行了……又新东西了，
+            记得上次写的时候是通过<inline-code>html-loader</inline-code>和<inline-code>file-loader</inline-code>解决的，但是这次不行了……又有新东西了。
         </p>
         <h2>JS转ES5<a href="/p/vue3/0introduction/code/introduction-5.zip" target="_blank">代码下载</a></h2>
-        <p>转ES6在真实项目中用的太多了，之前在vue2.x的时候也弄了，但是此时按照原来的方式写出现了一些问题，最后发现竟然是<inline-code>target</inline-code>的问题
+        <p>转ES5在实际项目中用的太多了，之前在vue2.x的时候也弄了，但是此时按照原来的方式就行不通了，出现了一些问题，最后发现竟然是<inline-code>target</inline-code>的问题
             ……还是先来张图看看结构的变化</p>
         <p>
             <img src="./images/9.png" width="100%">
         </p>
-        <p>原来的vue相关的代码没有变动，只是增加了一个新的模块（module3）来测试ES5的转换。</p>
+        <p>原来的vue相关的代码没有变动，只是增加了一个新的模块（module3）来测试ES5的转换（路径为：/src/module3/index.html 和 /src/module3/js/index.js）。</p>
+        <h3>新增的html页面</h3>
+        <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
+            data-url="/p/vue3/0introduction/code/introduction-5-module3-index.html" ddz-lang="html"></div>
+        <h3>新增的js</h3>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("array-from-1").innerHTML = Array.from("利用Array.from将字符串转成数组！");
+    document.getElementById("array-from-2").innerHTML = JSON.stringify(Array.from({
+        0: null,
+        1: undefined,
+        2: true,
+        3: 666,
+        4: "我是字符串",
+        5: Symbol("key1"),
+        6: {
+            key1: 1,
+            key2: 2
+        },
+        7: ["a", "b", "c"],
+        8: function () {},
+        length: 9,
+    }));
+    document.getElementById("array-from-3").innerHTML = Array.from({
+        1: "b",
+        3: "d",
+        length: 6
+    });
+
+    Promise.resolve("Promise的返回结果：888").then((ret) => {
+        document.getElementById("promise-1").innerHTML = ret;
+    });
+});
+        </pre>
         <h3>package.json的更改</h3>
-        <p>新增转ES5需要的依赖，这里有点多就不列了。有两种实现方式，在<inline-code>webpack.config.js</inline-code>中有说明。
-        </p>
+        <p>在处理ES6+转ES5的时候，当时就查到了两种处理方式，添加的依赖项不同，这里都记录一下：</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+# 你可以用下面的命令安装
+yarn add vue@next
+# 方式一：@babel/core @babel/preset-env babel-loader core-js regenerator-runtime
+yarn add @babel/core @babel/preset-env @vue/compiler-sfc babel-loader core-js css-loader html-loader html-webpack-plugin less less-loader regenerator-runtime style-loader vue-loader@next webpack webpack-cli -D
+        </pre>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+# 你可以用下面的命令安装
+yarn add vue@next
+# 方式二：@babel/core @babel/plugin-transform-runtime @babel/preset-env @babel/runtime @babel/runtime-corejs3 babel-loader
+yarn add @babel/core @babel/plugin-transform-runtime @babel/preset-env @babel/runtime @babel/runtime-corejs3 @vue/compiler-sfc babel-loader css-loader html-loader html-webpack-plugin less less-loader style-loader vue-loader@next webpack webpack-cli -D
+        </pre>
         <h3>webpack.config.js的更改</h3>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+let multiPageConfig = [
+    // 第五版：添加的内容
+    {
+        entry: {
+            sourcePath: "./src/module3/js/index.js",
+            targetPath: "module3/js/index"
+        },
+        htmlWebPack: {
+            sourcePath: './src/module3/index.html',
+            targetPath: 'module3/index.html'
+        }
+    }
+];
+let tempModuleExportsObj = {
+    // 第五版：添加的内容
+    target: ['web', 'es5'],
+    module: {
+        rules: [
+            // 第五版：添加html-loader配置项和添加babel-loader
+            {
+                test: /\.html$/,
+                loader: 'html-loader',
+                options: {
+                    sources: {
+                        // // 第一版使用的方式，但是不太好，不能过滤标签
+                        // urlFilter: (attrName, value, absolutePath) => {
+                        //     // attrName => "src"
+                        //     // value => "/p/_/js/main.js"
+                        //     // absolutePath  => "F:\……\src\module3\index.html"
+                        //     if (attrName === "src" && value.startsWith("/")) {
+                        //         return false;
+                        //     }
+                        //     return true;
+                        // },
+                        list: [
+                            "...",
+                            {
+                                tag: "script",
+                                attribute: "src",
+                                type: "src",
+                                filter: (tagName, attrName, kvs, absolutePath) => {
+                                    // tagName => "script"
+                                    // attrName => "src"
+                                    // kvs => [{"name":"src","value":"/p/_/js/main.js"}]
+                                    // absolutePath => "F:\……\src\module3\index.html"
+                                    let srcKV = null;
+                                    if (tagName === "script" &&
+                                        attrName === "src" &&
+                                        Array.isArray(kvs) &&
+                                        (srcKV = kvs.filter(x => x.name === attrName)[0])) {
+                                        if (srcKV.value.startsWith("/")) {
+                                            return false;
+                                        }
+                                    }
+                                    return true;
+                                }
+                            },
+                        ]
+                    }
+                }
+            }, {
+                test: /\.m?js$/,
+                exclude: /(node_modules|bower_components)/,
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        /**
+                         *   第一种方式
+                         *      如果独立使用，你可以使用下面的命令(其他的项目，单独转码使用)
+                         *          yarn add @babel/core @babel/preset-env babel-loader core-js html-loader html-webpack-plugin regenerator-runtime webpack webpack-cli -D
+                         */
+                        presets: [
+                            ["@babel/preset-env", {
+                                modules: false,
+                                useBuiltIns: "usage",
+                                corejs: {
+                                    version: 3,
+                                    proposals: true,
+                                },
+                                targets: {
+                                    ie: 8
+                                }
+                            }]
+                        ],
+                        /**
+                         *   第二种方式
+                         *      如果独立使用，你可以使用下面的命令(其他的项目，单独转码使用)
+                         *          yarn add @babel/core @babel/plugin-transform-runtime @babel/preset-env @babel/runtime @babel/runtime-corejs3 babel-loader html-loader html-webpack-plugin webpack webpack-cli -D
+                         */
+                        // presets: [
+                        //     ["@babel/preset-env"]
+                        // ],
+                        // plugins: [
+                        //     ['@babel/plugin-transform-runtime', {
+                        //         corejs: {
+                        //             version: 3,
+                        //             proposals: true
+                        //         },
+                        //         useESModules: true
+                        //     }]
+                        // ]
+                    }
+                }
+            }
+        ]
+    },
+};
+        </pre>
         <p>
             <img src="./images/10.png" width="100%">
         </p>
