@@ -52,7 +52,7 @@
         <h3>示例代码</h3>
         <p>这里展示一下模块1（模块1和模块2只是1和2的区别）下的入口页面html（路径为：/src/module1/index.html）和js（路径为：/src/module1/js/index.js）：</p>
         <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
-            data-url="/p/vue3/0introduction/code/module1/index.html" ddz-lang="html"></div>
+            data-url="/p/vue3/0introduction/code/introduction-1-module1-index.html" ddz-lang="html"></div>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 import * as Vue from "vue";
 Vue.createApp({
@@ -608,13 +608,57 @@ let tempModuleExportsObj = {
         <marked-block type="info">
             <p>图片中的代码对比：一些注释代码给忽略了，看详细的你可以下载代码。</p>
         </marked-block>
+        <p>最后再来看一下转ES5前后的截图对比</p>
+        <p>
+            <img src="./images/10-2.png" width="100%">
+        </p>
         <h2>抽取公共JS<a href="/p/vue3/0introduction/code/introduction-6.zip" target="_blank">代码下载</a></h2>
         <p>默认打包时将依赖和业务代码都弄到一个JS中了，看着不舒服，希望打包之后的代码也有一个清晰的结构，仅仅是为了看着舒服……看一下目录变化</p>
         <p>
             <img src="./images/11.png" width="100%">
         </p>
-        <h3>html和js的更改</h3>
-        <p>自己整理的一些通用JS方法，放到了utils.js中。三个入口页面都引入其中的某个方法并使用……</p>
+        <h3>新增公共方法类库</h3>
+        <p>新增公共方法类库（路径为：/src/common/js/utils.js）</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+/*! utils.js  业务无关通用方法 */
+/**
+    * 获取一个GUID
+    * 例子：getGUID();=>'AEFC9ABC-1396-494B-AB96-C35CA3C9F92F'
+    * @returns {string} 返回一个GUID
+    */
+export const getGUID = function () {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+        let r = Math.random() * 16 | 0,
+            v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16).toUpperCase();
+    });
+}
+        </pre>
+        <h3>两个vue html页面的修改</h3>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
+<!-- 第六版：添加的内容 -->
+<hr>
+<p>一个GUID：{{guid1}}</p>
+        </pre>
+        <h3>两个vue html页面对应js的修改</h3>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  第六版新增
+import * as utils from '../../common/js/utils';
+//  这里放在vue的data中
+guid1: utils.getGUID()
+        </pre>
+        <h3>另一个非vue html页面的修改</h3>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
+<!-- 第六版：添加的内容 -->
+<p id="guid1"></p>
+        </pre>
+        <h3>两个vue html页面对应js的修改</h3>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  第六版新增
+import * as utils from '../../common/js/utils';
+//  下面的代码放到DOMContentLoaded监听回调中
+document.getElementById("guid1").innerHTML = "一个GUID：" + utils.getGUID();
+        </pre>
         <h3>package.json的更改</h3>
         <p>这次并没有添加新的依赖，上图中的变化是版本的升级。</p>
         <h3>webpack.config.js的更改</h3>
