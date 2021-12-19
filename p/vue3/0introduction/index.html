@@ -45,12 +45,20 @@
         <p>
             <img src="./images/1.png" width="100%">
         </p>
-        <p>上面的对比图中，你可以忽略tree.txt文件，该文档中的内容是项目的目录结构也就是上图中的内容。你可以使用下面的命令生成目录结构文件：</p>
-        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
-            tree /f >tree.txt
-        </pre>
-        <h3>示例代码</h3>
-        <p>这里展示一下模块1（模块1和模块2只是1和2的区别）下的入口页面html（路径为：/src/module1/index.html）和js（路径为：/src/module1/js/index.js）：</p>
+        <marked-block type="info">
+            <p>上面的对比图，你可以忽略tree.txt文件。你可以使用下面的命令生成目录结构文件：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+                tree /f >tree.txt
+            </pre>
+        </marked-block>
+        <h3>html和对应的js</h3>
+        <p>开篇说了处理多个入口页面，所以这里创建了两个文件夹（module1和module2）来模拟没有任何关系的两个子模块。这两个模块的代码没有什么大的不同，只是1和2的区别。</p>
+        <p>模块1的路径：<inline-code>/src/module1/index.html</inline-code>
+            <inline-code>/src/module1/js/index.js</inline-code>
+        </p>
+        <p>模块2的路径：<inline-code>/src/module2/index.html</inline-code>
+            <inline-code>/src/module2/js/index.js</inline-code>
+        </p>
         <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
             data-url="/p/vue3/0introduction/code/introduction-1-module1-index.html" ddz-lang="html"></div>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
@@ -63,7 +71,7 @@ Vue.createApp({
     }
 }).mount('#vue3Module1Entry');
         </pre>
-        <p>下面是 package.json</p>
+        <h3>package.json</h3>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="json">
 {
     "name": "vue3-webpack-multi-entry-demo",
@@ -76,11 +84,11 @@ Vue.createApp({
 }              
         </pre>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
-<!-- 你可以用下面的命令安装 -->
+#   你可以用下面的命令安装
 yarn add vue@next
 yarn add html-webpack-plugin webpack webpack-cli -D
         </pre>
-        <p>下面是 webpack.config.js</p>
+        <h3>webpack.config.js</h3>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 // yarn add vue@next
 // yarn add html-webpack-plugin webpack webpack-cli -D
@@ -188,7 +196,7 @@ module.exports = tempModuleExportsObj;
     };
 </script>
         </pre>
-        <h3>两个html页面的修改</h3>
+        <h3>两个html页面更新</h3>
         <p>两个html页面都添加下面的内容</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
 <!-- 第二版：添加的内容 -->
@@ -196,7 +204,7 @@ module.exports = tempModuleExportsObj;
 <display-text></display-text>
 <display-text :value="displayText" :u-style="displayTextStyle"></display-text>
         </pre>
-        <h3>两个html页面对应的js的修改</h3>
+        <h3>两个html页面对应的js更新</h3>
         <p>对应的js文件用下面的替换（记得改一下两个页面的区别）</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 import * as Vue from "vue";
@@ -216,16 +224,16 @@ Vue.createApp({
     }
 }).mount('#vue3Module1Entry');
         </pre>
-        <h3>package.json的更改</h3>
+        <h3>package.json更新</h3>
         <p>新增<inline-code>@vue/compiler-sfc</inline-code>
             <inline-code>vue-loader@next</inline-code>两个开发依赖
         </p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
-<!-- 你可以用下面的命令安装 -->
+#   你可以用下面的命令安装
 yarn add vue@next
 yarn add @vue/compiler-sfc html-webpack-plugin vue-loader@next webpack webpack-cli -D
         </pre>
-        <h3>webpack.config.js的更改</h3>
+        <h3>webpack.config.js更新</h3>
         <p>引入<inline-code>vue-loader</inline-code>；rules中添加vue处理；plugins中添加<inline-code>vue-loader</inline-code>插件
         </p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
@@ -275,8 +283,8 @@ let tempModuleExportsObj = {
         <p>
             <img src="./images/5.png" width="100%">
         </p>
-        <h3>页面新增LESS文件</h3>
-        <p>两个入口页面都添加<inline-code>index.less</inline-code>文件（路径为：/src/module1/css/index.less）</p>
+        <h3>新增LESS文件</h3>
+        <p>两个模块都添加<inline-code>index.less</inline-code>文件（路径为：/src/module1/css/index.less）</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="less">
 //  两个LESS文件公共部分
 *,
@@ -308,24 +316,24 @@ body {
     color: blue;
 }
         </pre>
-        <h3>页面引入LESS文件</h3>
+        <h3>引入LESS文件</h3>
         <p>两个入口页面对应的JS文件引入LESS（这里放在了JS文件的最上方）</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //  两个入口页面对应的JS文件新增引入样式
 import '../css/index.less';
         </pre>
-        <h3>package.json的更改</h3>
+        <h3>package.json更新</h3>
         <p>新增<inline-code>css-loader</inline-code>
             <inline-code>less</inline-code>
             <inline-code>less-loader</inline-code>
             <inline-code>style-loader</inline-code>四个开发依赖
         </p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
-<!-- 你可以用下面的命令安装 -->
+#   你可以用下面的命令安装
 yarn add vue@next
 yarn add @vue/compiler-sfc css-loader html-webpack-plugin less less-loader style-loader vue-loader@next webpack webpack-cli -D
         </pre>
-        <h3>webpack.config.js的更改</h3>
+        <h3>webpack.config.js更新</h3>
         <p>rules中添加LESS文件处理</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 let tempModuleExportsObj = {
@@ -378,16 +386,13 @@ body {
     background: url(../images/bg.png) repeat-x;
 }
         </pre>
-        <h3>两个入口页面对应JS的修改</h3>
-        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
-//  引入组件
-import Module from '../component/Module.vue';
-//  注册组件
-components: {
-    Module
-}
-        </pre>
-        <h3>两个入口页面HTML的修改</h3>
+        <marked-block type="info">
+            <p>此次添加的图片你可以在这里找到：
+                <a href="https://github.com/xiaodu114/xiaodu114.github.io/tree/master/p/vue3/0introduction/code"
+                    target="_blank">快去找图片吧</a>
+            </p>
+        </marked-block>
+        <h3>两个html页面更新</h3>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
 <!-- 第四版：添加的内容 -->
 <hr>
@@ -398,8 +403,16 @@ components: {
     <module></module>
 </p>
         </pre>
-        <p>新添加的单文件组件和一些图片就不说了，html和js也只是引入了这些……</p>
-        <h3>package.json的更改</h3>
+        <h3>两个html页面对应的js更新</h3>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  引入组件
+import Module from '../component/Module.vue';
+//  注册组件
+components: {
+    Module
+}
+        </pre>
+        <h3>package.json更新</h3>
         <p>新增<inline-code>html-loader</inline-code>一个开发依赖
         </p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
@@ -407,7 +420,7 @@ components: {
 yarn add vue@next
 yarn add @vue/compiler-sfc css-loader html-loader html-webpack-plugin less less-loader style-loader vue-loader@next webpack webpack-cli -D
         </pre>
-        <h3>webpack.config.js的更改</h3>
+        <h3>webpack.config.js更新</h3>
         <p>rules中添加HTML文件处理以及静态文件（这里是图片）处理</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 let tempModuleExportsObj = {
@@ -478,22 +491,33 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
         </pre>
-        <h3>package.json的更改</h3>
+        <h3>package.json更新</h3>
         <p>在处理ES6+转ES5的时候，当时就查到了两种处理方式，添加的依赖项不同，这里都记录一下：</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+# 这里是没有转码的命令（也就是上一版本的），你可以先试试他，之后再试试下面的两种方式，做一下对比
+yarn add vue@next
+yarn add @vue/compiler-sfc css-loader html-loader html-webpack-plugin less less-loader style-loader vue-loader@next webpack webpack-cli -D
+        </pre>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 # 你可以用下面的命令安装
 yarn add vue@next
-# 方式一：@babel/core @babel/preset-env babel-loader core-js regenerator-runtime
+# 方式一添加的依赖：@babel/core @babel/preset-env babel-loader core-js regenerator-runtime
 yarn add @babel/core @babel/preset-env @vue/compiler-sfc babel-loader core-js css-loader html-loader html-webpack-plugin less less-loader regenerator-runtime style-loader vue-loader@next webpack webpack-cli -D
         </pre>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 # 你可以用下面的命令安装
 yarn add vue@next
-# 方式二：@babel/core @babel/plugin-transform-runtime @babel/preset-env @babel/runtime @babel/runtime-corejs3 babel-loader
+# 方式二添加的依赖：@babel/core @babel/plugin-transform-runtime @babel/preset-env @babel/runtime @babel/runtime-corejs3 babel-loader
 yarn add @babel/core @babel/plugin-transform-runtime @babel/preset-env @babel/runtime @babel/runtime-corejs3 @vue/compiler-sfc babel-loader css-loader html-loader html-webpack-plugin less less-loader style-loader vue-loader@next webpack webpack-cli -D
         </pre>
-        <h3>webpack.config.js的更改</h3>
+        <h3>webpack.config.js更新</h3>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+// yarn add vue@next
+//      ES6+转ES5，第一种实现方式新增的依赖：@babel/core @babel/preset-env babel-loader core-js regenerator-runtime
+// yarn add @babel/core @babel/preset-env @vue/compiler-sfc babel-loader core-js css-loader html-loader html-webpack-plugin less less-loader regenerator-runtime style-loader vue-loader@next webpack webpack-cli -D
+//      ES6+转ES5，第二种实现方式新增的依赖：@babel/core @babel/plugin-transform-runtime @babel/preset-env @babel/runtime @babel/runtime-corejs3 babel-loader
+// yarn add @babel/core @babel/plugin-transform-runtime @babel/preset-env @babel/runtime @babel/runtime-corejs3 @vue/compiler-sfc babel-loader css-loader html-loader html-webpack-plugin less less-loader style-loader vue-loader@next webpack webpack-cli -D
+
 let multiPageConfig = [
     // 第五版：添加的内容
     {
@@ -606,6 +630,7 @@ let tempModuleExportsObj = {
             <img src="./images/10.png" width="100%">
         </p>
         <marked-block type="info">
+            <p>html-loader：这里做了一些配置，目的是排除一些js（站点根目录开始的）</p>
             <p>图片中的代码对比：一些注释代码给忽略了，看详细的你可以下载代码。</p>
         </marked-block>
         <p>最后再来看一下转ES5前后的截图对比</p>
@@ -634,34 +659,34 @@ export const getGUID = function () {
     });
 }
         </pre>
-        <h3>两个vue html页面的修改</h3>
+        <h3>两个vue html页面更新</h3>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
 <!-- 第六版：添加的内容 -->
 <hr>
 <p>一个GUID：{{guid1}}</p>
         </pre>
-        <h3>两个vue html页面对应js的修改</h3>
+        <h3>两个vue html页面对应js更新</h3>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //  第六版新增
 import * as utils from '../../common/js/utils';
 //  这里放在vue的data中
 guid1: utils.getGUID()
         </pre>
-        <h3>另一个非vue html页面的修改</h3>
+        <h3>另一个非vue html页面更新</h3>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
 <!-- 第六版：添加的内容 -->
 <p id="guid1"></p>
         </pre>
-        <h3>两个vue html页面对应js的修改</h3>
+        <h3>两个vue html页面对应js更新</h3>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //  第六版新增
 import * as utils from '../../common/js/utils';
 //  下面的代码放到DOMContentLoaded监听回调中
 document.getElementById("guid1").innerHTML = "一个GUID：" + utils.getGUID();
         </pre>
-        <h3>package.json的更改</h3>
+        <h3>package.json更新</h3>
         <p>这次并没有添加新的依赖，上图中的变化是版本的升级。</p>
-        <h3>webpack.config.js的更改</h3>
+        <h3>webpack.config.js更新</h3>
         <p>
             webpack.config.js添加下面的配置型
         </p>
