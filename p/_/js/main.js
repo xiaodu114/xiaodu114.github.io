@@ -21,9 +21,13 @@ customElements.define('p-dependence',
 
             /**
              *  1、博客依赖的css
+             *      // https://unpkg.com/
+             *      // https://www.jsdelivr.com/
+             *      // https://cdnjs.com/
              */
+            // https://unpkg.com/normalize.css  访问不了了
             [
-                "https://unpkg.com/normalize.css",
+                "https://cdn.jsdelivr.net/npm/normalize.css/normalize.min.css",
                 "/lib/highlight/github.css",
                 "/lib/highlight/lang-label.css",
                 "/p/_/css/typesetting.css"
