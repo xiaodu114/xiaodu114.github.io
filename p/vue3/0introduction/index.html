@@ -736,6 +736,82 @@ document.getElementById("guid1").innerHTML = "一个GUID：" + utils.getGUID();
     }
 }            
         </pre>
+        <h2>提取CSS到单独的文件中<a href="/p/vue3/0introduction/code/introduction-7.zip" target="_blank">代码下载</a></h2>
+        <p>前面的示例中用到的css都弄到了JS中，感觉不是很爽，希望webpack源码项目和打包之后的目录尽量保持一致，这也是这片文档的宗旨……</p>
+        <p>这次提取CSS，代码目录没有改变……</p>
+        <h3>package.json更新</h3>
+        <p>新增<inline-code>mini-css-extract-plugin</inline-code>开发依赖</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+# 你可以用下面的命令安装。上一版本没有添加新的依赖，这里使用ES6转ES5的方式1，在这基础上添加 mini-css-extract-plugin
+yarn add vue@next
+yarn add @babel/core @babel/preset-env @vue/compiler-sfc babel-loader core-js css-loader html-loader html-webpack-plugin less less-loader mini-css-extract-plugin regenerator-runtime style-loader vue-loader@next webpack webpack-cli -D
+        </pre>
+        <h3>webpack.config.js更新</h3>
+        <p>引入<inline-code>mini-css-extract-plugin</inline-code>；用 MiniCssExtractPlugin.loader 替换
+            style-loader；plugins中添加插件
+        </p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+// 第七版：添加的内容
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+let tempModuleExportsObj = {
+    module: {
+        rules: [
+            // 第七版：更新
+            {
+                test: /\.less$/,
+                use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader']
+            }
+        ]
+    },
+    plugins: [
+        // 第七版：添加的内容
+        new MiniCssExtractPlugin({
+            filename: ({
+                chunk
+            }) => `${chunk.name.replace('/js/', '/css/')}.css`,
+        })
+    ]
+};
+        </pre>
+        <p>最后再看一下，不提取CSS和提取之后的目录对比：</p>
+        <p>
+            <img src="./images/12.png" width="100%">
+        </p>
+        <marked-block type="info">
+            <p>这里还发现了一个问题，html页面对js的引入都添加到了head标签下并且提取css文件都放在script标签的后面，赶紧处理一下吧</p>
+            <p>查了一下，发现是html-webpack-plugin插件<inline-code>inject</inline-code>配置项的问题，开始设置的是布尔类型ture，现在修改成字符串"body"就好了</p>
+        </marked-block>
+        <h2>clean-webpack-plugin 插件和 copy-webpack-plugin 插件</h2>
+        <p>这里在添加两个插件：clean-webpack-plugin 生成之前先删除（你手动添加的文件也会删除）；copy-webpack-plugin
+            拷贝文件到指定的目录。这两个插件本文档使用的比较简单，就不添加代码下载了。</p>
+        <p>创建一个文件（路径为：/src/mock/test.json），文件随便写点，你随意</p>
+        <h3>package.json更新</h3>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   你可以用下面的命令安装
+yarn add clean-webpack-plugin copy-webpack-plugin -D
+        </pre>
+        <h3>webpack.config.js更新</h3>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+// 第八版：添加的内容
+const {
+    CleanWebpackPlugin
+} = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+let tempModuleExportsObj = {
+    plugins: [
+        // 第八版：添加的内容
+        new CleanWebpackPlugin(),
+        new CopyWebpackPlugin({
+            patterns: [{
+                from: 'src/mock',
+                to: 'mock'
+            }, ]
+        })
+    ]
+};
+        </pre>
     </div>
 </body>
 

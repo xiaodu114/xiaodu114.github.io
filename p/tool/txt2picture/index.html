@@ -146,7 +146,8 @@
                     let maxWidth = 0;
                     if (Array.isArray(trs) && trs.length) {
                         trs.forEach((tr, trIndex) => {
-                            let currentTrWidth = getUnitSizeByStyle(defaultStyle, tr.replaceAll(" ", "&nbsp;")).w;
+                            // let currentTrWidth = getUnitSizeByStyle(defaultStyle, tr.replaceAll(" ", "&nbsp;")).w;
+                            let currentTrWidth = getUnitSizeByStyle(defaultStyle, tr.replace(/ /gi,"&nbsp;")).w;
                             if (maxWidth < currentTrWidth) {
                                 maxWidth = currentTrWidth;
                             }
