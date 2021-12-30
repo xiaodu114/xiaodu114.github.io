@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ffmpeg online - xiaodu114.github.io</title>
+    <meta name="keywords" content="ffmpeg, ffmpeg.wasm, ffmpeg online, images to video">
+    <meta name="description" content="ffmpeg online.">
+
+    <style>
+        .select-input-file-container {
+            display: flex;
+        }
+
+        .select-input-file-container>fieldset {
+            flex: 1;
+        }
+
+        #input-img-tobeselected-list {
+            width: 100%;
+            max-height: 388px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        #btnConvert {
+            width: 100%;
+            height: 36px;
+            background-color: #3cb878;
+            color: #fff;
+            border: none;
+            outline: none;
+            cursor: pointer;
+        }
+    </style>
+    <script src="/p/_/js/main.js"></script>
+    <!-- <script src="/lib/coi-serviceworker/min.js"></script> -->
+    <script src="coi-serviceworker.min.js"></script>
+</head>
+
+<body>
+    <!-- github访问地址：/p/tool/ffmpeg/web/index.html -->
+    <div class="blog-page">
+
+        <h1>ffmpeg online</h1>
+        <h2>概述</h2>
+        <p>对，你没有看错，ffmpeg可以在浏览器中运行了👍👍👍。这里需要感谢<strong>WebAssembly</strong>。</p>
+        <marked-block explain="传送">
+            <p>
+                官网：<a href="https://ffmpegwasm.netlify.app/" target="_blank">FFMPEG.WASM</a>
+            </p>
+            <p>
+                GitHub：<a href="https://github.com/ffmpegwasm/ffmpeg.wasm" target="_blank">GitHub -
+                    ffmpegwasm/ffmpeg.wasm</a>
+            </p>
+            <p>
+                cdn：<a href="https://unpkg.com/@ffmpeg/ffmpeg/" target="_blank">UNPKG - @ffmpeg/ffmpeg</a>
+            </p>
+        </marked-block>
+        <h2>遇到的问题</h2>
+        <h3>使用unpkg的问题</h3>
+        <marked-block type="error">
+            <p>
+                The FetchEvent for "https://unpkg.com/@ffmpeg/ffmpeg@0.10.0/dist/ffmpeg.min.js" resulted in a network
+                error response:
+                Cross-Origin-Resource-Policy prevented from serving the response to the client.
+            </p>
+            <p>
+                GET https://unpkg.com/@ffmpeg/ffmpeg@0.10.0/dist/ffmpeg.min.js net::ERR_FAILED
+            </p>
+        </marked-block>
+        <p>这个也不是每次都出现，刷新的时候，时不时冒出一次……还没有来得急研究为什么。你可以在<inline-code>script</inline-code>标签中添加<inline-code>crossorigin
+            </inline-code>属性。
+        </p>
+        <h3>cross-origin isolated</h3>
+        <marked-block type="error">
+            <p>
+                [Deprecation] SharedArrayBuffer will require cross-origin isolation as of M92, around July 2021. See
+                https://developer.chrome.com/blog/enabling-shared-array-buffer/ for more details.
+            </p>
+            <p>
+                Uncaught (in promise) ReferenceError: SharedArrayBuffer is not defined
+            </p>
+        </marked-block>
+        <p>跨域隔离，这是遇到的第二个问题。GitHub的介绍中也给出了解决办法：对应页面的响应头部添加两个选项。这里使用的是IIS，测试了一下果然没有问题。添加的headers如下：</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+Cross-Origin-Embedder-Policy: require-corp
+Cross-Origin-Opener-Policy: same-origin
+		</pre>
+        <p>这里衍生出另外一个问题：服务器是我们自己的，我们可以给页面响应添加header，但是如果服务器我们控制不了该怎么办（例如：GitHub中的页面）？抱着试试看的态度查了一下，还真找到解决办法，引一个JS就能搞定，这个真的觉得👍👍👍。感觉是服务器端的问题，但是现在一个JS搞定了。注意一下这个JS不能使用CDN的方式引入。参考链接：<a
+                href="https://github.com/gzuidhof/coi-serviceworker" target="_blank">GitHub -
+                gzuidhof/coi-serviceworker</a>
+        </p>
+        <marked-block type="warning">
+            <p>
+                这里遇到一个令人费解的问题：引入<inline-code>coi-serviceworker</inline-code>
+                （引入方式是用script标签,src="/lib/coi-serviceworker/min.js"）之后,浏览器中第一次访问该页面时一直在自动刷新……不知道什么鬼。之后将该类库放到与该页面相同的文件夹下，此时在引入，访问页面就正常了……懵圈的是，在换成第一次的引入方式也没有问题了😅😅😅，停滞一段时间之后就又开始一直刷新了……
+            </p>
+        </marked-block>
+        <h3>图片太大的问题</h3>
+        <p>这是一个苦逼的问题，这个问题感觉自己弄这个有点鸡肋了。选了一张3.53MB的图片和10.2MB的音频，报错了😓😓😓。之后又换了一个组合108KB的图片和10.2MB的音频，这次成功了。3.53MB也不是太大吧！
+        </p>
+        <marked-block type="error">
+            <p>Pthread aborting at Error</p>
+            <p>worker.js onmessage() captured an uncaught exception: RuntimeError: abort(OOM). Build with -s
+                ASSERTIONS=1 for more
+                info.</p>
+            <p>RuntimeError: abort(OOM). Build with -s ASSERTIONS=1 for more info.</p>
+            <p>Uncaught RuntimeError: abort(OOM). Build with -s ASSERTIONS=1 for more info.</p>
+        </marked-block>
+        <h2>赶紧试试吧</h2>
+        <p id="msg"></p>
+        <div class="select-input-file-container">
+            <fieldset>
+                <legend>选择图片</legend>
+                <div class="select-input-img-container">
+                    <p><label><input id="input-file-img" type="file" accept="image/*" multiple="multiple"></label></p>
+                    <div id="input-img-tobeselected-list">
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>选择音频</legend>
+                <div class="select-input-audio-container">
+                    <p><input id="input-file-audio" type="file" accept="audio/*" multiple="multiple"></p>
+                    <div id="input-audio-tobeselected-list">
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <p>
+            <button type="button" id="btnConvert">&uarr;&rarr;转&rarr;&darr;</button>
+        </p>
+        <video id="video-player" controls style="max-width: 100%;"></video>
+
+    </div>
+
+    <script src="https://unpkg.com/@ffmpeg/ffmpeg/dist/ffmpeg.min.js" crossorigin></script>
+    <script>
+        const { createFFmpeg, fetchFile } = FFmpeg,
+            cr = document.createRange(),
+            msgDom = document.getElementById('msg');
+        function resetMsg(_msg, _color) {
+            msgDom.innerHTML = _msg;
+            msgDom.style.color = _color;
+        }
+        function ffmpegInit() {
+            const ffmpeg = createFFmpeg({
+                corePath: 'https://unpkg.com/@ffmpeg/core/dist/ffmpeg-core.js',
+                log: true
+            });
+            return new Promise((resolve, reject) => {
+                ffmpeg.load().then(() => {
+                    resolve(ffmpeg);
+                }, (error) => {
+                    console.error(error);
+                    reject("ffmpeg.load方法出现异常，详见控制台输出。");
+                });
+            });
+        }
+        resetMsg("ffmpeg：各位千万别着急，我的有点富态再加上这苦逼的网速……别着急操作，各位稍等，好了通知你们", "red");
+        ffmpegInit().then((myFFmpeg) => {
+            resetMsg("ffmpeg：让各位久等了，我准备好了", "green");
+            const inputImgDom = document.getElementById('input-file-img'),
+                inputAudioDom = document.getElementById('input-file-audio'),
+                btnConvertDom = document.getElementById("btnConvert"),
+                inputImgShowListDom = document.getElementById("input-img-tobeselected-list"),
+                inputAudioShowListDom = document.getElementById("input-audio-tobeselected-list"),
+                videoPlayerDom = document.getElementById('video-player');
+            let inputImgCache = [], inputAudioCache = [];
+            function inputImgShowListChange() {
+                if (Array.isArray(inputImgCache) && inputImgCache.length) {
+                    inputImgShowListDom.innerHTML = "";
+                    inputImgCache.forEach((file) => {
+                        inputImgShowListDom.appendChild(cr.createContextualFragment(`
+                            <p>
+                                ${file.name}
+                            </p>
+                        `));
+                    });
+                }
+            }
+            function inputAudioShowListChange() {
+                if (Array.isArray(inputAudioCache) && inputAudioCache.length) {
+                    inputAudioShowListDom.innerHTML = "";
+                    inputAudioCache.forEach((file) => {
+                        inputAudioShowListDom.appendChild(cr.createContextualFragment(`
+                            <p>
+                                ${file.name}
+                            </p>
+                        `));
+                    });
+                }
+            }
+            inputImgDom.addEventListener('change', (eFileInput) => {
+                if (eFileInput.target.files && eFileInput.target.files.length) {
+                    inputImgCache = inputImgCache.concat(Array.from(eFileInput.target.files));
+                }
+                inputImgShowListChange();
+            }, false);
+            inputAudioDom.addEventListener('change', (eFileInput) => {
+                if (eFileInput.target.files && eFileInput.target.files.length) {
+                    inputAudioCache = inputAudioCache.concat(Array.from(eFileInput.target.files));
+                }
+                inputAudioShowListChange();
+            }, false);
+
+            btnConvertDom.addEventListener('click', async (eBtn) => {
+                if (!inputImgCache.length) return;
+                resetMsg("正在尽力转换中，您稍等", "green");
+                let ffmpegCommandArgs = [], filterComplexArgs = [], filterComplexPartStr = "";
+                //  
+                for (let i = 0; i < inputImgCache.length; i++) {
+                    ffmpegCommandArgs.push('-loop', '1', '-t', '5', '-i', inputImgCache[i].name);
+                    filterComplexPartStr += `[${i}:v] `;
+                    myFFmpeg.FS('writeFile', inputImgCache[i].name, await fetchFile(inputImgCache[i]));
+                }
+                filterComplexArgs.push('-filter_complex', `${filterComplexPartStr}concat=n=${inputImgCache.length}:v=1:a=0 [v]`);
+                //
+                if (inputAudioCache.length) {
+                    for (let i = 0; i < inputAudioCache.length; i++) {
+                        ffmpegCommandArgs.push('-i', inputAudioCache[i].name);
+                        myFFmpeg.FS('writeFile', inputAudioCache[i].name, await fetchFile(inputAudioCache[i]));
+                    }
+                }
+                if (filterComplexArgs.length) {
+                    ffmpegCommandArgs = ffmpegCommandArgs.concat(filterComplexArgs);
+                }
+                if (inputImgCache.length) {
+                    ffmpegCommandArgs.push('-map', "[v]");
+                }
+                if (inputAudioCache.length && inputImgCache.length) {
+                    ffmpegCommandArgs.push('-map', inputImgCache.length + ':a');
+                }
+                ffmpegCommandArgs.push('output.mp4');
+                await myFFmpeg.run.apply(null, ffmpegCommandArgs);
+                var data = myFFmpeg.FS('readFile', 'output.mp4');
+                videoPlayerDom.src = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
+                resetMsg("转换完成，让您久等了", "green");
+            }, false);
+
+        }, (errorMsg) => {
+            resetMsg(errorMsg, "red");
+        });
+    </script>
+</body>
+
+</html>
