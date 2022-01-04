@@ -56,7 +56,9 @@ https://mdbootstrap.com/docs/jquery/forms/builder/
 https://bootsnipp.com/forms 
 https://forms.app/myforms
 https://secure.wufoo.com/form-builder/
+https://www.wufoo.com/form-builder/
 https://www.cognitoforms.com/forms/build
+https://www.jotform.com/myforms/
 
 
 https://mobirise.com/
