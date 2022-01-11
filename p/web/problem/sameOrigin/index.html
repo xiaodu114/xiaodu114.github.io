@@ -18,7 +18,7 @@
 </head>
 
 <body>
-    <!-- github访问地址：/p/webFrontEnd/sameOrigin/index.html -->
+    <!-- github访问地址：/p/web/problem/sameOrigin/index.html -->
     <div class="blog-page">
         <h1>同源页面通信</h1>
         <div id="same-page-xxx-vue3-instance" v-cloak>
@@ -75,41 +75,41 @@
                         name: "杜1",
                         gender: "男",
                         remarks: "我是小杜1号"
-                    },{
+                    }, {
                         id: ++initId,
                         name: "杜2",
                         gender: "女",
                         remarks: "我是小杜2号"
                     }]);
                 },
-                handleListChange(event){
-                    if(!(event&&event.action&&event.data))return;
+                handleListChange(event) {
+                    if (!(event && event.action && event.data)) return;
                     switch (event.action) {
-                        case "add":{
+                        case "add": {
                             this.showItems.unshift(event.data);
                             break;
                         }
-                        case "edit":{break;}
-                        case "delete":{break;}
+                        case "edit": { break; }
+                        case "delete": { break; }
                     }
                 },
-                openAddDialog(evt){
+                openAddDialog(evt) {
                     this.$refs.xxxAddCompRef.show();
                 }
             },
             created() {
-                this.requestShowItems().then((serverData)=>{
-                    this.showItems=this.showItems.concat(serverData);
+                this.requestShowItems().then((serverData) => {
+                    this.showItems = this.showItems.concat(serverData);
                 });
                 GV_EventEmitter.on('same-page-xxx-list-change', this.handleListChange);
             },
             mounted() {
             },
         });
-        samePageXxxVue3Instance.config.compilerOptions.isCustomElement=tag=>["my-dialog"].indexOf(tag)>=0;
+        samePageXxxVue3Instance.config.compilerOptions.isCustomElement = tag => ["my-dialog"].indexOf(tag) >= 0;
         samePageXxxVue3Instance.component('xxx-add', {
-            template: 
-            `
+            template:
+                `
             <my-dialog ref="xxxAddDialog" title="新建xxx">
                 <div slot="body" style="padding: 0 24px;">
                     <p><label>姓名：<input type="text" v-model="name"></label></p>
@@ -131,22 +131,22 @@
                 </div>
             </my-dialog>
             `,
-            data(){
+            data() {
                 return {
-                    name:"",
-                    gender:"",
-                    remarks:""
+                    name: "",
+                    gender: "",
+                    remarks: ""
                 }
             },
             methods: {
-                show(){
+                show() {
                     this.$refs.xxxAddDialog.open();
                 },
-                hidden(){
+                hidden() {
                     this.$refs.xxxAddDialog.closed();
                 },
-                save(evt){
-                    if(!(this.name&&this.gender)) {
+                save(evt) {
+                    if (!(this.name && this.gender)) {
                         alert("请输入姓名、选择性别！");
                         return;
                     }
@@ -156,12 +156,12 @@
                             id: new Date().valueOf(),
                             name: this.name,
                             gender: this.gender,
-                            remarks:this.remarks
+                            remarks: this.remarks
                         }
                     });
                     this.hidden();
                 },
-                openInnerDialog(){
+                openInnerDialog() {
                     this.$refs.innerDialog001.open();
                 }
             }

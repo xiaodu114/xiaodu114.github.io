@@ -194,7 +194,7 @@
 </head>
 
 <body>
-    <!-- github访问地址：/p/webFrontEnd/css/grid/index.html -->
+    <!-- github访问地址：/p/web/css/grid/index.html -->
     <div class="blog-page">
         <h1>css grid 布局相关</h1>
         <h2>常见的布局</h2>
@@ -337,7 +337,7 @@
                     let gridItemDom = document.createElement("div");
                     gridItemDom.innerHTML = `第${rowIndex}行 第${colIndex}列`;
                     gridItemDom.classList.add("grid-item-problem-border");
-                    gridItemDom.style.gridArea = `${rowIndex} / ${colIndex} / ${rowIndex+1} / ${colIndex+1}`;
+                    gridItemDom.style.gridArea = `${rowIndex} / ${colIndex} / ${rowIndex + 1} / ${colIndex + 1}`;
                     fragmentForGridItems.appendChild(gridItemDom);
                 }
             }
