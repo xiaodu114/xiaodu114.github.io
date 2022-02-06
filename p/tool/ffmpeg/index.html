@@ -48,7 +48,7 @@
 		</p>
 		<h3>Linux下安装</h3>
 		<p>先占个位置……</p>
-		<h2>图片转视频</h2>
+		<h2>图片、音频合成视频</h2>
 		<p>
 			怎么把自己拍的n多照片利用起来？合成一个视频怎么样，在添加点描述，在来点音乐……太棒了😄😄😄
 		</p>
@@ -425,6 +425,19 @@ ffmpeg `
 ,format=yuv420p[v]
 " -map "[v]" -map 5:a input_multi_pic_ratio_4.mp4
 		</pre>
+		<h2>m3u8转视频</h2>
+		<p>m3u8这个东东挺让人（喜欢下载的）郁闷的，也不是没有办法下载，只是有点麻烦……这里介绍一种方式：利用ffmpeg。本来的想法是先下载m3u8文件，之后解析文件并获取所有的ts文件地址并下载，最后合并这些ts文件
+			。没想到啊！ffmpeg直接支持输入m3u8文件，完美。</p>
+		<p>这里有一点需要注意一下，你的m3u8文件既可以是远程文件（例如：https://www.xxx.com/1.m3u8），也可以是本地文件。远程文件咱就不说了。如果是本地文件，需要注意文件中的地址可能是相对地址，这时你需要手动补充一下。
+		</p>
+		<pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   远程文件
+ffmpeg -protocol_whitelist file,http,https,tcp,tls,crypto -i https://www.xxx.com/1.m3u8 output.mp4
+#   本地文件
+ffmpeg -protocol_whitelist file,http,https,tcp,tls,crypto -i index.m3u8 output.mp4
+		</pre>
+		<p>其他做法：<a href="https://www.leawo.org/entips/use-ffmpeg-to-download-m3u8-file-1395.html" target="_blank">How to
+				Use FFmpeg to Download M3U8 File? | Leawo Tutorial Center</a></p>
 	</div>
 </body>
 

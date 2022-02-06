@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>web font online viewer - xiaodu114.github.io</title>
+    <meta name="keywords" content="web font online viewer, web字体在线预览, opentype.js">
+    <meta name="description" content="web字体在线预览">
+
+    <style>
+        .icon-wrapper {
+            width: 200px;
+            min-width: 200px;
+            display: inline-flex;
+            align-items: center;
+            line-height: 1.5;
+        }
+
+        .icon-wrapper>i.icon {
+            width: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .icon-wrapper>code {
+            border: 1px solid #DDD;
+            width: 46px;
+            border-radius: 4px;
+            text-align: center;
+            margin-left: 3px;
+            margin-right: 3px;
+        }
+
+        .icon-wrapper>span {
+            font-size: 1rem;
+            display: inline-block;
+            max-width: calc(100% - 90px);
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .view-box-by-opentypejs {
+            display: flex;
+            flex-flow: wrap;
+        }
+    </style>
+
+    <script src="/p/_/js/main.js"></script>
+</head>
+
+<body>
+    <!-- github访问地址：/p/_/index.html -->
+    <div class="blog-page">
+        <h1>font icon在线查看</h1>
+        <p>不知道为什么写这个工具了，反正就是有了……你用就行了，😄😄😄</p>
+        <details>
+            <summary>先看看别人是怎么整的（快点点开看看吧）</summary>
+            <ul>
+                <li>
+                    <a href="https://fontdrop.info/" target="_blank">FontDrop!</a>
+                </li>
+                <li>
+                    <a href="https://torinak.com/font/lsfont.html" target="_blank">List glyphs in font — online
+                        app</a>
+                </li>
+                <li>
+                    <a href="https://products.aspose.app/font/viewer" target="_blank">Open font file online for
+                        free</a>
+                </li>
+                <li>
+                    <a href="https://fontsee.com/" target="_blank">FontSee - Font viewer for webfont files</a>
+                </li>
+                <li>
+                    <a href="https://www.glyphrstudio.com/online/" target="_blank">Glyphr Studio</a>
+                </li>
+                <li>
+                    <a href="https://github.com/ecomfe/fonteditor" target="_blank">GitHub - ecomfe/fonteditor:
+                        在线字体编辑器</a>
+                </li>
+                <li>
+                    <a href="http://blog.luckly-mjw.cn/tool-show/iconfont-preview/index.html" target="_blank">Iconfont
+                        Preview</a>
+                </li>
+            </ul>
+        </details>
+        <p></p>
+        <details>
+            <summary>一些字体图标库（快点点开看看吧）</summary>
+            <ul>
+                <li>
+                    <a href="https://materialdesignicons.com/" target="_blank">Material Design Icons</a>
+                </li>
+                <li>
+                    <a href="https://fontawesome.com/" target="_blank">Font Awesome</a> |
+                    <a href="https://fontawesome.com/cheatsheet" target="_blank">Cheatsheet | Font Awesome</a>
+                </li>
+                <li>
+                    <a href="https://fontawesome.dashgame.com/" target="_blank">Font Awesome，一套绝佳的图标字体库和CSS框架</a>
+                </li>
+                <li>
+                    <a href="https://ionic.io/ionicons" target="_blank">Ionicons: The premium icon pack for Ionic
+                        Framework</a>
+                </li>
+                <li>
+                    <a href="https://github.com/erikflowers/weather-icons" target="_blank">GitHub -
+                        erikflowers/weather-icons: 215 Weather Themed Icons and CSS</a>
+                </li>
+                <li>
+                    <a href="https://github.com/thesabbir/simple-line-icons" target="_blank">GitHub -
+                        thesabbir/simple-line-icons: Simple and Minimal Line Icons</a>
+                </li>
+            </ul>
+        </details>
+        <h2>方案一：opentype.js</h2>
+        <p>官网：<a href="https://opentype.js.org/" target="_blank">opentype.js – JavaScript parser/writer for OpenType and
+                TrueType fonts.</a></p>
+        <p>
+            <inline-code>opentype.js</inline-code>实现，官网支持的格式：WOFF, OTF, TTF。更多介绍请查看：<a
+                href="https://github.com/opentypejs/opentype.js" target="_blank">GitHub - opentypejs/opentype.js</a>
+        </p>
+        <fieldset>
+            <legend>opentype.js版</legend>
+            <p>
+                <input type="file" accept="application/x-font-truetype" onchange="fileInputForOpentypejs(this);"
+                    style="width: 49%;" />
+                <span style="width: 2%; font-weight: bold;">或|者</span>
+                <span style="width: 49%;">
+                    <label>地址：<input type="url" id="inputUrlForOpentypejs" /></label>
+                    <button type="button" id="btnForOpentypejs">确定</button>
+                </span>
+            </p>
+            <div class="view-box-by-opentypejs" id="view-by-opentypejs"></div>
+        </fieldset>
+        <h2>其他版本：急需eot、woff2等</h2>
+        <h2>参考链接</h2>
+        <ul>
+            <li>
+                <a href="https://www.coder.work/article/3792939" target="_blank">javascript -
+                    将FileReader.readAsBinaryString转换为Unicode转义的字符串 - IT工具网</a>
+            </li>
+            <li>
+                <a href="https://www.w3schools.com/cssref/css3_pr_font-face_rule.asp" target="_blank">CSS @font-face
+                    Rule</a>
+            </li>
+        </ul>
+    </div>
+    <script src="https://unpkg.com/opentype.js"></script>
+    <script>
+
+        const cr = document.createRange();
+
+        const styleTagIdOpentypejs = "custom-web-font-handle-by-opentypejs";
+        const viewByOpentypejsDom = document.getElementById("view-by-opentypejs"),
+            inputUrlForOpentypejsDom = document.getElementById("inputUrlForOpentypejs"),
+            btnForOpentypejsDom = document.getElementById("btnForOpentypejs");
+
+        btnForOpentypejsDom.addEventListener('click', (event) => {
+            if (!inputUrlForOpentypejs.value) return;
+
+            resetIconDisplayOpentypejs();
+            //  http://localhost:8888/html-js-css/js-demo/ttf-icon-online/ttf/Simple-Line-Icons.ttf
+            fetch(inputUrlForOpentypejs.value).then((response) => {
+                if (response.ok) {
+                    return response.arrayBuffer();
+                }
+                else {
+                    let error = new Error(response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            }).then(handleFontFileByOpentypejs).catch(error => {
+                console.log('request failed', error)
+            });
+        });
+
+        function fileInputForOpentypejs(evt) {
+            if (!evt.files && evt.files.length) return;
+
+            const fileReader = new FileReader();
+            fileReader.readAsArrayBuffer(evt.files[0]);
+            fileReader.onerror = (error) => {
+                console.error('Error: ', JSON.stringify(error));
+            };
+            fileReader.onload = () => {
+                resetIconDisplayOpentypejs();
+                handleFontFileByOpentypejs(fileReader.result);
+            };
+        }
+
+        function resetIconDisplayOpentypejs() {
+            //  删除上一次插入的样式,并清空展示容器
+            let styleTagEle = document.getElementById(styleTagIdOpentypejs);
+            if (styleTagEle) {
+                styleTagEle.remove();
+            }
+            viewByOpentypejsDom.innerHTML = "";
+        }
+
+        function handleFontFileByOpentypejs(arrBuffer) {
+            const font = opentype.parse(arrBuffer);
+            if (!(font && font.glyphs && font.glyphs.glyphs)) return;
+
+            let iconsStyleFragment = "";
+            for (let key in font.glyphs.glyphs) {
+                if (font.glyphs.glyphs.hasOwnProperty(key)) {
+                    let glyph = font.glyphs.glyphs[key];
+                    if (!glyph.unicode) continue;
+
+                    let iconName = glyph.name || glyph.unicode,
+                        icon16Value = glyph.unicode.toString(16).toUpperCase(),
+                        iconClassName = `custom-font-${iconName}`;
+                    viewByOpentypejsDom.appendChild(cr.createContextualFragment(
+                        `<div class="icon-wrapper">
+                            <i class="icon ${iconClassName}"></i> 
+                            <code>${icon16Value}</code>
+                            <span>${iconName}</span>
+                        </div>`));
+                    iconsStyleFragment +=
+                        `.${iconClassName}::before { content: "\\${icon16Value}"; }  `;
+                }
+            }
+            addFontToStyle("you-custom-font-" + new Date().valueOf(), arrBuffer, viewByOpentypejsDom, iconsStyleFragment);
+        }
+
+        function addFontToStyle(fontFamilyName, fontFileArraybuffer, displayBoxEle, styleFragment) {
+            let currentFont = new FontFace(fontFamilyName, fontFileArraybuffer, {
+                style: 'normal',
+                weight: 'normal'
+            });
+            currentFont.loaded.then((loadedFace) => {
+                document.fonts.add(loadedFace);
+                displayBoxEle.style.fontFamily = fontFamilyName;
+                let newStyle = document.createElement('style');
+                newStyle.id = styleTagIdOpentypejs;
+                newStyle.appendChild(cr.createContextualFragment(styleFragment));
+                document.head.appendChild(newStyle);
+            }).catch(function (error) { });
+
+            document.fonts.ready.then(() => {
+                //document.body.appendChild(cr.createContextualFragment(`<i></i>`));
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -112,6 +112,7 @@ Cross-Origin-Opener-Policy: same-origin
         </marked-block>
         <h2>赶紧试试吧</h2>
         <p id="msg"></p>
+        <h3>图片和音频合成视频</h3>
         <div class="select-input-file-container">
             <fieldset>
                 <legend>选择图片</legend>
@@ -133,6 +134,27 @@ Cross-Origin-Opener-Policy: same-origin
         <p>
             <button type="button" id="btnConvert">&uarr;&rarr;转&rarr;&darr;</button>
         </p>
+        <h3>m3u8转视频</h3>
+        <p>
+            <label>
+                选择一个m3u8文件：<input id="input-file-m3u8" type="file">
+            </label>
+        </p>
+        <marked-block type="error">
+            <p>
+                m3u8转视频没有跑成功，提示如下错误:
+            </p>
+            <p>
+                [fferr] https protocol not found, recompile FFmpeg with openssl, gnutls or securetransport enabled.
+            </p>
+            <hr>
+            <p>在官网上也找到了类似的问题：<a href="https://hub.xn--p8jhe.tw/ffmpegwasm/ffmpeg.wasm/issues/219" target="_blank">https
+                    protocol not found, recompile FFmpeg with openssl, gnutls or securetransport enabled. · Issue #219 ·
+                    ffmpegwasm/ffmpeg.wasm · GitHub</a></p>
+            <p>记录一下这个链接：<a href="https://askubuntu.com/questions/650577/how-to-compile-ffmpeg-with-https-support"
+                    target="_blank" rel="noopener noreferrer">openssl - How to compile ffmpeg with https support - Ask
+                    Ubuntu</a></p>
+        </marked-block>
         <video id="video-player" controls style="max-width: 100%;"></video>
 
     </div>
@@ -163,6 +185,9 @@ Cross-Origin-Opener-Policy: same-origin
         resetMsg("ffmpeg：各位千万别着急，我的有点富态再加上这苦逼的网速……别着急操作，各位稍等，好了通知你们", "red");
         ffmpegInit().then((myFFmpeg) => {
             resetMsg("ffmpeg：让各位久等了，我准备好了", "green");
+
+            //#region 图片、音频合成视频
+
             const inputImgDom = document.getElementById('input-file-img'),
                 inputAudioDom = document.getElementById('input-file-audio'),
                 btnConvertDom = document.getElementById("btnConvert"),
@@ -240,6 +265,25 @@ Cross-Origin-Opener-Policy: same-origin
                 videoPlayerDom.src = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
                 resetMsg("转换完成，让您久等了", "green");
             }, false);
+
+            //#endregion
+
+            //#region m3u8转视频
+
+            const eleInputFileM3u8 = document.getElementById('input-file-m3u8');
+            eleInputFileM3u8.addEventListener("change", async (eFileInput) => {
+                if (!(eFileInput.target.files && eFileInput.target.files.length)) return;
+
+                let [m3u8File] = eFileInput.target.files;
+                myFFmpeg.FS('writeFile', m3u8File.name, await fetchFile(m3u8File));
+                let commandArgs = ["-protocol_whitelist", "file,http,https,tcp,tls,crypto", "-i", m3u8File.name, "output-form-m3u8.mp4"];
+                await myFFmpeg.run.apply(null, commandArgs);
+                var data = myFFmpeg.FS('readFile', 'output-form-m3u8.mp4');
+                videoPlayerDom.src = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
+                resetMsg("转换完成，让您久等了", "green");
+            });
+
+            //#endregion
 
         }, (errorMsg) => {
             resetMsg(errorMsg, "red");
