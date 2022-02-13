@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <!-- github访问地址：/p/vue3/0introduction/index.html -->
+    <!-- github访问地址：/p/web/vue3/0introduction/index.html -->
     <div class="blog-page">
         <h1>Vue3 + webpack 多入口</h1>
         <marked-block type="info">
@@ -36,7 +36,7 @@
         <p>这里简单的记录一下：Vue3 + webpack下的多入口demo。该demo并没有使用<inline-code>@vue/cli</inline-code>、<inline-code>Vite
             </inline-code>等，而是自己搭建的，争取做到最简。
         </p>
-        <h2>最简：跑起来就行 <a href="/p/vue3/0introduction/code/introduction-1.zip" target="_blank">代码下载</a></h2>
+        <h2>最简：跑起来就行 <a href="/p/web/vue3/0introduction/code/introduction-1.zip" target="_blank">代码下载</a></h2>
         <p>这是第一步，仅仅是Vue3 + webpack的组合，只是弄了个多入口。没有使用单文件组件、
             <inline-code>TypeScript</inline-code>、<inline-code>Less</inline-code>等，（开发）依赖也是非必要不安装，webpack配置也是非必要不添加……
         </p>
@@ -60,7 +60,7 @@
             <inline-code>/src/module2/js/index.js</inline-code>
         </p>
         <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
-            data-url="/p/vue3/0introduction/code/introduction-1-module1-index.html" ddz-lang="html"></div>
+            data-url="/p/web/vue3/0introduction/code/introduction-1-module1-index.html" ddz-lang="html"></div>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 import * as Vue from "vue";
 Vue.createApp({
@@ -163,7 +163,7 @@ multiPageConfig.forEach(singlePage => {
 });
 module.exports = tempModuleExportsObj;
         </pre>
-        <h2>添加单文件组件支持 <a href="/p/vue3/0introduction/code/introduction-2.zip" target="_blank">代码下载</a></h2>
+        <h2>添加单文件组件支持 <a href="/p/web/vue3/0introduction/code/introduction-2.zip" target="_blank">代码下载</a></h2>
         <p>先来张图看看结构的变化</p>
         <p>
             <img src="./images/2.png" width="100%">
@@ -261,7 +261,7 @@ let tempModuleExportsObj = {
         <p>
             <img src="./images/3.png" width="100%">
         </p>
-        <h2>LESS支持 <a href="/p/vue3/0introduction/code/introduction-3.zip" target="_blank">代码下载</a></h2>
+        <h2>LESS支持 <a href="/p/web/vue3/0introduction/code/introduction-3.zip" target="_blank">代码下载</a></h2>
         <p>还是先来张图看看结构的变化</p>
         <p>
             <img src="./images/4.png" width="100%">
@@ -351,7 +351,7 @@ let tempModuleExportsObj = {
         <p>
             <img src="./images/6.png" width="100%">
         </p>
-        <h2>静态文件-图片 <a href="/p/vue3/0introduction/code/introduction-4.zip" target="_blank">代码下载</a></h2>
+        <h2>静态文件-图片 <a href="/p/web/vue3/0introduction/code/introduction-4.zip" target="_blank">代码下载</a></h2>
         <p>还是先来张图看看结构的变化</p>
         <p>
             <img src="./images/7.png" width="100%">
@@ -372,9 +372,9 @@ let tempModuleExportsObj = {
     </div>
 </template>
 <script>
-export default {
-name: "Module",
-};
+    export default {
+        name: "Module",
+    };
 </script>
         </pre>
         <P>
@@ -388,7 +388,7 @@ body {
         </pre>
         <marked-block type="info">
             <p>此次添加的图片你可以在这里找到：
-                <a href="https://github.com/xiaodu114/xiaodu114.github.io/tree/master/p/vue3/0introduction/code"
+                <a href="https://github.com/xiaodu114/xiaodu114.github.io/tree/master/p/web/vue3/0introduction/code"
                     target="_blank">快去找图片吧</a>
             </p>
         </marked-block>
@@ -451,7 +451,7 @@ let tempModuleExportsObj = {
         <p>
             记得上次写的时候是通过<inline-code>html-loader</inline-code>和<inline-code>file-loader</inline-code>解决的，但是这次不行了……又有新东西了。
         </p>
-        <h2>JS转ES5<a href="/p/vue3/0introduction/code/introduction-5.zip" target="_blank">代码下载</a></h2>
+        <h2>JS转ES5<a href="/p/web/vue3/0introduction/code/introduction-5.zip" target="_blank">代码下载</a></h2>
         <p>转ES5在实际项目中用的太多了，之前在vue2.x的时候也弄了，但是此时按照原来的方式就行不通了，出现了一些问题，最后发现竟然是<inline-code>target</inline-code>的问题
             ……还是先来张图看看结构的变化</p>
         <p>
@@ -460,7 +460,7 @@ let tempModuleExportsObj = {
         <p>原来的vue相关的代码没有变动，只是增加了一个新的模块（module3）来测试ES5的转换（路径为：/src/module3/index.html 和 /src/module3/js/index.js）。</p>
         <h3>新增的html页面</h3>
         <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
-            data-url="/p/vue3/0introduction/code/introduction-5-module3-index.html" ddz-lang="html"></div>
+            data-url="/p/web/vue3/0introduction/code/introduction-5-module3-index.html" ddz-lang="html"></div>
         <h3>新增的js</h3>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 document.addEventListener("DOMContentLoaded", function () {
@@ -637,7 +637,7 @@ let tempModuleExportsObj = {
         <p>
             <img src="./images/10-2.png" width="100%">
         </p>
-        <h2>抽取公共JS<a href="/p/vue3/0introduction/code/introduction-6.zip" target="_blank">代码下载</a></h2>
+        <h2>抽取公共JS<a href="/p/web/vue3/0introduction/code/introduction-6.zip" target="_blank">代码下载</a></h2>
         <p>默认打包时将依赖和业务代码都弄到一个JS中了，看着不舒服，希望打包之后的代码也有一个清晰的结构，仅仅是为了看着舒服……看一下目录变化</p>
         <p>
             <img src="./images/11.png" width="100%">
@@ -736,7 +736,7 @@ document.getElementById("guid1").innerHTML = "一个GUID：" + utils.getGUID();
     }
 }            
         </pre>
-        <h2>提取CSS到单独的文件中<a href="/p/vue3/0introduction/code/introduction-7.zip" target="_blank">代码下载</a></h2>
+        <h2>提取CSS到单独的文件中<a href="/p/web/vue3/0introduction/code/introduction-7.zip" target="_blank">代码下载</a></h2>
         <p>前面的示例中用到的css都弄到了JS中，感觉不是很爽，希望webpack源码项目和打包之后的目录尽量保持一致，这也是这片文档的宗旨……</p>
         <p>这次提取CSS，代码目录没有改变……</p>
         <h3>package.json更新</h3>
