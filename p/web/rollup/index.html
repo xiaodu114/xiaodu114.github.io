@@ -183,6 +183,16 @@ export default {
         </pre>
         <p><strong>说明：</strong>上面的配置只会转换一些语法，例如：let、const、class、数组或者对象的解构赋值等，async和await也会转换（转换之后用到了Promise）；像新增的Array.from、Set、Promise等不会转换。
         </p>
+        <marked-block type="error">
+            <p>在浏览器中运行的时候报错了，还是Chrome，并且是最新版的，什么鬼……</p>
+            <p>
+                <span>
+                    Uncaught ReferenceError: regeneratorRuntime is not defined
+                </span>
+                <img src="./images/2.png">
+            </p>
+            <p>之后又看了一下转码之后的代码，确实找到了<inline-code>regeneratorRuntime</inline-code>，并且还给出了提示<inline-code>regenerator-runtime</inline-code>，这时也想起之前用webapck转ES5时安装过这个包。但是这里node_modules目录下已经有这个包了，算了先不纠结他了，应该很少单独这么用。</p>
+        </marked-block>
         <h3>第三次尝试</h3>
         <p>第三次尝试，依赖再次添加，终于像点样子了。</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
