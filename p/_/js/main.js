@@ -33,6 +33,7 @@ customElements.define('p-dependence',
                 "/p/_/css/typesetting.css"
             ].forEach((cssPath) => {
                 let linkElement = document.createElement("link");
+                linkElement.id = "link-css-" + cssPath.slice(cssPath.lastIndexOf("/") + 1);
                 linkElement.rel = "stylesheet";
                 linkElement.href = cssPath;
                 headEle.appendChild(linkElement);
@@ -100,15 +101,35 @@ document.documentElement.appendChild(document.createElement("p-dependence"));
 document.documentElement.appendChild(document.createElement("link-icon"));
 
 document.addEventListener('DOMContentLoaded', (event) => {
+    function addMustNeedWebComponent() {
+        document.querySelector("body>.blog-page").appendChild(document.createElement("back-to-top"));
+        document.querySelector("body>.blog-page").appendChild(document.createElement("auto-generate-directory"));
+    }
 
-    document.querySelector("body>.blog-page").appendChild(document.createElement("back-to-top"));
-    document.querySelector("body>.blog-page").appendChild(document.createElement("auto-generate-directory"));
+    let linkEle = document.getElementById("link-css-typesetting.css");
+    if (linkEle) {
+        if (linkEle.readyState) {
+            linkEle.onreadystatechange = () => {
+                if (["loaded", "complete"].indexOf(linkEle.readyState) >= 0) {
+                    linkEle.onreadystatechange = null;
+                    addMustNeedWebComponent();
+                }
+            };
+        } else {
+            linkEle.onload = () => {
+                linkEle.onload = null;
+                addMustNeedWebComponent();
+            };
+        }
+    } else {
+        setTimeout(addMustNeedWebComponent);
+    }
 
     const myRange = document.createRange();
     document.querySelectorAll("pre[ddz-class='here-need-to-handle-by-highlight']").forEach((block) => {
         let lang = block.getAttribute("ddz-lang").toLowerCase();
         block.replaceWith(myRange.createContextualFragment(
-            `<pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${lang} hljs">${hljs.highlightAuto(lang==="html"?block.innerHTML.trim():block.innerText.trim()).value}</code></pre>`
+            `<pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${lang} hljs">${hljs.highlightAuto(lang === "html" ? block.innerHTML.trim() : block.innerText.trim()).value}</code></pre>`
         ));
     });
     document.querySelectorAll("[ddz-class='here-need-to-handle-by-highlight-and-replace-one']").forEach(
