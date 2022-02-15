@@ -22,7 +22,7 @@
             <inline-code>
                 webpack</inline-code>的区别，<inline-code>rollup</inline-code>才是想要的嘛！这里记录一下关于他的一切，从ES6转ES5开始。
         </p>
-        <h2>ES6+转ES5</h2>
+        <h2>ES6+转ES5（rollup.config.js）</h2>
         <p>这个简直就是必备啊！虽然现在大部分浏览器对ES6+的支持已经很好了，但是永远不能保证用户的浏览器……<inline-code>JavaScript</inline-code>
             的新特性越来越多，不用又有些难受，所以转换成低版本的成为了必不可少的工作。说道转ES5，就不得不说<inline-code>babel</inline-code>
             了，他也是这章节的主角。最近还发现了一个和他类似的工具：<a href="https://swc.rs/" target="_blank">Rust-based platform for the Web –
@@ -191,7 +191,9 @@ export default {
                 </span>
                 <img src="./images/2.png">
             </p>
-            <p>之后又看了一下转码之后的代码，确实找到了<inline-code>regeneratorRuntime</inline-code>，并且还给出了提示<inline-code>regenerator-runtime</inline-code>，这时也想起之前用webapck转ES5时安装过这个包。但是这里node_modules目录下已经有这个包了，算了先不纠结他了，应该很少单独这么用。</p>
+            <p>之后又看了一下转码之后的代码，确实找到了<inline-code>regeneratorRuntime</inline-code>，并且还给出了提示<inline-code>
+                    regenerator-runtime</inline-code>
+                ，这时也想起之前用webapck转ES5时安装过这个包。但是这里node_modules目录下已经有这个包了，算了先不纠结他了，应该很少单独这么用。</p>
         </marked-block>
         <h3>第三次尝试</h3>
         <p>第三次尝试，依赖再次添加，终于像点样子了。</p>
@@ -295,6 +297,120 @@ export default {
         <p>综合第三次和第四次的优点， <a href="https://github.com/babel/babel-polyfills" target="_blank">GitHub -
                 babel/babel-polyfills: A set of Babel plugins that enable injecting different polyfills with different
                 strategies in your compiled code.</a> 我们期待他的到来……</p>
+        <h2>ES6+转ES5（JavaScript API）</h2>
+        <p>上一章节是使用配置文件处理的，这一章节介绍一下使用API处理。为了做一下对比，上面的配置也修改一下来生成map文件，这里是在“第四次尝试”的基础上进行修改。先看一下修改之后的配置：</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+// 下面是 rollup.config.js 文件的内容
+
+import { babel } from '@rollup/plugin-babel';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+
+export default {
+    input: './src/index.js',
+    output: {
+        file: 'dist/index.js',
+        format: 'iife',
+        sourcemap: true,    //  和“第四次尝试”对比新增的选项
+    },
+    plugins: [
+        nodeResolve({
+            browser: true
+        }),
+        commonjs(),
+        babel({
+            babelrc: false,
+            exclude: /node_modules/,
+            babelHelpers: 'runtime',
+            presets: ['@babel/preset-env'],
+            plugins: [
+                ['@babel/plugin-transform-runtime', {
+                    corejs: {
+                        version: 3,
+                        proposals: true
+                    },
+                    useESModules: true
+                }]
+            ]
+        })
+    ]
+};
+        </pre>
+        <p>赶紧试试吧！先生成一个，方便后面的对比，看看是不是一样。</p>
+        <p>下面就切入正题，介绍一下使用API。其实关于rollup的配置，就是拆分成了两部分：输入选项和输出选项；之后就是调用rollup的API了；最后就是将返回的内容写入文件了……这里新建一个"build.js"文件，和"rollup.config.js"文件同级
+        </p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//      下面是 build.js 文件的内容
+
+const rollup = require("rollup");
+const { babel } = require("@rollup/plugin-babel");
+const { nodeResolve } = require("@rollup/plugin-node-resolve");
+const commonjs = require("@rollup/plugin-commonjs");
+
+const fs = require("fs");
+if (!fs.existsSync("dist")) {
+    fs.mkdirSync("dist");
+}
+
+const inputOptions = {
+    input: './src/index.js',
+    plugins: [
+        nodeResolve({
+            browser: true
+        }),
+        commonjs(),
+        babel({
+            babelrc: false,
+            exclude: /node_modules/,
+            babelHelpers: 'runtime',
+            presets: ['@babel/preset-env'],
+            plugins: [
+                ['@babel/plugin-transform-runtime', {
+                    corejs: {
+                        version: 3,
+                        proposals: true
+                    },
+                    useESModules: true
+                }]
+            ]
+        })
+    ]
+};
+const outputOptions = {
+    file: 'dist/index.js',
+    format: 'iife',
+    sourcemap: true,
+};
+
+rollup.rollup(inputOptions).then((bundle) => {
+    bundle.generate(outputOptions).then((outputData) => {
+        let {
+            output: [{ code, map }],
+        } = outputData,
+            //  暂时先这样获取文件名
+            outputFileName = outputOptions.file.slice(outputOptions.file.lastIndexOf("/") + 1),
+            jsMapFileName = "";
+        //  对于map先这样处理，暂时不考虑sourcemapFile
+        if (outputOptions.sourcemap) {
+            code += `//# sourceMappingURL=${outputFileName}.map`;
+            jsMapFileName = outputOptions.file + ".map";
+        }
+        fs.writeFile(outputOptions.file, code, (err) => {
+            console.log(JSON.stringify(err));
+        });
+        if (outputOptions.sourcemap) {
+            fs.writeFile(
+                jsMapFileName,
+                JSON.stringify(map),
+                (err) => {
+                    console.log(JSON.stringify(err));
+                }
+            );
+        }
+    });
+});
+        </pre>
+        <p>之后在控制台执行<inline-code>node build.js</inline-code>就可以了。这里对比发现转码之后的JS文件以及对应的map文件完全相同。</p>
     </div>
 </body>
 
