@@ -18,6 +18,14 @@
             flex: 1;
         }
 
+        .select-input-m3u8-container {
+            display: flex;
+        }
+
+        .select-input-m3u8-container>fieldset {
+            flex: 1;
+        }
+
         #input-img-tobeselected-list {
             width: 100%;
             max-height: 388px;
@@ -135,11 +143,21 @@ Cross-Origin-Opener-Policy: same-origin
             <button type="button" id="btnConvert">&uarr;&rarr;转&rarr;&darr;</button>
         </p>
         <h3>m3u8转视频</h3>
-        <p>
-            <label>
-                选择一个m3u8文件：<input id="input-file-m3u8" type="file">
-            </label>
-        </p>
+        <div class="select-input-m3u8-container">
+            <fieldset>
+                <legend>选择一个m3u8文件</legend>
+                <p><label><input id="input-file-m3u8" type="file"></label></p>
+            </fieldset>
+            <fieldset>
+                <legend>输入m3u8文件地址</legend>
+                <p>
+                    <label>
+                        <input id="input-text-m3u8" type="text" style="width: calc(100% - 60px);">
+                    </label>
+                    <button type="button" id="btnM3u8Url">确定</button>
+                </p>
+            </fieldset>
+        </div>
         <marked-block type="error">
             <p>
                 m3u8转视频没有跑成功，提示如下错误:
@@ -270,18 +288,30 @@ Cross-Origin-Opener-Policy: same-origin
 
             //#region m3u8转视频
 
-            const eleInputFileM3u8 = document.getElementById('input-file-m3u8');
-            eleInputFileM3u8.addEventListener("change", async (eFileInput) => {
+            const eleInputFileM3u8 = document.getElementById('input-file-m3u8'),
+                eleInputTextM3u8 = document.getElementById('input-text-m3u8'),
+                eleBtnM3u8Url = document.getElementById('btnM3u8Url');
+            eleInputFileM3u8.addEventListener("change", (eFileInput) => {
                 if (!(eFileInput.target.files && eFileInput.target.files.length)) return;
 
                 let [m3u8File] = eFileInput.target.files;
-                myFFmpeg.FS('writeFile', m3u8File.name, await fetchFile(m3u8File));
-                let commandArgs = ["-protocol_whitelist", "file,http,https,tcp,tls,crypto", "-i", m3u8File.name, "output-form-m3u8.mp4"];
+                handleM3u8ToMP4(m3u8File, m3u8File.name);
+            });
+            eleBtnM3u8Url.addEventListener("click", () => {
+                if (!eleInputTextM3u8.value) { alert("请输入链接地址"); return; }
+                let fileName = eleInputTextM3u8.value.slice(eleInputTextM3u8.value.lastIndexOf("/") + 1);
+                handleM3u8ToMP4(eleInputTextM3u8.value, fileName);
+            });
+
+            async function handleM3u8ToMP4(m3u8File, fileName) {
+                myFFmpeg.FS('writeFile', fileName, await fetchFile(m3u8File));
+                //  await ffmpeg.run('-allowed_extensions', 'ALL', '-i', "index.m3u8", '-c', 'copy', 'output.mp4');
+                let commandArgs = ["-protocol_whitelist", "file,http,https,tcp,tls,crypto", "-i", fileName, "output-form-m3u8.mp4"];
                 await myFFmpeg.run.apply(null, commandArgs);
-                var data = myFFmpeg.FS('readFile', 'output-form-m3u8.mp4');
+                var data = myFFmpeg.FS('readFile', 'output-from-m3u8.mp4');
                 videoPlayerDom.src = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
                 resetMsg("转换完成，让您久等了", "green");
-            });
+            }
 
             //#endregion
 
