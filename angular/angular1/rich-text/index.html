@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>div contenteditable 示例 - xiaodu114.github.io</title>
+    <meta name="keywords" content="div,contenteditable,input,select,tag,输入,选择" />
+    <meta name="description" content="利用contenteditable属性实现既可以输入又可以选择（选择之后显示的可能是一个复杂的组件）的功能" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        /* 代码来源：https://cloud.tencent.com/developer/article/1144484 */
+        /* 例外：https://www.jianshu.com/p/04127d74d88c */
+        pre {
+            box-sizing: border-box;
+            /*以下样式是自动换行代码*/
+            white-space: pre-wrap;
+            /* css-3 */
+            white-space: -moz-pre-wrap;
+            /* Mozilla, since 1999 */
+            white-space: -pre-wrap;
+            /* Opera 4-6 */
+            white-space: -o-pre-wrap;
+            /* Opera 7 */
+            word-wrap: break-word;
+            /* Internet Explorer 5.5+ */
+            /*以上样式是自动换行代码，需要的加上，不需要的删除*/
+            height: 100%;
+            overflow: auto;
+            font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+            font-size: 13px;
+            padding: 9.5px;
+            margin-top: 0px;
+            margin-bottom: 10px;
+            line-height: 1.42857;
+            color: #333333;
+            word-break: break-all;
+            word-wrap: break-word;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            background-color: #f5f5f5;
+        }
+
+        h5 {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .rich-text-demo {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .rich-text-demo>.header {
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .rich-text-demo>.header::after {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            height: 1px;
+            content: "";
+            -webkit-transform: scaleY(0.5);
+            transform: scaleY(0.5);
+            background-color: #ccc;
+        }
+
+        .rich-text-demo>.main {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .rich-text-demo>.main>.main-left {
+            width: 345px;
+            flex-shrink: 0;
+            position: relative;
+            background-color: #f1f2f3;
+            padding-left: 10px;
+            padding-right: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .rich-text-demo>.main>.main-left::after {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            width: 1px;
+            content: "";
+            -webkit-transform: scaleX(0.5);
+            transform: scaleX(0.5);
+            background-color: #ccc;
+        }
+
+        .rich-text-demo>.main>.main-left>.select-field-area {
+            flex-shrink: 0;
+        }
+
+        .rich-text-demo>.main>.main-left>.select-field-area>ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 0;
+        }
+
+        .rich-text-demo>.main>.main-left>.select-field-area>ul>li {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 36px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+            background-color: #fff;
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.16);
+            margin-bottom: 10px;
+            margin-right: 10px;
+            padding-left: 10px;
+            padding-right: 10px;
+            user-select: none;
+        }
+
+        .rich-text-demo>.main>.main-left>.imitate-edit-area {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .rich-text-demo>.main>.main-left>.imitate-edit-area>.initvalue-wrapper {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .rich-text-demo>.main>.main-left>.imitate-edit-area>.initvalue-wrapper>textarea {
+            height: 100%;
+            width: 100%;
+        }
+
+        .rich-text-demo>.main>.main-left>.imitate-edit-area>.initvalue-submit {
+            padding-top: 6px;
+            padding-bottom: 6px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .rich-text-demo>.main>.main-left>.imitate-edit-area>.initvalue-submit>button {
+            padding: 6px 12px;
+            cursor: pointer;
+            user-select: none;
+            border: 1px solid transparent;
+            border-radius: 4px;
+
+            color: #333;
+            background-color: #fff;
+            border-color: #ccc;
+        }
+
+        .rich-text-demo>.main>.main-left>.imitate-edit-area>.initvalue-submit>button:focus {
+            outline: none;
+        }
+
+        .rich-text-demo>.main>.main-left>.imitate-edit-area>.initvalue-submit>button:active {
+            background-color: #e6e6e6;
+            border-color: #adadad;
+        }
+
+        .rich-text-demo>.main>.main-content {
+            flex: 1;
+        }
+
+        .rich-text-demo>.main>.main-content>.rich-text-control-wrapper {
+            width: 456px;
+            min-height: 32px;
+            max-height: 456px;
+            font-size: 14px;
+            margin-top: 50px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .rich-text-demo>.main>.main-right {
+            width: 345px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .rich-text-demo>.main>.main-right::after {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 1px;
+            content: "";
+            -webkit-transform: scaleX(0.5);
+            transform: scaleX(0.5);
+            background-color: #ccc;
+        }
+
+        .rich-text-demo>.main>.main-right>#btnCopy {
+            position: absolute;
+            right: 25px;
+            top: 15px;
+        }
+
+        .rich-text-container {
+            width: 456px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 0.5rem;
+            outline: none;
+        }
+
+        .rich-text-container:focus-visible {
+            border: 1px solid #3cb878;
+        }
+
+        .select-field-container {
+            display: inline-block;
+            user-select: none;
+            background-color: rebeccapurple;
+            color: #fff;
+            margin-left: 4px;
+            margin-right: 4px;
+        }
+
+        .select-field-container .icon-del {
+            padding-left: 3px;
+            padding-right: 3px;
+            cursor: pointer;
+        }
+
+        .select-field-container .icon-del:hover {
+            color: red;
+        }
+    </style>
+</head>
+
+<body ng-cloak ng-controller="MyAppController">
+    <div class="rich-text-demo">
+        <div class="header">
+            <h1>div contenteditable属性示例</h1>
+        </div>
+        <div class="main">
+            <div class="main-left">
+                <div class="select-field-area">
+                    <h5>表单字段</h5>
+                    <ul id="ulSelctSomeFiled">
+                        <li ng-repeat="field in youCanSelectFields track by $index"
+                            ng-click="youCanSelectFieldClick(field,$index,$event)">
+                            {{field.fieldName}}</li>
+                    </ul>
+                </div>
+                <div class="imitate-edit-area">
+                    <h5>输入需要JSON数据模拟编辑页面</h5>
+                    <div class="initvalue-wrapper">
+                        <textarea ng-model="inputYourValue"></textarea>
+                    </div>
+                    <div class="initvalue-submit">
+                        <button type="button" ng-click="handleYourInputClick()">
+                            确定
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="rich-text-control-wrapper">
+                    <div contenteditable spellcheck="false" class="rich-text-container"></div>
+                </div>
+            </div>
+            <div class="main-right">
+                <button id="btnCopy" type="button" ng-click="copyYourNeedDataClick()">复制</button>
+                <pre>{{richInputValueStr}}</pre>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/a2bei4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery"></script>
+    <script src="https://cdn.jsdelivr.net/npm/angular/angular.min.js"></script>
+    <script type="text/ng-template" id="selectFieldTpl">
+        <div class="select-field-container" contenteditable="false" data-filed-id="{{field.fieldId}}" selector-flag="{{selectorFlag}}">
+            {{field.fieldName}}<span ng-click="deleteThisSelectField()" class="icon-del">&times;</span>
+        </div>
+    </script>
+    <script>
+        if (!window.du) {
+            alert(`a2bei4 加载异常`);
+        }
+        // https://docs.microsoft.com/zh-cn/dotnet/framework/migration-guide/how-to-determine-which-versions-are-installed
+        // https://www.howtogeek.com/731913/how-to-check-the-.net-framework-version-on-windows-10/
+        // https://winbuzzer.com/2021/03/11/how-to-check-your-net-framework-version-on-windows-10-in-a-few-seconds-xcxwbt/
+        //  https://www.zhangxinxu.com/wordpress/2016/01/contenteditable-plaintext-only/
+        //  https://developer.mozilla.org/zh-CN/docs/Web/Guide/HTML/Editable_content
+        var myApp = angular.module('myApp', []);
+        myApp.directive('selectField', function ($timeout) {
+            return {
+                restrict: "EA",
+                replace: true,
+                templateUrl: 'selectFieldTpl',
+                scope: {
+                    field: "=",
+                    selectorFlag: "@",
+                    deleteFn: "&"
+                },
+                link: function (scope, el, attrs) {
+                    scope.deleteThisSelectField = function () {
+                        scope.deleteFn({ field: scope.field, selectorFlag: attrs["selectorFlag"] });
+                    }
+                }
+            }
+        });
+
+        myApp.controller("MyAppController", function ($scope, $compile, $element, $timeout) {
+            //  
+            function getFlagTextNode() {
+                //  https://www.cnblogs.com/He-tao-yuan/p/10050181.html
+                var tempNullNode = document.createTextNode("\u200D");
+                return tempNullNode;
+            }
+            function isFlagTextNode(node) {
+                return du.node.isSpaceTextNode(node, "\u200D");
+            }
+
+            //  1、左侧区域
+            $scope.youCanSelectFields = [
+                {
+                    fieldId: "1572493551001",
+                    fieldName: "车辆品牌名称",
+                },
+                {
+                    fieldId: "1572493551002",
+                    fieldName: "车辆品牌型号",
+                },
+                {
+                    fieldId: "1572493551003",
+                    fieldName: "车辆牌照",
+                },
+                {
+                    fieldId: "1572493551004",
+                    fieldName: "车辆购买日期",
+                },
+                {
+                    fieldId: "1572493551005",
+                    fieldName: "车辆购买价格",
+                },
+                {
+                    fieldId: "1572493551006",
+                    fieldName: "备注",
+                },
+            ];
+            $scope.youCanSelectFieldObj = {};
+            [].forEach.call($scope.youCanSelectFields, (field) => {
+                $scope.youCanSelectFieldObj[field.fieldId] = field;
+            });
+            $scope.selectedFieldObj = {};
+            function buildSelectFieldNode(field) {
+                var uniqueKey = "field_" + du.utils.getGUID().replace(/-/gi, '').toLowerCase();
+                //  删除的时候别忘了删除这个挂在属性
+                $scope.selectedFieldObj[uniqueKey] = JSON.parse(JSON.stringify(field));
+                var selectEleHtml = `<select-field field="selectedFieldObj.${uniqueKey}" selector-flag="${uniqueKey}" delete-fn="deleteOneSelectFieldFn(field,selectorFlag)"></select-field>`;
+                return $compile(selectEleHtml)($scope);
+            }
+            function isSelectFieldNode(node) {
+                return node?.nodeName === "DIV" && node.classList.contains("select-field-container");
+            }
+            function deleteSelectFieldNode(node, type) {
+                if (!isSelectFieldNode(node)) return;
+                var preNode1 = du.node.getPreNode(node);
+                var preNode2 = du.node.getPreNode(preNode1);
+                var nextNode1 = du.node.getNextNode(node);
+                var nextNode2 = du.node.getNextNode(nextNode1);
+                var isDelPre = false, isDelNext = false;
+                node.remove();
+                switch (type) {
+                    case "all": {
+                        isDelPre = true;
+                        isDelNext = true;
+                        break;
+                    }
+                    case "pre": {
+                        isDelPre = true;
+                        break;
+                    }
+                    case "next": {
+                        isDelNext = true;
+                        break;
+                    }
+                }
+                if (isDelPre && isFlagTextNode(preNode1) && !isSelectFieldNode(preNode2)) {
+                    preNode1.remove();
+                }
+                if (isDelNext && isFlagTextNode(nextNode1) && !isSelectFieldNode(nextNode2)) {
+                    nextNode1.remove();
+                }
+            }
+            //  将业务数据添加到视图
+            function handleYourInputToView(initValue) {
+                if (!(Array.isArray(initValue) && initValue.length)) return;
+                if (initValue[0].type !== "LineFeed") {
+                    initValue.unshift({
+                        "type": "LineFeed",
+                        "value": "\n",
+                        "extend": {}
+                    });
+                }
+                var lineArr = [];
+                initValue.forEach((item) => {
+                    if (item.type === "LineFeed") {
+                        lineArr[lineArr.length] = [];
+                    }
+                    else {
+                        lineArr[lineArr.length - 1].push(item);
+                    }
+                });
+                var fragments = document.createDocumentFragment();
+                lineArr.forEach((lineItems) => {
+                    var lineBox = document.createElement("div");
+                    [].forEach.call(lineItems, (item) => {
+                        if (item.type === "Fixed") {
+                            lineBox.appendChild(document.createTextNode(item.value));
+                        }
+                        else if (item.type === "Field") {
+                            if ($scope.youCanSelectFieldObj.hasOwnProperty(item.value)) {
+                                var selectElements = buildSelectFieldNode($scope.youCanSelectFieldObj[item.value]);
+                                lineBox.appendChild(selectElements[0]);
+                            }
+                        }
+                    });
+                    fragments.appendChild(lineBox);
+                });
+                richInputEle.append(fragments);
+                //  模拟触发事件
+                $timeout(function () {
+                    richInputEle.trigger("input");
+                });
+            }
+            //  从视图中获取需要的数据
+            function getNeedDataFromView(ele, retArr) {
+                if (!Array.isArray(retArr)) retArr = [];
+                if (isSelectFieldNode(ele)) {
+                    var tempFieldId = ele.getAttribute("data-filed-id");
+                    if ($scope.youCanSelectFieldObj.hasOwnProperty(tempFieldId)) {
+                        retArr.push({
+                            type: "Field",
+                            value: tempFieldId,
+                            extend: {
+                                ...$scope.youCanSelectFieldObj[tempFieldId]
+                            },
+                        });
+                    }
+                }
+                else {
+                    switch (ele.nodeName) {
+                        case "#text": {
+                            if (isFlagTextNode(ele)) break;
+                            if (!!ele.nodeValue && ele.nodeValue !== "\u200D") {
+                                retArr.push({
+                                    type: "Fixed",
+                                    value: ele.nodeValue,
+                                    extend: {},
+                                });
+                            }
+                            break;
+                        }
+                        case "DIV": {
+                            if (ele.classList.length === 0) {
+                                retArr.push({
+                                    type: "LineFeed",
+                                    value: "\n",
+                                    extend: {},
+                                });
+                            }
+                            break;
+                        }
+                    }
+                    var childElements = $(ele).contents();
+                    if (childElements.length) {
+                        [].forEach.call(Array.from(childElements), (child) => {
+                            getNeedDataFromView(child, retArr);
+                        });
+                    }
+                }
+                return retArr;
+            }
+
+            $scope.deleteOneSelectFieldFn = function (field, selectorFlag) {
+                var deleteSelectNode = richInputEle.find(`[selector-flag='${selectorFlag}']`)[0];
+                deleteSelectFieldNode(deleteSelectNode, "all");
+                delete $scope.selectedFieldObj[selectorFlag?.trim()];
+                //  模拟触发事件
+                $timeout(function () {
+                    richInputEle.trigger("input");
+                });
+            };
+            $scope.youCanSelectFieldClick = function (field, $index, $event) {
+                var selectElements = buildSelectFieldNode(field);
+                var selObj = window.getSelection();
+                if (selObj.focusNode && richInputEle[0].contains(selObj.focusNode)) {
+                    var range = selObj.getRangeAt(0);
+                    range.insertNode(selectElements[0]);
+                }
+                else {
+                    richInputEle.append(selectElements);
+                }
+                //  模拟触发事件
+                $timeout(function () {
+                    richInputEle.trigger("input");
+                    var selObj = window.getSelection();
+                    //  第一种实现方式
+                    // var range = selObj.getRangeAt(0);
+                    // range.setStart(du.node.getNextNode(selectElements[0]), 0);
+                    // range.setEnd(du.node.getNextNode(selectElements[0]), 0);
+                    //  第二种实现方式
+                    // var range = selObj.getRangeAt(0);
+                    // range.selectNode(du.node.getNextNode(selectElements[0]));
+                    // range.collapse(true);
+                    //  第三种实现方式
+                    selObj.collapse(du.node.getNextNode(selectElements[0]), 1);
+                });
+            };
+            $scope.inputYourValue = "";
+            $scope.handleYourInputClick = function () {
+                if (!$scope.inputYourValue) {
+                    alert("请输入");
+                    return;
+                }
+                var tempInitNeedValue = null;
+                try {
+                    tempInitNeedValue = JSON.parse($scope.inputYourValue);
+                } catch (error) {
+                    alert("反序列化失败：" + error.message);
+                    return;
+                }
+                if (!Array.isArray(tempInitNeedValue)) {
+                    alert("这里需要的是数组");
+                    return;
+                }
+                handleYourInputToView(tempInitNeedValue);
+                $scope.inputYourValue = "";
+                $timeout(function () {
+                    $scope.richInputValue = [];
+                    getNeedDataFromView(richInputEle[0], $scope.richInputValue);
+                    $scope.richInputValueStr = JSON.stringify($scope.richInputValue, null, 4);
+                });
+            };
+
+            //  2、中间区域
+            $scope.richInputValue = [];
+            //  富文本输入框元素
+            var richInputEle = $element.find(".rich-text-container");
+            function handleBrNode(richInputNode) {
+                [].forEach.call([...richInputNode.querySelectorAll("br")], (ele) => {
+                    var allSiblingCounter = ele.parentNode.childNodes.length;
+                    if (allSiblingCounter === 1 || allSiblingCounter === ele.parentNode.querySelectorAll("br").length) return;
+                    var isHasOtherInlineNode = false;
+                    [...ele.parentNode.childNodes].forEach((childNode) => {
+                        if (childNode === ele) return;
+                        if (isHasOtherInlineNode) return;
+                        if (childNode.nodeType === Node.TEXT_NODE) {
+                            isHasOtherInlineNode = true;
+                            return;
+                        }
+                        if (["inline", "inline-block", "inline-flex", "inline-grid", "inline-table"].includes(getComputedStyle(childNode).display)) {
+                            isHasOtherInlineNode = true;
+                        }
+                    });
+                    if (isHasOtherInlineNode) {
+                        ele.remove();
+                    }
+                });
+            }
+
+            richInputEle[0].addEventListener("keydown", (evt) => {
+                switch (evt.keyCode) {
+                    case 8://   backspace
+                        {
+                            var selObj = window.getSelection();
+                            if (selObj.focusNode && isFlagTextNode(selObj.focusNode)) {
+                                var nullNodePreNode1 = du.node.getPreNode(selObj.focusNode);
+                                deleteSelectFieldNode(nullNodePreNode1, "pre");
+                            }
+                            break;
+                        }
+                    case 46://   delete
+                        {
+                            var selObj = window.getSelection();
+                            if (selObj.focusNode && isFlagTextNode(selObj.focusNode)) {
+                                var nullNodeNextNode1 = du.node.getNextNode(selObj.focusNode);
+                                deleteSelectFieldNode(nullNodeNextNode1, "next");
+                            }
+                            break;
+                        }
+                }
+            });
+            richInputEle.on('input', function () {
+                handleBrNode(richInputEle[0]);
+                [].forEach.call([...richInputEle[0].querySelectorAll(".select-field-container")], (item) => {
+                    if (!isFlagTextNode(du.node.getPreNode(item))) {
+                        du.node.insertBeforeMe(item, getFlagTextNode());
+                    }
+                    var itemNextNode = du.node.getNextNode(item);
+                    if (du.node.isNullTextNode(itemNextNode)) {
+                        itemNextNode.remove();
+                        itemNextNode = null;
+                        itemNextNode = du.node.getNextNode(item);
+                    }
+                    if (!isFlagTextNode(itemNextNode)) {
+                        du.node.insertAfterMe(item, getFlagTextNode());
+                    }
+                });
+                $timeout(function () {
+                    $scope.richInputValue = [];
+                    getNeedDataFromView(richInputEle[0], $scope.richInputValue);
+                    $scope.richInputValueStr = JSON.stringify($scope.richInputValue, null, 4);
+                });
+            });
+            //  3、右侧区域
+            $scope.richInputValueStr = "";
+            //  复制功能相关
+            //      参考：
+            //          https://developer.mozilla.org/zh-CN/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard
+            //          https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
+            function copyTextToClipboardByCommandCopy(text) {
+                if (!document.execCommand("copy")) return;
+                var tempInput = document.createElement("input");
+                tempInput.value = text;
+                document.body.appendChild(tempInput);
+                tempInput.focus();
+                tempInput.select();
+                document.execCommand("copy");
+                document.body.removeChild(tempInput);
+                alert("已复制");
+            }
+            function copyTextToClipboard(text) {
+                if (!navigator.clipboard) {
+                    copyTextToClipboardByCommandCopy(text);
+                    return;
+                }
+                navigator.clipboard.writeText(text).then(
+                    function () {
+                        alert("已复制");
+                    },
+                    function (err) {
+                        copyTextToClipboardByCommandCopy(text);
+                    }
+                );
+            }
+            $scope.copyYourNeedDataClick = function () {
+                if (!$scope.richInputValueStr) return;
+                copyTextToClipboard($scope.richInputValueStr);
+            }
+        });
+    </script>
+</body>
+
+</html>
