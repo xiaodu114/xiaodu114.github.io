@@ -1,0 +1,213 @@
+#region 查询因子（最小查询）
+
+/// <summary>
+/// 查询因子（最小查询）
+/// </summary>
+public class QueryFactor
+{
+    /// <summary>
+    /// 查询字段的名称
+    /// </summary>
+    public string Key { get; set; }
+
+    /// <summary>
+    /// 查询操作集合（用于实现日期、数值的区间查询）
+    /// </summary>
+    public List<QueryFactorOperator> ValueOperators { get; set; } = new();
+}
+
+/// <summary>
+/// 查询操作
+/// </summary>
+public class QueryFactorOperator
+{
+    /// <summary>
+    /// 查询字段的值（这里为object类型，需要借助"QueryFactorOperator.ValueKind"说明具体类型）
+    /// </summary>
+    public object? Value { get; set; }
+
+    /// <summary>
+    /// 查询字段的值的数据类型（"QueryFactorOperator.Value"的数据类型）
+    /// </summary>
+    public QueryValueKind ValueKind { get; set; } = QueryValueKind.String;
+
+    /// <summary>
+    /// 对查询字段进行什么比较操作(等值、模糊、大于等)，
+    /// </summary>
+    public QueryOperatorKind QueryOperator { get; set; } = QueryOperatorKind.EQ;
+}
+
+#endregion
+
+#region 查询单位（最小查询单位，最小针对的是"$elemMatch"）
+
+/// <summary>
+/// 查询单位（最小查询单位，最小针对的是"$elemMatch"）
+/// </summary>
+public class QueryUnit
+{
+    /// <summary>
+    /// 如果该值存在，则"QueryUnit.Factors"之间是 and 关系
+    /// </summary>
+    public string? ElemMatchName { get; set; }
+
+    /// <summary>
+    /// 查询因子集合之间的关系（"QueryUnit.Factors"之间的关系）
+    /// </summary>
+    public LogicalOperatorKind LogicalOperator { get; set; } = LogicalOperatorKind.And;
+
+    /// <summary>
+    /// 查询因子集合
+    /// </summary>
+    public List<QueryFactor> Factors { get; set; } = new();
+}
+
+#endregion
+
+#region 通用查询类之类组装版
+
+/// <summary>
+/// 通用查询类
+/// </summary>
+public class QueryModel
+{
+    /// <summary>
+    /// "QueryModel.QueryUnits"集合或者"QueryModel.QueryModels"集合之间的逻辑关系
+    /// "QueryModel.QueryUnits"、"QueryModel.QueryModels"二者只能存在一个，优先检查"QueryModel.QueryUnits"
+    /// </summary>
+    public LogicalOperatorKind LogicalOperator { get; set; } = LogicalOperatorKind.And;
+
+    /// <summary>
+    /// 查询单位集合
+    /// </summary>
+    public List<QueryUnit>? QueryUnits { get; set; }
+
+    /// <summary>
+    /// 通用查询类集合（嵌套）
+    /// </summary>
+    public List<QueryModel>? QueryModels { get; set; }
+}
+
+#endregion
+
+#region 通用查询类之表达式拼接版
+
+public class QueryModelExpression
+{
+    public string StringExpression { get; set; }
+
+    /// <summary>
+    /// 这里使用 QueryUnit，而并非 QueryFactor（为了实现 $elemMatch 查询）
+    /// </summary>
+    public Dictionary<string, QueryUnit> KeyValues { get; set; } = new();
+}
+
+#endregion
+
+#region 查询类中涉及到的枚举
+
+/// <summary>
+/// 逻辑运算符 - 暂时支持 and、or
+/// </summary>
+public enum LogicalOperatorKind
+{
+    And = 1,
+
+    Or = 2
+}
+
+/// <summary>
+/// 枚举：数据类型
+/// </summary>
+public enum QueryValueKind
+{
+    Null = 0,
+
+    Boolean = 10,
+
+    Number = 20,
+
+    String = 30,
+
+    DateTime = 40,
+
+    Object = 50,
+
+    Array = 60
+}
+
+/// <summary>
+/// 枚举：查询操作符
+/// </summary>
+public enum QueryOperatorKind
+{
+    /// <summary>
+    /// 等于
+    /// </summary>
+    EQ = 10,
+
+    /// <summary>
+    /// 不等
+    /// </summary>
+    NE = 20,
+
+    /// <summary>
+    /// 模糊查询（忽略大小写）
+    /// </summary>
+    LIKE_IgnoreCase = 30,
+
+    /// <summary>
+    /// 模糊查询（不忽略大小写）
+    /// </summary>
+    LIKE = 31,
+
+    /// <summary>
+    /// 大于
+    /// </summary>
+    GT = 40,
+
+    /// <summary>
+    /// 大于等于
+    /// </summary>
+    GTE = 50,
+
+    /// <summary>
+    /// 小于
+    /// </summary>
+    LT = 60,
+
+    /// <summary>
+    /// 小于等于
+    /// </summary>
+    LTE = 70,
+
+    /// <summary>
+    /// 在范围内
+    /// </summary>
+    IN = 80,
+
+    /// <summary>
+    /// 不在范围内
+    /// </summary>
+    NIN = 90,
+
+    /// <summary>
+    /// 全部包含
+    ///     数据库中字段的值是全集，给定的数组是子集
+    ///     数据库中字段的值（类型为数组）包含指定数组中的所有元素
+    /// </summary>
+    ALL = 100,
+
+    /// <summary>
+    /// 上面All的反向
+    ///     数据库中字段的值是子集，给定的数组是全集
+    ///     指定数组包含数据库中字段的值（类型为数组）中的所有元素
+    /// </summary>
+    ALL_Reverse = 101,
+
+    Exists = 110,
+
+    RegEx = 120
+}
+
+#endregion

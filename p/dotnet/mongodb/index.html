@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>.net 和 mongodb - xiaodu114.github.io</title>
+    <meta name="keywords" content=".net,mongodb,通用查询">
+    <meta name="description" content="记录一些 .net 中使用 mongodb 的东东，例如：通用查询">
+
+    <script src="/p/_/js/main.js"></script>
+</head>
+
+<body>
+    <!-- github访问地址：/p/dotnet/mongodb/index.html -->
+    <div class="blog-page">
+
+        <h1>.net 和 mongodb</h1>
+        <p>这里整理更新一些 .net 中使用 mongodb 的东东……</p>
+        <h2>查询</h2>
+        <p>查询，用的场景太多了，这和用什么数据库没关系。各行各业，各种各样的需求，都离不开查询……曾经想着，弄一个类，一统查询江湖，之后呵呵了。</p>
+        <h3>通用查询</h3>
+        <p>到目前为止，共弄了两种实现方式：1、嵌套递归的方式（类中的一个属性指向自身）2、逻辑表达式的方式。</p>
+        <p>下面介绍一下这两种方式，首先是代码：</p>
+        <details>
+            <summary>查询相关类（点击查看代码）</summary>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
+                data-url="/p/dotnet/mongodb/code/QueryCommonModels.txt" ddz-lang="c#"></div>
+        </details>
+        <p></p>
+        <details>
+            <summary>mongodb助手类（点击查看代码）</summary>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
+                data-url="/p/dotnet/mongodb/code/MongoDBHelper.txt" ddz-lang="c#"></div>
+        </details>
+        <p>上面是一些基础的或者帮助类代码，之后就是测试一下了，这里创建了一个WebAPI项目，下面是示例代码：</p>
+        <details>
+            <summary>控制器相关（点击查看代码）</summary>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
+                data-url="/p/dotnet/mongodb/code/InstanceController.txt" ddz-lang="c#"></div>
+        </details>
+        <p>api创建完之后，我们得准备一下测试数据了</p>
+        <details>
+            <summary>测试数据（点击查看代码）</summary>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
+                data-url="/p/dotnet/mongodb/code/TestData.json" ddz-lang="json"></div>
+        </details>
+        <p>
+            <img src="./images/1.png">
+        </p>
+        <p>到这里该准备的都准备好了，就差最后一哆嗦了</p>
+        <details>
+            <summary>API测试（点击查看代码，这个有点长啊）</summary>
+            <p>请求地址：http://localhost:5251/api/Instance/QueryTestFactors</p>
+            <p>请求方式：POST</p>
+            <p>请求参数：如下</p>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
+                data-url="/p/dotnet/mongodb/code/PostBodyData.json" ddz-lang="json"></div>
+            <p>返回结果：如下</p>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
+                data-url="/p/dotnet/mongodb/code/ResponseData.json" ddz-lang="json"></div>
+        </details>
+        <p>"QueryTestFactors"这个API对最小查询单位进行批量测试，基本涵盖了枚举定义的数据类型以及比较方式。"QueryByQueryFactor"、"QueryByQueryUnit"、"QueryByQueryModel"这个几个API都是在查询因子的基础上拼接出来的。 "QueryModelExpression"这个就是上面说的逻辑表达是的方式了，形如：((1&2)|3)&4 。1、2、3、4等指的是QueryUnit，哈哈，不知道能不能理解。</p>
+    </div>
+    
+</body>
+
+</html>

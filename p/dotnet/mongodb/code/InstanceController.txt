@@ -1,0 +1,134 @@
+[Route("api/[controller]")]
+[ApiController]
+public class InstanceController : ControllerBase
+{
+    /// <summary>
+    /// 获取服务器端时间（看看API能不能跑通）
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("GetDateTime")]
+    public DateTime GetDateTime()
+    {
+        return DateTime.Now;
+    }
+
+    /// <summary>
+    /// 验证类型转换以及比较条件
+    /// </summary>
+    /// <param name="factors">查询因子集合</param>
+    /// <returns></returns>
+    [HttpPost("QueryTestFactors")]
+    public object QueryTestFactors([FromBody] List<QueryFactor> factors)
+    {
+        List<object> retList = new();
+        if (factors != null && factors.Any())
+        {
+            var _collection = GetMongoCollection<object>("mongodb://127.0.0.1:27017", "Test002", "FormInstace");
+
+            foreach (var factor in factors)
+            {
+                if (factor.ValueOperators == null || !factor.ValueOperators.Any()) continue;
+
+                var filter = MongoDBHelper.QueryFactorToFilter<object>(factor);
+                var filterStr = MongoDBHelper.FilterDefinitionToJsonString(filter);
+                var ids = _collection.Find(filter).ToList();
+
+                retList.Add(new
+                {
+                    Factors = factor,
+                    FilterString = filterStr,
+                    QueryResult = ids
+                });
+            }
+        }
+        return retList;
+    }
+
+    [HttpPost("QueryByQueryFactor")]
+    public object QueryByQueryFactor([FromBody] QueryFactor factor)
+    {
+        if (factor == null) throw new ArgumentNullException(nameof(factor));
+        if (factor.ValueOperators == null || !factor.ValueOperators.Any()) throw new ArgumentException("QueryFactor.ValueOperators 至少包含一项");
+
+        var filter = MongoDBHelper.QueryFactorToFilter<object>(factor);
+        var filterStr = MongoDBHelper.FilterDefinitionToJsonString(filter);
+        var ids = QueryFromDB(filter);
+
+        return new
+        {
+            Factor = factor,
+            FilterString = filterStr,
+            QueryResult = ids
+        };
+    }
+
+    [HttpPost("QueryByQueryUnit")]
+    public object QueryByQueryUnit([FromBody] QueryUnit queryUnit)
+    {
+        if (queryUnit == null) throw new ArgumentNullException(nameof(queryUnit));
+        if (queryUnit.Factors == null || !queryUnit.Factors.Any()) throw new ArgumentException("queryUnit.Factors至少包含一项");
+
+        var filter = MongoDBHelper.QueryUnitToFilter<object>(queryUnit);
+        var filterStr = MongoDBHelper.FilterDefinitionToJsonString(filter);
+        var ids = QueryFromDB(filter);
+
+        return new
+        {
+            QueryUnit = queryUnit,
+            FilterString = filterStr,
+            QueryResult = ids
+        };
+    }
+
+    [HttpPost("QueryByQueryModel")]
+    public object QueryByQueryModel([FromBody] QueryModel queryModel)
+    {
+        if (queryModel == null) throw new ArgumentNullException(nameof(queryModel));
+
+        var filter = MongoDBHelper.QueryModelToFilter<object>(queryModel);
+        var filterStr = MongoDBHelper.FilterDefinitionToJsonString(filter);
+        var ids = QueryFromDB(filter);
+
+        return new
+        {
+            QueryModel = queryModel,
+            FilterString = filterStr,
+            QueryResult = ids
+        };
+    }
+
+    [HttpPost("QueryModelExpression")]
+    public object QueryModelExpression([FromBody] QueryModelExpression queryModel)
+    {
+        if (queryModel == null) throw new ArgumentNullException(nameof(queryModel));
+
+        var filter = MongoDBHelper.QueryModelExpressionToFilter<object>(queryModel);
+        var filterStr = MongoDBHelper.FilterDefinitionToJsonString(filter);
+        var ids = QueryFromDB(filter);
+
+        return new
+        {
+            QueryModel = queryModel,
+            FilterString = filterStr,
+            QueryResult = ids
+        };
+    }
+
+    #region 私有方法
+
+    private static List<T> QueryFromDB<T>(FilterDefinition<T> filter)
+    {
+        var _collection = GetMongoCollection<T>("mongodb://127.0.0.1:27017", "Test002", "FormInstace");
+        return _collection.Find(filter).ToList();
+    }
+
+    private static IMongoCollection<T> GetMongoCollection<T>(string connectionString, string dbName, string collectionName)
+    {
+        var _client = new MongoClient(connectionString);
+        var _database = _client.GetDatabase(dbName);
+        return _database.GetCollection<T>(collectionName);
+    }
+
+    #endregion
+
+}

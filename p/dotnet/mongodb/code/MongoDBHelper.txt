@@ -1,0 +1,307 @@
+public class MongoDBHelper
+{
+    public static FilterDefinition<T> GetQueryFilter<T>(string key, object? value, QueryValueKind valueKind, QueryOperatorKind operatorKind)
+    {
+        if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
+
+        #region MongoDB类型转换测试
+        ////    异常：.NET type System.Text.Json.JsonElement cannot be mapped to BsonType.Boolean. (Parameter 'value')
+        //BsonBoolean.Create(value);
+        //BsonTypeMapper.MapToBsonValue(value, BsonType.Boolean);
+        ////    异常：.NET type System.Text.Json.JsonElement cannot be mapped to a BsonValue.
+        //BsonValue.Create(value)
+        ////    异常：Value cannot be null. Arg_ParamName_Name
+        //MongoDB.Bson.IO.JsonConvert.ToBoolean(null);
+
+        ////    异常：Unable to cast object of type 'System.Text.Json.JsonElement' to type 'System.IConvertible'.
+        //Convert.ToBoolean(value);
+        ////    异常：Unable to cast object of type 'System.Text.Json.JsonElement' to type 'System.Boolean'.
+        //(bool)value;
+        #endregion
+
+        //  根据传入的值类型（valueKind）处理value
+        //      如果尝试转换失败，是否继续……
+        switch (valueKind)
+        {
+            case QueryValueKind.Null:
+                value = null;
+                break;
+            case QueryValueKind.Boolean:
+                _ = bool.TryParse(value?.ToString(), out bool outBool);
+                value = outBool;
+                break;
+            case QueryValueKind.Number:
+                _ = double.TryParse(value?.ToString(), out double outDouble);
+                value = outDouble;
+                break;
+            case QueryValueKind.String:
+                value = value?.ToString();
+                break;
+            case QueryValueKind.DateTime:
+                _ = DateTime.TryParse(value?.ToString(), out DateTime outDateTime);
+                value = outDateTime;
+                break;
+            case QueryValueKind.Object:
+            case QueryValueKind.Array:
+            default:
+                break;
+        }
+
+        FilterDefinition<T>? filter = null;
+        switch (operatorKind)
+        {
+            case QueryOperatorKind.EQ:
+                filter = Builders<T>.Filter.Eq(key, value);
+                break;
+            case QueryOperatorKind.NE:
+                filter = Builders<T>.Filter.Ne(key, value);
+                break;
+            case QueryOperatorKind.LIKE_IgnoreCase:
+                if (value == null) break;
+                filter = Builders<T>.Filter.Regex(key, new BsonRegularExpression(new Regex(Regex.Escape(value.ToString().Trim()), RegexOptions.IgnoreCase)));
+                break;
+            case QueryOperatorKind.LIKE:
+                if (value == null) break;
+                filter = Builders<T>.Filter.Regex(key, new BsonRegularExpression(new Regex(Regex.Escape(value.ToString().Trim()))));
+                break;
+            case QueryOperatorKind.GT:
+                filter = Builders<T>.Filter.Gt(key, value);
+                break;
+            case QueryOperatorKind.GTE:
+                filter = Builders<T>.Filter.Gte(key, value);
+                break;
+            case QueryOperatorKind.LT:
+                filter = Builders<T>.Filter.Lt(key, value);
+                break;
+            case QueryOperatorKind.LTE:
+                filter = Builders<T>.Filter.Lte(key, value);
+                break;
+            case QueryOperatorKind.IN:
+                filter = $"{{ '{key}' : {{ $in : {value?.ToString()} }} }}";
+                break;
+            case QueryOperatorKind.NIN:
+                filter = $"{{ '{key}' : {{ $nin : {value?.ToString()} }} }}";
+                break;
+            case QueryOperatorKind.ALL:
+                filter = $"{{ '{key}' : {{ $all : {value?.ToString()} }} }}";
+                break;
+            case QueryOperatorKind.ALL_Reverse:
+                filter = $"{{ '{key}.0' : {{ $exists : true }} }}";// 如果不添加这个，会将在字段不存在或者字段值（数组）长度为0的查出来
+                filter &= $"{{ '{key}' : {{ $not : {{ $elemMatch : {{ $nin : {value?.ToString()} }} }} }} }}";
+                break;
+            case QueryOperatorKind.Exists:
+                _ = bool.TryParse(value?.ToString(), out bool outBool);
+                filter = Builders<T>.Filter.Exists(key, outBool);
+                break;
+            case QueryOperatorKind.RegEx:
+                if (value == null) break;
+                filter = Builders<T>.Filter.Regex(key, new BsonRegularExpression(value.ToString().Trim()));
+                break;
+        }
+        return filter ?? Builders<T>.Filter.Empty;
+    }
+    public static FilterDefinition<T> QueryFactorToFilter<T>(QueryFactor factor)
+    {
+        if (factor == null) throw new ArgumentNullException(nameof(factor));
+        if (factor.ValueOperators == null || !factor.ValueOperators.Any()) throw new ArgumentException("factor.ValueOperators 至少包含一项");
+
+        List<FilterDefinition<T>> minFilters = new();
+        foreach (var item in factor.ValueOperators)
+        {
+            var minFilter = GetQueryFilter<T>(factor.Key, item.Value, item.ValueKind, item.QueryOperator);
+            if (minFilter != null)
+            {
+                minFilters.Add(minFilter);
+            }
+        }
+
+        if (!minFilters.Any()) return Builders<T>.Filter.Empty;
+        return Builders<T>.Filter.And(minFilters);
+    }
+    public static FilterDefinition<T> QueryUnitToFilter<T>(QueryUnit queryUnit)
+    {
+        if (queryUnit == null) throw new ArgumentNullException(nameof(queryUnit));
+        if (queryUnit.Factors == null || !queryUnit.Factors.Any()) throw new ArgumentException("queryUnit.Factors至少包含一项");
+
+        List<FilterDefinition<T>> factorFilters = new();
+        foreach (var factor in queryUnit.Factors)
+        {
+            if (factor.ValueOperators == null || !factor.ValueOperators.Any()) continue;
+
+            var factorFilter = QueryFactorToFilter<T>(factor);
+            if (factorFilter == null) continue;
+            factorFilters.Add(factorFilter);
+        }
+
+        if (!factorFilters.Any()) return Builders<T>.Filter.Empty;
+
+        if (!string.IsNullOrEmpty(queryUnit.ElemMatchName))
+        {
+            return Builders<T>.Filter.ElemMatch(queryUnit.ElemMatchName, Builders<T>.Filter.And(factorFilters));
+        }
+
+        return HandleFilterDefinitions(factorFilters, queryUnit.LogicalOperator);
+    }
+    public static FilterDefinition<T> QueryModelToFilter<T>(QueryModel queryModel)
+    {
+        if (queryModel == null) throw new ArgumentNullException(nameof(queryModel));
+
+        if (queryModel.QueryUnits != null && queryModel.QueryUnits.Any())
+        {
+            List<FilterDefinition<T>> unitFilters = new();
+            foreach (var unitItem in queryModel.QueryUnits)
+            {
+                var unitFilter = QueryUnitToFilter<T>(unitItem);
+                if (unitFilter != null)
+                {
+                    unitFilters.Add(unitFilter);
+                }
+            }
+
+            return HandleFilterDefinitions(unitFilters, queryModel.LogicalOperator);
+        }
+        else
+        {
+            var filter = Builders<T>.Filter.Empty;
+            if (queryModel.QueryModels == null || !queryModel.QueryModels.Any()) return filter;
+
+            List<FilterDefinition<T>> queryModelFilters = new();
+            foreach (var queryModel2Item in queryModel.QueryModels)
+            {
+                queryModelFilters.Add(QueryModelToFilter<T>(queryModel2Item));
+            }
+
+            return HandleFilterDefinitions(queryModelFilters, queryModel.LogicalOperator);
+        }
+    }
+    public static FilterDefinition<T> QueryModelExpressionToFilter<T>(QueryModelExpression queryModel)
+    {
+        return QueryModelExpressionToFilter2(queryModel.StringExpression, queryModel.KeyValues, new Dictionary<string, FilterDefinition<T>>());
+    }
+
+
+    public static string? FilterDefinitionToJsonString<T>(FilterDefinition<T> filterDefinition)
+    {
+        if (filterDefinition == null) return null;
+        return filterDefinition.Render(BsonSerializer.SerializerRegistry.GetSerializer<T>(), BsonSerializer.SerializerRegistry).ToString();
+    }
+    public static string? FilterDefinitionToJsonString<T>(IMongoCollection<T> conn, FilterDefinition<T> filterDefinition)
+    {
+        if (filterDefinition == null) return null;
+        return filterDefinition.Render(conn.DocumentSerializer, conn.Settings.SerializerRegistry).ToString();
+    }
+    public static string? SortDefinitionToJsonString<T>(SortDefinition<T> sortDefinition)
+    {
+        if (sortDefinition == null) return null;
+        return sortDefinition.Render(BsonSerializer.SerializerRegistry.GetSerializer<T>(), BsonSerializer.SerializerRegistry).ToString();
+    }
+    public static string? ProjectionDefinitionToJsonString<T>(ProjectionDefinition<T> projectionDefinition)
+    {
+        if (projectionDefinition == null) return null;
+        return projectionDefinition.Render(BsonSerializer.SerializerRegistry.GetSerializer<T>(), BsonSerializer.SerializerRegistry).ToString();
+    }
+
+    #region 私有方法
+
+    private static FilterDefinition<T> HandleFilterDefinitions<T>(List<FilterDefinition<T>> filterDefinitions, LogicalOperatorKind operatorKind)
+    {
+        if (filterDefinitions == null) throw new ArgumentNullException(nameof(filterDefinitions));
+
+        if (!filterDefinitions.Any()) return Builders<T>.Filter.Empty;
+
+        if (filterDefinitions.Count == 1)
+        {
+            return filterDefinitions[0];
+        }
+
+        switch (operatorKind)
+        {
+            case LogicalOperatorKind.Or:
+                {
+                    return Builders<T>.Filter.Or(filterDefinitions);
+                }
+            case LogicalOperatorKind.And:
+            default:
+                {
+                    return Builders<T>.Filter.And(filterDefinitions);
+                }
+        }
+    }
+
+    private static FilterDefinition<T> QueryModelExpressionToFilter2<T>(string filterStr, Dictionary<string, QueryUnit> keyValues, Dictionary<string, FilterDefinition<T>> dicFilterDefinition)
+    {
+        int startIndex = filterStr.LastIndexOf("(");
+        if (startIndex != -1)
+        {
+            //  截取括号中的表达式
+            int endIndex = filterStr.IndexOf(")", startIndex);
+            int len = endIndex - startIndex - 1;
+            string simpleExpress = filterStr.Substring(startIndex + 1, len);
+            //  处理简单的表达式并结果保存到字典中
+            string tempGuid = Guid.NewGuid().ToString();
+            FilterDefinition<T> fd1 = HandleSimpleExpression(simpleExpress, keyValues, dicFilterDefinition);
+            dicFilterDefinition.Add(tempGuid, fd1);
+            //  继续处理剩余表达式
+            string leftStr = filterStr.Substring(0, startIndex);
+            string rightStr = filterStr.Substring(endIndex + 1);
+            return QueryModelExpressionToFilter2($"{leftStr}{tempGuid}{rightStr}", keyValues, dicFilterDefinition);
+        }
+        return HandleSimpleExpression(filterStr, keyValues, dicFilterDefinition);
+    }
+
+    private static FilterDefinition<T> HandleSimpleExpression<T>(string filterStr, Dictionary<string, QueryUnit> keyValues, Dictionary<string, FilterDefinition<T>> dicFilterDefinition)
+    {
+        //  1、筛选出操作符：&、|
+        Queue<char> qOperator = new();
+        //Regex regexOperator = new Regex("[&|]");
+        //foreach (Match item in regexOperator.Matches(logicalExpression))
+        //{
+        //    qOperator.Enqueue(item.Value);
+        //}
+        foreach (char c in filterStr)
+        {
+            if (c == '&' || c == '|')
+            {
+                qOperator.Enqueue(c);
+            }
+        }
+        //  2、筛选出所有的变量
+        Queue<string> qVariable = new();
+        string[] tempVariables = filterStr.Replace("&", ",").Replace("|", ",").Split(",");
+        foreach (string v in tempVariables)
+        {
+            qVariable.Enqueue(v);
+        }
+        //  3、返回结果组装
+        FilterDefinition<T>? filter = null;
+        if (qVariable.Count >= 1)
+        {
+            string tempV = qVariable.Dequeue();
+            filter = dicFilterDefinition.ContainsKey(tempV) ? dicFilterDefinition[tempV] : QueryUnitToFilter<T>(keyValues[tempV]);
+            while (qVariable.Count > 0)
+            {
+                string rightV = qVariable.Dequeue();
+                var tempFilter = dicFilterDefinition.ContainsKey(rightV) ? dicFilterDefinition[rightV] : QueryUnitToFilter<T>(keyValues[rightV]);
+                char tempOperator = qOperator.Dequeue();
+                switch (tempOperator)
+                {
+                    case '&':
+                        {
+                            filter &= tempFilter;
+                            break;
+                        }
+                    case '|':
+                        {
+                            filter |= tempFilter;
+                            break;
+                        }
+                }
+            }
+            filter = Builders<T>.Filter.Empty & (filter);
+        }
+        return filter ?? Builders<T>.Filter.Empty;
+    }
+
+    #endregion
+
+}

@@ -1,0 +1,900 @@
+[
+    {
+        "factors": {
+            "key": "col1",
+            "valueOperators": [
+                {
+                    "value": null,
+                    "valueKind": 0,
+                    "queryOperator": 10
+                }
+            ]
+        },
+        "filterString": "{ \"col1\" : null }",
+        "queryResult": [
+            {
+                "_id": "3",
+                "col1": null,
+                "col2": null,
+                "col3": "true",
+                "col5": [
+                    "语文"
+                ],
+                "col4": "2022-05-01T00:00:00Z"
+            },
+            {
+                "_id": "4",
+                "col2": 9.99,
+                "col3": "false",
+                "col5": [],
+                "col4": "2022-05-10T01:36:45.345Z"
+            },
+            {
+                "_id": "5",
+                "col2": 0.0689,
+                "col3": "888"
+            },
+            {
+                "_id": "6",
+                "col3": "哈哈"
+            },
+            {
+                "_id": "7",
+                "col3": "😄"
+            },
+            {
+                "_id": "8",
+                "col3": "TRUE"
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col1",
+            "valueOperators": [
+                {
+                    "value": null,
+                    "valueKind": 0,
+                    "queryOperator": 20
+                }
+            ]
+        },
+        "filterString": "{ \"col1\" : { \"$ne\" : null } }",
+        "queryResult": [
+            {
+                "_id": "1",
+                "col1": true,
+                "col2": 666,
+                "col3": "",
+                "col4": "2022-05-02T05:27:01.787Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语",
+                    "物理",
+                    "化学",
+                    "生物"
+                ]
+            },
+            {
+                "_id": "2",
+                "col1": false,
+                "col2": 888,
+                "col4": "2022-05-03T00:00:00Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语"
+                ]
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col1",
+            "valueOperators": [
+                {
+                    "value": true,
+                    "valueKind": 10,
+                    "queryOperator": 110
+                }
+            ]
+        },
+        "filterString": "{ \"col1\" : { \"$exists\" : true } }",
+        "queryResult": [
+            {
+                "_id": "1",
+                "col1": true,
+                "col2": 666,
+                "col3": "",
+                "col4": "2022-05-02T05:27:01.787Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语",
+                    "物理",
+                    "化学",
+                    "生物"
+                ]
+            },
+            {
+                "_id": "2",
+                "col1": false,
+                "col2": 888,
+                "col4": "2022-05-03T00:00:00Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语"
+                ]
+            },
+            {
+                "_id": "3",
+                "col1": null,
+                "col2": null,
+                "col3": "true",
+                "col5": [
+                    "语文"
+                ],
+                "col4": "2022-05-01T00:00:00Z"
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col1",
+            "valueOperators": [
+                {
+                    "value": true,
+                    "valueKind": 10,
+                    "queryOperator": 10
+                }
+            ]
+        },
+        "filterString": "{ \"col1\" : true }",
+        "queryResult": [
+            {
+                "_id": "1",
+                "col1": true,
+                "col2": 666,
+                "col3": "",
+                "col4": "2022-05-02T05:27:01.787Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语",
+                    "物理",
+                    "化学",
+                    "生物"
+                ]
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col1",
+            "valueOperators": [
+                {
+                    "value": true,
+                    "valueKind": 10,
+                    "queryOperator": 20
+                }
+            ]
+        },
+        "filterString": "{ \"col1\" : { \"$ne\" : true } }",
+        "queryResult": [
+            {
+                "_id": "2",
+                "col1": false,
+                "col2": 888,
+                "col4": "2022-05-03T00:00:00Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语"
+                ]
+            },
+            {
+                "_id": "3",
+                "col1": null,
+                "col2": null,
+                "col3": "true",
+                "col5": [
+                    "语文"
+                ],
+                "col4": "2022-05-01T00:00:00Z"
+            },
+            {
+                "_id": "4",
+                "col2": 9.99,
+                "col3": "false",
+                "col5": [],
+                "col4": "2022-05-10T01:36:45.345Z"
+            },
+            {
+                "_id": "5",
+                "col2": 0.0689,
+                "col3": "888"
+            },
+            {
+                "_id": "6",
+                "col3": "哈哈"
+            },
+            {
+                "_id": "7",
+                "col3": "😄"
+            },
+            {
+                "_id": "8",
+                "col3": "TRUE"
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col1",
+            "valueOperators": [
+                {
+                    "value": [
+                        true,
+                        false
+                    ],
+                    "valueKind": 60,
+                    "queryOperator": 80
+                }
+            ]
+        },
+        "filterString": "{ \"col1\" : { \"$in\" : [true, false] } }",
+        "queryResult": [
+            {
+                "_id": "1",
+                "col1": true,
+                "col2": 666,
+                "col3": "",
+                "col4": "2022-05-02T05:27:01.787Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语",
+                    "物理",
+                    "化学",
+                    "生物"
+                ]
+            },
+            {
+                "_id": "2",
+                "col1": false,
+                "col2": 888,
+                "col4": "2022-05-03T00:00:00Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语"
+                ]
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col1",
+            "valueOperators": [
+                {
+                    "value": "[true,false]",
+                    "valueKind": 60,
+                    "queryOperator": 80
+                }
+            ]
+        },
+        "filterString": "{ \"col1\" : { \"$in\" : [true, false] } }",
+        "queryResult": [
+            {
+                "_id": "1",
+                "col1": true,
+                "col2": 666,
+                "col3": "",
+                "col4": "2022-05-02T05:27:01.787Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语",
+                    "物理",
+                    "化学",
+                    "生物"
+                ]
+            },
+            {
+                "_id": "2",
+                "col1": false,
+                "col2": 888,
+                "col4": "2022-05-03T00:00:00Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语"
+                ]
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col1",
+            "valueOperators": [
+                {
+                    "value": [
+                        null
+                    ],
+                    "valueKind": 60,
+                    "queryOperator": 90
+                }
+            ]
+        },
+        "filterString": "{ \"col1\" : { \"$nin\" : [null] } }",
+        "queryResult": [
+            {
+                "_id": "1",
+                "col1": true,
+                "col2": 666,
+                "col3": "",
+                "col4": "2022-05-02T05:27:01.787Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语",
+                    "物理",
+                    "化学",
+                    "生物"
+                ]
+            },
+            {
+                "_id": "2",
+                "col1": false,
+                "col2": 888,
+                "col4": "2022-05-03T00:00:00Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语"
+                ]
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col2",
+            "valueOperators": [
+                {
+                    "value": 888,
+                    "valueKind": 20,
+                    "queryOperator": 10
+                }
+            ]
+        },
+        "filterString": "{ \"col2\" : 888.0 }",
+        "queryResult": [
+            {
+                "_id": "2",
+                "col1": false,
+                "col2": 888,
+                "col4": "2022-05-03T00:00:00Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语"
+                ]
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col2",
+            "valueOperators": [
+                {
+                    "value": 666,
+                    "valueKind": 20,
+                    "queryOperator": 50
+                },
+                {
+                    "value": 999,
+                    "valueKind": 20,
+                    "queryOperator": 60
+                }
+            ]
+        },
+        "filterString": "{ \"col2\" : { \"$gte\" : 666.0, \"$lt\" : 999.0 } }",
+        "queryResult": [
+            {
+                "_id": "1",
+                "col1": true,
+                "col2": 666,
+                "col3": "",
+                "col4": "2022-05-02T05:27:01.787Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语",
+                    "物理",
+                    "化学",
+                    "生物"
+                ]
+            },
+            {
+                "_id": "2",
+                "col1": false,
+                "col2": 888,
+                "col4": "2022-05-03T00:00:00Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语"
+                ]
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col2",
+            "valueOperators": [
+                {
+                    "value": [
+                        666,
+                        888,
+                        9.99,
+                        33333
+                    ],
+                    "valueKind": 60,
+                    "queryOperator": 80
+                }
+            ]
+        },
+        "filterString": "{ \"col2\" : { \"$in\" : [666, 888, 9.9900000000000002, 33333] } }",
+        "queryResult": [
+            {
+                "_id": "1",
+                "col1": true,
+                "col2": 666,
+                "col3": "",
+                "col4": "2022-05-02T05:27:01.787Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语",
+                    "物理",
+                    "化学",
+                    "生物"
+                ]
+            },
+            {
+                "_id": "2",
+                "col1": false,
+                "col2": 888,
+                "col4": "2022-05-03T00:00:00Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语"
+                ]
+            },
+            {
+                "_id": "4",
+                "col2": 9.99,
+                "col3": "false",
+                "col5": [],
+                "col4": "2022-05-10T01:36:45.345Z"
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col2",
+            "valueOperators": [
+                {
+                    "value": "[666,888,9.99,33333]",
+                    "valueKind": 60,
+                    "queryOperator": 80
+                }
+            ]
+        },
+        "filterString": "{ \"col2\" : { \"$in\" : [666, 888, 9.9900000000000002, 33333] } }",
+        "queryResult": [
+            {
+                "_id": "1",
+                "col1": true,
+                "col2": 666,
+                "col3": "",
+                "col4": "2022-05-02T05:27:01.787Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语",
+                    "物理",
+                    "化学",
+                    "生物"
+                ]
+            },
+            {
+                "_id": "2",
+                "col1": false,
+                "col2": 888,
+                "col4": "2022-05-03T00:00:00Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语"
+                ]
+            },
+            {
+                "_id": "4",
+                "col2": 9.99,
+                "col3": "false",
+                "col5": [],
+                "col4": "2022-05-10T01:36:45.345Z"
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col3",
+            "valueOperators": [
+                {
+                    "value": "哈哈",
+                    "valueKind": 30,
+                    "queryOperator": 10
+                }
+            ]
+        },
+        "filterString": "{ \"col3\" : \"哈哈\" }",
+        "queryResult": [
+            {
+                "_id": "6",
+                "col3": "哈哈"
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col3",
+            "valueOperators": [
+                {
+                    "value": "true",
+                    "valueKind": 30,
+                    "queryOperator": 30
+                }
+            ]
+        },
+        "filterString": "{ \"col3\" : /true/i }",
+        "queryResult": [
+            {
+                "_id": "3",
+                "col1": null,
+                "col2": null,
+                "col3": "true",
+                "col5": [
+                    "语文"
+                ],
+                "col4": "2022-05-01T00:00:00Z"
+            },
+            {
+                "_id": "8",
+                "col3": "TRUE"
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col3",
+            "valueOperators": [
+                {
+                    "value": "true",
+                    "valueKind": 30,
+                    "queryOperator": 31
+                }
+            ]
+        },
+        "filterString": "{ \"col3\" : /true/ }",
+        "queryResult": [
+            {
+                "_id": "3",
+                "col1": null,
+                "col2": null,
+                "col3": "true",
+                "col5": [
+                    "语文"
+                ],
+                "col4": "2022-05-01T00:00:00Z"
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col3",
+            "valueOperators": [
+                {
+                    "value": "/true/i",
+                    "valueKind": 30,
+                    "queryOperator": 120
+                }
+            ]
+        },
+        "filterString": "{ \"col3\" : /true/i }",
+        "queryResult": [
+            {
+                "_id": "3",
+                "col1": null,
+                "col2": null,
+                "col3": "true",
+                "col5": [
+                    "语文"
+                ],
+                "col4": "2022-05-01T00:00:00Z"
+            },
+            {
+                "_id": "8",
+                "col3": "TRUE"
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col3",
+            "valueOperators": [
+                {
+                    "value": [
+                        "true",
+                        "888",
+                        "😄",
+                        "我没有在数据库中"
+                    ],
+                    "valueKind": 60,
+                    "queryOperator": 80
+                }
+            ]
+        },
+        "filterString":"{ \"col3\" : { \"$in\" : [\"true\", \"888\", \"\�\�\", \"我没有在数据库中\"] } }",
+        "queryResult": [
+            {
+                "_id": "3",
+                "col1": null,
+                "col2": null,
+                "col3": "true",
+                "col5": [
+                    "语文"
+                ],
+                "col4": "2022-05-01T00:00:00Z"
+            },
+            {
+                "_id": "5",
+                "col2": 0.0689,
+                "col3": "888"
+            },
+            {
+                "_id": "7",
+                "col3": "😄"
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col3",
+            "valueOperators": [
+                {
+                    "value": "[\"true\",\"888\",\"😄\",\"我没有在数据库中\"]",
+                    "valueKind": 60,
+                    "queryOperator": 80
+                }
+            ]
+        },
+        "filterString":"{ \"col3\" : { \"$in\" : [\"true\", \"888\", \"\�\�\", \"我没有在数据库中\"] } }",
+        "queryResult": [
+            {
+                "_id": "3",
+                "col1": null,
+                "col2": null,
+                "col3": "true",
+                "col5": [
+                    "语文"
+                ],
+                "col4": "2022-05-01T00:00:00Z"
+            },
+            {
+                "_id": "5",
+                "col2": 0.0689,
+                "col3": "888"
+            },
+            {
+                "_id": "7",
+                "col3": "😄"
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col4",
+            "valueOperators": [
+                {
+                    "value": "2022-05-02 13:27:01.788",
+                    "valueKind": 40,
+                    "queryOperator": 50
+                }
+            ]
+        },
+        "filterString": "{ \"col4\" : { \"$gte\" : ISODate(\"2022-05-02T05:27:01.788Z\") } }",
+        "queryResult": [
+            {
+                "_id": "2",
+                "col1": false,
+                "col2": 888,
+                "col4": "2022-05-03T00:00:00Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语"
+                ]
+            },
+            {
+                "_id": "4",
+                "col2": 9.99,
+                "col3": "false",
+                "col5": [],
+                "col4": "2022-05-10T01:36:45.345Z"
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col4",
+            "valueOperators": [
+                {
+                    "value": "2022-05-01 00:00:01",
+                    "valueKind": 40,
+                    "queryOperator": 40
+                },
+                {
+                    "value": "2022-05-02 23:59:59",
+                    "valueKind": 40,
+                    "queryOperator": 70
+                }
+            ]
+        },
+        "filterString": "{ \"col4\" : { \"$gt\" : ISODate(\"2022-04-30T16:00:01Z\"), \"$lte\" : ISODate(\"2022-05-02T15:59:59Z\") } }",
+        "queryResult": [
+            {
+                "_id": "1",
+                "col1": true,
+                "col2": 666,
+                "col3": "",
+                "col4": "2022-05-02T05:27:01.787Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语",
+                    "物理",
+                    "化学",
+                    "生物"
+                ]
+            },
+            {
+                "_id": "3",
+                "col1": null,
+                "col2": null,
+                "col3": "true",
+                "col5": [
+                    "语文"
+                ],
+                "col4": "2022-05-01T00:00:00Z"
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col5",
+            "valueOperators": [
+                {
+                    "value": [
+                        "语文",
+                        "数学",
+                        "英语"
+                    ],
+                    "valueKind": 60,
+                    "queryOperator": 100
+                }
+            ]
+        },
+        "filterString": "{ \"col5\" : { \"$all\" : [\"语文\", \"数学\", \"英语\"] } }",
+        "queryResult": [
+            {
+                "_id": "1",
+                "col1": true,
+                "col2": 666,
+                "col3": "",
+                "col4": "2022-05-02T05:27:01.787Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语",
+                    "物理",
+                    "化学",
+                    "生物"
+                ]
+            },
+            {
+                "_id": "2",
+                "col1": false,
+                "col2": 888,
+                "col4": "2022-05-03T00:00:00Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语"
+                ]
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col5",
+            "valueOperators": [
+                {
+                    "value": "[\"语文\",\"数学\"]",
+                    "valueKind": 60,
+                    "queryOperator": 100
+                }
+            ]
+        },
+        "filterString": "{ \"col5\" : { \"$all\" : [\"语文\", \"数学\"] } }",
+        "queryResult": [
+            {
+                "_id": "1",
+                "col1": true,
+                "col2": 666,
+                "col3": "",
+                "col4": "2022-05-02T05:27:01.787Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语",
+                    "物理",
+                    "化学",
+                    "生物"
+                ]
+            },
+            {
+                "_id": "2",
+                "col1": false,
+                "col2": 888,
+                "col4": "2022-05-03T00:00:00Z",
+                "col5": [
+                    "语文",
+                    "数学",
+                    "英语"
+                ]
+            }
+        ]
+    },
+    {
+        "factors": {
+            "key": "col5",
+            "valueOperators": [
+                {
+                    "value": [
+                        "语文"
+                    ],
+                    "valueKind": 60,
+                    "queryOperator": 101
+                }
+            ]
+        },
+        "filterString": "{ \"col5.0\" : { \"$exists\" : true }, \"col5\" : { \"$not\" : { \"$elemMatch\" : { \"$nin\" : [\"语文\"] } } } }",
+        "queryResult": [
+            {
+                "_id": "3",
+                "col1": null,
+                "col2": null,
+                "col3": "true",
+                "col5": [
+                    "语文"
+                ],
+                "col4": "2022-05-01T00:00:00Z"
+            }
+        ]
+    }
+]

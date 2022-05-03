@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>我的博客模板 - xiaodu114.github.io</title>
-    <meta name="keywords" content="Web Components, Typesetting, Typesetting series, normalize.css, highlight.js">
-    <meta name="description" content="我的博客模板">
+    <title>【博客标题】 - xiaodu114.github.io</title>
+    <meta name="keywords" content="【博客关键字】">
+    <meta name="description" content="【博客描述】">
 
     <script src="/p/_/js/main.js"></script>
 </head>
@@ -16,21 +16,43 @@
     <!-- github访问地址：/p/_/index.html -->
     <div class="blog-page">
 
-        <h1>博客模板</h1>
-        <p>该页面作为之后笔记的模板，方便之后使用。</p>
-        <h2>依赖资源</h2>
-        <p>除了自己写的一些Web Components，还用了一些其他的第三方类库，例如可以让样式跨浏览器更统一的<inline-code>Normalize.css</inline-code>、代码高亮的
-            <inline-code>highlight.js</inline-code>等。
-        </p>
-        <h3>normalize.css</h3>
+        <h1>【一级标题】</h1>
+        <p>【博客简介】</p>
+        <h2>【二级标题】</h2>
+        <p>【章节介绍】</p>
+        <h3>【三级标题】</h3>
+        <p>【章节介绍】</p>
+
+
+        <h2>highlight.js</h2>
+        <p>博客模板使用<inline-code>highlight.js</inline-code>进行代码高亮……</p>
         <ul>
-            <li><a href="https://github.com/necolas/normalize.css" target="_blank">normalize.css - github</a></li>
-            <li><a href="https://unpkg.com/normalize.css/" target="_blank">normalize.css - unpkg</a></li>
+            <li>
+                <dl>
+                    <dt>
+                        <a href="https://highlightjs.org/" target="_blank">highlightjs</a>
+                    </dt>
+                    <dd>
+                        <a href="https://github.com/highlightjs/highlight.js" target="_blank">github</a>
+                    </dd>
+                    <dd>
+                        <a href="https://highlightjs.org/static/demo/" target="_blank">highlight.js demo</a>
+                    </dd>
+                </dl>
+            </li>
+            <li>
+                <a href="https://prismjs.com/" target="_blank">PrismJS</a>
+            </li>
         </ul>
-        <h3>highlight.js</h3>
-        <p>代码高亮还有<a href="https://prismjs.com/" target="_blank">PrismJS</a>，这里采用的是 <a href="https://highlightjs.org/"
-                target="_blank">highlightjs</a> (<a href="https://github.com/highlightjs/highlight.js"
-                target="_blank">github</a>) - <a href="https://highlightjs.org/static/demo/" target="_blank">示例</a></p>
+        <h3>嵌入式代码高亮</h3>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+// 需要高亮的JS代码
+alert("666");
+console.log("666");
+        </pre>
+        <h3>指定URL地址</h3>
+        <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
+            data-url="/p/_/index.html" ddz-lang="html"></div>
     </div>
 </body>
 

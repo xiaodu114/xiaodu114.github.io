@@ -1,0 +1,263 @@
+[
+    {
+        "Key": "col1",
+        "ValueOperators": [
+            {
+                "Value": null,
+                "ValueKind": 0,
+                "QueryOperator": 10
+            }
+        ]
+    },
+    {
+        "Key": "col1",
+        "ValueOperators": [
+            {
+                "Value": null,
+                "ValueKind": 0,
+                "QueryOperator": 20
+            }
+        ]
+    },
+    {
+        "Key": "col1",
+        "ValueOperators": [
+            {
+                "Value": true,
+                "ValueKind": 10,
+                "QueryOperator": 110
+            }
+        ]
+    },
+    {
+        "Key": "col1",
+        "ValueOperators": [
+            {
+                "Value": true,
+                "ValueKind": 10,
+                "QueryOperator": 10
+            }
+        ]
+    },
+    {
+        "Key": "col1",
+        "ValueOperators": [
+            {
+                "Value": true,
+                "ValueKind": 10,
+                "QueryOperator": 20
+            }
+        ]
+    },
+    {
+        "Key": "col1",
+        "ValueOperators": [
+            {
+                "Value": [
+                    true,
+                    false
+                ],
+                "ValueKind": 60,
+                "QueryOperator": 80
+            }
+        ]
+    },
+    {
+        "Key": "col1",
+        "ValueOperators": [
+            {
+                "Value": "[true,false]",
+                "ValueKind": 60,
+                "QueryOperator": 80
+            }
+        ]
+    },
+    {
+        "Key": "col1",
+        "ValueOperators": [
+            {
+                "Value": [
+                    null
+                ],
+                "ValueKind": 60,
+                "QueryOperator": 90
+            }
+        ]
+    },
+    {
+        "Key": "col2",
+        "ValueOperators": [
+            {
+                "Value": 888,
+                "ValueKind": 20,
+                "QueryOperator": 10
+            }
+        ]
+    },
+    {
+        "Key": "col2",
+        "ValueOperators": [
+            {
+                "Value": 666,
+                "ValueKind": 20,
+                "QueryOperator": 50
+            },
+            {
+                "Value": 999,
+                "ValueKind": 20,
+                "QueryOperator": 60
+            }
+        ]
+    },
+    {
+        "Key": "col2",
+        "ValueOperators": [
+            {
+                "Value": [
+                    666,
+                    888,
+                    9.99,
+                    33333
+                ],
+                "ValueKind": 60,
+                "QueryOperator": 80
+            }
+        ]
+    },
+    {
+        "Key": "col2",
+        "ValueOperators": [
+            {
+                "Value": "[666,888,9.99,33333]",
+                "ValueKind": 60,
+                "QueryOperator": 80
+            }
+        ]
+    },
+    {
+        "Key": "col3",
+        "ValueOperators": [
+            {
+                "Value": "哈哈",
+                "ValueKind": 30,
+                "QueryOperator": 10
+            }
+        ]
+    },
+    {
+        "Key": "col3",
+        "ValueOperators": [
+            {
+                "Value": "true",
+                "ValueKind": 30,
+                "QueryOperator": 30
+            }
+        ]
+    },
+    {
+        "Key": "col3",
+        "ValueOperators": [
+            {
+                "Value": "true",
+                "ValueKind": 30,
+                "QueryOperator": 31
+            }
+        ]
+    },
+    {
+        "Key": "col3",
+        "ValueOperators": [
+            {
+                "Value": "/true/i",
+                "ValueKind": 30,
+                "QueryOperator": 120
+            }
+        ]
+    },
+    {
+        "Key": "col3",
+        "ValueOperators": [
+            {
+                "Value": [
+                    "true",
+                    "888",
+                    "😄",
+                    "我没有在数据库中"
+                ],
+                "ValueKind": 60,
+                "QueryOperator": 80
+            }
+        ]
+    },
+    {
+        "Key": "col3",
+        "ValueOperators": [
+            {
+                "Value": "[\"true\",\"888\",\"😄\",\"我没有在数据库中\"]",
+                "ValueKind": 60,
+                "QueryOperator": 80
+            }
+        ]
+    },
+    {
+        "Key": "col4",
+        "ValueOperators": [
+            {
+                "Value": "2022-05-02 13:27:01.788",
+                "ValueKind": 40,
+                "QueryOperator": 50
+            }
+        ]
+    },
+    {
+        "Key": "col4",
+        "ValueOperators": [
+            {
+                "Value": "2022-05-01 00:00:01",
+                "ValueKind": 40,
+                "QueryOperator": 40
+            },
+            {
+                "Value": "2022-05-02 23:59:59",
+                "ValueKind": 40,
+                "QueryOperator": 70
+            }
+        ]
+    },
+    {
+        "Key": "col5",
+        "ValueOperators": [
+            {
+                "Value": [
+                    "语文",
+                    "数学",
+                    "英语"
+                ],
+                "ValueKind": 60,
+                "QueryOperator": 100
+            }
+        ]
+    },
+    {
+        "Key": "col5",
+        "ValueOperators": [
+            {
+                "Value": "[\"语文\",\"数学\"]",
+                "ValueKind": 60,
+                "QueryOperator": 100
+            }
+        ]
+    },
+    {
+        "Key": "col5",
+        "ValueOperators": [
+            {
+                "Value": [
+                    "语文"
+                ],
+                "ValueKind": 60,
+                "QueryOperator": 101
+            }
+        ]
+    }
+]

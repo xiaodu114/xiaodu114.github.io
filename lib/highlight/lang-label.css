@@ -43,6 +43,10 @@ pre[class~="language-bash"]:before {
     content: 'bash';
 }
 
+pre[class~="language-c#"]:before {
+    content: 'c#';
+}
+
 pre[class~="language-c"]:before {
     content: 'c';
 }
