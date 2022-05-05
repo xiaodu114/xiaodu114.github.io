@@ -1,26 +1,13 @@
 
 
 #	参考：
-#		https://docs.microsoft.com/zh-cn/windows/win32/cimwin32prov/computer-system-hardware-classes
-#		https://docs.microsoft.com/zh-cn/windows/win32/cimwin32prov/operating-system-classes
-#		https://docs.microsoft.com/zh-cn/powershell/module/microsoft.powershell.management/get-wmiobject
-#		https://docs.microsoft.com/zh-cn/powershell/module/microsoft.powershell.utility/select-object
-#		https://docs.microsoft.com/zh-cn/powershell/module/Microsoft.PowerShell.Core/about/about_special_characters
-#	    https://docs.microsoft.com/zh-cn/powershell/scripting/learn/deep-dives/everything-about-if
-#	    https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_for
-#		下面是输出文件相关
 #		https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-date
-#		https://docs.microsoft.com/zh-cn/powershell/scripting/learn/deep-dives/everything-about-arrays
 #		https://docs.microsoft.com/zh-cn/powershell/module/microsoft.powershell.utility/out-file
-#   说明：如果只是用"Get-WmiObject -Class Win32_Processor -ComputerName."，返回的信息比较少；添加"Select-Object -Property *" 返回的信息比较全
 
 
 #	1、时间戳并取整
 #		$timeStamp = [long](Get-Date -UFormat %s)
-#	2、声明ArrayList的两种方式
-#		$output = New-Object -TypeName 'System.Collections.ArrayList'
-#		$output = [System.Collections.ArrayList]::new()
-#	3、[void] $output.add(666)	之后会打印索引值，下面是两种解决办法
+#	2、[void] $output.add(666)	之后会打印索引值，下面是两种解决办法
 #		[void] [void] $output.add(666);
 #		[void] $output.add(666) > $null
 
@@ -45,11 +32,6 @@ $pc = Get-WmiObject -Class Win32_ComputerSystem -ComputerName. | Select-Object -
 # 	参考：https://docs.microsoft.com/zh-cn/windows/win32/cimwin32prov/win32-processor
 #	其他-输出某些属性：Get-WmiObject -Class Win32_Processor | Select-Object -Property Name, Number*
 $cpu = Get-WmiObject -Class Win32_Processor -ComputerName. | Select-Object -Property *
-
-#	拼接字符串的几种方式：
-#	Write-host "处理器：" $cpu.Name "`t核心数：" $cpu.NumberOfCores "`t线程数：" $cpu.NumberOfLogicalProcessors
-#	Write-host ("处理器：" + $cpu.Name + "`t核心数："  + $cpu.NumberOfCores + "`t线程数：" + $cpu.NumberOfLogicalProcessors)
-#	Write-Host "处理器：$($cpu.Name)`t核心数：$($cpu.NumberOfCores)`t线程数：$($cpu.NumberOfLogicalProcessors)"
 
 [void] $output.add("--------------> 处理器`t Win32_Processor ---------------------------------------------")
 [void] $output.add("`t说明：分别在 Name 、 NumberOfCores 、 NumberOfLogicalProcessors 属性获取下面的参数")
@@ -76,62 +58,81 @@ $baseBoard = Get-WmiObject -Class Win32_BaseBoard -ComputerName. | Select-Object
 #	参考：https://docs.microsoft.com/zh-cn/windows/win32/cimwin32prov/win32-physicalmemory
 $memory = Get-WmiObject -Class Win32_PhysicalMemory -ComputerName. | Select-Object -Property * 
 
+$memorys = [System.Collections.ArrayList]::new()
+if ($memory -is [array]){
+	$memorys = $memory;
+}else{
+	[void] $memorys.add($memory)
+}
+
 [void] $output.add("--------------> 内存`t Win32_PhysicalMemory ---------------------------------------------")
 [void] $output.add("`t说明：分别在 Manufacturer 、 PartNumber 、 SerialNumber 、 Capacity 属性获取下面的参数")
-[void] $output.add("`t制 造 商：`t$($memory.Manufacturer)")
-[void] $output.add("`t部 件 号：`t$($memory.PartNumber)")
-[void] $output.add("`t序 列 号：`t$($memory.SerialNumber)")
-[void] $output.add("`t容    量：`t$($memory.Capacity/1GB)GB")
+if($memorys.Count -gt 0){
+	for ($i = 0; $i -le ($memorys.Count - 1); $i += 1) {
+		[void] $output.add("`t这是您的第$($i+1)块内存条的信息：")
+		[void] $output.add("`t制 造 商：`t$($memorys[$i].Manufacturer)")
+		[void] $output.add("`t部 件 号：`t$($memorys[$i].PartNumber)")
+		[void] $output.add("`t序 列 号：`t$($memorys[$i].SerialNumber)")
+		[void] $output.add("`t容    量：`t$($memorys[$i].Capacity/1GB)GB")
+	}
+}
+else{
+	[void] $output.add("很抱歉，没有找到任何内存条……")
+}
 [void] $output.add("`n")
 
 
 # 4、获取声卡信息
 #	参考：https://docs.microsoft.com/zh-cn/windows/win32/cimwin32prov/win32-sounddevice
-$sounds = Get-WmiObject -Class Win32_SoundDevice -ComputerName. | Select-Object -Property *
+$sound = Get-WmiObject -Class Win32_SoundDevice -ComputerName. | Select-Object -Property *
+
+$sounds = [System.Collections.ArrayList]::new()
+if ($sound -is [array]){
+	$sounds = $sound;
+}else{
+	[void] $sounds.add($sound)
+}
 
 [void] $output.add("--------------> 声卡`t Win32_SoundDevice ---------------------------------------------")
 [void] $output.add("`t说明：分别在 Name 、 Manufacturer  属性获取下面的参数")
-if ($sounds -is [array]) {
-	if($sounds.length -gt 0){
-		#	遍历方式
-		#	foreach ($item in $netAdapters) {}
-		for ($i = 0; $i -le ($sounds.length - 1); $i += 1) {
-			[void] $output.add("`t这是您的第$($i+1)块声卡的信息：") 
-		    [void] $output.add("`t名    称：`t$($sounds[$i].Name)")
-		    [void] $output.add("`t制 造 商：`t$($sounds[$i].Manufacturer)") 
-		}
+if($sounds.Count -gt 0){
+	for ($i = 0; $i -le ($sounds.Count - 1); $i += 1) { 
+		[void] $output.add("`t这是您的第$($i+1)块声卡的信息：") 
+		[void] $output.add("`t名    称：`t$($sounds[$i].Name)")
+		[void] $output.add("`t制 造 商：`t$($sounds[$i].Manufacturer)") 
 	}
-	else{
-		[void] $output.add("很抱歉，没有找到任何声卡……")
-	}
-}else{
-	[void] $output.add("Get-WmiObject -Class Win32_SoundDevice -ComputerName. | Select-Object -Property * 得到结果不是数组，还没有遇到这种情况……")
+}
+else{
+	[void] $output.add("很抱歉，没有找到任何声卡……")
 }
 [void] $output.add("`n")
 
 
 # 5、获取显卡信息
 #	参考：https://docs.microsoft.com/zh-cn/windows/win32/cimwin32prov/win32-videocontroller
-$nvdias = Get-WmiObject -Class Win32_VideoController -ComputerName. | Select-Object -Property *
+$nvdia = Get-WmiObject -Class Win32_VideoController -ComputerName. | Select-Object -Property *
+
+$nvdias = [System.Collections.ArrayList]::new()
+if ($nvdia -is [array]){
+	$nvdias = $nvdia;
+}else{
+	[void] $nvdias.add($nvdia)
+}
 
 [void] $output.add("--------------> 显卡`t Win32_VideoController ---------------------------------------------")
 [void] $output.add("`t说明：分别在 Name 、 DeviceID 、 Description 、 DriverDate 、 DriverVersion   属性获取下面的参数")
-if ($nvdias -is [array]) {
-	if($nvdias.length -gt 0){
-		for ($i = 0; $i -le ($nvdias.length - 1); $i += 1) {
-			[void] $output.add("`t这是您的第$($i+1)块显卡的信息：")
-		    [void] $output.add("`t名    称：`t$($nvdias[$i].Name)") 
-		    [void] $output.add("`t设 备 ID：`t$($nvdias[$i].DeviceID)")
-			[void] $output.add("`t描    述：`t$($nvdias[$i].Description)") 
-			[void] $output.add("`t驱动日期：`t$($nvdias[$i].DriverDate)") 
-			[void] $output.add("`t驱动版本：`t$($nvdias[$i].DriverVersion)") 
-		}
+if($nvdias.Count -gt 0){
+	for ($i = 0; $i -le ($nvdias.Count - 1); $i += 1) {
+		[void] $output.add("`t这是您的第$($i+1)块显卡的信息：")
+		[void] $output.add("`t名    称：`t$($nvdias[$i].Name)") 
+		[void] $output.add("`t设 备 ID：`t$($nvdias[$i].DeviceID)")
+		[void] $output.add("`t描    述：`t$($nvdias[$i].Description)") 
+		[void] $output.add("`t驱动日期：`t$($nvdias[$i].DriverDate)") 
+		[void] $output.add("`t驱动版本：`t$($nvdias[$i].DriverVersion)") 
 	}
-	else{
-		[void] $output.add("很抱歉，没有找到任何显卡……")
-	}
-}else{
-	[void] $output.add("Get-WmiObject -Class Win32_VideoController -ComputerName. | Select-Object -Property * 得到结果不是数组，还没有遇到这种情况……")
+}
+else{
+	[void] $output.add("很抱歉，没有找到任何显卡……")
 }
 [void] $output.add("`n")
 
@@ -139,33 +140,37 @@ if ($nvdias -is [array]) {
 # 6、获取网卡信息
 #	参考：https://docs.microsoft.com/zh-cn/windows/win32/cimwin32prov/win32-networkadapterconfiguration
 #	说明："Get-WmiObject -Class Win32_NetworkAdapterConfiguration -ComputerName. | Select-Object -Property *"  这个返回的个数太多了 
-$netAdapters = Get-NetAdapter | Select-Object -Property * 
+$netAdapter = Get-NetAdapter | Select-Object -Property * 
+
+$netAdapters = [System.Collections.ArrayList]::new()
+if ($netAdapter -is [array]){
+	$netAdapters = $netAdapter;
+}else{
+	[void] $netAdapters.add($netAdapter)
+}
 
 [void] $output.add("--------------> 网卡`t Get-NetAdapter ---------------------------------------------")
 [void] $output.add("`t说明-网卡：分别在 ifName 、 ifDesc 、 MediaConnectionState 、 MacAddress 属性获取下面的参数")
 [void] $output.add("`t说明-驱动：分别在 DriverFileName 、 DriverProvider 、 DriverVersion 、 DriverInformation 、 DriverDescription  属性获取下面的参数")
-if ($netAdapters -is [array]) {
-	if($netAdapters.length -gt 0){
-		for ($i = 0; $i -le ($netAdapters.length - 1); $i += 1) {
-			[void] $output.add("`t这是您的第$($i+1)块网卡的信息：") 
-		    [void] $output.add("`t名    称：`t$($netAdapters[$i].ifName)") 
-		    [void] $output.add("`t描    述：`t$($netAdapters[$i].ifDesc)") 
-		    [void] $output.add("`t连接状态：`t$($netAdapters[$i].MediaConnectionState)") 
-		    [void] $output.add("`tMac 地址：`t$($netAdapters[$i].MacAddress)") 
-			[void] $output.add("`t下面是网卡驱动信息：")
-		    [void] $output.add("`t文件名称：`t$($netAdapters[$i].DriverFileName)") 
-		    [void] $output.add("`t提 供 商：`t$($netAdapters[$i].DriverProvider)") 
-		    [void] $output.add("`t版    本：`t$($netAdapters[$i].DriverVersion)") 
-		    [void] $output.add("`t描    述：`t$($netAdapters[$i].DriverDescription)") 
-		}
+if($netAdapters.Count -gt 0){
+	for ($i = 0; $i -le ($netAdapters.Count - 1); $i += 1) {
+		[void] $output.add("`t这是您的第$($i+1)块网卡的信息：") 
+		[void] $output.add("`t名    称：`t$($netAdapters[$i].ifName)") 
+		[void] $output.add("`t描    述：`t$($netAdapters[$i].ifDesc)") 
+		[void] $output.add("`t连接状态：`t$($netAdapters[$i].MediaConnectionState)") 
+		[void] $output.add("`tMac 地址：`t$($netAdapters[$i].MacAddress)") 
+		[void] $output.add("`t下面是网卡驱动信息：")
+		[void] $output.add("`t文件名称：`t$($netAdapters[$i].DriverFileName)") 
+		[void] $output.add("`t提 供 商：`t$($netAdapters[$i].DriverProvider)") 
+		[void] $output.add("`t版    本：`t$($netAdapters[$i].DriverVersion)") 
+		[void] $output.add("`t描    述：`t$($netAdapters[$i].DriverDescription)") 
 	}
-	else{
-		[void] $output.add("很抱歉，没有找到任何网卡……")
-	}
-}else{
-	[void] $output.add("Get-NetAdapter | Select-Object -Property * 得到结果不是数组，还没有遇到这种情况……")
+}
+else{
+	[void] $output.add("很抱歉，没有找到任何网卡……")
 }
 [void] $output.add("`n")
+
 
 foreach ($item in $output) {
 	Write-Host $item
