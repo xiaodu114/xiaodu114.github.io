@@ -125,7 +125,7 @@
         document.querySelectorAll("pre[ddz-class='here-need-to-handle-by-highlight']").forEach((block) => {
             let lang = block.getAttribute("ddz-lang").toLowerCase();
             block.replaceWith(myRange.createContextualFragment(
-                `<pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${lang} hljs">${hljs.highlightAuto(lang === "html" ? block.innerHTML.trim() : block.innerText.trim()).value}</code></pre>`
+                `<pre class="language-${block.getAttribute("ddz-lang")}"><code class="language-${lang} hljs">${hljs.highlightAuto(lang === "html" ? block.innerHTML.trim() : (block.innerText.trim() || block.textContent.trim()).value}</code></pre>`
             ));
         });
         document.querySelectorAll("[ddz-class='here-need-to-handle-by-highlight-and-replace-one']").forEach(
