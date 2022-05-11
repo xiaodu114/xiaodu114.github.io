@@ -188,7 +188,7 @@ public class MongoDBHelper
     }
 
 
-    public static bool HandleArrayChildItemsAddOrDelete<T, TKeyType>(IMongoCollection<T> collection, TKeyType primaryKeyValue, string name, QueryModel deleteQueryModel, List<object> addItems, string primaryKeyName = "_id")
+    public static bool HandleArrayChildItemsAddOrDelete<T, TKeyType>(IMongoCollection<T> collection, TKeyType primaryKeyValue, string name, QueryModel? deleteQueryModel, List<object>? addItems, string primaryKeyName = "_id")
     {
         if (collection == null) throw new ArgumentNullException(nameof(collection));
         if (primaryKeyValue == null) throw new ArgumentNullException(nameof(primaryKeyValue));

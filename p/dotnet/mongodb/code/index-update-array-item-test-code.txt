@@ -1,0 +1,53 @@
+var collection = MongoDBHelper.GetMongoCollection<BsonDocument>("mongodb://localhost:27017", "Test001", "Instance");
+//  1、2、3 你可以分开执行，方便看结果
+//  1、插入三条测试数据
+collection.InsertMany(new List<BsonDocument>()
+{
+    new BsonDocument(){ { "_id", ObjectId.Parse("627bb4b7e2260e978a564dd1") }, { "FormItems", new BsonArray()} },
+    new BsonDocument(){ { "_id", 1 }, { "FormItems", new BsonArray()} },
+    new BsonDocument(){ { "_id", "1" }, { "FormItems", new BsonArray()} },
+});
+//  2、数组字段中添加子项
+List<object> childItems = new()
+{
+    new { key = "1572493554001", value = "u1" },
+    new { key = "1572493554002", value = new List<object>() { new { id = "1", text = "C#" }, new { id = "2", text = "JavaScript" }, new { id = "3", text = "HTML" } } },
+    new { key = "1572493554003", value = new List<object>() { new { id = "1", text = "C#" } } },
+    new { key = "1572493554004", value = "北京" },
+    new { key = "1572493554005", value = 1 },
+    new { key = "1572493554006", value = "随便写点什么" }
+};
+MongoDBHelper.HandleArrayChildItemsAddOrDelete(collection, ObjectId.Parse("627bb4b7e2260e978a564dd1"), "FormItems", null, childItems);
+MongoDBHelper.HandleArrayChildItemsAddOrDelete(collection, 1, "FormItems", null, childItems);
+MongoDBHelper.HandleArrayChildItemsAddOrDelete(collection, "1", "FormItems", null, childItems);
+//  3、数组字段中删除子项
+var deleteQueryModel = new QueryModel()
+{
+    QueryUnits = new List<QueryUnit>()
+    {
+        new QueryUnit()
+        {
+            Factors = new List<QueryFactor>()
+            {
+                new QueryFactor()
+                {
+                    Key = "key",
+                    ValueOperators=new List<QueryFactorOperator>()
+                    {
+                        new QueryFactorOperator()
+                        {
+                            Value = "[\"1572493554004\", \"1572493554005\",\"1572493554006\"]",
+                            ValueKind = QueryValueKind.Array,
+                            QueryOperator = QueryOperatorKind.IN
+                        }
+                    }
+                }
+            }
+        }
+    }
+};
+MongoDBHelper.HandleArrayChildItemsAddOrDelete(collection, ObjectId.Parse("627bb4b7e2260e978a564dd1"), "FormItems", deleteQueryModel, null);
+MongoDBHelper.HandleArrayChildItemsAddOrDelete(collection, 1, "FormItems", deleteQueryModel, null);
+MongoDBHelper.HandleArrayChildItemsAddOrDelete(collection, "1", "FormItems", deleteQueryModel, null);
+//  4、当然你也可以删除、添加同时进行
+//  ……

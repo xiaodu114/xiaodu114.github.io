@@ -18,6 +18,12 @@
 
         <h1>.net 和 mongodb</h1>
         <p>这里整理更新一些 .net 中使用 mongodb 的东东……</p>
+        <p>这里先放置一些mongodb助手类，下面的多个地方都会用到</p>
+        <details>
+            <summary>mongodb助手类（点击查看代码）</summary>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
+                data-url="/p/dotnet/mongodb/code/index-MongoDBHelper.txt" ddz-lang="c#"></div>
+        </details>
         <h2>查询</h2>
         <p>查询，用的场景太多了，这和用什么数据库没关系。各行各业，各种各样的需求，都离不开查询……曾经想着，弄一个类，一统查询江湖，之后呵呵了。</p>
         <h3>通用查询</h3>
@@ -26,25 +32,19 @@
         <details>
             <summary>查询相关类（点击查看代码）</summary>
             <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
-                data-url="/p/dotnet/mongodb/code/QueryCommonModels.txt" ddz-lang="c#"></div>
-        </details>
-        <p></p>
-        <details>
-            <summary>mongodb助手类（点击查看代码）</summary>
-            <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
-                data-url="/p/dotnet/mongodb/code/MongoDBHelper.txt" ddz-lang="c#"></div>
+                data-url="/p/dotnet/mongodb/code/index-query-QueryCommonModels.txt" ddz-lang="c#"></div>
         </details>
         <p>上面是一些基础的或者帮助类代码，之后就是测试一下了，这里创建了一个WebAPI项目，下面是示例代码：</p>
         <details>
             <summary>控制器相关（点击查看代码）</summary>
             <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
-                data-url="/p/dotnet/mongodb/code/InstanceController.txt" ddz-lang="c#"></div>
+                data-url="/p/dotnet/mongodb/code/index-query-test-InstanceController.txt" ddz-lang="c#"></div>
         </details>
         <p>api创建完之后，我们得准备一下测试数据了</p>
         <details>
             <summary>测试数据（点击查看代码）</summary>
             <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
-                data-url="/p/dotnet/mongodb/code/TestData.json" ddz-lang="json"></div>
+                data-url="/p/dotnet/mongodb/code/index-query-test-TestData.json" ddz-lang="json"></div>
         </details>
         <p>
             <img src="./images/1.png">
@@ -56,10 +56,10 @@
             <p>请求方式：POST</p>
             <p>请求参数：如下</p>
             <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
-                data-url="/p/dotnet/mongodb/code/PostBodyData.json" ddz-lang="json"></div>
+                data-url="/p/dotnet/mongodb/code/index-query-test-PostBodyData.json" ddz-lang="json"></div>
             <p>返回结果：如下</p>
             <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
-                data-url="/p/dotnet/mongodb/code/ResponseData.json" ddz-lang="json"></div>
+                data-url="/p/dotnet/mongodb/code/index-query-test-ResponseData.json" ddz-lang="json"></div>
         </details>
         <p>"QueryTestFactors"这个API对最小查询单位进行批量测试，基本涵盖了枚举定义的数据类型以及比较方式。"QueryByQueryFactor"、"QueryByQueryUnit"、"QueryByQueryModel"这个几个API都是在查询因子的基础上拼接出来的。
             "QueryModelExpression"这个就是上面说的逻辑表达是的方式了，形如：((1&2)|3)&4 。1、2、3、4等指的是QueryUnit，哈哈，不知道能不能理解。</p>
@@ -68,170 +68,14 @@
         <h3>数组字段相关</h3>
         <p>此部分针对数组字段，对数组子项的添加、删除、更新等</p>
         <h4>添加和删除数组子项</h4>
-        <p>mongodb助手类更新，新增获取MongDB连接的方法；新增添加和删除数组子项的方法（HandleArrayChildItemsAddOrDelete）。下面看一下测试数据和测试代码：</p>
-        <p>
-            <img src="./images/2.png">
-        </p>
-        <details>
-            <summary>测试数据</summary>
-            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="json">
-[{
-        "_id": "631DE228-DD46-43CE-9A17-1C1571A8F8F0",
-        "FormItems": [{
-                "key": "1572493554001",
-                "value": "u1"
-            }, {
-                "key": "1572493554002",
-                "value": [{
-                        "id": "1",
-                        "text": "C#"
-                    }, {
-                        "id": "2",
-                        "text": "JavaScript"
-                    }, {
-                        "id": "3",
-                        "text": "HTML"
-                    }, {
-                        "id": "4",
-                        "text": "CSS"
-                    }
-                ]
-            }, {
-                "key": "1572493554003",
-                "value": [{
-                        "id": "1",
-                        "text": "C#"
-                    }
-                ]
-            }, {
-                "key": "1572493554004",
-                "value": "北京"
-            }, {
-                "key": "1572493554005",
-                "value": 1.0
-            }, {
-                "key": "1572493554006",
-                "value": "随便写点什么"
-            }
-        ]
-    }, {
-        "_id": "1",
-        "FormItems": [{
-                "key": "1572493554001",
-                "value": "u1"
-            }, {
-                "key": "1572493554002",
-                "value": [{
-                        "id": "1",
-                        "text": "C#"
-                    }, {
-                        "id": "2",
-                        "text": "JavaScript"
-                    }, {
-                        "id": "3",
-                        "text": "HTML"
-                    }, {
-                        "id": "4",
-                        "text": "CSS"
-                    }
-                ]
-            }, {
-                "key": "1572493554003",
-                "value": [{
-                        "id": "1",
-                        "text": "C#"
-                    }
-                ]
-            }, {
-                "key": "1572493554004",
-                "value": "北京"
-            }, {
-                "key": "1572493554005",
-                "value": 1.0
-            }, {
-                "key": "1572493554006",
-                "value": "随便写点什么"
-            }
-        ]
-    }, {
-        "_id": 1,
-        "FormItems": [{
-                "key": "1572493554001",
-                "value": "u1"
-            }, {
-                "key": "1572493554002",
-                "value": [{
-                        "id": "1",
-                        "text": "C#"
-                    }, {
-                        "id": "2",
-                        "text": "JavaScript"
-                    }, {
-                        "id": "3",
-                        "text": "HTML"
-                    }, {
-                        "id": "4",
-                        "text": "CSS"
-                    }
-                ]
-            }, {
-                "key": "1572493554003",
-                "value": [{
-                        "id": "1",
-                        "text": "C#"
-                    }
-                ]
-            }, {
-                "key": "1572493554004",
-                "value": "北京"
-            }, {
-                "key": "1572493554005",
-                "value": 1.0
-            }, {
-                "key": "1572493554006",
-                "value": "随便写点什么"
-            }
-        ]
-    }
-]
-            </pre>
-        </details>
-        <P></P>
+        <p>mongodb助手类更新，新增获取MongDB连接的方法（GetMongoCollection）；新增添加和删除数组子项的方法（HandleArrayChildItemsAddOrDelete）。下面看一下测试代码：</p>
         <details>
             <summary>测试代码</summary>
-            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="c#">
-var collection = MongoDBHelper.GetMongoCollection<BsonDocument>("mongodb://localhost:27017", "config", "Instance");
-var deleteQueryModel = new QueryModel()
-{
-    QueryUnits = new List<QueryUnit>()
-    {
-        new QueryUnit()
-        {
-            Factors = new List<QueryFactor>()
-            {
-                new QueryFactor()
-                {
-                    Key = "key",
-                    ValueOperators=new List<QueryFactorOperator>()
-                    {
-                        new QueryFactorOperator()
-                        {
-                            Value = "[\"1572493554004\", \"1572493554005\",\"1572493554006\"]",
-                            ValueKind = QueryValueKind.Array,
-                            QueryOperator = QueryOperatorKind.IN
-                        }
-                    }
-                }
-            }
-        }
-    }
-};
-MongoDBHelper.HandleArrayChildItemsAddOrDelete(collection, 1, "FormItems", deleteQueryModel, null);
-MongoDBHelper.HandleArrayChildItemsAddOrDelete(collection, "1", "FormItems", deleteQueryModel, null);
-MongoDBHelper.HandleArrayChildItemsAddOrDelete(collection, ObjectId.Parse("627b0c6c2394580c6e0f05b7"), "FormItems", deleteQueryModel, null);
-            </pre>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
+                data-url="/p/dotnet/mongodb/code/index-update-array-item-test-code.txt" ddz-lang="json"></div>
         </details>
         <h4>更新数组子项</h4>
+        <p>……</p>
     </div>
 
 </body>
