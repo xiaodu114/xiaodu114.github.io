@@ -1,5 +1,13 @@
 public class MongoDBHelper
 {
+    public static IMongoCollection<T> GetMongoCollection<T>(string connectionString, string dbName, string collectionName)
+    {
+        MongoClient _client = new(connectionString);
+        IMongoDatabase _database = _client.GetDatabase(dbName);
+        return _database.GetCollection<T>(collectionName);
+    }
+
+
     public static FilterDefinition<T> GetQueryFilter<T>(string key, object? value, QueryValueKind valueKind, QueryOperatorKind operatorKind)
     {
         if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
@@ -177,6 +185,29 @@ public class MongoDBHelper
     public static FilterDefinition<T> QueryModelExpressionToFilter<T>(QueryModelExpression queryModel)
     {
         return QueryModelExpressionToFilter2(queryModel.StringExpression, queryModel.KeyValues, new Dictionary<string, FilterDefinition<T>>());
+    }
+
+
+    public static bool HandleArrayChildItemsAddOrDelete<T, TKeyType>(IMongoCollection<T> collection, TKeyType primaryKeyValue, string name, QueryModel deleteQueryModel, List<object> addItems, string primaryKeyName = "_id")
+    {
+        if (collection == null) throw new ArgumentNullException(nameof(collection));
+        if (primaryKeyValue == null) throw new ArgumentNullException(nameof(primaryKeyValue));
+        if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
+        if (string.IsNullOrEmpty(primaryKeyName)) throw new ArgumentNullException(nameof(primaryKeyName));
+
+        if (deleteQueryModel != null)
+        {
+            var deleteFilter = QueryModelToFilter<T>(deleteQueryModel);
+            if (deleteFilter != null && deleteFilter != Builders<T>.Filter.Empty)
+            {
+                collection.UpdateOne(Builders<T>.Filter.Eq(primaryKeyName, primaryKeyValue), Builders<T>.Update.PullFilter(name, deleteFilter));
+            }
+        }
+        if (addItems != null && addItems.Any())
+        {
+            collection.UpdateOne(Builders<T>.Filter.Eq(primaryKeyName, primaryKeyValue), Builders<T>.Update.PushEach(name, addItems));
+        }
+        return true;
     }
 
 
