@@ -61,9 +61,179 @@
             <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
                 data-url="/p/dotnet/mongodb/code/ResponseData.json" ddz-lang="json"></div>
         </details>
-        <p>"QueryTestFactors"这个API对最小查询单位进行批量测试，基本涵盖了枚举定义的数据类型以及比较方式。"QueryByQueryFactor"、"QueryByQueryUnit"、"QueryByQueryModel"这个几个API都是在查询因子的基础上拼接出来的。 "QueryModelExpression"这个就是上面说的逻辑表达是的方式了，形如：((1&2)|3)&4 。1、2、3、4等指的是QueryUnit，哈哈，不知道能不能理解。</p>
+        <p>"QueryTestFactors"这个API对最小查询单位进行批量测试，基本涵盖了枚举定义的数据类型以及比较方式。"QueryByQueryFactor"、"QueryByQueryUnit"、"QueryByQueryModel"这个几个API都是在查询因子的基础上拼接出来的。
+            "QueryModelExpression"这个就是上面说的逻辑表达是的方式了，形如：((1&2)|3)&4 。1、2、3、4等指的是QueryUnit，哈哈，不知道能不能理解。</p>
+        <h2>更新</h2>
+        <p>这里放置一些更新相关的操作</p>
+        <h3>数组字段相关</h3>
+        <p>此部分针对数组字段，对数组子项的添加、删除、更新等</p>
+        <h4>添加和删除数组子项</h4>
+        <p>mongodb助手类更新，新增获取MongDB连接的方法；新增添加和删除数组子项的方法（HandleArrayChildItemsAddOrDelete）。下面看一下测试数据和测试代码：</p>
+        <p>
+            <img src="./images/2.png">
+        </p>
+        <details>
+            <summary>测试数据</summary>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="json">
+[{
+        "_id": "631DE228-DD46-43CE-9A17-1C1571A8F8F0",
+        "FormItems": [{
+                "key": "1572493554001",
+                "value": "u1"
+            }, {
+                "key": "1572493554002",
+                "value": [{
+                        "id": "1",
+                        "text": "C#"
+                    }, {
+                        "id": "2",
+                        "text": "JavaScript"
+                    }, {
+                        "id": "3",
+                        "text": "HTML"
+                    }, {
+                        "id": "4",
+                        "text": "CSS"
+                    }
+                ]
+            }, {
+                "key": "1572493554003",
+                "value": [{
+                        "id": "1",
+                        "text": "C#"
+                    }
+                ]
+            }, {
+                "key": "1572493554004",
+                "value": "北京"
+            }, {
+                "key": "1572493554005",
+                "value": 1.0
+            }, {
+                "key": "1572493554006",
+                "value": "随便写点什么"
+            }
+        ]
+    }, {
+        "_id": "1",
+        "FormItems": [{
+                "key": "1572493554001",
+                "value": "u1"
+            }, {
+                "key": "1572493554002",
+                "value": [{
+                        "id": "1",
+                        "text": "C#"
+                    }, {
+                        "id": "2",
+                        "text": "JavaScript"
+                    }, {
+                        "id": "3",
+                        "text": "HTML"
+                    }, {
+                        "id": "4",
+                        "text": "CSS"
+                    }
+                ]
+            }, {
+                "key": "1572493554003",
+                "value": [{
+                        "id": "1",
+                        "text": "C#"
+                    }
+                ]
+            }, {
+                "key": "1572493554004",
+                "value": "北京"
+            }, {
+                "key": "1572493554005",
+                "value": 1.0
+            }, {
+                "key": "1572493554006",
+                "value": "随便写点什么"
+            }
+        ]
+    }, {
+        "_id": 1,
+        "FormItems": [{
+                "key": "1572493554001",
+                "value": "u1"
+            }, {
+                "key": "1572493554002",
+                "value": [{
+                        "id": "1",
+                        "text": "C#"
+                    }, {
+                        "id": "2",
+                        "text": "JavaScript"
+                    }, {
+                        "id": "3",
+                        "text": "HTML"
+                    }, {
+                        "id": "4",
+                        "text": "CSS"
+                    }
+                ]
+            }, {
+                "key": "1572493554003",
+                "value": [{
+                        "id": "1",
+                        "text": "C#"
+                    }
+                ]
+            }, {
+                "key": "1572493554004",
+                "value": "北京"
+            }, {
+                "key": "1572493554005",
+                "value": 1.0
+            }, {
+                "key": "1572493554006",
+                "value": "随便写点什么"
+            }
+        ]
+    }
+]
+            </pre>
+        </details>
+        <P></P>
+        <details>
+            <summary>测试代码</summary>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="c#">
+var collection = MongoDBHelper.GetMongoCollection<BsonDocument>("mongodb://localhost:27017", "config", "Instance");
+var deleteQueryModel = new QueryModel()
+{
+    QueryUnits = new List<QueryUnit>()
+    {
+        new QueryUnit()
+        {
+            Factors = new List<QueryFactor>()
+            {
+                new QueryFactor()
+                {
+                    Key = "key",
+                    ValueOperators=new List<QueryFactorOperator>()
+                    {
+                        new QueryFactorOperator()
+                        {
+                            Value = "[\"1572493554004\", \"1572493554005\",\"1572493554006\"]",
+                            ValueKind = QueryValueKind.Array,
+                            QueryOperator = QueryOperatorKind.IN
+                        }
+                    }
+                }
+            }
+        }
+    }
+};
+MongoDBHelper.HandleArrayChildItemsAddOrDelete(collection, 1, "FormItems", deleteQueryModel, null);
+MongoDBHelper.HandleArrayChildItemsAddOrDelete(collection, "1", "FormItems", deleteQueryModel, null);
+MongoDBHelper.HandleArrayChildItemsAddOrDelete(collection, ObjectId.Parse("627b0c6c2394580c6e0f05b7"), "FormItems", deleteQueryModel, null);
+            </pre>
+        </details>
+        <h4>更新数组子项</h4>
     </div>
-    
+
 </body>
 
 </html>
