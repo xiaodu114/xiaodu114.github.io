@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>MongoDB相关 - xiaodu114.github.io</title>
+    <meta name="keywords" content="MongoDB, mongo shell, 批量插入">
+    <meta name="description" content="MongoDB相关的知识点……">
+
+    <script src="/p/_/js/main.js"></script>
+</head>
+
+<body>
+    <!-- github访问地址：/p/db/mongodb/index.html -->
+    <div class="blog-page">
+
+        <h1>MongoDB</h1>
+        <p>MongoDB是……</p>
+        <h2>添加数据</h2>
+        <p>该章节介绍向MongoDB中添加数据的几种方式：</p>
+        <h3>insert\insertMany</h3>
+        <p>通过<inline-code>db.xxx.insertMany</inline-code>的方式新增数据</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+/**
+ * 本JS说明：
+ *      1、将这里的内容保存到JS文件中
+ *      2、在JS文件所在的文件夹“在此处打开PowerShell窗口”或者“命令提示符”
+ *      3、在终端输入下面的命令
+ *          示例： mongo xxx.js
+ */
+
+/**
+ * mongo 其他
+ *  0、添加 数据库名称 参数
+ *      语法： mongo 数据库名称 xxx.js
+ *      说明： 这里默认连接的是本地数据
+ *  1、添加 mongodb地址（端口）和数据库名称 参数
+ *      语法： mongo IP地址:端口/数据库名称 xxx.js
+ *      说明： 
+ *          1.1、此时你可以在JS文件中直接 db ,例如：print(db.getName()); print(db.version());
+ *          1.2、如果设置了用户名和密码，则需要添加 -u -p --authenticationDatabase 参数
+ *               示例：mongo IP地址:端口/数据库名称 xxx.js -u 用户名 -p 密码 --authenticationDatabase  admin
+ *  2、在终端输入时不带 mongodb地址和数据库名称 参数
+ *      语法： mongo xxx.js
+ *      说明： 这种情况下，如何获取 db 以及设置了 用户名和密码 如何处理，请直接看代码
+ *  …… 更多参数你可以输入： mongo --help
+ */
+
+//	1、数据库连接   ！！！这里需要替换！！！
+var mongo = new Mongo('IP地址:端口');
+mongo.getDB("admin").auth('用户名', '密码');
+var db = mongo.getDB('数据库名称');
+
+//	2、方法：批量插入数据
+function realBatchInsertData(collectionName, trs) {
+    try {
+        db[collectionName].insertMany(trs);
+    } catch (e) {
+        print(e);
+    }
+};
+
+//	3、准备数据以及插入数据
+//		每页插入的条数
+var pageSize = 100;
+//		这里放置你需要插入的数据    ！！！这里需要替换！！！
+var trs = [];
+//		计算页数
+var pageNum = Math.ceil(trs.length / pageSize);
+print("开始插入 ---> 共" + trs.length + "条记录，分页插入，每页" + pageSize + "条，共" + pageNum + "页");
+for (var m = 1; m <= pageNum; m++) {
+    var currentPageTrs = trs.slice((m - 1) * pageSize, m * pageSize);
+    print("            第" + m + "页，共" + currentPageTrs.length + "条");
+    //  ！！！这里需要替换！！！
+    realBatchInsertData("表名", currentPageTrs);
+}
+print("结束插入 ……");
+        </pre>
+        <h2>备份</h2>
+        <p>备份相关</p>
+        <h2>还原</h2>
+        <p>还原相关</p>
+        <h2>查询</h2>
+        <p>该章节记录查询相关的</p>
+        <h3>最新层级配置查询</h3>
+        <p>这个查询的业务性很强，应用到的场景应该不多。先介绍一下具体的业务：先介绍一下模块（我们称之为模块），他有一套完整的功能，例如，添加记录、编辑记录、列表（搜索）等；首先他有一个默认的配置，其次在不同的应用中使用他时可以有不同的配置，可以在默认配置的基础上修改，再次不同的企业买了应用之后也可以在应用级的基础上对模块进行修改，甚至每个用户都有自己的配置。这里我们将默认配置、应用下的配置、企业下的配置、用户配置等叫做层级配置，并且在同意层级内还支持版本的概念，随着时间的推移以及业务的变化，我们的配置可能会有变化。</p>
+        <p>说了一大堆，不知道说清楚了没有，哈哈，就当说清楚了。这个查询的是：批量查询最新的层级配置，可能是同一模块不同层级的最新配置，也可能是不同模块某一层级的最新配置……</p>
+        <p>为了验证查询语句，还是先造点数据：</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//	两个方法，用于生成一个随机时间
+function getInRangeInteger(num1, num2) {
+    num1 = Number.isInteger(num1) ? num1 : 0;
+    num2 = Number.isInteger(num2) ? num2 : 0;
+    if (num1 > num2)
+        [num1, num2] = [num2, num1];
+    return Math.round(Math.random() * (num2 - num1)) + num1;
+}
+function date_GetInRangeDate(date1, date2) {
+    let v1 = new Date(date1).valueOf(),
+    v2 = new Date(date2).valueOf();
+    if (isNaN(v1) && isNaN(v2)) {
+        v1 = 0;
+        v2 = new Date().valueOf();
+    } else {
+        if (isNaN(v1))
+            v1 = 0;
+        if (isNaN(v2))
+            v2 = 0;
+    }
+    return new Date(getInRangeInteger(Math.abs(v1 - v2)) + Math.min(v1, v2));
+}
+
+let modelIds = ["a", "b", "c"],
+level1s = ["lv1_1", "lv1_2", "lv1_3"],
+level2s = ["lv2_1", "lv2_2", "lv2_3"],
+level3s = ["lv3_1", "lv3_2", "lv3_3"];
+
+let trs = [];
+//	标识
+modelIds.forEach((modelId) => {
+    for (let i = 0; i < 3; i++) {
+        trs.push({
+            ModelId: modelId,
+            Level1: null,
+            Level2: null,
+            Level3: null
+        });
+        //	自定义：第一级
+        level1s.forEach((lv1) => {
+            trs.push({
+                ModelId: modelId,
+                Level1: lv1,
+                Level2: null,
+                Level3: null
+            });
+            //	自定义：第一级
+            level2s.forEach((lv2) => {
+                trs.push({
+                    ModelId: modelId,
+                    Level1: lv1,
+                    Level2: lv2,
+                    Level3: null
+                });
+                //	自定义：第一级
+                level3s.forEach((lv3) => {
+                    trs.push({
+						ModelId: modelId,
+						Level1: lv1,
+						Level2: lv2,
+						Level3: lv3
+					});
+                });
+            });
+        });
+    }
+});
+trs.forEach(tr => {
+    tr["Config"] = "";
+    tr["CreateDate"] = date_GetInRangeDate("2022-01-01 08:00:00", "2022-05-15 08:00:00");
+});
+db.config.insertMany(trs);           
+        </pre>
+        <p>下面就是查询语句了</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+db.getCollection('config').aggregate([{
+        $match: {
+            $or: [{
+                    'ModelId': 'a',
+                    'Level1': null,
+                    'Level2': null,
+                    'Level3': null
+                }, {
+                    'ModelId': 'a',
+                    'Level1': 'lv1_1',
+                    'Level2': null,
+                    'Level3': null,
+                }, {
+                    'ModelId': 'a',
+                    'Level1': 'lv1_1',
+                    'Level2': 'lv2_1',
+                    'Level3': null
+                }, {
+                    'ModelId': 'a',
+                    'Level1': 'lv1_1',
+                    'Level2': 'lv2_1',
+                    'Level3': 'lv3_1'
+                }, {
+                    'ModelId': 'b',
+                    'Level1': null,
+                    'Level2': null,
+                    'Level3': null
+                }, {
+                    'ModelId': 'b',
+                    'Level1': 'lv1_2',
+                    'Level2': null,
+                    'Level3': null,
+                }, {
+                    'ModelId': 'b',
+                    'Level1': 'lv1_2',
+                    'Level2': 'lv2_2',
+                    'Level3': null
+                }, {
+                    'ModelId': 'b',
+                    'Level1': 'lv1_2',
+                    'Level2': 'lv2_2',
+                    'Level3': 'lv3_2'
+                }
+            ]
+        }
+    }, {
+        $sort: {
+            'CreateDate': -1
+        }
+    }, {
+        $group: {
+            _id: {
+                $concat: ['$ModelId', '->', {
+                        $ifNull: ['$Level1', 'null']
+                    }, '->', {
+                        $ifNull: ['$Level2', 'null']
+                    }, '->', {
+                        $ifNull: ['$Level3', 'null']
+                    }
+                ]
+            },
+            latestItem: {
+                //	'$arrayElemAt': ['$items', 0]  // 获取数组第一项
+                $first: '$$ROOT'
+            }
+        }
+    }, {
+        $group: {
+            _id: '1',
+            results: {
+                $push: '$$ROOT'
+            }
+        }
+    }, {
+        $replaceRoot: {
+            newRoot: {
+                $arrayToObject: {
+                    $map: {
+                        input: '$results',
+                        as: 'item',
+                        in: ['$$item._id', '$$item.latestItem']
+                    }
+                }
+            }
+        }
+    }
+])
+        </pre>
+        <h2>参考链接</h2>
+        <ul>
+            <li>
+                <a href="https://www.modb.pro/u/311133" target="_blank">运维人在路上的个人主页 - 墨天轮</a>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>
