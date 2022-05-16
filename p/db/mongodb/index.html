@@ -80,8 +80,19 @@ print("结束插入 ……");
         </pre>
         <h2>备份</h2>
         <p>备份相关</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#	说明：目录会自动创建的
+#	1、备份本地数据库（Test001）-未开启权限认证
+mongodump -h localhost:27017 -d Test001 -o D:\backup\mongodb\local
+mongodump -h 127.0.0.1:27017 -d Test001 -o D:\backup\mongodb\local
+        </pre>
         <h2>还原</h2>
         <p>还原相关</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#	1、还原到本地数据库（Test002）-未开启权限认证
+mongorestore -h localhost:27017 -d Test002 D:\backup\mongodb\local\Test001
+mongorestore -h 127.0.0.1:27017 -d Test002 D:\backup\mongodb\local\Test001
+        </pre>
         <h2>查询</h2>
         <p>该章节记录查询相关的</p>
         <h3>最新层级配置查询</h3>
