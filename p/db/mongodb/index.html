@@ -38,7 +38,7 @@
  *      说明： 这里默认连接的是本地数据
  *  1、添加 mongodb地址（端口）和数据库名称 参数
  *      语法： mongo IP地址:端口/数据库名称 xxx.js
- *      说明： 
+ *      说明：
  *          1.1、此时你可以在JS文件中直接 db ,例如：print(db.getName()); print(db.version());
  *          1.2、如果设置了用户名和密码，则需要添加 -u -p --authenticationDatabase 参数
  *               示例：mongo IP地址:端口/数据库名称 xxx.js -u 用户名 -p 密码 --authenticationDatabase  admin
@@ -49,9 +49,9 @@
  */
 
 //	1、数据库连接   ！！！这里需要替换！！！
-var mongo = new Mongo('IP地址:端口');
+let mongo = new Mongo('IP地址:端口');
 mongo.getDB("admin").auth('用户名', '密码');
-var db = mongo.getDB('数据库名称');
+let db = mongo.getDB('数据库名称');
 
 //	2、方法：批量插入数据
 function realBatchInsertData(collectionName, trs) {
@@ -64,19 +64,22 @@ function realBatchInsertData(collectionName, trs) {
 
 //	3、准备数据以及插入数据
 //		每页插入的条数
-var pageSize = 100;
+let pageSize = 100;
 //		这里放置你需要插入的数据    ！！！这里需要替换！！！
-var trs = [];
+let trs = [];
 //		计算页数
-var pageNum = Math.ceil(trs.length / pageSize);
-print("开始插入 ---> 共" + trs.length + "条记录，分页插入，每页" + pageSize + "条，共" + pageNum + "页");
-for (var m = 1; m <= pageNum; m++) {
-    var currentPageTrs = trs.slice((m - 1) * pageSize, m * pageSize);
+let pageNum = Math.ceil(trs.length / pageSize);
+let startTime = new Date();
+print("此次共插入" + trs.length + "条记录，分页方式插入，每页" + pageSize + "条，共" + pageNum + "页");
+print("---> 开始插入，计时开始。现在时间：" + startTime.toLocaleString());
+for (let m = 1; m <= pageNum; m++) {
+    let currentPageTrs = trs.slice((m - 1) * pageSize, m * pageSize);
     print("            第" + m + "页，共" + currentPageTrs.length + "条");
     //  ！！！这里需要替换！！！
     realBatchInsertData("表名", currentPageTrs);
 }
-print("结束插入 ……");
+var endTime = new Date();
+print("---> 结束插入，计时结束。现在时间：" + endTime.toLocaleString() + "。耗时：" + (endTime - startTime) / 1000 + "s");
         </pre>
         <h2>备份</h2>
         <p>备份相关</p>
