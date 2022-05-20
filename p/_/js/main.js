@@ -1,5 +1,6 @@
 (() => {
-    let headEle = document.getElementsByTagName("head")[0];
+
+    //#region 方法区
 
     /**
      * 同步请求一个文件
@@ -22,66 +23,46 @@
     }
 
     /**
-     * 1、在加载完样式之前， 将页面设置成透明
+     * 使用 fetch 请求（Get 方式）一个文本
+     * @param {String} url 
+     * @returns 
      */
-    let tempStyleEle = document.createElement("style");
-    tempStyleEle.innerHTML = `
-                .blog-page {
-                    opacity: 0.01;
-                }
-            `;
-    headEle.appendChild(tempStyleEle);
-
-    /**
-     *  2、添加依赖的css
-     *      // https://unpkg.com/
-     *      // https://www.jsdelivr.com/
-     *      // https://cdnjs.com/
-     */
-    [
-        "https://cdn.jsdelivr.net/npm/normalize.css/normalize.min.css",
-        "/lib/highlight/github.css",
-        "/lib/highlight/lang-label.css",
-        "/p/_/css/typesetting.css"
-    ].forEach((cssPath) => {
-        let linkElement = document.createElement("link");
-        linkElement.id = "link-css-" + cssPath.slice(cssPath.lastIndexOf("/") + 1);
-        linkElement.rel = "stylesheet";
-        linkElement.href = cssPath;
-        headEle.appendChild(linkElement);
-    });
-
-    /**
-     *  3、加载依赖的js
-     */
-    if (!customElements.get("marked-block")) {
-        _SyncLoadJS("/lib/_/webComponents.js", (responseText) => {
-            let _fn = new Function(responseText);
-            _fn();
-        });
+    function _FetchGetText(url) {
+        return fetch(url).then(response => {
+            if (response.ok) {
+                return response.text();
+            } else {
+                console.error(`异常---> 响应状态码：${response.status} ；响应状态信息：${response.statusText}`);
+            }
+        }, error => {  console.error(`异常---> ${JSON.stringify(error)}`); })
     }
 
-    if (!window.hljs) {
-        /**
-         *  highlight.js
-         *  官网：https://highlightjs.org/
-         *  使用：https://highlightjs.org/usage/
-         *      CDN1：https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js
-         *      CDN2：https://unpkg.com/@highlightjs/cdn-assets/highlight.min.js
-         *  示例：https://highlightjs.org/static/demo/
-         */
-        _SyncLoadJS("https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js", (responseText) => {
-            let _fn = new Function("module", "exports", responseText),
-                _module = {
-                    exports: {}
-                };
-            _fn(_module, _module.exports);
-            window.hljs = _module.exports;
-        });
+    /**
+     * 解析 CommonJS 规范的字符串形式的代码
+     * @param {String} code 
+     * @returns 
+     */
+    function _HandleStrCodeCommonjs(code) {
+        let _module = {
+            exports: {}
+        };
+        (new Function("module", "exports", code))(_module, _module.exports);
+        return _module.exports.hasOwnProperty("default") ? _module.exports.default : _module.exports;
     }
 
-    //  添加 icon
-    document.documentElement.appendChild(document.createElement("link-icon"));
+    function loadHighlight() {
+        return Promise.any([
+            _FetchGetText("https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js"),
+            _FetchGetText("https://fastly.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js"),
+            _FetchGetText("https://unpkg.com/@highlightjs/cdn-assets/highlight.min.js"),
+            _FetchGetText("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js")
+        ]).then(firstData => {
+            if (firstData) {
+                window.hljs = _HandleStrCodeCommonjs(firstData);
+            }
+            return;
+        });
+    }
 
     function checkCSSIsLoaded() {
         return new Promise((resolve, reject) => {
@@ -114,7 +95,51 @@
         });
     }
 
-    Promise.all([checkCSSIsLoaded(), checkDOMContentLoaded()]).then(() => {
+    //#endregion
+
+    let headEle = document.getElementsByTagName("head")[0];
+
+    /**
+     * 1、在加载完样式之前， 将页面设置成透明
+     */
+    let tempStyleEle = document.createElement("style");
+    tempStyleEle.innerHTML = `
+                .blog-page {
+                    opacity: 0.01;
+                }
+            `;
+    headEle.appendChild(tempStyleEle);
+
+    /**
+     *  2、添加依赖的css
+     *      //https://cdn.jsdelivr.net/npm/normalize.css/normalize.min.css
+     */
+    [
+        "/lib/highlight/github.css",
+        "/lib/highlight/lang-label.css",
+        "/p/_/css/typesetting.css"
+    ].forEach((cssPath) => {
+        let linkElement = document.createElement("link");
+        linkElement.id = "link-css-" + cssPath.slice(cssPath.lastIndexOf("/") + 1);
+        linkElement.rel = "stylesheet";
+        linkElement.href = cssPath;
+        headEle.appendChild(linkElement);
+    });
+
+    /**
+     *  3、加载依赖的js
+     */
+    if (!customElements.get("marked-block")) {
+        _SyncLoadJS("/lib/_/webComponents.js", (responseText) => {
+            let _fn = new Function(responseText);
+            _fn();
+        });
+    }
+
+    //  添加 icon
+    document.documentElement.appendChild(document.createElement("link-icon"));
+
+    Promise.all([loadHighlight(), checkCSSIsLoaded(), checkDOMContentLoaded()]).then(() => {
         //  添加    回到顶部和自动生成目录组件
         document.querySelector("body>.blog-page").appendChild(document.createElement("back-to-top"));
         document.querySelector("body>.blog-page").appendChild(document.createElement("auto-generate-directory"));
