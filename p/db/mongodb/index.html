@@ -96,8 +96,25 @@ mongodump -h 127.0.0.1:27017 -d Test001 -o D:\backup\mongodb\local
 mongorestore -h localhost:27017 -d Test002 D:\backup\mongodb\local\Test001
 mongorestore -h 127.0.0.1:27017 -d Test002 D:\backup\mongodb\local\Test001
         </pre>
+        <h2>复制数据库（database）</h2>
+        <p>克隆数据库的几种方式，等待添加</p>
+        <h2>复制集合（collection）</h2>
+        <p>克隆集合的几种方式，找到了一篇文章，文中介绍了好几种方式，感觉够全了。链接地址：<a href="https://www.mongodbmanager.com/clone-mongodb-collection" target="_blank">7 different ways to clone MongoDB connection</a></p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  这里会创建一个新表"config2"，可能需要权限验证。
+db.config.aggregate([ { $out: "config2" } ]);
+
+//  如果添加过滤条件，则只是复制其中的部分数据
+db.config.aggregate([{
+    $match: { ModelId : 'a' }
+}, {
+    $out: "config2"
+}
+]);
+        </pre>
         <h2>查询</h2>
         <p>该章节记录查询相关的</p>
+        <div id="anchor-id-h3-001"></div>
         <h3>最新层级配置查询</h3>
         <p>这个查询的业务性很强，应用到的场景应该不多。先介绍一下具体的业务：先介绍一下模块（我们称之为模块），他有一套完整的功能，例如，添加记录、编辑记录、列表（搜索）等；首先他有一个默认的配置，其次在不同的应用中使用他时可以有不同的配置，可以在默认配置的基础上修改，再次不同的企业买了应用之后也可以在应用级的基础上对模块进行修改，甚至每个用户都有自己的配置。这里我们将默认配置、应用下的配置、企业下的配置、用户配置等叫做层级配置，并且在同意层级内还支持版本的概念，随着时间的推移以及业务的变化，我们的配置可能会有变化。</p>
         <p>说了一大堆，不知道说清楚了没有，哈哈，就当说清楚了。这个查询的是：批量查询最新的层级配置，可能是同一模块不同层级的最新配置，也可能是不同模块某一层级的最新配置……</p>
@@ -171,7 +188,8 @@ modelIds.forEach((modelId) => {
     }
 });
 trs.forEach(tr => {
-    tr["Config"] = "";
+    tr["FormConfig"] = "";
+    tr["ListConfig"] = {pc:[],mobile:[]};
     tr["CreateDate"] = date_GetInRangeDate("2022-01-01 08:00:00", "2022-05-15 08:00:00");
 });
 db.config.insertMany(trs);           
@@ -265,6 +283,257 @@ db.getCollection('config').aggregate([{
         }
     }
 ])
+        </pre>
+        <h3>实例数据之表单数据查询（数组内字段查询）</h3>
+        <p>还是先说一下业务场景：表单基于表单构造器，表单字段是用户自己配的，所以不确定有哪些字段，因此在存储表单数据时选用的是数组结构，形如：</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="json">
+{
+    _id: "",
+    FormData: [{
+            key: "表单控件ID",
+            value: "对应的值"
+        }, {
+            key: "表单控件ID",
+            value: "对应的值"
+        },
+        // ……   还有很多字段
+    ],
+    //  ……  其他字段省略
+}
+        </pre>
+        <p>在没有弄通用查询（<a href="/p/dotnet/mongodb/index.html" target="_blank">.net 和 mongodb</a>这篇有介绍）之前或者说刚从关系型数据转到mongodb后，这种查询感觉很别扭，于是便想着能不能在查询之前先将数据处理一下：将表单中的字段拿出来放到最外层，表单控件ID作为列名称，和"_id"处于同一层级。实现该功能至今有好几个版本了，在这里汇总一下：<a href="https://www.cnblogs.com/du-blog/p/11820110.html" target="_blank">表单生成器(Form Builder)之mongodb表单数据——整理数据</a>，这篇笔记是以前整理的</p>
+        <h4>版本一</h4>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+db.instance.aggregate([{
+            $addFields: {
+                FormDataObj: {
+                    $arrayToObject: {
+                        $map: {
+                            input: "$FormData",
+                            as: "kv",
+                            in: ["$$kv.key", "$$kv.value"]
+                        }
+                    }
+                }
+            }
+        }, {
+            $addFields: {
+                "FormDataObj._id": "$_id",
+                "FormDataObj.Title": "$Title",
+                "FormDataObj.FormData": "$FormData",
+                "FormDataObj.CreateUserId": "$CreateUserId",
+                "FormDataObj.CreateUserName": "$CreateUserName",
+                "FormDataObj.CreateDate": "$CreateDate",
+                "FormDataObj.ModifyUserId": "$ModifyUserId",
+                "FormDataObj.ModifyUserName": "$ModifyUserName",
+                "FormDataObj.LastOperateDate": "$LastOperateDate",
+                "FormDataObj.ModelId": "$ModelId"
+            }
+        }, {
+            $replaceRoot: {
+                newRoot: "$FormDataObj"
+            }
+        }
+    ]);
+        </pre>
+        <h4>版本二</h4>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+db.instance.aggregate([{
+            $addFields: {
+                FormDataObj: {
+                    $arrayToObject: {
+                        $map: {
+                            input: "$FormData",
+                            as: "kv",
+                            in: ["$$kv.key", "$$kv.value"]
+                        }
+                    }
+                }
+            }
+        }, {
+            $addFields: {
+                TempFormData: {
+                    $objectToArray: "$FormDataObj"
+                }
+            }
+        }, {
+            $addFields: {
+                replaceObj: {
+                    $arrayToObject: {
+                        $map: {
+                            input: {
+                                $concatArrays: ["$TempFormData", {
+                                        $objectToArray: "$$ROOT"
+                                    }
+                                ]
+                            },
+                            as: "kv",
+                            in: ["$$kv.k", "$$kv.v"]
+                        }
+                    }
+                }
+            }
+        }, {
+            $replaceRoot: {
+                newRoot: "$replaceObj"
+            }
+        }, {
+            $project: {
+                FormDataObj: 0,
+                TempFormData: 0
+            }
+        }
+    ]);
+        </pre>
+        <h4>版本三</h4>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  $mergeObjects 版本要求比较高，当时没有用这个
+db.instance.aggregate([{
+            $replaceRoot: {
+                newRoot: {
+                    $mergeObjects: [{
+                            $cond: [{
+                                    $isArray: "$FormData"
+                                }, {
+                                    $arrayToObject: {
+                                        $map: {
+                                            input: "$FormData",
+                                            as: "kv",
+                                            in: ["$$kv.key", "$$kv.value"]
+                                        }
+                                    }
+                                }, {}
+                            ]
+                        }, "$$ROOT"
+                    ]
+                }
+            }
+        }
+    ]);
+        </pre>
+        <h4>版本四</h4>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+db.instance.aggregate([{
+            $replaceRoot: {
+                newRoot: {
+                    $arrayToObject: {
+                        $concatArrays: [{
+                                $cond: [{
+                                        $isArray: "$FormData"
+                                    }, {
+                                        $map: {
+                                            input: "$FormData",
+                                            as: "kv",
+                                            in: {
+                                                "k": "$$kv.key",
+                                                "v": "$$kv.value"
+                                            }
+                                        }
+                                    }, []]
+                            }, {
+                                $objectToArray: "$$ROOT"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    ]);
+        </pre>
+        <h2>更新</h2>
+        <p>更新相关</p>
+        <h3>字段由原数据类型对象修改为数组（或者添加一个新的字段）</h3>
+        <p>上面的查询章节<a href="#anchor-id-h3-001">最新层级配置查询</a>中<inline-code>ListConfig</inline-code>字段的数据类型为对象。最初存储为对象是没有问题的，但是后来有了新的需求：一条记录中可以有多个列表配置（ListConfig）。为了防止意外，原来的字段先不删除，而是在添加一个新的字段<inline-code>ListConfigs</inline-code>，将原字段添加某些属性之后添加到新数组中。</p>
+        <p>为了实现上面需求有一下几种实现方式：</p>
+        <h4>遍历更新</h4>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+db.config.find({}).forEach(dr => {
+    dr.ListConfig._id = ISODate().valueOf().toString();
+    dr.ListConfig.name = "默认列表";
+    db.config.update({
+        _id: dr._id
+    }, {
+        $set: {
+            ListConfigs: [dr.ListConfig]
+        }
+    });
+});
+        </pre>
+        <p>这种方式太慢了，总共有4万条数据，更新时间将近半个小时……本来想试试<inline-code>db.collection.bulkWrite</inline-code>这个，但是后来发现了后面的神器。</p>
+        <h4>聚合之$out和$mergeObjects</h4>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  这里可能需要权限验证
+db.config.aggregate([{
+            "$addFields": {
+                "ListConfigs": [{
+                        $mergeObjects: [{
+                                "_id": ISODate().valueOf().toString(),
+                                "name": "默认列表"
+                            },
+                            "$ListConfig"]
+                    }
+                ]
+            }
+        }, {
+            "$out": "config"
+        }
+    ]);
+        </pre>
+        <p>这种方式太牛了，同样的数据不到一分钟就更新完了……但是来了一个新问题，我们mongodb的版本（3.4.6）太低了，不支持<inline-code>$mergeObjects</inline-code>，于是就有了后面的两种方式：</p>
+        <h4>聚合之$out和$addFields、$project</h4>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  这里可能需要权限验证
+db.config.aggregate([
+	{
+		"$addFields": {
+			"ListConfigCopy": "$ListConfig"
+		}
+	},
+	{
+		"$addFields": {
+			"ListConfigCopy._id": ISODate().valueOf().toString(),
+			"ListConfigCopy.name": "默认列表"
+		}
+	},
+	{
+		"$addFields": {
+			"ListConfigs": ["$ListConfigCopy"]
+		}
+	},
+	{
+		"$project": {
+			"ListConfigCopy": 0
+		}
+	},
+	{
+		"$out": "config"
+	}
+]);
+        </pre>
+        <h4>聚合之$out和$arrayToObject、$objectToArray</h4>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  这里可能需要权限验证
+db.config.aggregate([{
+            "$addFields": {
+                "ListConfigs": [{
+                        "$arrayToObject": {
+                            "$setUnion": [{
+                                    "$objectToArray": {
+                                        "_id": ISODate().valueOf().toString(),
+                                        "name": "默认列表"
+                                    }
+                                }, {
+                                    "$objectToArray": "$ListConfig"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }, {
+            "$out": "config"
+        }
+    ]);
         </pre>
         <h2>参考链接</h2>
         <ul>
