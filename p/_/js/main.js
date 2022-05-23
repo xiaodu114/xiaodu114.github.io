@@ -68,18 +68,23 @@
         return new Promise((resolve, reject) => {
             let linkEle = document.getElementById("link-css-typesetting.css");
             if (linkEle) {
-                if (linkEle.readyState) {
-                    linkEle.onreadystatechange = () => {
-                        if (["loaded", "complete"].indexOf(linkEle.readyState) >= 0) {
-                            linkEle.onreadystatechange = null;
+                if (linkEle.getAttribute("is-loaded") === "true") {
+                    resolve();
+                }
+                else{
+                    if (linkEle.readyState) {
+                        linkEle.onreadystatechange = () => {
+                            if (["loaded", "complete"].indexOf(linkEle.readyState) >= 0) {
+                                linkEle.onreadystatechange = null;
+                                resolve();
+                            }
+                        };
+                    } else {
+                        linkEle.onload = () => {
+                            linkEle.onload = null;
                             resolve();
-                        }
-                    };
-                } else {
-                    linkEle.onload = () => {
-                        linkEle.onload = null;
-                        resolve();
-                    };
+                        };
+                    }
                 }
             } else {
                 setTimeout(resolve);
@@ -89,9 +94,14 @@
 
     function checkDOMContentLoaded() {
         return new Promise((resolve, reject) => {
-            document.addEventListener("DOMContentLoaded", (event) => {
+            if (["interactive", "complete"].indexOf(document.readyState) >= 0) {
                 resolve();
-            });
+            }
+            else {
+                document.addEventListener("DOMContentLoaded", (event) => {
+                    resolve();
+                });
+            }
         });
     }
 
@@ -123,6 +133,9 @@
         linkElement.id = "link-css-" + cssPath.slice(cssPath.lastIndexOf("/") + 1);
         linkElement.rel = "stylesheet";
         linkElement.href = cssPath;
+        linkElement.addEventListener("load", () => {
+            linkElement.setAttribute("is-loaded", "true");
+        });
         headEle.appendChild(linkElement);
     });
 
