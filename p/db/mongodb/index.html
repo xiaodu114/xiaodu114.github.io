@@ -25,7 +25,7 @@
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 /**
  * 本JS说明：
- *      1、将这里的内容保存到JS文件中
+ *      1、将这里的内容保存到JS文件（这里命名为：xxx.js）中
  *      2、在JS文件所在的文件夹“在此处打开PowerShell窗口”或者“命令提示符”
  *      3、在终端输入下面的命令
  *          示例： mongo xxx.js
@@ -35,22 +35,22 @@
  * mongo 其他
  *  0、添加 数据库名称 参数
  *      语法： mongo 数据库名称 xxx.js
- *      说明： 这里默认连接的是本地数据
+ *      说明： 这里默认连接的是本地数据库
  *  1、添加 mongodb地址（端口）和数据库名称 参数
  *      语法： mongo IP地址:端口/数据库名称 xxx.js
  *      说明：
- *          1.1、此时你可以在JS文件中直接 db ,例如：print(db.getName()); print(db.version());
+ *          1.1、此时你可以在JS文件中直接使用 db ,例如：print(db.getName()); print(db.version());
  *          1.2、如果设置了用户名和密码，则需要添加 -u -p --authenticationDatabase 参数
  *               示例：mongo IP地址:端口/数据库名称 xxx.js -u 用户名 -p 密码 --authenticationDatabase  admin
  *  2、在终端输入时不带 mongodb地址和数据库名称 参数
  *      语法： mongo xxx.js
  *      说明： 这种情况下，如何获取 db 以及设置了 用户名和密码 如何处理，请直接看代码
- *  …… 更多参数你可以输入： mongo --help
+ *  …… 更多使用方式，你可以在终端输入： mongo --help
  */
 
 //	1、数据库连接   ！！！这里需要替换！！！
 let mongo = new Mongo('IP地址:端口');
-mongo.getDB("admin").auth('用户名', '密码');
+mongo.getDB('admin').auth('用户名', '密码');
 let db = mongo.getDB('数据库名称');
 
 //	2、方法：批量插入数据
@@ -102,13 +102,13 @@ mongorestore -h 127.0.0.1:27017 -d Test002 D:\backup\mongodb\local\Test001
         <p>克隆集合的几种方式，找到了一篇文章，文中介绍了好几种方式，感觉够全了。链接地址：<a href="https://www.mongodbmanager.com/clone-mongodb-collection" target="_blank">7 different ways to clone MongoDB connection</a></p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //  这里会创建一个新表"config2"，可能需要权限验证。
-db.config.aggregate([ { $out: "config2" } ]);
+db.config.aggregate([ { $out: 'config2' } ]);
 
 //  如果添加过滤条件，则只是复制其中的部分数据
 db.config.aggregate([{
     $match: { ModelId : 'a' }
 }, {
-    $out: "config2"
+    $out: 'config2'
 }
 ]);
         </pre>
@@ -121,6 +121,7 @@ db.config.aggregate([{
         <p>为了验证查询语句，还是先造点数据：</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //	两个方法，用于生成一个随机时间
+//      更多方法：https://github.com/xiaodu114/a2bei4
 function getInRangeInteger(num1, num2) {
     num1 = Number.isInteger(num1) ? num1 : 0;
     num2 = Number.isInteger(num2) ? num2 : 0;
@@ -199,51 +200,51 @@ db.config.insertMany(trs);
 db.getCollection('config').aggregate([{
         $match: {
             $or: [{
-                    'ModelId': 'a',
-                    'Level1': null,
-                    'Level2': null,
-                    'Level3': null
+                    ModelId: 'a',
+                    Level1: null,
+                    Level2: null,
+                    Level3: null
                 }, {
-                    'ModelId': 'a',
-                    'Level1': 'lv1_1',
-                    'Level2': null,
-                    'Level3': null,
+                    ModelId: 'a',
+                    Level1: 'lv1_1',
+                    Level2: null,
+                    Level3: null,
                 }, {
-                    'ModelId': 'a',
-                    'Level1': 'lv1_1',
-                    'Level2': 'lv2_1',
-                    'Level3': null
+                    ModelId: 'a',
+                    Level1: 'lv1_1',
+                    Level2: 'lv2_1',
+                    Level3: null
                 }, {
-                    'ModelId': 'a',
-                    'Level1': 'lv1_1',
-                    'Level2': 'lv2_1',
-                    'Level3': 'lv3_1'
+                    ModelId: 'a',
+                    Level1: 'lv1_1',
+                    Level2: 'lv2_1',
+                    Level3: 'lv3_1'
                 }, {
-                    'ModelId': 'b',
-                    'Level1': null,
-                    'Level2': null,
-                    'Level3': null
+                    ModelId: 'b',
+                    Level1: null,
+                    Level2: null,
+                    Level3: null
                 }, {
-                    'ModelId': 'b',
-                    'Level1': 'lv1_2',
-                    'Level2': null,
-                    'Level3': null,
+                    ModelId: 'b',
+                    Level1: 'lv1_2',
+                    Level2: null,
+                    Level3: null,
                 }, {
-                    'ModelId': 'b',
-                    'Level1': 'lv1_2',
-                    'Level2': 'lv2_2',
-                    'Level3': null
+                    ModelId: 'b',
+                    Level1: 'lv1_2',
+                    Level2: 'lv2_2',
+                    Level3: null
                 }, {
-                    'ModelId': 'b',
-                    'Level1': 'lv1_2',
-                    'Level2': 'lv2_2',
-                    'Level3': 'lv3_2'
+                    ModelId: 'b',
+                    Level1: 'lv1_2',
+                    Level2: 'lv2_2',
+                    Level3: 'lv3_2'
                 }
             ]
         }
     }, {
         $sort: {
-            'CreateDate': -1
+            CreateDate: -1
         }
     }, {
         $group: {
@@ -258,7 +259,7 @@ db.getCollection('config').aggregate([{
                 ]
             },
             latestItem: {
-                //	'$arrayElemAt': ['$items', 0]  // 获取数组第一项
+                //	$arrayElemAt: ['$items', 0]  // 获取数组第一项
                 $first: '$$ROOT'
             }
         }
@@ -296,8 +297,9 @@ db.getCollection('config').aggregate([{
             key: "表单控件ID",
             value: "对应的值"
         },
-        // ……   还有很多字段
+        // ……   还有很多表单字段
     ],
+    CreateDate: new Date(),
     //  ……  其他字段省略
 }
         </pre>
@@ -305,140 +307,140 @@ db.getCollection('config').aggregate([{
         <h4>版本一</h4>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 db.instance.aggregate([{
-            $addFields: {
-                FormDataObj: {
-                    $arrayToObject: {
-                        $map: {
-                            input: "$FormData",
-                            as: "kv",
-                            in: ["$$kv.key", "$$kv.value"]
-                        }
+        $addFields: {
+            FormDataObj: {
+                $arrayToObject: {
+                    $map: {
+                        input: '$FormData',
+                        as: 'kv',
+                        in: ['$$kv.key', '$$kv.value']
                     }
                 }
             }
-        }, {
-            $addFields: {
-                "FormDataObj._id": "$_id",
-                "FormDataObj.Title": "$Title",
-                "FormDataObj.FormData": "$FormData",
-                "FormDataObj.CreateUserId": "$CreateUserId",
-                "FormDataObj.CreateUserName": "$CreateUserName",
-                "FormDataObj.CreateDate": "$CreateDate",
-                "FormDataObj.ModifyUserId": "$ModifyUserId",
-                "FormDataObj.ModifyUserName": "$ModifyUserName",
-                "FormDataObj.LastOperateDate": "$LastOperateDate",
-                "FormDataObj.ModelId": "$ModelId"
-            }
-        }, {
-            $replaceRoot: {
-                newRoot: "$FormDataObj"
-            }
         }
-    ]);
+    }, {
+        $addFields: {
+            'FormDataObj._id': '$_id',
+            'FormDataObj.Title': '$Title',
+            'FormDataObj.FormData': '$FormData',
+            'FormDataObj.CreateUserId': '$CreateUserId',
+            'FormDataObj.CreateUserName': '$CreateUserName',
+            'FormDataObj.CreateDate': '$CreateDate',
+            'FormDataObj.ModifyUserId': '$ModifyUserId',
+            'FormDataObj.ModifyUserName': '$ModifyUserName',
+            'FormDataObj.LastOperateDate': '$LastOperateDate',
+            'FormDataObj.ModelId': '$ModelId'
+        }
+    }, {
+        $replaceRoot: {
+            newRoot: '$FormDataObj'
+        }
+    }
+])
         </pre>
         <h4>版本二</h4>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 db.instance.aggregate([{
-            $addFields: {
-                FormDataObj: {
-                    $arrayToObject: {
-                        $map: {
-                            input: "$FormData",
-                            as: "kv",
-                            in: ["$$kv.key", "$$kv.value"]
-                        }
+        $addFields: {
+            FormDataObj: {
+                $arrayToObject: {
+                    $map: {
+                        input: '$FormData',
+                        as: 'kv',
+                        in: ['$$kv.key', '$$kv.value']
                     }
                 }
-            }
-        }, {
-            $addFields: {
-                TempFormData: {
-                    $objectToArray: "$FormDataObj"
-                }
-            }
-        }, {
-            $addFields: {
-                replaceObj: {
-                    $arrayToObject: {
-                        $map: {
-                            input: {
-                                $concatArrays: ["$TempFormData", {
-                                        $objectToArray: "$$ROOT"
-                                    }
-                                ]
-                            },
-                            as: "kv",
-                            in: ["$$kv.k", "$$kv.v"]
-                        }
-                    }
-                }
-            }
-        }, {
-            $replaceRoot: {
-                newRoot: "$replaceObj"
-            }
-        }, {
-            $project: {
-                FormDataObj: 0,
-                TempFormData: 0
             }
         }
-    ]);
+    }, {
+        $addFields: {
+            TempFormData: {
+                $objectToArray: '$FormDataObj'
+            }
+        }
+    }, {
+        $addFields: {
+            replaceObj: {
+                $arrayToObject: {
+                    $map: {
+                        input: {
+                            $concatArrays: ['$TempFormData', {
+                                    $objectToArray: '$$ROOT'
+                                }
+                            ]
+                        },
+                        as: 'kv',
+                        in: ['$$kv.k', '$$kv.v']
+                    }
+                }
+            }
+        }
+    }, {
+        $replaceRoot: {
+            newRoot: '$replaceObj'
+        }
+    }, {
+        $project: {
+            FormDataObj: 0,
+            TempFormData: 0
+        }
+    }
+])
         </pre>
         <h4>版本三</h4>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //  $mergeObjects 版本要求比较高，当时没有用这个
 db.instance.aggregate([{
-            $replaceRoot: {
-                newRoot: {
-                    $mergeObjects: [{
-                            $cond: [{
-                                    $isArray: "$FormData"
-                                }, {
-                                    $arrayToObject: {
-                                        $map: {
-                                            input: "$FormData",
-                                            as: "kv",
-                                            in: ["$$kv.key", "$$kv.value"]
-                                        }
+        $replaceRoot: {
+            newRoot: {
+                $mergeObjects: [{
+                        $cond: [{
+                                $isArray: '$FormData'
+                            }, {
+                                $arrayToObject: {
+                                    $map: {
+                                        input: '$FormData',
+                                        as: 'kv',
+                                        in: ['$$kv.key', '$$kv.value']
                                     }
-                                }, {}
-                            ]
-                        }, "$$ROOT"
-                    ]
-                }
+                                }
+                            }, {}
+                        ]
+                    }, '$$ROOT'
+                ]
             }
         }
-    ]);
+    }
+])
         </pre>
         <h4>版本四</h4>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 db.instance.aggregate([{
-            $replaceRoot: {
-                newRoot: {
-                    $arrayToObject: {
-                        $concatArrays: [{
-                                $cond: [{
-                                        $isArray: "$FormData"
-                                    }, {
-                                        $map: {
-                                            input: "$FormData",
-                                            as: "kv",
-                                            in: {
-                                                "k": "$$kv.key",
-                                                "v": "$$kv.value"
-                                            }
+        $replaceRoot: {
+            newRoot: {
+                $arrayToObject: {
+                    $concatArrays: [{
+                            $cond: [{
+                                    $isArray: '$FormData'
+                                }, {
+                                    $map: {
+                                        input: '$FormData',
+                                        as: 'kv',
+                                        in: {
+                                            'k': '$$kv.key',
+                                            'v': '$$kv.value'
                                         }
-                                    }, []]
-                            }, {
-                                $objectToArray: "$$ROOT"
-                            }
-                        ]
-                    }
+                                    }
+                                }, []]
+                        }, {
+                            $objectToArray: '$$ROOT'
+                        }
+                    ]
                 }
             }
         }
-    ]);
+    }
+])
         </pre>
         <h2>更新</h2>
         <p>更新相关</p>
@@ -464,76 +466,71 @@ db.config.find({}).forEach(dr => {
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //  这里可能需要权限验证
 db.config.aggregate([{
-            "$addFields": {
-                "ListConfigs": [{
-                        $mergeObjects: [{
-                                "_id": ISODate().valueOf().toString(),
-                                "name": "默认列表"
-                            },
-                            "$ListConfig"]
-                    }
-                ]
-            }
-        }, {
-            "$out": "config"
+        $addFields: {
+            ListConfigs: [{
+                    $mergeObjects: [{
+                            _id: ISODate().valueOf().toString(),
+                            name: '默认列表'
+                        },
+                        '$ListConfig']
+                }
+            ]
         }
-    ]);
+    }, {
+        $out: 'config'
+    }
+])
         </pre>
         <p>这种方式太牛了，同样的数据不到一分钟就更新完了……但是来了一个新问题，我们mongodb的版本（3.4.6）太低了，不支持<inline-code>$mergeObjects</inline-code>，于是就有了后面的两种方式：</p>
         <h4>聚合之$out和$addFields、$project</h4>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //  这里可能需要权限验证
-db.config.aggregate([
-	{
-		"$addFields": {
-			"ListConfigCopy": "$ListConfig"
-		}
-	},
-	{
-		"$addFields": {
-			"ListConfigCopy._id": ISODate().valueOf().toString(),
-			"ListConfigCopy.name": "默认列表"
-		}
-	},
-	{
-		"$addFields": {
-			"ListConfigs": ["$ListConfigCopy"]
-		}
-	},
-	{
-		"$project": {
-			"ListConfigCopy": 0
-		}
-	},
-	{
-		"$out": "config"
-	}
-]);
+db.config.aggregate([{
+        $addFields: {
+            ListConfigCopy: '$ListConfig'
+        }
+    }, {
+        $addFields: {
+            'ListConfigCopy._id': ISODate().valueOf().toString(),
+            'ListConfigCopy.name': '默认列表'
+        }
+    }, {
+        $addFields: {
+            ListConfigs: ['$ListConfigCopy']
+        }
+    }, {
+        $project: {
+            ListConfigCopy: 0
+        }
+    }, {
+        $out: 'config'
+    }
+])
         </pre>
         <h4>聚合之$out和$arrayToObject、$objectToArray</h4>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //  这里可能需要权限验证
 db.config.aggregate([{
-            "$addFields": {
-                "ListConfigs": [{
-                        "$arrayToObject": {
-                            "$setUnion": [{
-                                    "$objectToArray": {
-                                        "_id": ISODate().valueOf().toString(),
-                                        "name": "默认列表"
-                                    }
-                                }, {
-                                    "$objectToArray": "$ListConfig"
+        $addFields: {
+            ListConfigs: [{
+                    $arrayToObject: {
+                        $setUnion: [{
+                                $objectToArray: {
+                                    _id: ISODate().valueOf().toString(),
+                                    name: '默认列表'
                                 }
-                            ]
-                        }
+                            }, {
+                                $objectToArray: '$ListConfig'
+                            }
+                        ]
                     }
-                ]
-            }
-        }, {
-            "$out": "config"
+                }
+            ]
         }
-    ]);
+    }, {
+        $out: 'config'
+    }
+])
         </pre>
         <h2>参考链接</h2>
         <ul>
