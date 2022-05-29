@@ -150,11 +150,11 @@ export default {
     ]
 };
         </pre>
-        <marked-block type="info">
+        <mark-block type="info">
             <p>babelHelpers: 'bundled' option was used by default. It is recommended to configure this option
                 explicitly, read more
                 here: https://github.com/rollup/plugins/tree/master/packages/babel#babelhelpers</p>
-        </marked-block>
+        </mark-block>
         <p><strong>说明：</strong>代码没有变化，只是外边添加一个立即执行函数</p>
         <h3>第二次尝试</h3>
         <p>第二次尝试，依赖慢慢添加。</p>
@@ -183,7 +183,7 @@ export default {
         </pre>
         <p><strong>说明：</strong>上面的配置只会转换一些语法，例如：let、const、class、数组或者对象的解构赋值等，async和await也会转换（转换之后用到了Promise）；像新增的Array.from、Set、Promise等不会转换。
         </p>
-        <marked-block type="error">
+        <mark-block type="error">
             <p>在浏览器中运行的时候报错了，还是Chrome，并且是最新版的，什么鬼……</p>
             <p>
                 <span>
@@ -194,7 +194,7 @@ export default {
             <p>之后又看了一下转码之后的代码，确实找到了<line-code>regeneratorRuntime</line-code>，并且还给出了提示<line-code>
                     regenerator-runtime</line-code>
                 ，这时也想起之前用webapck转ES5时安装过这个包。但是这里node_modules目录下已经有这个包了，算了先不纠结他了，应该很少单独这么用。</p>
-        </marked-block>
+        </mark-block>
         <h3>第三次尝试</h3>
         <p>第三次尝试，依赖再次添加，终于像点样子了。</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">

@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Typesetting Web Components - xiaodu114.github.io</title>
     <meta name="keywords" content="Web Components,Typesetting,Typesetting series">
-    <meta name="description" content="这里记录演示一下关于排版的一系列Web Components：醒目块（marked-block）">
+    <meta name="description" content="这里记录演示一下关于排版的一系列Web Components：醒目块（mark-block）">
 
     <script src="/p/_/js/main.js"></script>
 </head>
@@ -16,47 +16,47 @@
     <!-- github访问地址：/p/web/webComponents/my/index.html -->
     <div class="blog-page">
         <h1>Web Components 之排版系列</h1>
-        <h2>醒目块<line-code>marked-block</line-code>
+        <h2>醒目块<line-code>mark-block</line-code>
         </h2>
         <p>
             看到这个组件名字时候我都忍不住吐槽，虽然这个名字是我取得……起名的时候我犯难了😣😣😣。看到下面的运行效果大家就应该知道这是什么东东了，该叫什么呢！看了网上好多类似效果的都是使用的
             <line-code>blockquote</line-code>,但是我觉得在这个基础上加个前缀、后缀什么的并不合适，最后想了半天，这其实是一个块元素并且很明显、醒目，所以就有了这个名字……
         </p>
         <h3>运行效果</h3>
-        <marked-block>
+        <mark-block>
             <p>醒目块之<strong>提示</strong>，这里可以放置一些<strong>提示</strong>性的内容。<strong>这个是默认情况</strong></p>
-        </marked-block>
+        </mark-block>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
-<marked-block>
+<mark-block>
     <p>醒目块之<strong>提示</strong>，这里可以放置一些<strong>提示</strong>性的内容。<strong>这个是默认情况</strong></p>
-</marked-block>
+</mark-block>
         </pre>
         <div style="height: 20px;"></div>
-        <marked-block type="info">
+        <mark-block type="info">
             <p>醒目块之<strong>信息</strong>，这里可以放置一些<strong>信息</strong>性的内容。</p>
-        </marked-block>
+        </mark-block>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
-<marked-block type="info">
+<mark-block type="info">
     <p>醒目块之<strong>信息</strong>，这里可以放置一些<strong>信息</strong>性的内容。</p>
-</marked-block>
+</mark-block>
         </pre>
         <div style="height: 20px;"></div>
-        <marked-block type="warning">
+        <mark-block type="warning">
             <p>醒目块之<strong>注意</strong>，这里可以放置一些<strong>注意</strong>性的内容。</p>
-        </marked-block>
+        </mark-block>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
-<marked-block type="warning">
+<mark-block type="warning">
     <p>醒目块之<strong>注意</strong>，这里可以放置一些<strong>注意</strong>性的内容。</p>
-</marked-block>
+</mark-block>
         </pre>
         <div style="height: 20px;"></div>
-        <marked-block type="error">
+        <mark-block type="error">
             <p>醒目块之<strong>错误</strong>，这里可以放置一些<strong>错误</strong>性的内容。</p>
-        </marked-block>
+        </mark-block>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
-<marked-block type="error">
+<mark-block type="error">
     <p>醒目块之<strong>错误</strong>，这里可以放置一些<strong>错误</strong>性的内容。</p>
-</marked-block>
+</mark-block>
         </pre>
         <div style="height: 20px;"></div>
         <h3>属性</h3>

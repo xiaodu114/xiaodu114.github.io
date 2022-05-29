@@ -56,7 +56,7 @@
         <p>
             <img src="./images/1.png" width="100%">
         </p>
-        <marked-block type="info">
+        <mark-block type="info">
             <p>.NET SDK和.NET 运行时列出里一大堆，各个版本的都有，怎么删除呢？如下：</p>
             <ul>
                 <li>
@@ -68,7 +68,7 @@
                         target="_blank">卸载工具 - .NET | Microsoft Docs</a>
                 </li>
             </ul>
-        </marked-block>
+        </mark-block>
         <h2>
             <line-code>maui-check</line-code>相关
         </h2>
@@ -129,9 +129,9 @@
         <p>
             > dotnet new maui -n demo1
         </p>
-        <marked-block type="info">
+        <mark-block type="info">
             <p>如果提示安装的maui模板不是最新版，可以根据提示或者上面的章节目录中的命令更新maui模板。</p>
-        </marked-block>
+        </mark-block>
         <p>
             <img src="./images/5-1.png" width="100%">
             <img src="./images/5-2.png" width="100%">
@@ -141,9 +141,9 @@
         <p>
             <img src="./images/5-3.png" width="100%">
         </p>
-        <marked-block type="info">
+        <mark-block type="info">
             <p>这里查看目录结构的目的是留痕，稍后会删改模板文件</p>
-        </marked-block>
+        </mark-block>
         <h3>阉割项目</h3>
         <p>记得之前创建模板是没有<line-code>sln</line-code>解决方案，也证实了开始不支持<line-code>Visual Studio</line-code>
             ，因为没有安装2022，还有就是只面向<line-code>Android</line-code>，所以修改一下模板项目。
@@ -165,10 +165,10 @@
         <p>
             <img src="./images/5-7.png" width="100%">
         </p>
-        <marked-block>
+        <mark-block>
             <p>> dotnet workload install maui-core</p>
             <p>这个还有权限问题，需要管理员权限，这里又开了一个窗口</p>
-        </marked-block>
+        </mark-block>
         <p>
             <img src="./images/5-8.png" width="100%">
             <img src="./images/5-9.png" width="100%">
@@ -183,10 +183,10 @@
         <p>> dotnet build -t:Run -f net6.0-android</p>
         <p>果然一切都不是那么顺利，又报错了</p>
         <p><img src="./images/5-12.png" width="100%"></p>
-        <marked-block type="error">
+        <mark-block type="error">
             <p>Mono.AndroidTools.IncompatibleCpuAbiExceptiopn: The package does not support the CPU architecture of this
                 device.</p>
-        </marked-block>
+        </mark-block>
         <p>随后就搜索了一下：</p>
         <ul>
             <li>

@@ -209,7 +209,7 @@ var slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
         <div id="cookie-demo-1"></div>
         <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
             data-url="/p/web/problem/crossDomain/cookie1.html" ddz-lang="html"></div>
-        <marked-block type="warning">
+        <mark-block type="warning">
             <p>
                 ● 主域名是不给子域名设置<line-code>cookie</line-code>的。例如：//ddz.com/index.html => document.cookie =
                 "name=index.html;domain=c1.ddz.com";
@@ -228,7 +228,7 @@ var slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
                 ● 子域名设置<line-code>domain</line-code>，主域名可以能访问。例如：//c1.ddz.com/cookie1.html => document.cookie =
                 "age=18;domain=ddz.com";之后 //ddz.com/index.html => document.cookie 就可以取到
             </p>
-        </marked-block>
+        </mark-block>
         <h2>你不能做的一些事情</h2>
         <blockquote>
             <p>（1） Cookie、LocalStorage 和 IndexDB 无法读取。</p>
@@ -252,26 +252,26 @@ var slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
         <p>先说一下，主域名下的页面不能设置<line-code>document.domain</line-code>为子域名，否则会报错。例如： //ddz.com/index.html =>
             document.domain = 'c1.ddz.com';</p>
 
-        <marked-block type="error">
+        <mark-block type="error">
             <p style="color: red;">
                 Uncaught DOMException: Failed to set the 'domain' property on 'Document': 'c1.ddz.com' is not a suffix
                 of 'ddz.com'.
             </p>
-        </marked-block>
+        </mark-block>
         <p>
             还有一点就是相应页面设置<line-code>document.domain</line-code>的时机，一定保证在跨域读取之前已经设置完成，否则还是会报跨域错误。
         </p>
-        <marked-block type="error">
+        <mark-block type="error">
             <p style="color: red;">
                 Uncaught DOMException: Blocked a frame with origin "http://c1.ddz.com" from accessing a cross-origin
                 frame.
             </p>
-        </marked-block>
+        </mark-block>
         <p>
             最后一点就是你可以在 //ddz.com/index.html 页面打印输出<line-code>document.domain</line-code>
             ，值为："ddz.com"。但是如果你不显示设置他的值，照样是跨域错误。
         </p>
-        <marked-block type="error">
+        <mark-block type="error">
             <p style="color: red;">
                 documentDomain1.html:11 Uncaught DOMException: Blocked a frame with origin "http://c1.ddz.com" from
                 accessing a cross-origin frame.
@@ -280,7 +280,7 @@ var slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
                 index.html:232 Uncaught DOMException: Blocked a frame with origin "http://ddz.com" from accessing a
                 cross-origin frame.
             </p>
-        </marked-block>
+        </mark-block>
         <div ddz-class="here-need-to-handle-by-highlight-and-replace-one" ddz-replaceid="documentdomain-demo-1"
             ddz-lang="html">
             <!-- 下面是 //ddz.com/index.html 页面中的代码片段，测试：iframe + document.domain  -->
@@ -312,17 +312,17 @@ var slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
                 new Date().valueOf();</line-code>这样
             修改父页面的<line-code>hash</line-code>吗？答案是不可以的，虽然是主域和子域的关系，会报下面的错误。
         </p>
-        <marked-block type="error">
+        <mark-block type="error">
             <p style="color: red;">
                 locationHash1.html:17 Uncaught DOMException: Blocked a frame with origin "http://c1.ddz.com" from
                 accessing a cross-origin frame.
             </p>
-        </marked-block>
-        <marked-block type="warning">
+        </mark-block>
+        <mark-block type="warning">
             <p>
                 此处的测试想要成功需要将上文中的<line-code>document.domain = 'ddz.com';</line-code>这句代码屏蔽掉。
             </p>
-        </marked-block>
+        </mark-block>
         <div ddz-class="here-need-to-handle-by-highlight-and-replace-one" ddz-replaceid="locationhash-demo-1"
             ddz-lang="html">
             <!-- 下面是 //ddz.com/index.html 页面中的代码片段，测试：iframe + location.hash  -->
@@ -351,11 +351,11 @@ var slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
             </line-code>的值，这里获取到的就是第一次加载跨域页面设置的<line-code>window.name</line-code>。注意：第二次加载的同源页面不要设置<line-code>
                 window.name</line-code>，否则获取到的就是他的值了。
         </p>
-        <marked-block type="warning">
+        <mark-block type="warning">
             <p>
                 此处的测试想要成功需要将上文中的<line-code>document.domain = 'ddz.com';</line-code>这句代码屏蔽掉。
             </p>
-        </marked-block>
+        </mark-block>
         <div ddz-class="here-need-to-handle-by-highlight-and-replace-one" ddz-replaceid="windowname1-demo-1"
             ddz-lang="html">
             <!-- 下面是 //ddz.com/index.html 页面中的代码片段，测试：iframe + window.name  -->

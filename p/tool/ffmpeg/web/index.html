@@ -55,7 +55,7 @@
         <h1>ffmpeg online</h1>
         <h2>概述</h2>
         <p>对，你没有看错，ffmpeg可以在浏览器中运行了👍👍👍。这里需要感谢<strong>WebAssembly</strong>。</p>
-        <marked-block explain="传送">
+        <mark-block explain="传送">
             <p>
                 官网：<a href="https://ffmpegwasm.netlify.app/" target="_blank">FFMPEG.WASM</a>
             </p>
@@ -66,10 +66,10 @@
             <p>
                 cdn：<a href="https://unpkg.com/@ffmpeg/ffmpeg/" target="_blank">UNPKG - @ffmpeg/ffmpeg</a>
             </p>
-        </marked-block>
+        </mark-block>
         <h2>遇到的问题</h2>
         <h3>使用unpkg的问题</h3>
-        <marked-block type="error">
+        <mark-block type="error">
             <p>
                 The FetchEvent for "https://unpkg.com/@ffmpeg/ffmpeg@0.10.0/dist/ffmpeg.min.js" resulted in a network
                 error response:
@@ -78,12 +78,12 @@
             <p>
                 GET https://unpkg.com/@ffmpeg/ffmpeg@0.10.0/dist/ffmpeg.min.js net::ERR_FAILED
             </p>
-        </marked-block>
+        </mark-block>
         <p>这个也不是每次都出现，刷新的时候，时不时冒出一次……还没有来得急研究为什么。你可以在<line-code>script</line-code>标签中添加<line-code>crossorigin
             </line-code>属性。
         </p>
         <h3>cross-origin isolated</h3>
-        <marked-block type="error">
+        <mark-block type="error">
             <p>
                 [Deprecation] SharedArrayBuffer will require cross-origin isolation as of M92, around July 2021. See
                 https://developer.chrome.com/blog/enabling-shared-array-buffer/ for more details.
@@ -91,7 +91,7 @@
             <p>
                 Uncaught (in promise) ReferenceError: SharedArrayBuffer is not defined
             </p>
-        </marked-block>
+        </mark-block>
         <p>跨域隔离，这是遇到的第二个问题。GitHub的介绍中也给出了解决办法：对应页面的响应头部添加两个选项。这里使用的是IIS，测试了一下果然没有问题。添加的headers如下：</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 Cross-Origin-Embedder-Policy: require-corp
@@ -101,23 +101,23 @@ Cross-Origin-Opener-Policy: same-origin
                 href="https://github.com/gzuidhof/coi-serviceworker" target="_blank">GitHub -
                 gzuidhof/coi-serviceworker</a>
         </p>
-        <marked-block type="warning">
+        <mark-block type="warning">
             <p>
                 这里遇到一个令人费解的问题：引入<line-code>coi-serviceworker</line-code>
                 （引入方式是用script标签,src="/lib/coi-serviceworker/min.js"）之后,浏览器中第一次访问该页面时一直在自动刷新……不知道什么鬼。之后将该类库放到与该页面相同的文件夹下，此时在引入，访问页面就正常了……懵圈的是，在换成第一次的引入方式也没有问题了😅😅😅，停滞一段时间之后就又开始一直刷新了……
             </p>
-        </marked-block>
+        </mark-block>
         <h3>图片太大的问题</h3>
         <p>这是一个苦逼的问题，这个问题感觉自己弄这个有点鸡肋了。选了一张3.53MB的图片和10.2MB的音频，报错了😓😓😓。之后又换了一个组合108KB的图片和10.2MB的音频，这次成功了。3.53MB也不是太大吧！
         </p>
-        <marked-block type="error">
+        <mark-block type="error">
             <p>Pthread aborting at Error</p>
             <p>worker.js onmessage() captured an uncaught exception: RuntimeError: abort(OOM). Build with -s
                 ASSERTIONS=1 for more
                 info.</p>
             <p>RuntimeError: abort(OOM). Build with -s ASSERTIONS=1 for more info.</p>
             <p>Uncaught RuntimeError: abort(OOM). Build with -s ASSERTIONS=1 for more info.</p>
-        </marked-block>
+        </mark-block>
         <h2>赶紧试试吧</h2>
         <p id="msg"></p>
         <h3>图片和音频合成视频</h3>
@@ -158,7 +158,7 @@ Cross-Origin-Opener-Policy: same-origin
                 </p>
             </fieldset>
         </div>
-        <marked-block type="error">
+        <mark-block type="error">
             <p>
                 m3u8转视频没有跑成功，提示如下错误:
             </p>
@@ -172,7 +172,7 @@ Cross-Origin-Opener-Policy: same-origin
             <p>记录一下这个链接：<a href="https://askubuntu.com/questions/650577/how-to-compile-ffmpeg-with-https-support"
                     target="_blank" rel="noopener noreferrer">openssl - How to compile ffmpeg with https support - Ask
                     Ubuntu</a></p>
-        </marked-block>
+        </mark-block>
         <video id="video-player" controls style="max-width: 100%;"></video>
 
     </div>

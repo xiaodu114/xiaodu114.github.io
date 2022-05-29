@@ -16,7 +16,7 @@
     <!-- github访问地址：/p/web/vue3/0introduction/index.html -->
     <div class="blog-page">
         <h1>Vue3 + webpack 多入口</h1>
-        <marked-block type="info">
+        <mark-block type="info">
             <p>写在最前面：切换npm源。</p>
             <dl>
                 <dt>查看npm源地址(默认为： https://registry.npmjs.org)</dt>
@@ -32,7 +32,7 @@
                     </pre>
                 </dd>
             </dl>
-        </marked-block>
+        </mark-block>
         <p>这里简单的记录一下：Vue3 + webpack下的多入口demo。该demo并没有使用<line-code>@vue/cli</line-code>、<line-code>Vite
             </line-code>等，而是自己搭建的，争取做到最简。
         </p>
@@ -45,12 +45,12 @@
         <p>
             <img src="./images/1.png" width="100%">
         </p>
-        <marked-block type="info">
+        <mark-block type="info">
             <p>上面的对比图，你可以忽略tree.txt文件。你可以使用下面的命令生成目录结构文件：</p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
                 tree /f >tree.txt
             </pre>
-        </marked-block>
+        </mark-block>
         <h3>html和对应的js</h3>
         <p>开篇说了处理多个入口页面，所以这里创建了两个文件夹（module1和module2）来模拟没有任何关系的两个子模块。这两个模块的代码没有什么大的不同，只是1和2的区别。</p>
         <p>模块1的路径：<line-code>/src/module1/index.html</line-code>
@@ -386,12 +386,12 @@ body {
     background: url(../images/bg.png) repeat-x;
 }
         </pre>
-        <marked-block type="info">
+        <mark-block type="info">
             <p>此次添加的图片你可以在这里找到：
                 <a href="https://github.com/xiaodu114/xiaodu114.github.io/tree/master/p/web/vue3/0introduction/code"
                     target="_blank">快去找图片吧</a>
             </p>
-        </marked-block>
+        </mark-block>
         <h3>两个html页面更新</h3>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
 <!-- 第四版：添加的内容 -->
@@ -629,10 +629,10 @@ let tempModuleExportsObj = {
         <p>
             <img src="./images/10.png" width="100%">
         </p>
-        <marked-block type="info">
+        <mark-block type="info">
             <p>html-loader：这里做了一些配置，目的是排除一些js（站点根目录开始的）</p>
             <p>图片中的代码对比：一些注释代码给忽略了，看详细的你可以下载代码。</p>
-        </marked-block>
+        </mark-block>
         <p>最后再来看一下转ES5前后的截图对比</p>
         <p>
             <img src="./images/10-2.png" width="100%">
@@ -778,10 +778,10 @@ let tempModuleExportsObj = {
         <p>
             <img src="./images/12.png" width="100%">
         </p>
-        <marked-block type="info">
+        <mark-block type="info">
             <p>这里还发现了一个问题，html页面对js的引入都添加到了head标签下并且提取css文件都放在script标签的后面，赶紧处理一下吧</p>
             <p>查了一下，发现是html-webpack-plugin插件<line-code>inject</line-code>配置项的问题，开始设置的是布尔类型ture，现在修改成字符串"body"就好了</p>
-        </marked-block>
+        </mark-block>
         <h2>clean-webpack-plugin 插件和 copy-webpack-plugin 插件</h2>
         <p>这里在添加两个插件：clean-webpack-plugin 生成之前先删除（你手动添加的文件也会删除）；copy-webpack-plugin
             拷贝文件到指定的目录。这两个插件本文档使用的比较简单，就不添加代码下载了。</p>

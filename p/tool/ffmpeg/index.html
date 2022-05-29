@@ -32,11 +32,11 @@
 		<p>
 			<img src="./images/2.png" width="100%" />
 		</p>
-		<marked-block type="info" explain="说明">
+		<mark-block type="info" explain="说明">
 			<p>
 				当时下载的版本为：ffmpeg-4.4-full_build.7z，现在是：ffmpeg-4.4.1-full_build.7z。后面没有说明都是在版本4.4的基础上弄的。
 			</p>
-		</marked-block>
+		</mark-block>
 		<p>
 			下载完成之后解压即可，这里解压位置是：<line-code>D:\Program Files\ffmpeg-4.4-full_build</line-code>
 			。之后你还可以添加环境变量，方便使用。将
@@ -59,38 +59,38 @@
 #   最简的命令
 ffmpeg -i 1-1.jpg input_one_pic_1.mp4
 		</pre>
-		<marked-block type="info" explain="说明">
+		<mark-block type="info" explain="说明">
 			<p>最简的命令：输入一张图片，输出一个视频，视频的时长为0。</p>
 			<p>
 				上面的命令（或者之后的命令）都是在图片所在的文件夹打开的命令行（这里使用的是：Windows
 				PowerShell）执行的。
 			</p>
-		</marked-block>
+		</mark-block>
 		<h4>添加循环输出、时间</h4>
 		<pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 #   添加循环输入、时间
 ffmpeg -loop 1 -t 5 -i 1-1.jpg input_one_pic_2.mp4
 		</pre>
-		<marked-block type="info" explain="说明">
+		<mark-block type="info" explain="说明">
 			<p>输出视频的时长为5s。</p>
-		</marked-block>
+		</mark-block>
 		<h4>添加音频输入</h4>
 		<pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 #   添加音频输入
 ffmpeg -loop 1 -t 5 -i 1-1.jpg -i 1.mp3 input_one_pic_3.mp4
 		</pre>
-		<marked-block type="info" explain="说明">
+		<mark-block type="info" explain="说明">
 			<p>mp3的时长为4分26秒，输出视频的时长也是。这张图片一直存在。</p>
-		</marked-block>
+		</mark-block>
 		<pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 #   在上面的基础上删除循环和时间
 ffmpeg -i 1-1.jpg -i 1.mp3 input_one_pic_4.mp4
 		</pre>
-		<marked-block type="info" explain="说明">
+		<mark-block type="info" explain="说明">
 			<p>
 				输出视频的时长和上面相同，图片也一直存在，但是文件大小要比上一个小。
 			</p>
-		</marked-block>
+		</mark-block>
 		<h3>多张图片转视频-文件</h3>
 		<p>
 			一张图片转视频没有什么意义（即使是添加了音频），不好看也太单调了。本来的想法是先按照拼接的方式来实现多张图片转视频，但是这种实现方式一路坎坷……倒是利用文件的方式很快就实现了，那就先说一下他吧！他有很多优点：缩短命令、忽略图片分辨率等。下面就看一下这种实现方式：
@@ -108,11 +108,11 @@ file '1-2.jpg'
 duration 5
 file '1-3.jpg'
         </pre>
-		<marked-block type="info" explain="说明">
+		<mark-block type="info" explain="说明">
 			<p>
 				最简的命令，将输入文件之间的拼接放到了txt文件中，这样以来整体命令缩短了很多。这里还屏蔽一个图片分辨率的问题，在使用纯命令拼接时，如果图片的分辨率不一致会报错（暂时没有找到解决办法），但是这种方式没有这个问题。
 			</p>
-		</marked-block>
+		</mark-block>
 		<h4>添加音频输入</h4>
 		<pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 #   音频输入
@@ -264,12 +264,12 @@ ffmpeg `
 -filter_complex "[0][1]xfade=transition=wiperight:duration=3:offset=2,format=yuv420p" `
 input_multi_pic_animation_1.mp4
         </pre>
-		<marked-block type="info" explain="说明">
+		<mark-block type="info" explain="说明">
 			<p>
 				每张图片的循环时间是5s，如果不添加过滤动画，那么视频的时长是10s。这里使用了过度动画，最后生成的视频时长是7s。那这7s是如何得出的，为了达到我们想要的视频效果，图片的循环时间、动画的duration和offset
 				……下面再看几个例子，希望可以得到答案。
 			</p>
-		</marked-block>
+		</mark-block>
 		<pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 #   使用这个命令生成的视频时长为10s。
 ffmpeg `
@@ -316,11 +316,11 @@ ffmpeg `
 ,format=yuv420p[v]
 " -map "[v]" -map 4:a input_multi_pic_animation_5.mp4
         </pre>
-		<marked-block type="info" explain="说明">
+		<mark-block type="info" explain="说明">
 			<p>
 				弄了几个例子，也大概发现了一些规律。下面是我的理解：动画持续时间（duration）是两张图片共同占有，相交的时间，也可以理解成后一张图片提前duration的时间；偏移（offset）是从哪一个时间点开始。不知道理解对不对😓😓😓，这几个看着没有问题。视频时长=(loop<sub>1</sub>+loop<sub>2</sub>+……+loop<sub>n</sub>)-(duration<sub>1</sub>+duration<sub>2</sub>+……+duration<sub>n-1</sub>)。
 			</p>
-		</marked-block>
+		</mark-block>
 		<h4>分辨率不一致的问题</h4>
 		<p>
 			采用拼接的方式，如果涉及到的图片的分辨率不一致就会报错。之后就是一顿查询……<a href="https://trac.ffmpeg.org/wiki/Scaling"

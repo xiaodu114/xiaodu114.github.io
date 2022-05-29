@@ -157,7 +157,7 @@
     /**
      *  3、加载依赖的js
      */
-    if (!customElements.get("marked-block")) {
+    if (!customElements.get("mark-block")) {
         _SyncLoadJS("/lib/_/webComponents.js", (responseText) => {
             let _fn = new Function(responseText);
             _fn();

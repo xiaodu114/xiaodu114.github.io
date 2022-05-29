@@ -650,11 +650,11 @@ db.instance.aggregate([{
 })
         </pre>
         <p>随着时间的推移，各种各样的模块越来越多，模块的数据也在不断增长，于是查询就慢了……除了速度变慢之外还有一个问题就是：如果<line-code>$facet</line-code>中每个属性中命中的数据太多会报错，如下</p>
-        <marked-block type="error">
+        <mark-block type="error">
             <p>
                 PlanExecutor error during aggregation :: caused by :: document constructed by $facet is 104857980 bytes, which exceeds the limit of 104857600 bytes
             </p>
-        </marked-block>
+        </mark-block>
         <h4>版本二</h4>
         <p>先解决<line-code>document</line-code>大小的问题，当时想到的办法是每个<line-code>$facet</line-code>属性中只获取_id、排序字段和键（这里指的是权限唯一key），之后按照最外层的排序规则排序，最后是获取条数（最外层的<line-code>$skip</line-code>和<line-code>$limit</line-code>之和）。因为只获取了部分字段，因此还需要关联查询一下，于是便有了第二个版本：</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
