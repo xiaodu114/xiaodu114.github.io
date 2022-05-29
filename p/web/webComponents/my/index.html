@@ -16,11 +16,11 @@
     <!-- github访问地址：/p/web/webComponents/my/index.html -->
     <div class="blog-page">
         <h1>Web Components 之排版系列</h1>
-        <h2>醒目块<inline-code>marked-block</inline-code>
+        <h2>醒目块<line-code>marked-block</line-code>
         </h2>
         <p>
             看到这个组件名字时候我都忍不住吐槽，虽然这个名字是我取得……起名的时候我犯难了😣😣😣。看到下面的运行效果大家就应该知道这是什么东东了，该叫什么呢！看了网上好多类似效果的都是使用的
-            <inline-code>blockquote</inline-code>,但是我觉得在这个基础上加个前缀、后缀什么的并不合适，最后想了半天，这其实是一个块元素并且很明显、醒目，所以就有了这个名字……
+            <line-code>blockquote</line-code>,但是我觉得在这个基础上加个前缀、后缀什么的并不合适，最后想了半天，这其实是一个块元素并且很明显、醒目，所以就有了这个名字……
         </p>
         <h3>运行效果</h3>
         <marked-block>
@@ -87,21 +87,21 @@
                 <tr>
                     <td>bg-color</td>
                     <td>醒目块的背景颜色</td>
-                    <td>你想要设置的都可以，默认为：<inline-code>#f9f9f9</inline-code>
+                    <td>你想要设置的都可以，默认为：<line-code>#f9f9f9</line-code>
                     </td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
                     <td colspan="3">
-                        说明：设置了支持的<inline-code>type</inline-code>之后，<inline-code>explain</inline-code>和<inline-code>
-                            side-color</inline-code>会有对应的值；如果同时设置，以具体的属性值为准。
+                        说明：设置了支持的<line-code>type</line-code>之后，<line-code>explain</line-code>和<line-code>
+                            side-color</line-code>会有对应的值；如果同时设置，以具体的属性值为准。
                         <p>2021-10-10 更新：已经支持通过代码方式设置属性的值。例如：dom.setAttribute("explain", "xxx");</p>
                     </td>
                 </tr>
             </tfoot>
         </table>
-        <h2>返回顶部<inline-code>back-to-top</inline-code>
+        <h2>返回顶部<line-code>back-to-top</line-code>
         </h2>
         <p>
             这个组件就不用过多的介绍了，功能比较常见，在N多网站中都有这个功能。这里自己实现了一下，支持在整个页面或者某一个滚动容器中使用。
@@ -154,12 +154,12 @@
             <tfoot>
                 <tr>
                     <td colspan="3">
-                        说明：该属性可以不设置，此时监听<inline-code>window</inline-code>滚动事件；设置时（如果找不到会报错）监听对应元素的滚动事件。
+                        说明：该属性可以不设置，此时监听<line-code>window</line-code>滚动事件；设置时（如果找不到会报错）监听对应元素的滚动事件。
                     </td>
                 </tr>
             </tfoot>
         </table>
-        <h2>单滑块进度条<inline-code>single-slider</inline-code>
+        <h2>单滑块进度条<line-code>single-slider</line-code>
         </h2>
         <p>
             这是我写的第一个Web Component，当时是为了音乐播放器的进度条，当然也用在了我的音乐播放器项目中（<a
@@ -340,12 +340,12 @@ function singleSliderDemo1_inputRangeOnChangeEvent(range) {
             <tfoot>
                 <tr>
                     <td colspan="3">
-                        你可以监听值的改变，支持<inline-code>input</inline-code>和<inline-code>change</inline-code>,你还可以设置滑过和加载的值……
+                        你可以监听值的改变，支持<line-code>input</line-code>和<line-code>change</line-code>,你还可以设置滑过和加载的值……
                     </td>
                 </tr>
             </tfoot>
         </table>
-        <h2>刻度表（腕表）<inline-code>scale-clock</inline-code>
+        <h2>刻度表（腕表）<line-code>scale-clock</line-code>
         </h2>
         <p>这组件的起因是Material
             Design的FAB，点击辐射出一些二级菜单……之后便想到了圆形，钟表等（对应的实现github中有示例代码）。之前都是样式实现的，现在想着是想一个JS版本的，便做成了组件，方便做一些定制。</p>
@@ -576,7 +576,7 @@ scaleClockDemo2Dom.updateClockOption("num60", "numStyle", {
             <tfoot>
                 <tr>
                     <td colspan="3">
-                        说明：你可以通过获取DOM元素调用<inline-code>updateClockOption</inline-code>
+                        说明：你可以通过获取DOM元素调用<line-code>updateClockOption</line-code>
                         方法，设置钟表中心圆点的大小，颜色；时针、分针、秒针的颜色；刻度盘、1-12、1-60的颜色（可以整体设置，也可以单个控制），这些在上面的定制钟表中都有体现。
                     </td>
                 </tr>
@@ -584,10 +584,10 @@ scaleClockDemo2Dom.updateClockOption("num60", "numStyle", {
         </table>
         <h3>待处理</h3>
         <p>该钟表组件支持的还不是很完善，涉及到计算的部分（例如：半径）还不支持动态更新，只支持开始时设置</p>
-        <h2>自动生成目录<inline-code>auto-generate-directory</inline-code>
+        <h2>自动生成目录<line-code>auto-generate-directory</line-code>
         </h2>
         <p>为了方便的阅读文章，更加快速的查找到自己想要的章节，这便是这个组件的由来。</p>
-        <p>简单介绍一下实现方式：查找<inline-code>body</inline-code>或者指定容器下的h1~h6子元素，之后通过样式控制缩进；支持点击跳转；支持滚动时选中对应的章节</p>
+        <p>简单介绍一下实现方式：查找<line-code>body</line-code>或者指定容器下的h1~h6子元素，之后通过样式控制缩进；支持点击跳转；支持滚动时选中对应的章节</p>
         <h3>运行效果</h3>
         <p>请查看文章右侧（如果没有，则某些情况下还没有适配）</p>
         <h3>属性</h3>
@@ -602,10 +602,10 @@ scaleClockDemo2Dom.updateClockOption("num60", "numStyle", {
             <tbody>
                 <tr>
                     <td>generate-source-selector</td>
-                    <td>容器选择器，如果没有找到对应的元素则使用<inline-code>body</inline-code>
+                    <td>容器选择器，如果没有找到对应的元素则使用<line-code>body</line-code>
                     </td>
                     <td>
-                        <inline-code>.blog-page</inline-code>
+                        <line-code>.blog-page</line-code>
                     </td>
                 </tr>
             </tbody>

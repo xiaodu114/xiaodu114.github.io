@@ -79,8 +79,8 @@
                 GET https://unpkg.com/@ffmpeg/ffmpeg@0.10.0/dist/ffmpeg.min.js net::ERR_FAILED
             </p>
         </marked-block>
-        <p>这个也不是每次都出现，刷新的时候，时不时冒出一次……还没有来得急研究为什么。你可以在<inline-code>script</inline-code>标签中添加<inline-code>crossorigin
-            </inline-code>属性。
+        <p>这个也不是每次都出现，刷新的时候，时不时冒出一次……还没有来得急研究为什么。你可以在<line-code>script</line-code>标签中添加<line-code>crossorigin
+            </line-code>属性。
         </p>
         <h3>cross-origin isolated</h3>
         <marked-block type="error">
@@ -103,7 +103,7 @@ Cross-Origin-Opener-Policy: same-origin
         </p>
         <marked-block type="warning">
             <p>
-                这里遇到一个令人费解的问题：引入<inline-code>coi-serviceworker</inline-code>
+                这里遇到一个令人费解的问题：引入<line-code>coi-serviceworker</line-code>
                 （引入方式是用script标签,src="/lib/coi-serviceworker/min.js"）之后,浏览器中第一次访问该页面时一直在自动刷新……不知道什么鬼。之后将该类库放到与该页面相同的文件夹下，此时在引入，访问页面就正常了……懵圈的是，在换成第一次的引入方式也没有问题了😅😅😅，停滞一段时间之后就又开始一直刷新了……
             </p>
         </marked-block>

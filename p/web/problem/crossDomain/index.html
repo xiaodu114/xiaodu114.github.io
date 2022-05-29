@@ -44,20 +44,20 @@
         <h1>实战跨域</h1>
         <h2>还是有一些漏网之鱼的</h2>
         <h3>
-            HTML<inline-code>link</inline-code>标签和CSS<inline-code>url</inline-code>函数
+            HTML<line-code>link</line-code>标签和CSS<line-code>url</line-code>函数
         </h3>
         <p>
-            <inline-code>link</inline-code>引入一个外部样式表。<inline-code>url</inline-code>指向一个资源，许多css属性都可以使用它，例如 <inline-code>
-                @font-face</inline-code>
-            <inline-code>list-style</inline-code>
-            <inline-code>cursor</inline-code>等。
+            <line-code>link</line-code>引入一个外部样式表。<line-code>url</line-code>指向一个资源，许多css属性都可以使用它，例如 <line-code>
+                @font-face</line-code>
+            <line-code>list-style</line-code>
+            <line-code>cursor</line-code>等。
             <button class="mdc-fab" type="button">
                 <div class="mdc-fab__ripple"></div>
                 <span class="material-icons mdc-fab__icon">add</span>
                 <div class="mdc-fab__touch"></div>
             </button>
-            这是一个<strong>Material Design</strong>风格的按钮，这里通过<inline-code>link</inline-code>
-            引入<strong>material-components-web</strong>样式，<inline-code>@font-face</inline-code>引入<strong>Material
+            这是一个<strong>Material Design</strong>风格的按钮，这里通过<line-code>link</line-code>
+            引入<strong>material-components-web</strong>样式，<line-code>@font-face</line-code>引入<strong>Material
                 Icons</strong>字体文件。
         </p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
@@ -94,10 +94,10 @@
 </button>
         </pre>
         <h3>
-            HTML<inline-code>script</inline-code>标签
+            HTML<line-code>script</line-code>标签
         </h3>
         <p>
-            <inline-code>script</inline-code>
+            <line-code>script</line-code>
             可以嵌入和引入外部可执行脚本,这里主要说的是引入跨域的JS。下面还是<strong>material-components-web</strong>的一个示例，只不过依赖JS：
         </p>
         <div class="mdc-slider mdc-slider--discrete">
@@ -150,18 +150,18 @@
 var slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
         </pre>
         <h3>
-            HTML<inline-code>img</inline-code>标签
+            HTML<line-code>img</line-code>标签
         </h3>
         <p>
-            <inline-code>img</inline-code>标签可以嵌入图像。 <img src="https://www.baidu.com/img/flexible/logo/pc/result.png"
+            <line-code>img</line-code>标签可以嵌入图像。 <img src="https://www.baidu.com/img/flexible/logo/pc/result.png"
                 alt="百度一下" width="100" height="33">这里使用了<strong>百度</strong>的图片。
         </p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
 <img src="https://www.baidu.com/img/flexible/logo/pc/result.png" alt="百度一下" width="100" height="33">
         </pre>
         <h3>
-            HTML<inline-code>video</inline-code>
-            <inline-code>audio</inline-code>标签
+            HTML<line-code>video</line-code>
+            <line-code>audio</line-code>标签
         </h3>
         <video controls="" loop="" height="55px" width="100%" style="outline: none;">
             <source
@@ -176,23 +176,23 @@ var slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
 </video>
         </pre>
         <h3>
-            HTML<inline-code>iframe</inline-code>标签
+            HTML<line-code>iframe</line-code>标签
         </h3>
         <p>
             这种方式也是可以禁止的，<a href="https://developer.mozilla.org/zh-CN/" target="_blank">MDN Web 文档</a>就不可以。这里使用
-            <inline-code>iframe</inline-code>嵌入<strong>多吉搜索</strong>
+            <line-code>iframe</line-code>嵌入<strong>多吉搜索</strong>
         </p>
         <iframe src="https://www.dogedoge.com" frameborder="0" width="100%" height="235"></iframe>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html">
 <iframe src="https://www.dogedoge.com" frameborder="0" width="100%" height="235"></iframe>
         </pre>
         <h3>
-            <inline-code>cookie</inline-code>(有限制)
+            <line-code>cookie</line-code>(有限制)
         </h3>
         <p>
-            <inline-code>cookie</inline-code>
-            未遵循严格的同源策略,但是也是有限制的。//ddz.com/index.html 页面设置cookie时如果不指定<inline-code>domain</inline-code>
-            ,<inline-code>iframe</inline-code>中 c1.ddz.com/cookie1.html 该页面不获取父页面的<inline-code>cookie</inline-code>。
+            <line-code>cookie</line-code>
+            未遵循严格的同源策略,但是也是有限制的。//ddz.com/index.html 页面设置cookie时如果不指定<line-code>domain</line-code>
+            ,<line-code>iframe</line-code>中 c1.ddz.com/cookie1.html 该页面不获取父页面的<line-code>cookie</line-code>。
         </p>
         <div ddz-class="here-need-to-handle-by-highlight-and-replace-one" ddz-replaceid="cookie-demo-1" ddz-lang="html">
             <!-- 下面是 //ddz.com/index.html 页面中的代码片段，测试：cookie  -->
@@ -211,21 +211,21 @@ var slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
             data-url="/p/web/problem/crossDomain/cookie1.html" ddz-lang="html"></div>
         <marked-block type="warning">
             <p>
-                ● 主域名是不给子域名设置<inline-code>cookie</inline-code>的。例如：//ddz.com/index.html => document.cookie =
+                ● 主域名是不给子域名设置<line-code>cookie</line-code>的。例如：//ddz.com/index.html => document.cookie =
                 "name=index.html;domain=c1.ddz.com";
             </p>
             <p>
-                ● 主域名不设置<inline-code>domain</inline-code>，子域名是不能访问的。例如：//ddz.com/index.html => document.cookie =
-                "name=index.html;";之后 //c1.ddz.com/cookie1.html => document.cookie，这里不能获取主域名设置的<inline-code>cookie
-                </inline-code>
+                ● 主域名不设置<line-code>domain</line-code>，子域名是不能访问的。例如：//ddz.com/index.html => document.cookie =
+                "name=index.html;";之后 //c1.ddz.com/cookie1.html => document.cookie，这里不能获取主域名设置的<line-code>cookie
+                </line-code>
             </p>
             <p>
-                ● 主域名设置<inline-code>domain</inline-code>，子域名可以能访问。例如：//ddz.com/index.html => document.cookie =
+                ● 主域名设置<line-code>domain</line-code>，子域名可以能访问。例如：//ddz.com/index.html => document.cookie =
                 "name=index.html;domain=ddz.com";之后 //c1.ddz.com/cookie1.html => document.cookie
-                这就就可以获取到了。如果你在浏览器F12中查看，你会发现主域名设置<inline-code>cookie</inline-code>会同时添加到子域名下
+                这就就可以获取到了。如果你在浏览器F12中查看，你会发现主域名设置<line-code>cookie</line-code>会同时添加到子域名下
             </p>
             <p>
-                ● 子域名设置<inline-code>domain</inline-code>，主域名可以能访问。例如：//c1.ddz.com/cookie1.html => document.cookie =
+                ● 子域名设置<line-code>domain</line-code>，主域名可以能访问。例如：//c1.ddz.com/cookie1.html => document.cookie =
                 "age=18;domain=ddz.com";之后 //ddz.com/index.html => document.cookie 就可以取到
             </p>
         </marked-block>
@@ -238,7 +238,7 @@ var slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
                     target="_blank">浏览器同源政策及其规避方法 - 阮一峰的网络日志</a></div>
         </blockquote>
         <h2>上面的问题可以解决吗？</h2>
-        <p>先介绍一下测试环境。服务器用的是IIS，搭了一个站点，路径为"/p/web/problem/crossDomain"；之后修改<inline-code>hosts</inline-code>文件，如下：
+        <p>先介绍一下测试环境。服务器用的是IIS，搭了一个站点，路径为"/p/web/problem/crossDomain"；之后修改<line-code>hosts</line-code>文件，如下：
         </p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="">
 127.0.0.1 ddz.com
@@ -246,10 +246,10 @@ var slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
 127.0.0.1 c2.ddz.com
         </pre>
         <h3>
-            <inline-code>iframe</inline-code>搭配
-            <inline-code>document.domain</inline-code>
+            <line-code>iframe</line-code>搭配
+            <line-code>document.domain</line-code>
         </h3>
-        <p>先说一下，主域名下的页面不能设置<inline-code>document.domain</inline-code>为子域名，否则会报错。例如： //ddz.com/index.html =>
+        <p>先说一下，主域名下的页面不能设置<line-code>document.domain</line-code>为子域名，否则会报错。例如： //ddz.com/index.html =>
             document.domain = 'c1.ddz.com';</p>
 
         <marked-block type="error">
@@ -259,7 +259,7 @@ var slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
             </p>
         </marked-block>
         <p>
-            还有一点就是相应页面设置<inline-code>document.domain</inline-code>的时机，一定保证在跨域读取之前已经设置完成，否则还是会报跨域错误。
+            还有一点就是相应页面设置<line-code>document.domain</line-code>的时机，一定保证在跨域读取之前已经设置完成，否则还是会报跨域错误。
         </p>
         <marked-block type="error">
             <p style="color: red;">
@@ -268,7 +268,7 @@ var slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
             </p>
         </marked-block>
         <p>
-            最后一点就是你可以在 //ddz.com/index.html 页面打印输出<inline-code>document.domain</inline-code>
+            最后一点就是你可以在 //ddz.com/index.html 页面打印输出<line-code>document.domain</line-code>
             ，值为："ddz.com"。但是如果你不显示设置他的值，照样是跨域错误。
         </p>
         <marked-block type="error">
@@ -299,18 +299,18 @@ var slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
         <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
             data-url="/p/web/problem/crossDomain/documentDomain1.html" ddz-lang="html"></div>
         <h3>
-            <inline-code>iframe</inline-code>搭配
-            <inline-code>location.hash</inline-code>
+            <line-code>iframe</line-code>搭配
+            <line-code>location.hash</line-code>
         </h3>
         <p>
-            在 //ddz.com/index.html 页面通过使用<inline-code>iframe</inline-code>并且设置路径时带上<inline-code>hash</inline-code>
-            值的方式给跨域页面传值，这并没有什么问题。问题是<inline-code>iframe</inline-code>
+            在 //ddz.com/index.html 页面通过使用<line-code>iframe</line-code>并且设置路径时带上<line-code>hash</line-code>
+            值的方式给跨域页面传值，这并没有什么问题。问题是<line-code>iframe</line-code>
             中的页面应答，该页面也可以通过上面的方式将相应传给与父页面同源的页面，例如：'//ddz.com/locationHash0.html#' + new Date().valueOf(); ，在
-            //ddz.com/locationHash0.html 这个页面就是通过<inline-code>window.parent.parent.location.hash</inline-code>设置
-            //ddz.com/index.html 页面的<inline-code>hash</inline-code>了。这可真够费劲的，子页面不能像<inline-code>parent.location.href =
-                parent.location.href + "#" + new Date().valueOf();</inline-code>或者<inline-code>parent.location.hash =
-                new Date().valueOf();</inline-code>这样
-            修改父页面的<inline-code>hash</inline-code>吗？答案是不可以的，虽然是主域和子域的关系，会报下面的错误。
+            //ddz.com/locationHash0.html 这个页面就是通过<line-code>window.parent.parent.location.hash</line-code>设置
+            //ddz.com/index.html 页面的<line-code>hash</line-code>了。这可真够费劲的，子页面不能像<line-code>parent.location.href =
+                parent.location.href + "#" + new Date().valueOf();</line-code>或者<line-code>parent.location.hash =
+                new Date().valueOf();</line-code>这样
+            修改父页面的<line-code>hash</line-code>吗？答案是不可以的，虽然是主域和子域的关系，会报下面的错误。
         </p>
         <marked-block type="error">
             <p style="color: red;">
@@ -320,7 +320,7 @@ var slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
         </marked-block>
         <marked-block type="warning">
             <p>
-                此处的测试想要成功需要将上文中的<inline-code>document.domain = 'ddz.com';</inline-code>这句代码屏蔽掉。
+                此处的测试想要成功需要将上文中的<line-code>document.domain = 'ddz.com';</line-code>这句代码屏蔽掉。
             </p>
         </marked-block>
         <div ddz-class="here-need-to-handle-by-highlight-and-replace-one" ddz-replaceid="locationhash-demo-1"
@@ -340,20 +340,20 @@ var slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
         <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
             data-url="/p/web/problem/crossDomain/locationHash0.html" ddz-lang="html"></div>
         <h3>
-            <inline-code>iframe</inline-code>搭配
-            <inline-code>window.name</inline-code>
+            <line-code>iframe</line-code>搭配
+            <line-code>window.name</line-code>
         </h3>
         <p>
-            在 //ddz.com/index.html 页面通过使用<inline-code>iframe</inline-code>嵌入 //c1.ddz.com/windowName1.html 页面（该页面设置
-            <inline-code>window.name</inline-code>），onload之后再利用该iframe去加载和 //ddz.com/index.html
-            页面同源的页面：//ddz.com/windowName0.html。这时读取<inline-code>iframe</inline-code>
-            <inline-code>contentWindow.name
-            </inline-code>的值，这里获取到的就是第一次加载跨域页面设置的<inline-code>window.name</inline-code>。注意：第二次加载的同源页面不要设置<inline-code>
-                window.name</inline-code>，否则获取到的就是他的值了。
+            在 //ddz.com/index.html 页面通过使用<line-code>iframe</line-code>嵌入 //c1.ddz.com/windowName1.html 页面（该页面设置
+            <line-code>window.name</line-code>），onload之后再利用该iframe去加载和 //ddz.com/index.html
+            页面同源的页面：//ddz.com/windowName0.html。这时读取<line-code>iframe</line-code>
+            <line-code>contentWindow.name
+            </line-code>的值，这里获取到的就是第一次加载跨域页面设置的<line-code>window.name</line-code>。注意：第二次加载的同源页面不要设置<line-code>
+                window.name</line-code>，否则获取到的就是他的值了。
         </p>
         <marked-block type="warning">
             <p>
-                此处的测试想要成功需要将上文中的<inline-code>document.domain = 'ddz.com';</inline-code>这句代码屏蔽掉。
+                此处的测试想要成功需要将上文中的<line-code>document.domain = 'ddz.com';</line-code>这句代码屏蔽掉。
             </p>
         </marked-block>
         <div ddz-class="here-need-to-handle-by-highlight-and-replace-one" ddz-replaceid="windowname1-demo-1"
@@ -382,7 +382,7 @@ var slider = new mdc.slider.MDCSlider(document.querySelector('.mdc-slider'));
         <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
             data-url="/p/web/problem/crossDomain/windowName0.html" ddz-lang="html"></div>
         <h3>
-            安全的跨源通信<inline-code>postMessage</inline-code>
+            安全的跨源通信<line-code>postMessage</line-code>
         </h3>
         <div ddz-class="here-need-to-handle-by-highlight-and-replace-one" ddz-replaceid="postMessage-demo-1"
             ddz-lang="html">

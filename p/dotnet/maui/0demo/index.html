@@ -16,30 +16,30 @@
     <!-- github访问地址：/p/dotnet/maui/0demo/index.html -->
     <div class="blog-page">
         <h1>maui初体验</h1>
-        <p>因为主攻的不是<inline-code>java</inline-code>，<inline-code>Eclipse</inline-code>这个IDE也用着不习惯，没有<inline-code>Visual
-                Studio</inline-code>用着顺手，所以呢，开发一个android
-            app或者弄个demo就变成了奢望（虽然也用<inline-code>java</inline-code>弄过一个）……因为一直对移动端应用不死心，一直留意着这方面的信息，出现好多迂回策略，像什么：
-            <inline-code>Apache Cordova</inline-code>
-            <inline-code>Phonegap</inline-code>
-            <inline-code>Ionic</inline-code>
+        <p>因为主攻的不是<line-code>java</line-code>，<line-code>Eclipse</line-code>这个IDE也用着不习惯，没有<line-code>Visual
+                Studio</line-code>用着顺手，所以呢，开发一个android
+            app或者弄个demo就变成了奢望（虽然也用<line-code>java</line-code>弄过一个）……因为一直对移动端应用不死心，一直留意着这方面的信息，出现好多迂回策略，像什么：
+            <line-code>Apache Cordova</line-code>
+            <line-code>Phonegap</line-code>
+            <line-code>Ionic</line-code>
             等,还有国内的正益无线。也写过一些对应的demo，但是觉得有些麻烦，弄个环境就挺费劲，其次就是调用原生，严重依赖插件，还有就是新能问题了（这个说的有点远了），觉得唯一的好处就是使用web前端的东西……直到后来了解到了
-            <inline-code>Xamarin</inline-code>，有<inline-code>Xamarin.Android</inline-code>
-            <inline-code>Xamarin.IOS
-            </inline-code>和<inline-code>Xamarin Forms</inline-code>，具说接近原生的速度，关键是可以用<inline-code>C#</inline-code>
-            写，感觉很牛逼，开始都是用<inline-code>Xamarin.Android
-            </inline-code>
-            ，但是后来觉得怎么着也是写，要不用<inline-code>Xamarin Forms</inline-code>？嗯，就用它。再到后来就有了<inline-code>React Native
-            </inline-code>
-            <inline-code>Weex</inline-code>等，还有就是最近很火的<inline-code>Flutter</inline-code>，自己也弄了个<inline-code>Flutter
-            </inline-code>的demo，可能是我先入为主也可能我是外行，感觉他的开发体验太差了……最近<inline-code>Flutter</inline-code>
+            <line-code>Xamarin</line-code>，有<line-code>Xamarin.Android</line-code>
+            <line-code>Xamarin.IOS
+            </line-code>和<line-code>Xamarin Forms</line-code>，具说接近原生的速度，关键是可以用<line-code>C#</line-code>
+            写，感觉很牛逼，开始都是用<line-code>Xamarin.Android
+            </line-code>
+            ，但是后来觉得怎么着也是写，要不用<line-code>Xamarin Forms</line-code>？嗯，就用它。再到后来就有了<line-code>React Native
+            </line-code>
+            <line-code>Weex</line-code>等，还有就是最近很火的<line-code>Flutter</line-code>，自己也弄了个<line-code>Flutter
+            </line-code>的demo，可能是我先入为主也可能我是外行，感觉他的开发体验太差了……最近<line-code>Flutter</line-code>
             也支持Web了，感觉这是要全能啊！这里不得不说一下<a href="https://platform.uno/" target="_blank">Uno
                 Platform</a>，这个是从同学那里了解到的，感觉这个就更牛逼了，感觉就是everywhere。
         </p>
-        <p>相对于<inline-code>Flutter</inline-code>的大火，觉得Xamarin就太那啥了，甚至好多人都不知道<inline-code>C#</inline-code>
+        <p>相对于<line-code>Flutter</line-code>的大火，觉得Xamarin就太那啥了，甚至好多人都不知道<line-code>C#</line-code>
             还可以开发android、ios的app😓😓😓。
-            虽然这样，我还在一直坚守着……<inline-code>Xamarin Forms</inline-code>还没有学的怎么样呢？又出现了<inline-code>MAUI</inline-code>
-            ，说是下一代。虐我千百遍啊，我还是我，我等着……她终于来了，记得<inline-code>.net</inline-code>第一个预览版的时候不支持<inline-code>maui</inline-code>
-            ；第二版就开始支持了，便开始折腾了，但是一直没有搞定；直到第三个预览版，有了检测工具<inline-code>maui-check</inline-code>
+            虽然这样，我还在一直坚守着……<line-code>Xamarin Forms</line-code>还没有学的怎么样呢？又出现了<line-code>MAUI</line-code>
+            ，说是下一代。虐我千百遍啊，我还是我，我等着……她终于来了，记得<line-code>.net</line-code>第一个预览版的时候不支持<line-code>maui</line-code>
+            ；第二版就开始支持了，便开始折腾了，但是一直没有搞定；直到第三个预览版，有了检测工具<line-code>maui-check</line-code>
             ，在他的帮助之下，我的demo跑通了，于是就是准备写笔记记录一下，还没有写，下一个版本就来了；直到写这个笔记的时候已经是预览版6了……
         </p>
         <p>我去，又说了一大推废话，关键是想记录一下我的历程，下面赶紧进入正题。</p>
@@ -70,13 +70,13 @@
             </ul>
         </marked-block>
         <h2>
-            <inline-code>maui-check</inline-code>相关
+            <line-code>maui-check</line-code>相关
         </h2>
         <p>
-            <inline-code>maui-check</inline-code>是一个<inline-code>.net maui</inline-code>
-            检查工具，帮助我们检查依赖的环境，如果没有，你可以选择安装，这样就不用去找安装包了。<inline-code>.net maui</inline-code>所依赖的环境有很多，这里也没有完全利用它。因为之前弄过
-            <inline-code>Xamarin Forms</inline-code>，所以一些开发android的环境已经安装好了。这里只是用来安装一些<inline-code>.net maui
-            </inline-code>的依赖。更多你可以去官网看看：<a href="https://github.com/Redth/dotnet-maui-check" target="_blank">GitHub -
+            <line-code>maui-check</line-code>是一个<line-code>.net maui</line-code>
+            检查工具，帮助我们检查依赖的环境，如果没有，你可以选择安装，这样就不用去找安装包了。<line-code>.net maui</line-code>所依赖的环境有很多，这里也没有完全利用它。因为之前弄过
+            <line-code>Xamarin Forms</line-code>，所以一些开发android的环境已经安装好了。这里只是用来安装一些<line-code>.net maui
+            </line-code>的依赖。更多你可以去官网看看：<a href="https://github.com/Redth/dotnet-maui-check" target="_blank">GitHub -
                 Redth/dotnet-maui-check: .NET MAUI Check tool</a>
         </p>
         <dl>
@@ -100,7 +100,7 @@
             <img src="./images/3-2.png" width="100%">
         </p>
         <h2>
-            <inline-code>.net maui</inline-code>模板相关
+            <line-code>.net maui</line-code>模板相关
         </h2>
         <p>弄好依赖之后，我们看一下对应的模板，创建一个项目，我们需要他。看一下已经安装的模板：</p>
         <p>> dotnet new --list</p>
@@ -123,8 +123,8 @@
         </dl>
         <h2>创建项目</h2>
         <h3>使用命令创建</h3>
-        <p>忘了从哪个预览版开始就是开始支持<inline-code>Visual Studio</inline-code>了，但是得是2022，还是预览版……算了，还是用<inline-code>.NET CLI
-            </inline-code>创建吧！
+        <p>忘了从哪个预览版开始就是开始支持<line-code>Visual Studio</line-code>了，但是得是2022，还是预览版……算了，还是用<line-code>.NET CLI
+            </line-code>创建吧！
         </p>
         <p>
             > dotnet new maui -n demo1
@@ -145,8 +145,8 @@
             <p>这里查看目录结构的目的是留痕，稍后会删改模板文件</p>
         </marked-block>
         <h3>阉割项目</h3>
-        <p>记得之前创建模板是没有<inline-code>sln</inline-code>解决方案，也证实了开始不支持<inline-code>Visual Studio</inline-code>
-            ，因为没有安装2022，还有就是只面向<inline-code>Android</inline-code>，所以修改一下模板项目。
+        <p>记得之前创建模板是没有<line-code>sln</line-code>解决方案，也证实了开始不支持<line-code>Visual Studio</line-code>
+            ，因为没有安装2022，还有就是只面向<line-code>Android</line-code>，所以修改一下模板项目。
         </p>
         <ol>
             <li>将项目目录下的非“demo1”文件夹删除，只保留“demo1”文件夹</li>
@@ -160,7 +160,7 @@
             <img src="./images/5-6.png" width="100%">
         </p>
         <h2>还原项目</h2>
-        <p>模板项目阉割之后，试试能不能跑起来。以试，还真不行，报错了，提示工作负载（<inline-code>workload</inline-code>）没有安装全。之后就是按照错误提示安装了一下</p>
+        <p>模板项目阉割之后，试试能不能跑起来。以试，还真不行，报错了，提示工作负载（<line-code>workload</line-code>）没有安装全。之后就是按照错误提示安装了一下</p>
         <p>> dotnet restore</p>
         <p>
             <img src="./images/5-7.png" width="100%">
@@ -205,7 +205,7 @@
                     first project with .NET MAUI</a>
             </li>
         </ul>
-        <p>上面的两个连接感觉和<inline-code>maui</inline-code>对不上号，猜测应该是针对<inline-code>xamarin</inline-code>
+        <p>上面的两个连接感觉和<line-code>maui</line-code>对不上号，猜测应该是针对<line-code>xamarin</line-code>
             的，参照第三个连接，修改*.csproj项目工程文件，添加上就没有问题了。
         </p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="xml">

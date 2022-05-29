@@ -21,7 +21,7 @@
         <h2>添加数据</h2>
         <p>该章节介绍如何向MongoDB中添加数据。</p>
         <h3>insert\insertMany</h3>
-        <p>通过<inline-code>db.xxx.insertMany</inline-code>的方式添加数据</p>
+        <p>通过<line-code>db.xxx.insertMany</line-code>的方式添加数据</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 /**
  * 本JS说明：
@@ -649,14 +649,14 @@ db.instance.aggregate([{
     }
 })
         </pre>
-        <p>随着时间的推移，各种各样的模块越来越多，模块的数据也在不断增长，于是查询就慢了……除了速度变慢之外还有一个问题就是：如果<inline-code>$facet</inline-code>中每个属性中命中的数据太多会报错，如下</p>
+        <p>随着时间的推移，各种各样的模块越来越多，模块的数据也在不断增长，于是查询就慢了……除了速度变慢之外还有一个问题就是：如果<line-code>$facet</line-code>中每个属性中命中的数据太多会报错，如下</p>
         <marked-block type="error">
             <p>
                 PlanExecutor error during aggregation :: caused by :: document constructed by $facet is 104857980 bytes, which exceeds the limit of 104857600 bytes
             </p>
         </marked-block>
         <h4>版本二</h4>
-        <p>先解决<inline-code>document</inline-code>大小的问题，当时想到的办法是每个<inline-code>$facet</inline-code>属性中只获取_id、排序字段和键（这里指的是权限唯一key），之后按照最外层的排序规则排序，最后是获取条数（最外层的<inline-code>$skip</inline-code>和<inline-code>$limit</inline-code>之和）。因为只获取了部分字段，因此还需要关联查询一下，于是便有了第二个版本：</p>
+        <p>先解决<line-code>document</line-code>大小的问题，当时想到的办法是每个<line-code>$facet</line-code>属性中只获取_id、排序字段和键（这里指的是权限唯一key），之后按照最外层的排序规则排序，最后是获取条数（最外层的<line-code>$skip</line-code>和<line-code>$limit</line-code>之和）。因为只获取了部分字段，因此还需要关联查询一下，于是便有了第二个版本：</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 db.instance.aggregate([{
             $match: {
@@ -779,7 +779,7 @@ db.instance.aggregate([{
     }
 })
         </pre>
-        <p>已测试这个语句，懵了，太慢了。全表总共333万，ModuleId === '507048044944691000'下有37万。耗时：2.5分钟。忍不了啊！谁都忍不了啊！没想到将<inline-code>collation: { locale: 'zh@collation=gb2312han' }</inline-code>去掉之后耗时3.5秒 …… 除了这个之外还有一个问题就是：如果表单中的字段需要排序怎么办，表单中的字段存在"FormData"数组中。你可以在<inline-code>$facet</inline-code>表单中的字段展开并放置到最外层，其实上面的语句已经包含了这部分代码了，只是在<inline-code>$facet</inline-code>的后面，这种处理方式将表单中的字段全部放到了最外层，但是在这种场景下，我们仅需要某一个排序字段即可，你可以使用下面的语句：</p>
+        <p>已测试这个语句，懵了，太慢了。全表总共333万，ModuleId === '507048044944691000'下有37万。耗时：2.5分钟。忍不了啊！谁都忍不了啊！没想到将<line-code>collation: { locale: 'zh@collation=gb2312han' }</line-code>去掉之后耗时3.5秒 …… 除了这个之外还有一个问题就是：如果表单中的字段需要排序怎么办，表单中的字段存在"FormData"数组中。你可以在<line-code>$facet</line-code>表单中的字段展开并放置到最外层，其实上面的语句已经包含了这部分代码了，只是在<line-code>$facet</line-code>的后面，这种处理方式将表单中的字段全部放到了最外层，但是在这种场景下，我们仅需要某一个排序字段即可，你可以使用下面的语句：</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //  将下面的代码，添加到$facet前面即可
 {
@@ -833,7 +833,7 @@ db.instance.aggregate([{
 ]
         </pre>
         <h4>版本三</h4>
-        <p><inline-code>$facet</inline-code>中的子项命中数据过多始终是个问题，并且还得在每个子项中排序等。后来想了一下，为什么不把权限中的数据过滤弄成一个<inline-code>$or</inline-code>查询和最基础的过滤放在一起，之后在得到分页的数据之后在进行<inline-code>$facet</inline-code>操作</p>
+        <p><line-code>$facet</line-code>中的子项命中数据过多始终是个问题，并且还得在每个子项中排序等。后来想了一下，为什么不把权限中的数据过滤弄成一个<line-code>$or</line-code>查询和最基础的过滤放在一起，之后在得到分页的数据之后在进行<line-code>$facet</line-code>操作</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
  db.instance.aggregate([{
             $match: {
@@ -951,11 +951,11 @@ db.instance.aggregate([{
     }
 })           
         </pre>
-        <p><inline-code>collation: { locale: 'zh@collation=gb2312han' }</inline-code>和<inline-code>{ $sort: { CreateDate: -1 } }</inline-code>对查询时间的影响很大</p>
+        <p><line-code>collation: { locale: 'zh@collation=gb2312han' }</line-code>和<line-code>{ $sort: { CreateDate: -1 } }</line-code>对查询时间的影响很大</p>
         <h2>更新</h2>
         <p>更新相关</p>
         <h3>字段由原数据类型对象修改为数组（或者添加一个新的字段）</h3>
-        <p>上面的查询章节<a href="#anchor-id-h3-001">最新层级配置查询</a>中<inline-code>ListConfig</inline-code>字段的数据类型为对象。最初存储为对象是没有问题的，但是后来有了新的需求：一条记录中可以有多个列表配置（ListConfig）。为了防止意外，原来的字段先不删除，而是在添加一个新的字段<inline-code>ListConfigs</inline-code>，将原字段添加某些属性之后添加到新数组中。</p>
+        <p>上面的查询章节<a href="#anchor-id-h3-001">最新层级配置查询</a>中<line-code>ListConfig</line-code>字段的数据类型为对象。最初存储为对象是没有问题的，但是后来有了新的需求：一条记录中可以有多个列表配置（ListConfig）。为了防止意外，原来的字段先不删除，而是在添加一个新的字段<line-code>ListConfigs</line-code>，将原字段添加某些属性之后添加到新数组中。</p>
         <p>为了实现上面需求有一下几种实现方式：</p>
         <h4>遍历更新</h4>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
@@ -971,7 +971,7 @@ db.config.find({}).forEach(dr => {
     });
 });
         </pre>
-        <p>这种方式太慢了，总共有4万条数据，更新时间将近半个小时……本来想试试<inline-code>db.collection.bulkWrite</inline-code>这个，但是后来发现了后面的神器。</p>
+        <p>这种方式太慢了，总共有4万条数据，更新时间将近半个小时……本来想试试<line-code>db.collection.bulkWrite</line-code>这个，但是后来发现了后面的神器。</p>
         <h4>聚合之$out和$mergeObjects</h4>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //  这里可能需要权限验证
@@ -991,7 +991,7 @@ db.config.aggregate([{
     }
 ])
         </pre>
-        <p>这种方式太牛了，同样的数据不到一分钟就更新完了……但是来了一个新问题，我们mongodb的版本（3.4.6）太低了，不支持<inline-code>$mergeObjects</inline-code>，于是就有了后面的两种方式：</p>
+        <p>这种方式太牛了，同样的数据不到一分钟就更新完了……但是来了一个新问题，我们mongodb的版本（3.4.6）太低了，不支持<line-code>$mergeObjects</line-code>，于是就有了后面的两种方式：</p>
         <h4>聚合之$out和$addFields、$project</h4>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //  这里可能需要权限验证

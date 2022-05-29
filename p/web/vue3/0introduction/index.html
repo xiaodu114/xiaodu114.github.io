@@ -33,12 +33,12 @@
                 </dd>
             </dl>
         </marked-block>
-        <p>这里简单的记录一下：Vue3 + webpack下的多入口demo。该demo并没有使用<inline-code>@vue/cli</inline-code>、<inline-code>Vite
-            </inline-code>等，而是自己搭建的，争取做到最简。
+        <p>这里简单的记录一下：Vue3 + webpack下的多入口demo。该demo并没有使用<line-code>@vue/cli</line-code>、<line-code>Vite
+            </line-code>等，而是自己搭建的，争取做到最简。
         </p>
         <h2>最简：跑起来就行 <a href="/p/web/vue3/0introduction/code/introduction-1.zip" target="_blank">代码下载</a></h2>
         <p>这是第一步，仅仅是Vue3 + webpack的组合，只是弄了个多入口。没有使用单文件组件、
-            <inline-code>TypeScript</inline-code>、<inline-code>Less</inline-code>等，（开发）依赖也是非必要不安装，webpack配置也是非必要不添加……
+            <line-code>TypeScript</line-code>、<line-code>Less</line-code>等，（开发）依赖也是非必要不安装，webpack配置也是非必要不添加……
         </p>
         <h3>目录树</h3>
         <p>先看一下demo目录结构，编译前后做个对比：</p>
@@ -53,11 +53,11 @@
         </marked-block>
         <h3>html和对应的js</h3>
         <p>开篇说了处理多个入口页面，所以这里创建了两个文件夹（module1和module2）来模拟没有任何关系的两个子模块。这两个模块的代码没有什么大的不同，只是1和2的区别。</p>
-        <p>模块1的路径：<inline-code>/src/module1/index.html</inline-code>
-            <inline-code>/src/module1/js/index.js</inline-code>
+        <p>模块1的路径：<line-code>/src/module1/index.html</line-code>
+            <line-code>/src/module1/js/index.js</line-code>
         </p>
-        <p>模块2的路径：<inline-code>/src/module2/index.html</inline-code>
-            <inline-code>/src/module2/js/index.js</inline-code>
+        <p>模块2的路径：<line-code>/src/module2/index.html</line-code>
+            <line-code>/src/module2/js/index.js</line-code>
         </p>
         <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
             data-url="/p/web/vue3/0introduction/code/introduction-1-module1-index.html" ddz-lang="html"></div>
@@ -225,8 +225,8 @@ Vue.createApp({
 }).mount('#vue3Module1Entry');
         </pre>
         <h3>package.json更新</h3>
-        <p>新增<inline-code>@vue/compiler-sfc</inline-code>
-            <inline-code>vue-loader@next</inline-code>两个开发依赖
+        <p>新增<line-code>@vue/compiler-sfc</line-code>
+            <line-code>vue-loader@next</line-code>两个开发依赖
         </p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 #   你可以用下面的命令安装
@@ -234,7 +234,7 @@ yarn add vue@next
 yarn add @vue/compiler-sfc html-webpack-plugin vue-loader@next webpack webpack-cli -D
         </pre>
         <h3>webpack.config.js更新</h3>
-        <p>引入<inline-code>vue-loader</inline-code>；rules中添加vue处理；plugins中添加<inline-code>vue-loader</inline-code>插件
+        <p>引入<line-code>vue-loader</line-code>；rules中添加vue处理；plugins中添加<line-code>vue-loader</line-code>插件
         </p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 // 第二版：添加的内容
@@ -284,7 +284,7 @@ let tempModuleExportsObj = {
             <img src="./images/5.png" width="100%">
         </p>
         <h3>新增LESS文件</h3>
-        <p>两个模块都添加<inline-code>index.less</inline-code>文件（路径为：/src/module1/css/index.less）</p>
+        <p>两个模块都添加<line-code>index.less</line-code>文件（路径为：/src/module1/css/index.less）</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="less">
 //  两个LESS文件公共部分
 *,
@@ -323,10 +323,10 @@ body {
 import '../css/index.less';
         </pre>
         <h3>package.json更新</h3>
-        <p>新增<inline-code>css-loader</inline-code>
-            <inline-code>less</inline-code>
-            <inline-code>less-loader</inline-code>
-            <inline-code>style-loader</inline-code>四个开发依赖
+        <p>新增<line-code>css-loader</line-code>
+            <line-code>less</line-code>
+            <line-code>less-loader</line-code>
+            <line-code>style-loader</line-code>四个开发依赖
         </p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 #   你可以用下面的命令安装
@@ -356,10 +356,10 @@ let tempModuleExportsObj = {
         <p>
             <img src="./images/7.png" width="100%">
         </p>
-        <p>1、公共文件夹<inline-code>common</inline-code>
+        <p>1、公共文件夹<line-code>common</line-code>
             下添加一张图片（路径为：/src/common/images/logo.png），两个入口页面都引用；
         </p>
-        <p>2、两个模块下各添加两张图片：一张作为<inline-code>body</inline-code>背景，另一张由单文件组件引入；
+        <p>2、两个模块下各添加两张图片：一张作为<line-code>body</line-code>背景，另一张由单文件组件引入；
         </p>
         <P>
             3、两个模块下都创建一个特有单文件组件（路径为：/src/module1/component/Module.vue）,这两个组件的代码相同,该组件展示一张特有的图片；
@@ -378,7 +378,7 @@ let tempModuleExportsObj = {
 </script>
         </pre>
         <P>
-            4、两个入口文件对应的LESS文件以<inline-code>body</inline-code>背影的方式引入图片
+            4、两个入口文件对应的LESS文件以<line-code>body</line-code>背影的方式引入图片
         </P>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="less">
 //  新增加的内容
@@ -413,7 +413,7 @@ components: {
 }
         </pre>
         <h3>package.json更新</h3>
-        <p>新增<inline-code>html-loader</inline-code>一个开发依赖
+        <p>新增<line-code>html-loader</line-code>一个开发依赖
         </p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 <!-- 你可以用下面的命令安装 -->
@@ -449,10 +449,10 @@ let tempModuleExportsObj = {
             <img src="./images/8.png" width="100%">
         </p>
         <p>
-            记得上次写的时候是通过<inline-code>html-loader</inline-code>和<inline-code>file-loader</inline-code>解决的，但是这次不行了……又有新东西了。
+            记得上次写的时候是通过<line-code>html-loader</line-code>和<line-code>file-loader</line-code>解决的，但是这次不行了……又有新东西了。
         </p>
         <h2>JS转ES5<a href="/p/web/vue3/0introduction/code/introduction-5.zip" target="_blank">代码下载</a></h2>
-        <p>转ES5在实际项目中用的太多了，之前在vue2.x的时候也弄了，但是此时按照原来的方式就行不通了，出现了一些问题，最后发现竟然是<inline-code>target</inline-code>的问题
+        <p>转ES5在实际项目中用的太多了，之前在vue2.x的时候也弄了，但是此时按照原来的方式就行不通了，出现了一些问题，最后发现竟然是<line-code>target</line-code>的问题
             ……还是先来张图看看结构的变化</p>
         <p>
             <img src="./images/9.png" width="100%">
@@ -740,14 +740,14 @@ document.getElementById("guid1").innerHTML = "一个GUID：" + utils.getGUID();
         <p>前面的示例中用到的css都弄到了JS中，感觉不是很爽，希望webpack源码项目和打包之后的目录尽量保持一致，这也是这片文档的宗旨……</p>
         <p>这次提取CSS，代码目录没有改变……</p>
         <h3>package.json更新</h3>
-        <p>新增<inline-code>mini-css-extract-plugin</inline-code>开发依赖</p>
+        <p>新增<line-code>mini-css-extract-plugin</line-code>开发依赖</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 # 你可以用下面的命令安装。上一版本没有添加新的依赖，这里使用ES6转ES5的方式1，在这基础上添加 mini-css-extract-plugin
 yarn add vue@next
 yarn add @babel/core @babel/preset-env @vue/compiler-sfc babel-loader core-js css-loader html-loader html-webpack-plugin less less-loader mini-css-extract-plugin regenerator-runtime style-loader vue-loader@next webpack webpack-cli -D
         </pre>
         <h3>webpack.config.js更新</h3>
-        <p>引入<inline-code>mini-css-extract-plugin</inline-code>；用 MiniCssExtractPlugin.loader 替换
+        <p>引入<line-code>mini-css-extract-plugin</line-code>；用 MiniCssExtractPlugin.loader 替换
             style-loader；plugins中添加插件
         </p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
@@ -780,7 +780,7 @@ let tempModuleExportsObj = {
         </p>
         <marked-block type="info">
             <p>这里还发现了一个问题，html页面对js的引入都添加到了head标签下并且提取css文件都放在script标签的后面，赶紧处理一下吧</p>
-            <p>查了一下，发现是html-webpack-plugin插件<inline-code>inject</inline-code>配置项的问题，开始设置的是布尔类型ture，现在修改成字符串"body"就好了</p>
+            <p>查了一下，发现是html-webpack-plugin插件<line-code>inject</line-code>配置项的问题，开始设置的是布尔类型ture，现在修改成字符串"body"就好了</p>
         </marked-block>
         <h2>clean-webpack-plugin 插件和 copy-webpack-plugin 插件</h2>
         <p>这里在添加两个插件：clean-webpack-plugin 生成之前先删除（你手动添加的文件也会删除）；copy-webpack-plugin
