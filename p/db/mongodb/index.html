@@ -19,9 +19,9 @@
         <h1>MongoDB</h1>
         <p>MongoDB是……</p>
         <h2>添加数据</h2>
-        <p>该章节介绍向MongoDB中添加数据的几种方式：</p>
+        <p>该章节介绍如何向MongoDB中添加数据。</p>
         <h3>insert\insertMany</h3>
-        <p>通过<inline-code>db.xxx.insertMany</inline-code>的方式新增数据</p>
+        <p>通过<inline-code>db.xxx.insertMany</inline-code>的方式添加数据</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 /**
  * 本JS说明：
@@ -45,7 +45,9 @@
  *  2、在终端输入时不带 mongodb地址和数据库名称 参数
  *      语法： mongo xxx.js
  *      说明： 这种情况下，如何获取 db 以及设置了 用户名和密码 如何处理，请直接看代码
- *  …… 更多使用方式，你可以在终端输入： mongo --help
+ *  …… 更多使用方式，
+ *          你可以在终端输入： mongo --help
+ *          https://www.mongodb.com/docs/manual/reference/program/mongo/
  */
 
 //	1、数据库连接   ！！！这里需要替换！！！
@@ -97,16 +99,16 @@ mongorestore -h localhost:27017 -d Test002 D:\backup\mongodb\local\Test001
 mongorestore -h 127.0.0.1:27017 -d Test002 D:\backup\mongodb\local\Test001
         </pre>
         <h2>复制数据库（database）</h2>
-        <p>克隆数据库的几种方式，等待添加</p>
+        <p>复制数据库的几种方式，等待添加……</p>
         <h2>复制集合（collection）</h2>
-        <p>克隆集合的几种方式，找到了一篇文章，文中介绍了好几种方式，感觉够全了。链接地址：<a href="https://www.mongodbmanager.com/clone-mongodb-collection" target="_blank">7 different ways to clone MongoDB connection</a></p>
+        <p>复制集合的几种方式。找到了一篇文章，文中介绍了多种方式，很全。链接地址：<a href="https://www.mongodbmanager.com/clone-mongodb-collection" target="_blank">7 different ways to clone MongoDB connection</a></p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //  这里会创建一个新表"config2"，可能需要权限验证。
 db.config.aggregate([ { $out: 'config2' } ]);
 
 //  如果添加过滤条件，则只是复制其中的部分数据
 db.config.aggregate([{
-    $match: { ModelId : 'a' }
+    $match: { ModuleId : 'a' }
 }, {
     $out: 'config2'
 }
@@ -115,9 +117,9 @@ db.config.aggregate([{
         <h2>查询</h2>
         <p>该章节记录查询相关的</p>
         <div id="anchor-id-h3-001"></div>
-        <h3>最新层级配置查询</h3>
-        <p>这个查询的业务性很强，应用到的场景应该不多。先介绍一下具体的业务：先介绍一下模块（我们称之为模块），他有一套完整的功能，例如，添加记录、编辑记录、列表（搜索）等；首先他有一个默认的配置，其次在不同的应用中使用他时可以有不同的配置，可以在默认配置的基础上修改，再次不同的企业买了应用之后也可以在应用级的基础上对模块进行修改，甚至每个用户都有自己的配置。这里我们将默认配置、应用下的配置、企业下的配置、用户配置等叫做层级配置，并且在同意层级内还支持版本的概念，随着时间的推移以及业务的变化，我们的配置可能会有变化。</p>
-        <p>说了一大堆，不知道说清楚了没有，哈哈，就当说清楚了。这个查询的是：批量查询最新的层级配置，可能是同一模块不同层级的最新配置，也可能是不同模块某一层级的最新配置……</p>
+        <h3>查询最新层级配置</h3>
+        <p>这个查询的业务性很强，用到的场景应该不多。为了了解这个查询是做什么的，先介绍一下具体的业务场景：模块（一个业务上的概念，非JS中的模块），他是一个功能完成的业务单元，包括添加记录、编辑记录、列表（包括搜索、导出）等；新建、编辑页面的表单展示哪些控件，列表显示哪些列时候需要排序、搜索等这些都是基于配置的；首先模块有一个默认的配置（从0到1），其次在不同的应用（或者叫做产品）中使用他时可以有不同的配置，可以在默认配置的基础上修改，再次不同的企业买了应用之后也可以在应用级的基础上对模块配置进行修改，甚至每个用户都有自己的配置。这里我们将默认配置、应用下的配置、企业下的配置、用户配置等叫做层级配置，并且在同一层级内还支持版本的概念，随着时间的推移以及业务的变化，我们的配置可能会有变化。</p>
+        <p>说了一大堆，不知道说清楚了没有，哈哈，就当说清楚了。这个查询的目的是：按照给定的层级参数，查询最新的配置。规则是：指定层级配置 如果存在，则取最新记录；如果不存在，则获取上一级的最新配置，直到最顶级。</p>
         <p>为了验证查询语句，还是先造点数据：</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //	两个方法，用于生成一个随机时间
@@ -144,17 +146,17 @@ function date_GetInRangeDate(date1, date2) {
     return new Date(getInRangeInteger(Math.abs(v1 - v2)) + Math.min(v1, v2));
 }
 
-let modelIds = ["a", "b", "c"],
+let moduleIds = ["a", "b", "c"],
 level1s = ["lv1_1", "lv1_2", "lv1_3"],
 level2s = ["lv2_1", "lv2_2", "lv2_3"],
 level3s = ["lv3_1", "lv3_2", "lv3_3"];
 
 let trs = [];
 //	标识
-modelIds.forEach((modelId) => {
+moduleIds.forEach((moduleId) => {
     for (let i = 0; i < 3; i++) {
         trs.push({
-            ModelId: modelId,
+            ModuleId: moduleId,
             Level1: null,
             Level2: null,
             Level3: null
@@ -162,7 +164,7 @@ modelIds.forEach((modelId) => {
         //	自定义：第一级
         level1s.forEach((lv1) => {
             trs.push({
-                ModelId: modelId,
+                ModuleId: moduleId,
                 Level1: lv1,
                 Level2: null,
                 Level3: null
@@ -170,7 +172,7 @@ modelIds.forEach((modelId) => {
             //	自定义：第一级
             level2s.forEach((lv2) => {
                 trs.push({
-                    ModelId: modelId,
+                    ModuleId: moduleId,
                     Level1: lv1,
                     Level2: lv2,
                     Level3: null
@@ -178,7 +180,7 @@ modelIds.forEach((modelId) => {
                 //	自定义：第一级
                 level3s.forEach((lv3) => {
                     trs.push({
-						ModelId: modelId,
+						ModuleId: moduleId,
 						Level1: lv1,
 						Level2: lv2,
 						Level3: lv3
@@ -197,45 +199,109 @@ db.config.insertMany(trs);
         </pre>
         <p>下面就是查询语句了</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//	模拟一个层级配置查询类
+let levelObj = {
+    ModuleId: 'a',
+    Level1: 'lv1_1',
+    Level2: 'lv2_1',
+    Level3: 'lv3_1'
+};
 db.getCollection('config').aggregate([{
         $match: {
             $or: [{
-                    ModelId: 'a',
+                    ModuleId: levelObj.ModuleId,
                     Level1: null,
                     Level2: null,
                     Level3: null
                 }, {
-                    ModelId: 'a',
+                    ModuleId: levelObj.ModuleId,
+                    Level1: levelObj.Level1,
+                    Level2: null,
+                    Level3: null,
+                }, {
+                    ModuleId: levelObj.ModuleId,
+                    Level1: levelObj.Level1,
+                    Level2: levelObj.Level2,
+                    Level3: null
+                }, {
+                    ModuleId: levelObj.ModuleId,
+                    Level1: levelObj.Level1,
+                    Level2: levelObj.Level2,
+                    Level3: levelObj.Level3,
+                }
+            ]
+        }
+    }, {
+        $sort: {
+            CreateDate: -1
+        }
+    }, {
+        $group: {
+            _id: {
+                ModuleId: '$ModuleId',
+                Level1: '$Level1',
+                Level2: '$Level2',
+                Level3: '$Level3'
+            },
+            latestItem: {
+                $first: '$$ROOT'
+            }
+        }
+    }, {
+        $sort: {
+            _id: -1
+        }
+    }, {
+        $limit: 1
+    }, {
+        $replaceRoot: {
+            newRoot: '$latestItem'
+        }
+    }
+])
+        </pre>
+        <h3>批量查询最新层级配置</h3>
+        <p>上面介绍的查询是单个的，下面再说一个批量查询的</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+db.getCollection('config').aggregate([{
+        $match: {
+            $or: [{
+                    ModuleId: 'a',
+                    Level1: null,
+                    Level2: null,
+                    Level3: null
+                }, {
+                    ModuleId: 'a',
                     Level1: 'lv1_1',
                     Level2: null,
                     Level3: null,
                 }, {
-                    ModelId: 'a',
+                    ModuleId: 'a',
                     Level1: 'lv1_1',
                     Level2: 'lv2_1',
                     Level3: null
                 }, {
-                    ModelId: 'a',
+                    ModuleId: 'a',
                     Level1: 'lv1_1',
                     Level2: 'lv2_1',
                     Level3: 'lv3_1'
                 }, {
-                    ModelId: 'b',
+                    ModuleId: 'b',
                     Level1: null,
                     Level2: null,
                     Level3: null
                 }, {
-                    ModelId: 'b',
+                    ModuleId: 'b',
                     Level1: 'lv1_2',
                     Level2: null,
                     Level3: null,
                 }, {
-                    ModelId: 'b',
+                    ModuleId: 'b',
                     Level1: 'lv1_2',
                     Level2: 'lv2_2',
                     Level3: null
                 }, {
-                    ModelId: 'b',
+                    ModuleId: 'b',
                     Level1: 'lv1_2',
                     Level2: 'lv2_2',
                     Level3: 'lv3_2'
@@ -249,7 +315,7 @@ db.getCollection('config').aggregate([{
     }, {
         $group: {
             _id: {
-                $concat: ['$ModelId', '->', {
+                $concat: ['$ModuleId', '->', {
                         $ifNull: ['$Level1', 'null']
                     }, '->', {
                         $ifNull: ['$Level2', 'null']
@@ -285,8 +351,8 @@ db.getCollection('config').aggregate([{
     }
 ])
         </pre>
-        <h3>实例数据之表单数据查询（数组内字段查询）</h3>
-        <p>还是先说一下业务场景：表单基于表单构造器，表单字段是用户自己配的，所以不确定有哪些字段，因此在存储表单数据时选用的是数组结构，形如：</p>
+        <h3>实例数据之表单数据外放（数组内字段放到最外层）</h3>
+        <p>还是先介绍一下业务场景：表单基于表单构造器，表单字段是用户自己配的，所以不确定有哪些字段，因此在存储表单数据时选用的是数组结构，形如：</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="json">
 {
     _id: "",
@@ -303,7 +369,13 @@ db.getCollection('config').aggregate([{
     //  ……  其他字段省略
 }
         </pre>
-        <p>在没有弄通用查询（<a href="/p/dotnet/mongodb/index.html" target="_blank">.net 和 mongodb</a>这篇有介绍）之前或者说刚从关系型数据转到mongodb后，这种查询感觉很别扭，于是便想着能不能在查询之前先将数据处理一下：将表单中的字段拿出来放到最外层，表单控件ID作为列名称，和"_id"处于同一层级。实现该功能至今有好几个版本了，在这里汇总一下：<a href="https://www.cnblogs.com/du-blog/p/11820110.html" target="_blank">表单生成器(Form Builder)之mongodb表单数据——整理数据</a>，这篇笔记是以前整理的</p>
+        <p>在查询之前还是先伪造一些数据，下面是语句：</p>
+        <details>
+            <summary>伪造数据</summary>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
+            data-url="/p/db/mongodb/code/instance-mock-data.js" ddz-lang="javascript"></div>
+        </details>
+        <p>在没有处理通用查询（<a href="/p/dotnet/mongodb/index.html" target="_blank">.net 和 mongodb</a>这篇有介绍）之前或者说刚从关系型数据转到mongodb后，这种查询感觉很别扭，于是便想着能不能在查询之前先将数据处理一下：将表单中的字段拿出来放到最外层，表单控件ID作为列名称，和"_id"处于同一层级。实现该功能至今有好几个版本了，在这里汇总一下。链接一下之前的笔记：<a href="https://www.cnblogs.com/du-blog/p/11820110.html" target="_blank">表单生成器(Form Builder)之mongodb表单数据——整理数据</a></p>
         <h4>版本一</h4>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 db.instance.aggregate([{
@@ -329,7 +401,8 @@ db.instance.aggregate([{
             'FormDataObj.ModifyUserId': '$ModifyUserId',
             'FormDataObj.ModifyUserName': '$ModifyUserName',
             'FormDataObj.LastOperateDate': '$LastOperateDate',
-            'FormDataObj.ModelId': '$ModelId'
+            'FormDataObj.ModuleId': '$ModuleId',
+            'FormDataObj.ModuleVersion': '$ModuleVersion'
         }
     }, {
         $replaceRoot: {
@@ -442,6 +515,443 @@ db.instance.aggregate([{
     }
 ])
         </pre>
+        <h3>$or查询之查询结果命中哪些$or子项</h3>
+        <p>还是先介绍一下业务场景：一个模块的列表展示数据，首先有一些必要的过滤条件（例如，上面提到的层级参数：哪一个模块，哪一个应用，哪一个企业等）；之后企业可能给不同的角色或者用户分配不同的权限（每个权限包括数据筛选条件、操作按钮等），用户可能拥有多个不同的权限。此时就用到了或查询，我们要对用户的权限取并集。到这里还不是特别麻烦，麻烦的是我们还想知道查询到的每一条记录命中了哪一个权限，只有这样我们才能知道用户针对某一条记录有哪些操作权限（导出、打印、编辑、删除等）。</p>
+        <h4>版本一</h4>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  $facet管道中的每个key（这里是a和b）即是一个权限的唯一标识
+db.instance.aggregate([{
+            $match: {
+                ModuleId: '507048044944691000'
+            }
+        }, {
+            $facet: {
+                a: [{
+                        $match: {
+                            _id: {
+                                $ne: ''
+                            }
+                        }
+                    }
+                ],
+                b: [{
+                        $match: {
+                            CreateUserId: 'user10007'
+                        }
+                    }
+                ]
+            }
+        }, {
+            $addFields: {
+                'a.PowerKey': 'a',
+                'a.PowerKey': 'a'
+            }
+        }, {
+            $project: {
+                FacetItems: {
+                    $concatArrays: ['$$ROOT.a', '$$ROOT.b']
+                }
+            }
+        }, {
+            $unwind: '$FacetItems'
+        }, {
+            $replaceRoot: {
+                newRoot: '$FacetItems'
+            }
+        }, {
+            $group: {
+                _id: '$_id',
+                GroupItems: {
+                    $push: '$$ROOT'
+                }
+            }
+        }, {
+            $addFields: {
+                ReplaceItem: {
+                    $arrayElemAt: ['$GroupItems', 0]
+                }
+            }
+        }, {
+            $addFields: {
+                'ReplaceItem.PowerKeys': {
+                    $map: {
+                        input: '$GroupItems',
+                        as: 'tempItem',
+                        in: '$$tempItem.PowerKey'
+                    }
+                }
+            }
+        }, {
+            $replaceRoot: {
+                newRoot: '$ReplaceItem'
+            }
+        }, {
+            $project: {
+                PowerKey: 0
+            }
+        }, {
+            $addFields: {
+                FormDataObj: {
+                    $arrayToObject: {
+                        $map: {
+                            input: '$FormData',
+                            as: 'field',
+                            in: ['$$field.key', '$$field.value']
+                        }
+                    }
+                }
+            }
+        }, {
+            $addFields: {
+                TempFormData: {
+                    $objectToArray: '$FormDataObj'
+                }
+            }
+        }, {
+            $addFields: {
+                FormValueObj: {
+                    $arrayToObject: {
+                        $map: {
+                            input: {
+                                $concatArrays: ['$TempFormData', {
+                                        $objectToArray: '$$ROOT'
+                                    }
+                                ]
+                            },
+                            as: 'kv',
+                            in: ['$$kv.k', '$$kv.v']
+                        }
+                    }
+                }
+            }
+        }, {
+            $replaceRoot: {
+                newRoot: '$FormValueObj'
+            }
+        }, {
+            $project: {
+                FormDataObj: 0,
+                TempFormData: 0
+            }
+        }, {
+            $sort: {
+                CreateDate: -1
+            }
+        }, {
+            $skip: 0
+        }, {
+            $limit: 30
+        }
+    ], {
+    allowDiskUse: true,
+    collation: {
+        locale: 'zh@collation=gb2312han'
+    }
+})
+        </pre>
+        <p>随着时间的推移，各种各样的模块越来越多，模块的数据也在不断增长，于是查询就慢了……除了速度变慢之外还有一个问题就是：如果<inline-code>$facet</inline-code>中每个属性中命中的数据太多会报错，如下</p>
+        <marked-block type="error">
+            <p>
+                PlanExecutor error during aggregation :: caused by :: document constructed by $facet is 104857980 bytes, which exceeds the limit of 104857600 bytes
+            </p>
+        </marked-block>
+        <h4>版本二</h4>
+        <p>先解决<inline-code>document</inline-code>大小的问题，当时想到的办法是每个<inline-code>$facet</inline-code>属性中只获取_id、排序字段和键（这里指的是权限唯一key），之后按照最外层的排序规则排序，最后是获取条数（最外层的<inline-code>$skip</inline-code>和<inline-code>$limit</inline-code>之和）。因为只获取了部分字段，因此还需要关联查询一下，于是便有了第二个版本：</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+db.instance.aggregate([{
+            $match: {
+                ModuleId: '507048044944691000'
+            }
+        }, {
+            $facet: {
+                a: [{
+                        $match: {
+                            _id: {
+                                $ne: ''
+                            }
+                        }
+                    }, {
+                        $project: {
+                            _id: 1,
+                            CreateDate: 1,
+                            PowerKey: 'a'
+                        }
+                    }, {
+                        $sort: {
+                            CreateDate: -1
+                        }
+                    }, {
+                        $limit: 30
+                    }
+                ],
+                b: [{
+                        $match: {
+                            CreateUserId: 'user10007'
+                        }
+                    }, {
+                        $project: {
+                            _id: 1,
+                            CreateDate: 1,
+                            PowerKey: 'b'
+                        }
+                    }, {
+                        $sort: {
+                            CreateDate: -1
+                        }
+                    }, {
+                        $limit: 30
+                    }
+                ]
+            }
+        }, {
+            $addFields: {
+                FacetItems: {
+                    $setUnion: ['$$ROOT.a', '$$ROOT.b']
+                }
+            }
+        }, {
+            $unwind: '$FacetItems'
+        }, {
+            $replaceRoot: {
+                newRoot: '$FacetItems'
+            }
+        }, {
+            $group: {
+                _id: '$_id',
+                PowerKeys: {
+                    $push: '$$ROOT.PowerKey'
+                }
+            }
+        }, {
+            $lookup: {
+                from: 'instance',
+                localField: '_id',
+                foreignField: '_id',
+                as: 'LookupItems'
+            }
+        }, {
+            $unwind: '$LookupItems'
+        }, {
+            $addFields: {
+                'LookupItems.PowerKeys': '$PowerKeys'
+            }
+        }, {
+            $replaceRoot: {
+                newRoot: '$LookupItems'
+            }
+        }, {
+            $replaceRoot: {
+                newRoot: {
+                    $arrayToObject: {
+                        $concatArrays: [{
+                                $cond: [{
+                                        $isArray: '$FormData'
+                                    }, {
+                                        $map: {
+                                            input: '$FormData',
+                                            as: 'kv',
+                                            in: {
+                                                'k': '$$kv.key',
+                                                'v': '$$kv.value'
+                                            }
+                                        }
+                                    }, []]
+                            }, {
+                                $objectToArray: '$$ROOT'
+                            }
+                        ]
+                    }
+                }
+            }
+        }, {
+            $sort: {
+                CreateDate: -1
+            }
+        }, {
+            $skip: 0
+        }, {
+            $limit: 30
+        }
+    ], {
+    allowDiskUse: true,
+    collation: {
+        locale: 'zh@collation=gb2312han'
+    }
+})
+        </pre>
+        <p>已测试这个语句，懵了，太慢了。全表总共333万，ModuleId === '507048044944691000'下有37万。耗时：2.5分钟。忍不了啊！谁都忍不了啊！没想到将<inline-code>collation: { locale: 'zh@collation=gb2312han' }</inline-code>去掉之后耗时3.5秒 …… 除了这个之外还有一个问题就是：如果表单中的字段需要排序怎么办，表单中的字段存在"FormData"数组中。你可以在<inline-code>$facet</inline-code>表单中的字段展开并放置到最外层，其实上面的语句已经包含了这部分代码了，只是在<inline-code>$facet</inline-code>的后面，这种处理方式将表单中的字段全部放到了最外层，但是在这种场景下，我们仅需要某一个排序字段即可，你可以使用下面的语句：</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  将下面的代码，添加到$facet前面即可
+{
+    $project: {
+        _id: 1,
+        '1632378042062': {
+            $arrayElemAt: [{
+                    $reduce: {
+                        input: "$FormData",
+                        initialValue: [],
+                        in: {
+                            '$concatArrays': ['$$value', {
+                                    '$cond': [{
+                                            '$eq': ['$$this.key', '1632378042062']
+                                        }, ['$$this.value'], []]
+                                }
+                            ]
+                        }
+                    }
+                }, 0]
+        }
+    }
+}
+        </pre>
+        <p>关联自身查询除了上面方式，还有另外一种方式，这里记录一下：</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  下面的代码可以替换上面$lookup和之后三个管道
+[{
+        $lookup: {
+            from: 'instance',
+            localField: '_id',
+            foreignField: '_id',
+            as: 'LookupItems'
+        }
+    }, {
+        $project: {
+            PowerKeys: 1,
+            ReplaceRootItem: {
+                $arrayElemAt: ['$LookupItems', 0]
+            }
+        }
+    }, {
+        $addFields: {
+            'ReplaceRootItem.PowerKeys': '$PowerKeys'
+        }
+    }, {
+        $replaceRoot: {
+            newRoot: '$ReplaceRootItem'
+        }
+    }
+]
+        </pre>
+        <h4>版本三</h4>
+        <p><inline-code>$facet</inline-code>中的子项命中数据过多始终是个问题，并且还得在每个子项中排序等。后来想了一下，为什么不把权限中的数据过滤弄成一个<inline-code>$or</inline-code>查询和最基础的过滤放在一起，之后在得到分页的数据之后在进行<inline-code>$facet</inline-code>操作</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+ db.instance.aggregate([{
+            $match: {
+                ModuleId: '507048044944691000'
+            }
+        }, {
+            $match: {
+                $or: [{
+                        _id: {
+                            $ne: ''
+                        }
+                    }, {
+                        CreateUserId: 'user10007'
+                    }
+                ]
+            }
+        }, {
+            $replaceRoot: {
+                newRoot: {
+                    $arrayToObject: {
+                        $concatArrays: [{
+                                $cond: [{
+                                        $isArray: '$FormData'
+                                    }, {
+                                        $map: {
+                                            input: '$FormData',
+                                            as: 'kv',
+                                            in: {
+                                                'k': '$$kv.key',
+                                                'v': '$$kv.value'
+                                            }
+                                        }
+                                    }, []]
+                            }, {
+                                $objectToArray: '$$ROOT'
+                            }
+                        ]
+                    }
+                }
+            }
+        }, {
+            $sort: {
+                CreateDate: -1
+            }
+        }, {
+            $skip: 0
+        }, {
+            $limit: 30
+        }, {
+            $facet: {
+                a: [{
+                        $match: {
+                            _id: {
+                                $ne: ''
+                            }
+                        }
+                    }, {
+                        $addFields: {
+                            PowerKey: 'a'
+                        }
+                    }
+                ],
+                b: [{
+                        $match: {
+                            CreateUserId: 'user10007'
+                        }
+                    }, {
+                        $addFields: {
+                            PowerKey: 'b'
+                        }
+                    }
+                ]
+            }
+        }, {
+            $addFields: {
+                FacetItems: {
+                    $setUnion: ['$$ROOT.a', '$$ROOT.b']
+                }
+            }
+        }, {
+            $unwind: '$FacetItems'
+        }, {
+            $replaceRoot: {
+                newRoot: '$FacetItems'
+            }
+        }, {
+            $group: {
+                _id: '$_id',
+                PowerKeys: {
+                    $push: '$$ROOT.PowerKey'
+                },
+                GroupItems: {
+                    $push: '$$ROOT'
+                }
+            }
+        }, {
+            $addFields: {
+                'GroupItems.PowerKeys': '$PowerKeys'
+            }
+        }, {
+            $replaceRoot: {
+                newRoot: {
+                    $first: '$GroupItems'
+                }
+            }
+        }, {
+            $project: {
+                PowerKey: 0
+            }
+        }
+    ], {
+    allowDiskUse: true,
+    collation: {
+        locale: 'zh@collation=gb2312han'
+    }
+})           
+        </pre>
+        <p><inline-code>collation: { locale: 'zh@collation=gb2312han' }</inline-code>和<inline-code>{ $sort: { CreateDate: -1 } }</inline-code>对查询时间的影响很大</p>
         <h2>更新</h2>
         <p>更新相关</p>
         <h3>字段由原数据类型对象修改为数组（或者添加一个新的字段）</h3>
