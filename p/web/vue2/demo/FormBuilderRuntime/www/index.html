@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>表单生成器（Form Builder）—移动端之Vue篇</title>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="myApp" class="list-page-container" v-cloak>
+        <div class="custom-page" v-if="tplConfig?.pageTpl"></div>
+        <div class="default-page" v-else>
+            <div class="page-header" v-if="tplConfig?.header?.tpl">
+            </div>
+            <div class="page-header" v-else>
+                <div class="header-left">左</div>
+                <div class="header-main">{{tplConfig?.header?.title}}</div>
+                <div class="header-right">右</div>
+            </div>
+            <div class="page-content">
+                <div class="toolbar" v-if="tplConfig?.body?.toolbar?.tpl"></div>
+                <div class="toolbar" v-else>
+                    <div class="toolbar-left" v-if="tplConfig?.body?.toolbar?.leftTpl"></div>
+                    <div class="toolbar-left" v-else>
+                        <select v-model="selectedModel" @change="selectedModelChanged()">
+                            <option v-for="option in showModels" v-bind:value="option">
+                                {{ option.name }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="toolbar-center">
+                        <input type="text" placeholder="请输入" />
+                    </div>
+                    <div class="toolbar-right" v-if="tplConfig?.body?.toolbar?.rightTpl"></div>
+                    <div class="toolbar-right" v-else>
+                        <button type="button">打开</button>
+                    </div>
+                </div>
+                <div class="list-container">
+                    <template v-if="tplConfig.body.listItemView.type==='component'">
+                        <component :is="tplConfig?.body?.listItemView?.componentConfig?.name" v-for="item in showItems"
+                            :key="item.id" :item="item" :form-config="formItemsObj" :tpl="tplConfig?.itemTpl">
+                        </component>
+                    </template>
+                    <template v-else-if="tplConfig.body.listItemView.type==='html'">
+                        <template v-if="tplConfig?.body?.listItemView?.htmlConfig?.isNeedItemClick">
+                            <component @click.native="listItemClickFn(item);" v-for="item in showItems" :key="item.id"
+                                :is="tplConfig?.body?.listItemView?.componentConfig?.name" :item="item"
+                                :form-config="formItemsObj" :tpl="tplConfig?.body?.listItemView?.htmlConfig?.tpl"
+                                :bind-data="tplConfig?.body?.listItemView?.htmlConfig?.bindData">
+                            </component>
+                        </template>
+                        <template v-else>
+                            <component v-for="item in showItems" :key="item.id"
+                                :is="tplConfig?.body?.listItemView?.componentConfig?.name" :item="item"
+                                :form-config="formItemsObj" :tpl="tplConfig?.body?.listItemView?.htmlConfig?.tpl"
+                                :bind-data="tplConfig?.body?.listItemView?.htmlConfig?.bindData">
+                            </component>
+                        </template>
+                    </template>
+                    <template v-else>
+                        <component @click.native="listItemClickFn(item);" v-for="item in showItems" :key="item.id"
+                            :is="tplConfig?.body?.listItemView?.componentConfig?.name" :item="item"
+                            :form-config="formItemsObj">
+                        </component>
+                    </template>
+                </div>
+            </div>
+            <div class="page-footer" v-if="tplConfig?.footer?.tpl">
+            </div>
+            <div class="page-footer" v-else>
+                通用列表页面
+            </div>
+        </div>
+    </div>
+    <script>
+        Date.prototype.Format = function (fmt) { //author: meizz
+            var o = {
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "h+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1
+                .length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[
+                    k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        }
+        var getDataType = function (obj) {
+            return Object.prototype.toString.call(obj).replace(/^\[object\s(\w+)\]$/, "$1").toLowerCase();
+        };
+    </script>
+    <!-- @babel/standalone real-time compile/transform JavaScript -->
+    <!--    In the browser  https://babeljs.io/setup -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script defer src="app.js"></script></body>
+
+</html>
