@@ -101,7 +101,8 @@ mongorestore -h 127.0.0.1:27017 -d Test002 D:\backup\mongodb\local\Test001
         <h2>复制数据库（database）</h2>
         <p>复制数据库的几种方式，等待添加……</p>
         <h2>复制集合（collection）</h2>
-        <p>复制集合的几种方式。找到了一篇文章，文中介绍了多种方式，很全。链接地址：<a href="https://www.mongodbmanager.com/clone-mongodb-collection" target="_blank">7 different ways to clone MongoDB connection</a></p>
+        <p>复制集合的几种方式。找到了一篇文章，文中介绍了多种方式，很全。链接地址：<a href="https://www.mongodbmanager.com/clone-mongodb-collection"
+                target="_blank">7 different ways to clone MongoDB connection</a></p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //  这里会创建一个新表"config2"，可能需要权限验证。
 db.config.aggregate([ { $out: 'config2' } ]);
@@ -118,8 +119,22 @@ db.config.aggregate([{
         <p>该章节记录查询相关的</p>
         <div id="anchor-id-h3-001"></div>
         <h3>查询最新层级配置</h3>
-        <p>这个查询的业务性很强，用到的场景应该不多。为了了解这个查询是做什么的，先介绍一下具体的业务场景：模块（一个业务上的概念，非JS中的模块），他是一个功能完成的业务单元，包括添加记录、编辑记录、列表（包括搜索、导出）等；新建、编辑页面的表单展示哪些控件，列表显示哪些列时候需要排序、搜索等这些都是基于配置的；首先模块有一个默认的配置（从0到1），其次在不同的应用（或者叫做产品）中使用他时可以有不同的配置，可以在默认配置的基础上修改，再次不同的企业买了应用之后也可以在应用级的基础上对模块配置进行修改，甚至每个用户都有自己的配置。这里我们将默认配置、应用下的配置、企业下的配置、用户配置等叫做层级配置，并且在同一层级内还支持版本的概念，随着时间的推移以及业务的变化，我们的配置可能会有变化。</p>
+        <p>这个查询的业务性很强，用到的场景应该不多。为了了解这个查询是做什么的，先介绍一下具体的业务场景：模块（一个业务上的概念，非JS中的模块），他是一个功能完成的业务单元，包括添加记录、编辑记录、列表（包括搜索、导出）等；新建、编辑页面的表单展示哪些控件，列表显示哪些列时候需要排序、搜索等这些都是基于配置的；首先模块有一个默认的配置（从0到1），其次在不同的应用（或者叫做产品）中使用他时可以有不同的配置，可以在默认配置的基础上修改，再次不同的企业买了应用之后也可以在应用级的基础上对模块配置进行修改，甚至每个用户都有自己的配置。这里我们将默认配置、应用下的配置、企业下的配置、用户配置等叫做层级配置，并且在同一层级内还支持版本的概念，随着时间的推移以及业务的变化，我们的配置可能会有变化。
+        </p>
         <p>说了一大堆，不知道说清楚了没有，哈哈，就当说清楚了。这个查询的目的是：按照给定的层级参数，查询最新的配置。规则是：指定层级配置 如果存在，则取最新记录；如果不存在，则获取上一级的最新配置，直到最顶级。</p>
+        <p>先看一下数据结构</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+{ 
+    "_id" : "", 
+    "ModuleId" : "a", 
+    "Level1" : null, 
+    "Level2" : null, 
+    "Level3" : null, 
+    "FormConfig" : "", 
+    "ListConfig" : "", 
+    "CreateDate" : ""
+}
+        </pre>
         <p>为了验证查询语句，还是先造点数据：</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //	两个方法，用于生成一个随机时间
@@ -261,7 +276,8 @@ db.getCollection('config').aggregate([{
 ])
         </pre>
         <h3>批量查询最新层级配置</h3>
-        <p>上面介绍的查询是单个的，下面再说一个批量查询的</p>
+        <p>上面介绍的查询是单个的，下面再说批量查询的，下面介绍两种方式：</p>
+        <h4>方式一</h4>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 db.getCollection('config').aggregate([{
         $match: {
@@ -329,7 +345,110 @@ db.getCollection('config').aggregate([{
                 $first: '$$ROOT'
             }
         }
+    }, 
+    //	下面的两个管道将查询结果（数组）转成对象
+    {
+        $group: {
+            _id: '1',
+            results: {
+                $push: '$$ROOT'
+            }
+        }
     }, {
+        $replaceRoot: {
+            newRoot: {
+                $arrayToObject: {
+                    $map: {
+                        input: '$results',
+                        as: 'item',
+                        in: ['$$item._id', '$$item.latestItem']
+                    }
+                }
+            }
+        }
+    }
+])
+        </pre>
+        <h4>方式二</h4>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+db.getCollection('config').aggregate([{
+        $match: {
+            $or: [{
+                    ModuleId: 'a',
+                    Level1: null,
+                    Level2: null,
+                    Level3: null
+                }, {
+                    ModuleId: 'a',
+                    Level1: 'lv1_1',
+                    Level2: null,
+                    Level3: null,
+                }, {
+                    ModuleId: 'a',
+                    Level1: 'lv1_1',
+                    Level2: 'lv2_1',
+                    Level3: null
+                }, {
+                    ModuleId: 'a',
+                    Level1: 'lv1_1',
+                    Level2: 'lv2_1',
+                    Level3: 'lv3_1'
+                }, {
+                    ModuleId: 'b',
+                    Level1: null,
+                    Level2: null,
+                    Level3: null
+                }, {
+                    ModuleId: 'b',
+                    Level1: 'lv1_2',
+                    Level2: null,
+                    Level3: null,
+                }, {
+                    ModuleId: 'b',
+                    Level1: 'lv1_2',
+                    Level2: 'lv2_2',
+                    Level3: null
+                }, {
+                    ModuleId: 'b',
+                    Level1: 'lv1_2',
+                    Level2: 'lv2_2',
+                    Level3: 'lv3_2'
+                }
+            ]
+        }
+    }, {
+        $group: {
+            _id: {
+                $concat: ['$ModuleId', '->', {
+                        $ifNull: ['$Level1', 'null']
+                    }, '->', {
+                        $ifNull: ['$Level2', 'null']
+                    }, '->', {
+                        $ifNull: ['$Level3', 'null']
+                    }
+                ]
+            },
+            items: {
+                $push: "$$ROOT"
+            }
+        }
+    }, {
+        $project: {
+            latestItem: {
+                $arrayElemAt: [
+                    '$items', {
+                        $indexOfArray: [
+                            '$items.CreateDate', {
+                                $max: '$items.CreateDate'
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    //	下面的两个管道将查询结果（数组）转成对象
+    {
         $group: {
             _id: '1',
             results: {
@@ -373,9 +492,12 @@ db.getCollection('config').aggregate([{
         <details>
             <summary>伪造数据</summary>
             <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
-            data-url="/p/db/mongodb/code/instance-mock-data.js" ddz-lang="javascript"></div>
+                data-url="/p/db/mongodb/code/instance-mock-data.js" ddz-lang="javascript"></div>
         </details>
-        <p>在没有处理通用查询（<a href="/p/dotnet/mongodb/index.html" target="_blank">.net 和 mongodb</a>这篇有介绍）之前或者说刚从关系型数据转到mongodb后，这种查询感觉很别扭，于是便想着能不能在查询之前先将数据处理一下：将表单中的字段拿出来放到最外层，表单控件ID作为列名称，和"_id"处于同一层级。实现该功能至今有好几个版本了，在这里汇总一下。链接一下之前的笔记：<a href="https://www.cnblogs.com/du-blog/p/11820110.html" target="_blank">表单生成器(Form Builder)之mongodb表单数据——整理数据</a></p>
+        <p>在没有处理通用查询（<a href="/p/dotnet/mongodb/index.html" target="_blank">.net 和
+                mongodb</a>这篇有介绍）之前或者说刚从关系型数据转到mongodb后，这种查询感觉很别扭，于是便想着能不能在查询之前先将数据处理一下：将表单中的字段拿出来放到最外层，表单控件ID作为列名称，和"_id"处于同一层级。实现该功能至今有好几个版本了，在这里汇总一下。链接一下之前的笔记：<a
+                href="https://www.cnblogs.com/du-blog/p/11820110.html" target="_blank">表单生成器(Form
+                Builder)之mongodb表单数据——整理数据</a></p>
         <h4>版本一</h4>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 db.instance.aggregate([{
@@ -516,7 +638,8 @@ db.instance.aggregate([{
 ])
         </pre>
         <h3>$or查询之查询结果命中哪些$or子项</h3>
-        <p>还是先介绍一下业务场景：一个模块的列表展示数据，首先有一些必要的过滤条件（例如，上面提到的层级参数：哪一个模块，哪一个应用，哪一个企业等）；之后企业可能给不同的角色或者用户分配不同的权限（每个权限包括数据筛选条件、操作按钮等），用户可能拥有多个不同的权限。此时就用到了或查询，我们要对用户的权限取并集。到这里还不是特别麻烦，麻烦的是我们还想知道查询到的每一条记录命中了哪一个权限，只有这样我们才能知道用户针对某一条记录有哪些操作权限（导出、打印、编辑、删除等）。</p>
+        <p>还是先介绍一下业务场景：一个模块的列表展示数据，首先有一些必要的过滤条件（例如，上面提到的层级参数：哪一个模块，哪一个应用，哪一个企业等）；之后企业可能给不同的角色或者用户分配不同的权限（每个权限包括数据筛选条件、操作按钮等），用户可能拥有多个不同的权限。此时就用到了或查询，我们要对用户的权限取并集。到这里还不是特别麻烦，麻烦的是我们还想知道查询到的每一条记录命中了哪一个权限，只有这样我们才能知道用户针对某一条记录有哪些操作权限（导出、打印、编辑、删除等）。
+        </p>
         <h4>版本一</h4>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //  $facet管道中的每个key（这里是a和b）即是一个权限的唯一标识
@@ -649,14 +772,18 @@ db.instance.aggregate([{
     }
 })
         </pre>
-        <p>随着时间的推移，各种各样的模块越来越多，模块的数据也在不断增长，于是查询就慢了……除了速度变慢之外还有一个问题就是：如果<line-code>$facet</line-code>中每个属性中命中的数据太多会报错，如下</p>
+        <p>随着时间的推移，各种各样的模块越来越多，模块的数据也在不断增长，于是查询就慢了……除了速度变慢之外还有一个问题就是：如果<line-code>$facet</line-code>中每个属性中命中的数据太多会报错，如下
+        </p>
         <mark-block type="error">
             <p>
-                PlanExecutor error during aggregation :: caused by :: document constructed by $facet is 104857980 bytes, which exceeds the limit of 104857600 bytes
+                PlanExecutor error during aggregation :: caused by :: document constructed by $facet is 104857980 bytes,
+                which exceeds the limit of 104857600 bytes
             </p>
         </mark-block>
         <h4>版本二</h4>
-        <p>先解决<line-code>document</line-code>大小的问题，当时想到的办法是每个<line-code>$facet</line-code>属性中只获取_id、排序字段和键（这里指的是权限唯一key），之后按照最外层的排序规则排序，最后是获取条数（最外层的<line-code>$skip</line-code>和<line-code>$limit</line-code>之和）。因为只获取了部分字段，因此还需要关联查询一下，于是便有了第二个版本：</p>
+        <p>先解决<line-code>document</line-code>大小的问题，当时想到的办法是每个<line-code>$facet</line-code>
+            属性中只获取_id、排序字段和键（这里指的是权限唯一key），之后按照最外层的排序规则排序，最后是获取条数（最外层的<line-code>$skip</line-code>和<line-code>$limit
+            </line-code>之和）。因为只获取了部分字段，因此还需要关联查询一下，于是便有了第二个版本：</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 db.instance.aggregate([{
             $match: {
@@ -779,7 +906,11 @@ db.instance.aggregate([{
     }
 })
         </pre>
-        <p>已测试这个语句，懵了，太慢了。全表总共333万，ModuleId === '507048044944691000'下有37万。耗时：2.5分钟。忍不了啊！谁都忍不了啊！没想到将<line-code>collation: { locale: 'zh@collation=gb2312han' }</line-code>去掉之后耗时3.5秒 …… 除了这个之外还有一个问题就是：如果表单中的字段需要排序怎么办，表单中的字段存在"FormData"数组中。你可以在<line-code>$facet</line-code>表单中的字段展开并放置到最外层，其实上面的语句已经包含了这部分代码了，只是在<line-code>$facet</line-code>的后面，这种处理方式将表单中的字段全部放到了最外层，但是在这种场景下，我们仅需要某一个排序字段即可，你可以使用下面的语句：</p>
+        <p>已测试这个语句，懵了，太慢了。全表总共333万，ModuleId === '507048044944691000'下有37万。耗时：2.5分钟。忍不了啊！谁都忍不了啊！没想到将<line-code>collation:
+                { locale: 'zh@collation=gb2312han' }</line-code>去掉之后耗时3.5秒 ……
+            除了这个之外还有一个问题就是：如果表单中的字段需要排序怎么办，表单中的字段存在"FormData"数组中。你可以在<line-code>$facet</line-code>
+            表单中的字段展开并放置到最外层，其实上面的语句已经包含了这部分代码了，只是在<line-code>$facet</line-code>
+            的后面，这种处理方式将表单中的字段全部放到了最外层，但是在这种场景下，我们仅需要某一个排序字段即可，你可以使用下面的语句：</p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //  将下面的代码，添加到$facet前面即可
 {
@@ -833,7 +964,10 @@ db.instance.aggregate([{
 ]
         </pre>
         <h4>版本三</h4>
-        <p><line-code>$facet</line-code>中的子项命中数据过多始终是个问题，并且还得在每个子项中排序等。后来想了一下，为什么不把权限中的数据过滤弄成一个<line-code>$or</line-code>查询和最基础的过滤放在一起，之后在得到分页的数据之后在进行<line-code>$facet</line-code>操作</p>
+        <p>
+            <line-code>$facet</line-code>中的子项命中数据过多始终是个问题，并且还得在每个子项中排序等。后来想了一下，为什么不把权限中的数据过滤弄成一个<line-code>$or
+            </line-code>查询和最基础的过滤放在一起，之后在得到分页的数据之后在进行<line-code>$facet</line-code>操作
+        </p>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
  db.instance.aggregate([{
             $match: {
@@ -951,11 +1085,16 @@ db.instance.aggregate([{
     }
 })           
         </pre>
-        <p><line-code>collation: { locale: 'zh@collation=gb2312han' }</line-code>和<line-code>{ $sort: { CreateDate: -1 } }</line-code>对查询时间的影响很大</p>
+        <p>
+            <line-code>collation: { locale: 'zh@collation=gb2312han' }</line-code>和<line-code>{ $sort: { CreateDate: -1
+                } }</line-code>对查询时间的影响很大
+        </p>
         <h2>更新</h2>
         <p>更新相关</p>
         <h3>字段由原数据类型对象修改为数组（或者添加一个新的字段）</h3>
-        <p>上面的查询章节<a href="#anchor-id-h3-001">最新层级配置查询</a>中<line-code>ListConfig</line-code>字段的数据类型为对象。最初存储为对象是没有问题的，但是后来有了新的需求：一条记录中可以有多个列表配置（ListConfig）。为了防止意外，原来的字段先不删除，而是在添加一个新的字段<line-code>ListConfigs</line-code>，将原字段添加某些属性之后添加到新数组中。</p>
+        <p>上面的查询章节<a href="#anchor-id-h3-001">最新层级配置查询</a>中<line-code>ListConfig</line-code>
+            字段的数据类型为对象。最初存储为对象是没有问题的，但是后来有了新的需求：一条记录中可以有多个列表配置（ListConfig）。为了防止意外，原来的字段先不删除，而是在添加一个新的字段<line-code>
+                ListConfigs</line-code>，将原字段添加某些属性之后添加到新数组中。</p>
         <p>为了实现上面需求有一下几种实现方式：</p>
         <h4>遍历更新</h4>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
@@ -991,7 +1130,8 @@ db.config.aggregate([{
     }
 ])
         </pre>
-        <p>这种方式太牛了，同样的数据不到一分钟就更新完了……但是来了一个新问题，我们mongodb的版本（3.4.6）太低了，不支持<line-code>$mergeObjects</line-code>，于是就有了后面的两种方式：</p>
+        <p>这种方式太牛了，同样的数据不到一分钟就更新完了……但是来了一个新问题，我们mongodb的版本（3.4.6）太低了，不支持<line-code>$mergeObjects</line-code>
+            ，于是就有了后面的两种方式：</p>
         <h4>聚合之$out和$addFields、$project</h4>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //  这里可能需要权限验证
