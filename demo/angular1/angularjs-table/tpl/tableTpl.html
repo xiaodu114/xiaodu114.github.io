@@ -1,0 +1,19 @@
+<div class="flex-layout-content" style="flex-direction:column;">
+    <!--标题行-->
+    <div class="flex-layout-height scroll-header" ng-style="config.header.style" ng-class="config.header.class">
+        <!--标题列-->
+        <div class="flex-layout-block vertical-center th" ng-repeat="th in config.columns" ng-style="th.thStyle" ng-class="th.thClass">
+            {{th.thText}}
+        </div>
+    </div>
+    <div class="flex-layout-content scroll-body" style="flex-direction:column;overflow:auto;">
+        <!--数据行-->
+        <div class="flex-layout-height" ng-repeat="tr in config.data" ng-init="trIndex=$index+1;" ng-style="config.body.trStyle" ng-class="config.body.trClass" ng-click="config.body.trClick(tr,$index);">
+            <!--数据列-->
+            <div class="flex-layout-block vertical-center text-ellipsis td" ng-repeat="td in config.columns" ng-style="td.tdStyle" ng-class="td.tdClass">
+                <div ng-if="td.tdTpl" ng-include="td.tdTpl" ddz-table-replace></div>
+                {{(!td.tdTpl)?tr[td.tdIndex]:""}}
+            </div>
+        </div>
+    </div>
+</div>

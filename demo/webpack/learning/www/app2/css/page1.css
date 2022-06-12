@@ -1,0 +1,15 @@
+/*! page1.css  应用2页面1样式 */
+/**************** 应用2页面1样式    开始 ****************/
+body {
+  background: url(/demo/webpack/learning/www/app2/images/app2page1-bg.png) repeat-x;
+}
+/**************** 应用2页面1样式    结束 ****************/
+
+/*! page1.vue  应用2页面1组件样式 */
+/**************** 应用2页面1组件样式    开始 ****************/
+.app2-page1-comp-container {
+  border: 16px solid cadetblue;
+  padding: 10px;
+}
+/**************** 应用2页面1组件样式    结束 ****************/
+

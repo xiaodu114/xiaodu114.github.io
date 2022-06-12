@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>输入框清空 angularjs - xiaodu114.github.io</title>
+    <meta name="keywords" content="angularjs,input clear,输入框清空">
+    <meta name="description" content="angularjs版本的文本框清空指令">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .myApp-Container {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body ng-cloak ng-controller="MyAppController">
+    <div class="myApp-Container">
+        <form style="width:30%;">
+            <div class="form-group">
+                <label>常规(指令内部实现)</label>
+                <input type="text" ng-model="msg1" class="form-control" clear-input>
+            </div>
+            <div class="form-group">
+                <label>方法(回掉方法实现)</label>
+                <input type="text" ng-model="msg2" class="form-control" clear-input="msgClearFn();">
+            </div>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/angular@1.7.2/angular.min.js"></script>
+    <script>
+        var myApp = angular.module('myApp', []);
+        myApp.directive('clearInput', ['$parse',
+            function ($parse) {
+                return {
+                    restrict: 'A',
+                    require: '?ngModel',
+                    link: function (scope, element, attr) {
+                        element[0].style.display = "inline-block";
+                        var htmlMarkup = attr.clearBtnMarkup ? attr.clearBtnMarkup :
+                            '<i class="fa fa-times-circle"></i>';
+                        var btn = angular.element(htmlMarkup);
+                        btn.addClass(attr.clearBtnClass ? attr.clearBtnClass : "clear-btn");
+                        btn.css("margin-left", "-22px");
+                        btn.css("cursor", "pointer");
+                        element.after(btn);
+
+                        btn.on('click', function (event) {
+                            if (attr.clearInput) {
+                                var fn = $parse(attr.clearInput);
+                                scope.$apply(function () {
+                                    fn(scope, {
+                                        $event: event
+                                    });
+                                });
+                            } else {
+                                // scope[attr.ngModel] = null;
+                                // scope.$digest();
+                                $parse(attr.ngModel).assign(element.scope(), null);
+                                scope.$apply();
+                            }
+                        });
+
+                        scope.$watch(attr.ngModel, function (val) {
+                            var hasValue = val && val.length > 0;
+                            if (!attr.clearDisableVisibility) {
+                                btn.css('visibility', hasValue ? 'visible' : 'hidden');
+                            }
+
+                            if (hasValue && !btn.hasClass('clear-visible')) {
+                                btn.removeClass('clear-hidden').addClass('clear-visible');
+                            } else if (!hasValue && !btn.hasClass('clear-hidden')) {
+                                btn.removeClass('clear-visible').addClass('clear-hidden');
+                            }
+                        });
+                    }
+                };
+            }
+        ]);
+        myApp.controller("MyAppController", function ($scope) {
+            $scope.msg1 = "";
+            $scope.msg2 = "msg2";
+            $scope.msgClearFn = function () {
+                $scope.msg2 = "";
+            }
+        });
+    </script>
+</body>
+
+</html>
