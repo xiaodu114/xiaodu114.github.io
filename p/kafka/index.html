@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>kafka - xiaodu114.github.io</title>
+    <meta name="keywords" content="kafka">
+    <meta name="description" content="整理kafka相关知识点……">
+
+    <script src="/p/_/js/main.js"></script>
+</head>
+
+<body>
+    <!-- github访问地址：/p/_/index.html -->
+    <div class="blog-page">
+
+        <h1>kafka</h1>
+        <p>整理kafka相关知识点……</p>
+        <h2>下载并安装</h2>
+        <p>下载地址：<a href="https://kafka.apache.org/downloads" target="_blank">Downloads - Apache Kafka</a>、<a
+                href="https://dlcdn.apache.org/kafka/" target="_blank">Index of /kafka</a></p>
+        <p>这里下载的是：<line-code>kafka_2.13-3.2.0.tgz</line-code>
+        </p>
+        <mark-block>
+            <p>安装之前需要先准备好JAVA环境，可以参考：<a href="/p/java/index.html" target="_blank">java - xiaodu114.github.io</a></p>
+        </mark-block>
+        <h3>Windows</h3>
+        <h4>解压</h4>
+        <p>绿色版，免安装的。压缩包放置目录是<line-code>D:\ProgramOther</line-code>，解压目录是<line-code>D:\ProgramOther\kafka_2.13-3.2.0
+            </line-code>
+        </p>
+        <h4>配置</h4>
+        <p>在上面的解压目录中新建<line-code>data</line-code>文件，之后在里面再新建两个文件夹分别存在<line-code>kafka</line-code>和<line-code>zookeeper
+            </line-code>数据，如下：</p>
+        <ul>
+            <li>D:/ProgramOther/kafka_2.13-3.2.0/data/kafka-logs</li>
+            <li>D:/ProgramOther/kafka_2.13-3.2.0/data/zookeeper</li>
+        </ul>
+        <p>之后修改<line-code>kafka</line-code>和<line-code>zookeeper</line-code>的配置文件，如下图：</p>
+        <p>
+            <img src="./images/index-1.png" alt="修改kafka和zookeeper配置文件">
+        </p>
+        <h4>启动</h4>
+        <p>在<line-code>D:\ProgramOther\kafka_2.13-3.2.0\bin\windows</line-code>打开两个终端，分别启动<line-code>zookeeper
+            </line-code>和
+            <line-code>kafka</line-code>，这里使用的是<line-code>powershell
+            </line-code>。命令如下：
+        </p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   首先是 zookeeper
+./zookeeper-server-start.bat D:/ProgramOther/kafka_2.13-3.2.0/config/zookeeper.properties
+#   其次是 kafka
+./kafka-server-start.bat D:/ProgramOther/kafka_2.13-3.2.0/config/server.properties
+        </pre>
+        <p>
+            <img src="./images/index-2.png" alt="启动 zookeeper">
+        </p>
+        <p>
+            <img src="./images/index-3.png" alt="启动 kafka">
+        </p>
+        <h4>创建一个 topics</h4>
+        <p>第一个<line-code>topics</line-code>便给出了警告，名称是<line-code>level1_level2_level3_001</line-code>
+        </p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   第一个 topics
+./kafka-topics.bat --create --topic level1_level2_level3_001 --bootstrap-server localhost:9092  
+#   第二个 topics   
+./kafka-topics.bat --create --topic level1-level2-level3-001 --bootstrap-server localhost:9092       
+        </pre>
+        <p>新建完了之后，查看一下<line-code>topics</line-code>
+        </p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   列出全部
+./kafka-topics.bat --bootstrap-server localhost:9092 --list
+#   查看某一个
+./kafka-topics.bat --bootstrap-server localhost:9092 --describe --topic level1-level2-level3-001
+        </pre>
+        <p>
+            <img src="./images/index-4.png" alt="创建 查看 kafka topics">
+        </p>
+        <mark-block type="warning">
+            <p>WARNING: Due to limitations in metric names, topics with a period ('.') or underscore ('_') could
+                collide. To avoid issues it is best to use either, but not both.</p>
+        </mark-block>
+        <h4>生产/消费 消息</h4>
+        <p>都准备好了，开始干活了。</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   生产消息
+./kafka-console-producer.bat --bootstrap-server localhost:9092 --topic level1-level2-level3-001
+#   消费消息
+./kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic level1-level2-level3-001 --from-beginning
+        </pre>
+        <p>
+            <img src="./images/index-5.png" alt="kafka 生产 消费 消息">
+        </p>
+        <mark-block>
+            <p>如果你是先启动的<line-code>kafka-console-producer.bat</line-code>，随后就生产消息；之后才启动的<line-code>
+                    kafka-console-consumer.bat</line-code>，这时需要添加<line-code>from-beginning</line-code>参数，如果先启动它应该就没问题了
+            </p>
+        </mark-block>
+    </div>
+</body>
+
+</html>
