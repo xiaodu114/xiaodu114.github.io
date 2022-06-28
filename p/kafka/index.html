@@ -6,19 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>kafka - xiaodu114.github.io</title>
-    <meta name="keywords" content="kafka">
-    <meta name="description" content="整理kafka相关知识点……">
+    <meta name="keywords" content="kafka, kafka eagle, install, jdk, jre">
+    <meta name="description" content="整理kafka相关知识点：kafka的安装和简单调试，kafka eagle的安装 ……">
 
     <script src="/p/_/js/main.js"></script>
 </head>
 
 <body>
-    <!-- github访问地址：/p/_/index.html -->
+    <!-- github访问地址：/p/kafka/index.html -->
     <div class="blog-page">
 
         <h1>kafka</h1>
         <p>整理kafka相关知识点……</p>
-        <h2>下载并安装</h2>
+        <h2>安装 kafka</h2>
         <p>下载地址：<a href="https://kafka.apache.org/downloads" target="_blank">Downloads - Apache Kafka</a>、<a
                 href="https://dlcdn.apache.org/kafka/" target="_blank">Index of /kafka</a></p>
         <p>这里下载的是：<line-code>kafka_2.13-3.2.0.tgz</line-code>
@@ -100,6 +100,113 @@
                     kafka-console-consumer.bat</line-code>，这时需要添加<line-code>from-beginning</line-code>参数，如果先启动它应该就没问题了
             </p>
         </mark-block>
+        <h2>安装 kafka eagle</h2>
+        <p>下载地址：<a href="http://www.kafka-eagle.org/" target="_blank">EFAK</a>、<a
+                href="http://download.kafka-eagle.org/" target="_blank">Download - EFAK</a></p>
+        <p>这里下载的是：<line-code>kafka-eagle-bin-2.1.0.tar.gz</line-code>
+        </p>
+        <h3>Windows</h3>
+        <h4>解压</h4>
+        <p>绿色版，免安装的。压缩包放置目录是<line-code>D:\ProgramOther</line-code>，解压目录是<line-code>D:\ProgramOther\kafka-eagle-bin-2.1.0
+            </line-code>。解压之后：一个文件夹<line-code>kafka-eagle-bin-2.1.0</line-code>和一个文件<line-code>pax_global_header
+            </line-code>。我开始以为文件夹中就是所需的文件了，没想到又是一个压缩包，不会一直递归下去吧！怀着忐忑的心情把他解压了，终于看到了<line-code>bin
+            </line-code>等目录，于是把他们一起剪切到最外边并且把<line-code>pax_global_header</line-code>删掉了，如下图：
+        </p>
+        <p>
+            <img src="./images/index-6.png" alt="kafka eagle 解压目录">
+        </p>
+        <h4>配置</h4>
+        <p>看了一下官方的安装教程：<a href="http://www.kafka-eagle.org/articles/docs/installation/windows.html" target="_blank"
+                rel="noopener noreferrer">Install on Windows - Docs</a>我去，so easy 啊！就四步，前两步安装JDK和检查JDK都已经弄过了，就生下了环境变量
+            <line-code>KE_HOME</line-code>的配置和启动了。有点怀疑，这玩意儿得和<line-code>zookeeper</line-code>、<line-code>kafka
+            </line-code>链接啊……还是查了一下，果然需要配置，配置文件路径：<line-code>
+                D:/ProgramOther/kafka-eagle-bin-2.1.0/conf/system-config.properties</line-code> 下面列出该文件的改动：
+        </p>
+        <p>
+            <img src="./images/index-7.png" alt="kafka eagle 修改配置文件">
+        </p>
+        <p>
+            之后就是设置环境变量<line-code>KE_HOME</line-code>了，路径为：<line-code>D:\ProgramOther\kafka-eagle-bin-2.1.0</line-code>
+            这个比较简单，就不截图了。
+        </p>
+        <h4>启动</h4>
+        <p>如官网说的，在<line-code>D:\ProgramOther\kafka-eagle-bin-2.1.0\bin</line-code>下执行<line-code>./ke.bat</line-code>
+            就可以了，小小的期待，看下效果图：
+        </p>
+        <p>
+            <img src="./images/index-8.png" alt="kafka eagle 修改配置文件">
+        </p>
+        <p>
+            我去，┭┮﹏┭┮，一堆乱码，页面404…… 开始反思与尝试之路，是不是哪里落下了，还是哪里弄错了……
+        </p>
+        <ul>
+            <li>
+                检查并修改配置文件，还原成mysql;替换类似linux下的路径等。都不好使
+            </li>
+            <li>
+                将<line-code>%KE_HOME%\bin</line-code>添加到<line-code>Path</line-code>。还是不管用
+            </li>
+            <li>
+                设置<line-code>CLASSPATH</line-code>环境变量，发现没有<line-code>jre</line-code>目录……
+            </li>
+            <li>
+                网上也查了不少：<a href="http://www.jiucaihua.cn/news/show-28534.html"
+                    target="_blank">http://www.jiucaihua.cn/news/show-28534.html</a> |
+                <a href="https://blog.csdn.net/qq_43163943/article/details/120288206" target="_blank">kafka eagle
+                    踩坑windows安装_嘤嘤樱桃小丸子的博客-CSDN博客</a>…… 还是不行啊！
+            </li>
+            <li>
+                ……
+            </li>
+        </ul>
+        <p>看着人家的炫酷大屏，都是泪啊！洗洗睡吧！</p>
+        <p>第二天，到了公司之后，忍不住啊，又试了一下。公司的电脑已经安装了java环境，于是只弄了<line-code>kafka eagle</line-code>
+            ，没想到啊，居然成功了……怎么回事儿，到底哪里出了问题，我开始想了，两边都哪里不一样，也确实有些不一样的地方：
+        </p>
+        <ul>
+            <li>
+                一个是jdk17，一个是jdk8（公司）
+            </li>
+            <li>
+                jdk8的环境变量<line-code>Path</line-code>中包含jre的路径
+            </li>
+            <li>
+                ……
+            </li>
+        </ul>
+        <p>分析了之后，于是便安装jdk17（和家中的相同），但是安装之后没有出现<line-code>jre</line-code>目录，于是便查了一下，还真找到了。需要在<line-code></line-code>
+            路径下进入终端，之后执行<line-code>bin\jlink.exe --module-path jmods --add-modules java.desktop --output jre</line-code>
+            。最后<line-code>jre</line-code>出现了，配置好了之后，还是不行。我郁闷了，真的郁闷了，难道只支持jdk8？最后在郁闷中下班了，回家试试
+            jdk8吧！
+        </p>
+        <p>到家之后，来不及干别的，赶紧试试jdk8，结果结果结果还是不行，郁闷升级了，啊啊啊啊啊啊！冷静了一下，想着看看<line-code>ke.bat</line-code>
+            这个文件，庆幸这个文件不大，一共60多行。一行一行的测试，直到测试到这一行<line-code>%JAVA_HOME%\bin\jar -xvf %KE_HOME%\kms\webapps\ke.war
+            </line-code>，出现了下面的错误（应该是现在才意识到，这个错误是致命的）：
+        </p>
+        <p>
+            <img src="./images/index-9.png" alt="'C:\Program' 不是内部或外部命令，也不是可运行的程序或批处理文件。">
+        </p>
+        <p>原来是这样，原来是这样，原来是这样啊，批处理文件不支持空格路径。现在想想公司的为什么可以，才恍然大悟，公司java的安装路径是<line-code>D:\Java\jdk1.8.0_291\bin
+            </line-code>，没有空格，路径合法，想想当时成功的场景，终端输出了好多文件路径，再结合现在的页面预览404和上面的<line-code>-xvf</line-code>
+            ，这是解压文件的。我们可以重新安装一下jdk，但是这里安装的microsoft发行的jdk，不给我们选择的机会。于是便查了一下批处理空格路径的问题，例如：<a
+                href="https://developer.aliyun.com/article/5622" target="_blank">Windows批处理中对带空格路径的处理</a>
+        </p>
+        <p>找出了原因就好说了，于是便改了一下<line-code>ke.bat</line-code>文件，一共修改两处，例如：<line-code>"%JAVA_HOME%"\bin\jar -xvf
+                %KE_HOME%\kms\webapps\ke.war</line-code>。修改之后，赶紧试试，结果并没有看到想要的解压压缩包，如下图：
+        </p>
+        <p>
+            <img src="./images/index-10.png" alt="kafka eagle 启动 ke.bat">
+        </p>
+        <p>好难啊！我开始再次查看<line-code>%JAVA_HOME%</line-code>，上面已经截图了，发现路径是<line-code>\</line-code>结尾的，拼接上<line-code>\bin\jar
+            </line-code>之后的结果是<line-code>C:\Program Files\Microsoft\jdk-17.0.3.7-hotspot\\bin\jar</line-code>，不会是因为多了一个
+            <line-code>\</line-code>吧！是的是的是的，这里把环境变量中的<line-code>\</line-code>去掉了，之后终于可以了，太难了
+        </p>
+        <p>
+            <img src="./images/index-11.png" alt="kafka eagle 启动 ke.bat">
+        </p>
+        <p>最后在说一下Tomcat中文乱码的问题，<line-code>%KE_HOME%</line-code>或者<line-code>%KE_HOME%\kms</line-code>路径下的<line-code>
+                logs</line-code>中找找，具体哪一个忘记了，有时间更正一下。
+        </p>
     </div>
 </body>
 
