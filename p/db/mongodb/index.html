@@ -90,6 +90,8 @@ print("---> 结束插入，计时结束。现在时间：" + endTime.toLocaleStr
 #	1、备份本地数据库（Test001）-未开启权限认证
 mongodump -h localhost:27017 -d Test001 -o D:\backup\mongodb\local
 mongodump -h 127.0.0.1:27017 -d Test001 -o D:\backup\mongodb\local
+#	2、备份远程数据库（Test001）-开启权限认证
+mongodump -h IP地址:端口号 -d Test001 -o D:\backup\mongodb\remote -u=用户名 -p=密码 --authenticationDatabase  admin
         </pre>
         <h2>还原</h2>
         <p>还原相关</p>
@@ -97,6 +99,8 @@ mongodump -h 127.0.0.1:27017 -d Test001 -o D:\backup\mongodb\local
 #	1、还原到本地数据库（Test002）-未开启权限认证
 mongorestore -h localhost:27017 -d Test002 D:\backup\mongodb\local\Test001
 mongorestore -h 127.0.0.1:27017 -d Test002 D:\backup\mongodb\local\Test001
+#	2、还原到远程数据库（Test002）-开启权限认证
+mongorestore -h IP地址:端口号 -d Test002  D:\backup\mongodb\remote\Test001 -u=用户名 -p=密码 --authenticationDatabase  admin
         </pre>
         <h2>复制数据库（database）</h2>
         <p>复制数据库的几种方式，等待添加……</p>
