@@ -1186,6 +1186,74 @@ db.config.aggregate([{
     }
 ])
         </pre>
+        <h2>批量操作<line-code>bulkWrite</line-code>
+        </h2>
+        <p>这个批量操作支持的很全面：新增、修改、替换、删除……详见：<a href="https://www.mongodb.com/docs/manual/core/bulk-write-operations/"
+                target="_blank">Bulk Write Operations — MongoDB Manual</a></p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+db.config.bulkWrite([{
+        insertOne: {
+            "document": {
+                "ModelId": "d",
+                "Level1": null,
+                "Level2": null,
+                "Level3": null,
+                "Config": "",
+                "CreateDate": new ISODate()
+            }
+        }
+    }, {
+        insertOne: {
+            "document": {
+                "ModelId": "d",
+                "Level1": "lv1_1",
+                "Level2": null,
+                "Level3": null,
+                "Config": "",
+                "CreateDate": new ISODate()
+            }
+        }
+    }, {
+        updateOne: {
+            "filter": {
+                "_id": "1"
+            },
+            "update": {
+                $set: {
+                    "ModelId": "d",
+                    "Level1": "lv1_1",
+                    "Level2": "lv2_1",
+                    "Level3": null,
+                    "Config": "",
+                    "CreateDate": new ISODate()
+                }
+            }
+        }
+    }, {
+        replaceOne: {
+            "filter": {
+                "_id": "2"
+            },
+            "replacement": {
+                "ModelId": "d",
+                "Level1": "lv1_1",
+                "Level2": "lv2_1",
+                "Level3": "lv3_1",
+                "Config": "",
+                "CreateDate": new ISODate()
+            }
+        }
+    }, {
+        deleteMany: {
+            "filter": {
+                "_id": {
+                    $in: ["3", "4"]
+                }
+            }
+        }
+    }
+]);
+        </pre>
         <h2>参考链接</h2>
         <ul>
             <li>
