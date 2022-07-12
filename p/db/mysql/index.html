@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>MySQL - xiaodu114.github.io</title>
+    <meta name="keywords" content="MySQL,MySQL 批量插入数据脚本,xiaodu114">
+    <meta name="description" content="整理记录 MySQL 相关的知识点，例如：批量插入数据脚本">
+
+    <script src="/p/_/js/main.js"></script>
+</head>
+
+<body>
+    <!-- github访问地址：/p/db/mysql/index.html -->
+    <div class="blog-page">
+
+        <h1>MySQL</h1>
+        <p>整理记录 MySQL 相关的知识点，赶紧看看吧！</p>
+        <h2>安装</h2>
+        <p>好想吐槽一下啊！比重装系统还麻烦……</p>
+        <h2>新增</h2>
+        <h3>批量插入数据</h3>
+        <p>同事想让帮忙写个语句，可以批量插入数据，于是便网上查了一下并结合需求，写了下面的语句：</p>
+        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="sql">
+--  https://www.sjkjc.com/mysql/install-on-windows/
+--	https://zhuanlan.zhihu.com/p/37152572
+--  https://www.runoob.com/w3cnote/windows10-mysql-installer.html
+--  https://segmentfault.com/a/1190000040901998
+
+--  https://www.runoob.com/mysql/mysql-functions.html
+--	http://www.htsjk.com/Mysql/14778.html
+--	https://www.jb51.net/article/163001.htm
+--  https://www.cnblogs.com/developer_chan/p/9229845.html
+
+--	1、创建存储过程
+delimiter $$
+drop procedure if exists ddz_batchinsert_data;
+create procedure ddz_batchinsert_data(in max_num int(10))
+begin
+	declare i int default 0;
+	set autocommit=0;
+	repeat
+		set i=i+1;
+		insert into test001.table001(id,flag,code,name,createdate) values(i,uuid(),CONCAT('code',i),CONCAT('name',i),CURRENT_TIMESTAMP());
+		until i=max_num
+	end repeat;
+	commit;
+end $$
+
+-- 2、调用存储过程
+CALL `test001`.`ddz_batchinsert_data`(500000);
+        </pre>
+
+    </div>
+</body>
+
+</html>
