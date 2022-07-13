@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React 练习 - xiaodu114.github.io</title>
+    <meta name="keywords" content="React,React 教程,React 练习">
+    <meta name="description" content="React 学习练习笔记。一个个小例子正在添加中……">
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .demo-container {
+            width: 100%;
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        .demo-container>fieldset {
+            margin-bottom: 20px;
+        }
+    </style>
+
+    <script crossorigin src="https://unpkg.com/react/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+</head>
+
+<body>
+    <div class="demo-container">
+
+        <fieldset>
+            <legend>示例1：Hello, world!</legend>
+            <div id="demo1" class="demo"></div>
+            <script>
+                const demo1Root = ReactDOM.createRoot(document.getElementById('demo1'));
+                //  ElementCreationOptions
+                demo1Root.render(React.createElement("h1", null, "Hello, world!"));
+            </script>
+        </fieldset>
+
+        <fieldset>
+            <legend>示例2：组件(展示文本)</legend>
+            <div id="demo2" class="demo"></div>
+            <script>
+                class Demo2_HelloMessage extends React.Component {
+                    render() {
+                        return React.createElement(
+                            "h1",
+                            null,
+                            "Hello ",
+                            this.props.name
+                        );
+                    }
+                }
+                const demo2Root = ReactDOM.createRoot(document.getElementById('demo2'));
+                demo2Root.render(React.createElement(Demo2_HelloMessage, { name: "ddz" }));
+            </script>
+        </fieldset>
+
+        <fieldset>
+            <legend>示例3：组件（组件内点击事件）</legend>
+            <div id="demo3" class="demo"></div>
+            <script>
+                class Demo3_MyButton extends React.Component {
+                    render() {
+                        return React.createElement(
+                            "button",
+                            {
+                                onClick: () => {
+                                    alert("按钮点击事件测试");
+                                }
+                            },
+                            "Hello ",
+                            this.props.name,
+                            "，点击一下试试吧！"
+                        );
+                    }
+                }
+                const demo3Root = ReactDOM.createRoot(document.getElementById('demo3'));
+                demo3Root.render(React.createElement(Demo3_MyButton, { name: "ddz" }));
+            </script>
+        </fieldset>
+
+        <fieldset>
+            <legend>示例4：组件（列表）</legend>
+            <div id="demo4" class="demo"></div>
+            <script>
+                function Demo4_NumberList(props) {
+                    const numbers = props.numbers;
+                    const listItems = numbers.map((number) =>
+                        React.createElement("li", { key: number + "" }, number)
+                    );
+                    return React.createElement("ul", { className: "test001" }, listItems);
+                }
+                const demo4Root = ReactDOM.createRoot(document.getElementById('demo4'));
+                demo4Root.render(React.createElement(Demo4_NumberList, { numbers: [1, 2, 3, 4, 5] }));
+            </script>
+        </fieldset>
+
+    </div>
+</body>
+
+</html>
