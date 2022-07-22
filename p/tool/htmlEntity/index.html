@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Entities Table | HTML Entities List - xiaodu114.github.io</title>
+    <meta name="keywords" content="HTML Entities Table, HTML Entities List, HTML实体列表">
+    <meta name="description" content="HTML Entities Table, HTML Entities List, HTML实体列表">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            flex-shrink: 0;
+            padding: 2rem;
+        }
+
+        summary {
+            cursor: pointer;
+        }
+
+        #html-entities-demo {
+            flex: 1;
+            padding: 0 2rem 2rem 2rem;
+            overflow-y: auto;
+        }
+
+        /* 下面是 HtmlEntities 组件样式相关 */
+        .html-entities-container {
+            width: 100%;
+            display: grid;
+            justify-content: space-between;
+            grid-template-columns: repeat(auto-fill, 150px);
+            grid-gap: 2rem;
+        }
+
+        .html-entities-container>.html-entity-container {
+            color: #495057;
+            padding: 12px;
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+        }
+
+        .html-entities-container>.html-entity-container>.html-entity-show {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .html-entities-container>.html-entity-container>.html-entity-info {
+            text-align: center;
+            color: #babdc2;
+            overflow: hidden;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <details>
+            <summary>HTML Entities 链接</summary>
+            <div style="display: grid;">
+                <a href="https://html.spec.whatwg.org/entities.json" target="_blank">数据来源（JSON文件）</a>
+                <a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Entity" target="_blank">Entity - 术语表 |
+                    MDN</a>
+                <a href="https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references"
+                    target="_blank">List of XML and HTML character entity references - Wikipedia</a>
+                <a href="https://www.toptal.com/designers/htmlarrows/currency/" target="_blank">HTML Currency Symbols,
+                    Entities and Codes — Toptal Designers</a>
+                <a href="https://nealchester.com/special-characters/" target="_blank">Special Characters for HTML, CSS
+                    and JS</a>
+                <a href="https://www.whatsmyip.org/html-characters/" target="_blank">HTML Entities & Special Characters
+                    / WhatsMyIP.org</a>
+            </div>
+        </details>
+    </header>
+    <div id="html-entities-demo"></div>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script>
+        //  公共方法 字符串 转 Unicode
+        function str2Unicode(str) {
+            let retStr = "";
+            for (i in str) {
+                retStr += "\\u" + str.charCodeAt(i).toString(16).toLocaleUpperCase().padStart(4, "0");
+            }
+            return retStr;
+        }
+
+        const domContainer = document.querySelector('#html-entities-demo');
+        const root = ReactDOM.createRoot(domContainer);
+
+        //  组件
+        function HtmlEntities(props) {
+            //  如果没有实体
+            if (!(Array.isArray(props.items) && props.items.length)) {
+                return React.createElement("div", { className: "html-entities-empty-container" }, "没有任何实体");
+            }
+            //  有实体
+            const listItems = props.items.map((item, index) => {
+
+                //#region 第一种方式
+
+                ////    参考地址：https://segmentfault.com/a/1190000005035773
+                //var div = document.createElement("div");
+                //div.innerHTML = item.name;
+                //return div.textContent;
+
+                ////    简写变种
+                //  document.createRange().createContextualFragment(`<div>${item.name}</div>`).textContent
+
+                //#endregion
+
+                //#region 第二种方式
+
+                // React.createElement("div", { className: "html-entity-show", dangerouslySetInnerHTML: { __html: item.name } })
+
+                //#endregion
+
+                //#region 第三种方式
+
+                //  React.createElement("div", { className: "html-entity-show" }, item.characters)
+
+                //#endregion
+
+                return React.createElement("div", { className: "html-entity-container", key: item.codepoints + "" }, [
+                    React.createElement("div", { className: "html-entity-show" }, item.characters),
+                    React.createElement("div", { className: "html-entity-info" }, [
+                        React.createElement("div", null, item.name),
+                        React.createElement("div", null, str2Unicode(item.characters)),
+                        React.createElement("div", null, item.codepoints),
+                    ])
+                ]);
+            });
+            return React.createElement("div", { className: "html-entities-container" }, listItems);
+        }
+
+        function handleHTMLEntitiesData(data) {
+            let entityItems = [];
+            if (data) {
+                for (const key in data) {
+                    if (Object.hasOwnProperty.call(data, key)) {
+                        const element = data[key];
+                        entityItems.push({ name: key, codepoints: data[key].codepoints[0], characters: data[key].characters })
+                    }
+                }
+            }
+            root.render(React.createElement(HtmlEntities, {
+                items: entityItems
+            }));
+        }
+
+        fetch("https://html.spec.whatwg.org/entities.json").then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            else {
+                let error = new Error(response.statusText);
+                error.response = response;
+                throw error;
+            }
+        }).then(handleHTMLEntitiesData).catch(error => {
+            console.log('request failed', error)
+        });
+    </script>
+</body>
+
+</html>
