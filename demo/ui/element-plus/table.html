@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table 表格 | element-plus vue3</title>
+    <meta name="keywords" content="vue,vue3,vue 3,element-plus,Table,Table 表格" />
+    <meta name="description" content="element-plus Table组件示例" />
+
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            font-size: 16px;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        #vue3App {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 0 20px 20px 20px;
+            overflow: hidden;
+        }
+
+        .el-table-user-container {
+            flex: 1;
+            overflow: hidden;
+        }
+    </style>
+
+    <script src="//unpkg.com/a2bei4"></script>
+    <!-- 引入 Vue 3 -->
+    <script src="//unpkg.com/vue@next"></script>
+    <!-- 引入组件库 -->
+    <script src="//unpkg.com/element-plus"></script>
+</head>
+
+<body>
+    <div id="vue3App">
+        <h1>
+            Table 表格 v1 - element-plus
+        </h1>
+        <p>
+            官网：<a href="https://element-plus.gitee.io/zh-CN/component/table.html" target="_blank">Table 表格 - Element
+                Plus</a>
+            <sub>&nbsp;&nbsp;&nbsp;&nbsp;说明：这里伪造了10000条数据，有点慢，甚至是卡，别着急……</sub>
+        </p>
+        <div class="el-table-user-container">
+            <el-table :data="items" height="100%">
+                <el-table-column type="index" width="60"></el-table-column>
+                <el-table-column prop="textType" label="文本类控件" width="230"></el-table-column>
+                <el-table-column prop="numberType" label="数值类控件" width="180"></el-table-column>
+                <el-table-column prop="dateType" label="日期类控件" width="200"></el-table-column>
+                <el-table-column prop="remarks" label="备注" width="1990"></el-table-column>
+                <el-table-column prop="id" label="主键ID" width="370"></el-table-column>
+            </el-table>
+        </div>
+    </div>
+    <script>
+        (() => {
+            if (!(window.du && window.Vue && window.ElementPlus)) {
+                alert(`'unpkg.com/a2bei4'或者'unpkg.com/vue@next'或者'unpkg.com/element-plus' 加载异常`);
+                return;
+            }
+
+            if (!Date.prototype.format) {
+                Date.prototype.format = function (format) {
+                    return du.date.format(this, format);
+                };
+            }
+            let vue3App = Vue.createApp({
+                data() {
+                    return {
+                        items: []
+                    }
+                },
+                created() {
+                    let tempTableData = [];
+                    for (let index = 0; index < 10000; index++) {
+                        tempTableData.push({
+                            id: du.utils.getGUID(),
+                            textType: du.utils.getRandomZhOrEnStr(du.utils.getInRangeInteger(20)),
+                            numberType: du.utils.getInRangeInteger(100),
+                            dateType: du.date.getInRangeDate("2022-01-01 08:00:00", "2022-07-27 08:00:00").format("yyyy-MM-dd hh:mm:ss"),
+                            remarks: du.utils.getRandomZhOrEnStr(du.utils.getInRangeInteger(200)),
+                        });
+                    }
+                    this.items = tempTableData;
+                }
+            });
+            vue3App.use(ElementPlus);
+            vue3App.mount("#vue3App");
+        })();
+    </script>
+</body>
+
+</html>
