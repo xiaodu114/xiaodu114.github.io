@@ -504,6 +504,8 @@ db.getCollection('config').aggregate([{
                 Builder)之mongodb表单数据——整理数据</a></p>
         <h4>版本一</h4>
         <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  参考链接： https://jira.mongodb.org/browse/SERVER-5947
+
 db.instance.aggregate([{
         $addFields: {
             FormDataObj: {
