@@ -40,15 +40,14 @@
 #region 强制管理员权限执行
 
 # 方法一：此方法代码多一点，这里只记录连接
-# 参考：https://www.pstips.net/force-script-run-as-admin.html
+# 参考：https://www.pstips.net/force-script-run-as-admin.html 
 
 # 方法二
 # 参考：https://stackoverflow.com/questions/7690994/running-a-command-as-administrator-using-powershell
-if
-(!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]
-"Administrator"))
+
+if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) 
 {
-Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs; exit
+ Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs; exit 
 }
 
 #endregion
@@ -62,31 +61,33 @@ $allIISSites = Get-IISSite
 Write-Host 'Get-IISSite返回的数据类型是：' $allIISSites.gettype()
 if($allIISSites -and ($allIISSites.count -gt 0))
 {
-Write-Host 共有 $allIISSites.count 个站点
-Write-Host '每一项的数据类型是：' $allIISSites[0].gettype()
-$allIISSites[0] | Out-String
-# 可以使用 get-member 命令来查看对象中的属性
-# get-member -inputobject $allIISSites[0]
-
-# 遍历所有的站点
-foreach($site in $allIISSites)
-{
-# 这里有一个问题，如何判断是服务器端站点，否则删多了怎么办？？？
-#参考网址：https://stackoverflow.com/questions/4334686/find-physical-path-from-microsoft-web-administration-and-path-relative-to-its-r
-# 参考网址：https://forums.iis.net/t/1146686.aspx
-# 删除站点下日志文件，如下
-# Remove-Item 'D:/TestWebRoot/App_Log/*' -include *.txt
-Write-Host $site.Applications["/"].VirtualDirectories["/"].PhysicalPath
+	Write-Host 共有 $allIISSites.count 个站点
+	Write-Host '每一项的数据类型是：' $allIISSites[0].gettype()
+	$allIISSites[0] | Out-String
+	# 可以使用 get-member 命令来查看对象中的属性
+	# get-member -inputobject $allIISSites[0]
+	
+	# 遍历所有的站点
+	foreach($site in $allIISSites)
+	{ 
+		# 这里有一个问题，如何判断是服务器端站点，否则删多了怎么办？？？
+		# 参考网址：https://stackoverflow.com/questions/4334686/find-physical-path-from-microsoft-web-administration-and-path-relative-to-its-r
+		# 参考网址：https://forums.iis.net/t/1146686.aspx
+		# 删除站点下日志文件，如下
+		# Remove-Item 'D:/TestWebRoot/App_Log/*' -include *.txt
+		Write-Host  $site.Applications["/"].VirtualDirectories["/"].PhysicalPath
+	}
 }
-}
-Write-Host '执行完毕...'
+Write-Host  '执行完毕...'
 
 #endregion
 
 # 执行完毕之后自动关闭了……
 # https://blog.danskingdom.com/keep-powershell-console-window-open-after-script-finishes-running/
 # https://stackoverflow.com/questions/16739322/how-to-keep-the-shell-window-open-after-running-a-powershell-script
+
 Read-Host -Prompt "Press Enter to exit"
+
         </pre>
     </div>
 </body>
