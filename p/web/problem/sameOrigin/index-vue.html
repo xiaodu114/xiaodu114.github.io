@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>同源页面通信 - xiaodu114.github.io</title>
+    <meta name="keywords" content="Web Components,Typesetting,Typesetting series">
+    <meta name="description" content="同源页面通信">
+
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+    <script src="/p/_/js/main.js"></script>
+</head>
+
+<body>
+    <!-- github访问地址：/p/web/problem/sameOrigin/index.html -->
+    <div class="blog-page">
+        <h1>同源页面通信</h1>
+        <div id="same-page-xxx-vue3-instance" v-cloak>
+            <fieldset>
+                <legend>同一页面内通信</legend>
+                <table>
+                    <caption>
+                        <span style="float: left;">XXX列表</span>
+                        <button type="button" style="float: right;" @click="openAddDialog($event);">新增</button>
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>性别</th>
+                            <th>备注</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(tr, index) in showItems" :key="tr.id">
+                            <td>{{tr.name}}</td>
+                            <td>{{tr.gender}}</td>
+                            <td>{{tr.remarks}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3">
+                                不会错过的，我在监听列表的变化……
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <xxx-add ref="xxxAddCompRef"></xxx-add>
+            </fieldset>
+        </div>
+        <p></p>
+    </div>
+    <script src="https://unpkg.com/eventemitter"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/vue-router@4"></script>
+    <script type="module">
+        let GV_EventEmitter = new EventEmitter();
+        let samePageXxxVue3Instance = Vue.createApp({
+            data() {
+                return {
+                    showItems: []
+                }
+            },
+            methods: {
+                requestShowItems(postData) {
+                    let initId = new Date().valueOf();
+                    return Promise.resolve([{
+                        id: initId,
+                        name: "杜1",
+                        gender: "男",
+                        remarks: "我是小杜1号"
+                    }, {
+                        id: ++initId,
+                        name: "杜2",
+                        gender: "女",
+                        remarks: "我是小杜2号"
+                    }]);
+                },
+                handleListChange(event) {
+                    if (!(event && event.action && event.data)) return;
+                    switch (event.action) {
+                        case "add": {
+                            this.showItems.unshift(event.data);
+                            break;
+                        }
+                        case "edit": { break; }
+                        case "delete": { break; }
+                    }
+                },
+                openAddDialog(evt) {
+                    this.$refs.xxxAddCompRef.show();
+                }
+            },
+            created() {
+                this.requestShowItems().then((serverData) => {
+                    this.showItems = this.showItems.concat(serverData);
+                });
+                GV_EventEmitter.on('same-page-xxx-list-change', this.handleListChange);
+            },
+            mounted() {
+            },
+        });
+        samePageXxxVue3Instance.config.compilerOptions.isCustomElement = tag => ["my-dialog"].indexOf(tag) >= 0;
+        samePageXxxVue3Instance.component('xxx-add', {
+            template:
+                `
+            <my-dialog ref="xxxAddDialog" title="新建xxx">
+                <div slot="body" style="padding: 0 24px;">
+                    <p><label>姓名：<input type="text" v-model="name"></label></p>
+                    <p><label>性别：<label><input type="radio" name="same-page-xxx-add-gender" 
+                                    value="男" v-model="gender">男</label><label><input type="radio" name="same-page-xxx-add-gender"
+                                    value="女" v-model="gender">女</label></label></p>
+                    <p><label>备注：<textarea v-model="remarks"></textarea></p> 
+                    <my-dialog ref="innerDialog001">
+                        <div slot="body">
+                            <p>嵌套dialog</p>
+                        </div>
+                    </my-dialog>   
+                </div>
+                <div slot="footer" style="padding: 0 24px;line-height: 48px;padding: 0 24px;text-align: right;">
+                    <div>
+                        <button type="button" @click="openInnerDialog($event)">千万不要点击啊</button>
+                        <button type="button" @click="save($event)">保存</button>
+                    </div>
+                </div>
+            </my-dialog>
+            `,
+            data() {
+                return {
+                    name: "",
+                    gender: "",
+                    remarks: ""
+                }
+            },
+            methods: {
+                show() {
+                    this.$refs.xxxAddDialog.open();
+                },
+                hidden() {
+                    this.$refs.xxxAddDialog.closed();
+                },
+                save(evt) {
+                    if (!(this.name && this.gender)) {
+                        alert("请输入姓名、选择性别！");
+                        return;
+                    }
+                    GV_EventEmitter.emit('same-page-xxx-list-change', {
+                        "action": "add",
+                        "data": {
+                            id: new Date().valueOf(),
+                            name: this.name,
+                            gender: this.gender,
+                            remarks: this.remarks
+                        }
+                    });
+                    this.hidden();
+                },
+                openInnerDialog() {
+                    this.$refs.innerDialog001.open();
+                }
+            }
+        });
+        samePageXxxVue3Instance.mount("#same-page-xxx-vue3-instance");
+    </script>
+</body>
+
+</html>
