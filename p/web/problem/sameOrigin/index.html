@@ -6,167 +6,182 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>同源页面通信 - xiaodu114.github.io</title>
-    <meta name="keywords" content="Web Components,Typesetting,Typesetting series">
+    <meta name="keywords" content="同源页面通信,same origin,事件,event,发布订阅">
     <meta name="description" content="同源页面通信">
 
-    <style>
-        [v-cloak] {
-            display: none;
-        }
-    </style>
     <script src="/p/_/js/main.js"></script>
 </head>
 
 <body>
-    <!-- github访问地址：/p/web/problem/sameOrigin/index.html -->
+    <!-- github访问地址：/p/web/problem/sameOrigin/page1.html -->
     <div class="blog-page">
         <h1>同源页面通信</h1>
-        <div id="same-page-xxx-vue3-instance" v-cloak>
+        <h2>一个页面不同组件的通信</h2>
+        <p>解决父子、兄弟组件之间的通信。这里有很多种解决方案：vue方案、自定义事件、第三方的事件派发器等。这里使用的是自己写的事件派发器。</p>
+        <div style="width: 100%; display: inline-grid; grid-auto-flow: column; grid-gap: 1rem;">
             <fieldset>
-                <legend>同一页面内通信</legend>
-                <table>
-                    <caption>
-                        <span style="float: left;">XXX列表</span>
-                        <button type="button" style="float: right;" @click="openAddDialog($event);">新增</button>
-                    </caption>
-                    <thead>
-                        <tr>
-                            <th>姓名</th>
-                            <th>性别</th>
-                            <th>备注</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(tr, index) in showItems" :key="tr.id">
-                            <td>{{tr.name}}</td>
-                            <td>{{tr.gender}}</td>
-                            <td>{{tr.remarks}}</td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="3">
-                                不会错过的，我在监听列表的变化……
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-                <xxx-add ref="xxxAddCompRef"></xxx-add>
-            </fieldset>
-        </div>
-        <p></p>
-    </div>
-    <script src="https://unpkg.com/eventemitter"></script>
-    <script src="https://unpkg.com/vue@next"></script>
-    <script src="https://unpkg.com/vue-router@4"></script>
-    <script type="module">
-        let GV_EventEmitter = new EventEmitter();
-        let samePageXxxVue3Instance = Vue.createApp({
-            data() {
-                return {
-                    showItems: []
-                }
-            },
-            methods: {
-                requestShowItems(postData) {
-                    let initId = new Date().valueOf();
-                    return Promise.resolve([{
-                        id: initId,
-                        name: "杜1",
-                        gender: "男",
-                        remarks: "我是小杜1号"
-                    }, {
-                        id: ++initId,
-                        name: "杜2",
-                        gender: "女",
-                        remarks: "我是小杜2号"
-                    }]);
-                },
-                handleListChange(event) {
-                    if (!(event && event.action && event.data)) return;
-                    switch (event.action) {
-                        case "add": {
-                            this.showItems.unshift(event.data);
-                            break;
-                        }
-                        case "edit": { break; }
-                        case "delete": { break; }
-                    }
-                },
-                openAddDialog(evt) {
-                    this.$refs.xxxAddCompRef.show();
-                }
-            },
-            created() {
-                this.requestShowItems().then((serverData) => {
-                    this.showItems = this.showItems.concat(serverData);
-                });
-                GV_EventEmitter.on('same-page-xxx-list-change', this.handleListChange);
-            },
-            mounted() {
-            },
-        });
-        samePageXxxVue3Instance.config.compilerOptions.isCustomElement = tag => ["my-dialog"].indexOf(tag) >= 0;
-        samePageXxxVue3Instance.component('xxx-add', {
-            template:
-                `
-            <my-dialog ref="xxxAddDialog" title="新建xxx">
-                <div slot="body" style="padding: 0 24px;">
-                    <p><label>姓名：<input type="text" v-model="name"></label></p>
-                    <p><label>性别：<label><input type="radio" name="same-page-xxx-add-gender" 
-                                    value="男" v-model="gender">男</label><label><input type="radio" name="same-page-xxx-add-gender"
-                                    value="女" v-model="gender">女</label></label></p>
-                    <p><label>备注：<textarea v-model="remarks"></textarea></p> 
-                    <my-dialog ref="innerDialog001">
-                        <div slot="body">
-                            <p>嵌套dialog</p>
-                        </div>
-                    </my-dialog>   
-                </div>
-                <div slot="footer" style="padding: 0 24px;line-height: 48px;padding: 0 24px;text-align: right;">
-                    <div>
-                        <button type="button" @click="openInnerDialog($event)">千万不要点击啊</button>
-                        <button type="button" @click="save($event)">保存</button>
+                <legend>这儿监听</legend>
+                <div class="same-page-evt-listen-container">
+                    <div class="same-page-evt-listen-instance">
+                        <p>
+                            <button type="button" id="btnStartSamePageEvt001Handle1">开始监听</button>
+                            <button type="button" id="btnStopSamePageEvt001Handle1">取消监听</button>
+                            &nbsp;&nbsp;&nbsp;监听状态：<span id="samePageEvt001ListenState1"></span>
+                        </p>
+                        <p>收到的消息：<strong id="samePageEvt001Result1"></strong></p>
+                    </div>
+                    <hr>
+                    <div class="same-page-evt-listen-instance">
+                        <p>
+                            <button type="button" id="btnStartSamePageEvt001Handle2">开始监听</button>
+                            <button type="button" id="btnStopSamePageEvt001Handle2">取消监听</button>
+                            &nbsp;&nbsp;&nbsp;监听状态：<span id="samePageEvt001ListenState2"></span>
+                        </p>
+                        <p>收到的消息：<strong id="samePageEvt001Result2"></strong></p>
+                    </div>
+                    <hr>
+                    <div class="same-page-evt-listen-instance">
+                        <p>
+                            <button type="button" id="btnStartSamePageEvt001Handle3">开始监听</button>
+                            <button type="button" id="btnStopSamePageEvt001Handle3">取消监听</button>
+                            &nbsp;&nbsp;&nbsp;监听状态：<span id="samePageEvt001ListenState3"></span>
+                        </p>
+                        <p>收到的消息：<strong id="samePageEvt001Result3"></strong></p>
                     </div>
                 </div>
-            </my-dialog>
-            `,
-            data() {
-                return {
-                    name: "",
-                    gender: "",
-                    remarks: ""
-                }
-            },
-            methods: {
-                show() {
-                    this.$refs.xxxAddDialog.open();
-                },
-                hidden() {
-                    this.$refs.xxxAddDialog.closed();
-                },
-                save(evt) {
-                    if (!(this.name && this.gender)) {
-                        alert("请输入姓名、选择性别！");
-                        return;
-                    }
-                    GV_EventEmitter.emit('same-page-xxx-list-change', {
-                        "action": "add",
-                        "data": {
-                            id: new Date().valueOf(),
-                            name: this.name,
-                            gender: this.gender,
-                            remarks: this.remarks
-                        }
-                    });
-                    this.hidden();
-                },
-                openInnerDialog() {
-                    this.$refs.innerDialog001.open();
-                }
-            }
+            </fieldset>
+            <fieldset>
+                <legend>我要广播</legend>
+                <div>
+                    <button type="button" id="btnSamePageEvt001Emit">触发（同一页面）</button>
+                </div>
+            </fieldset>
+        </div>
+        <h2>同源不用页面之间的通信</h2>
+        <p>解决不用页面之间的通信。为了测试这个，你需要在打开一个页面：<a href="./index.html"
+                target="_blank">一模一样</a>。或者你自己复制一下该html页面（取个你喜欢的名字），之后在同一浏览器打开这两个页面。</p>
+        <div style="width: 100%; display: inline-grid; grid-auto-flow: column; grid-gap: 1rem;">
+            <fieldset>
+                <legend>这儿监听</legend>
+                <div class="diff-page-evt-listen-container">
+                    <div class="diff-page-evt-listen-instance">
+                        <p>
+                            &nbsp;&nbsp;&nbsp;监听状态：<span id="diffPageEvt001ListenState1"></span>
+                        </p>
+                        <p>收到的消息：<strong id="diffPageEvt001Result1"></strong></p>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>我要广播</legend>
+                <div>
+                    <button type="button" id="btnDiffPageEvt001Emit">触发（不同页面）</button>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <script src="https://unpkg.com/a2bei4"></script>
+    <script>
+        let { MyEvent } = window.du;
+        //  定义一个"MyEvent"实例
+        let myEvt = new MyEvent({
+            crossPage: true
         });
-        samePageXxxVue3Instance.mount("#same-page-xxx-vue3-instance");
+
+        //#region 同页面事件相关
+
+        //  事件监听之监听实例1
+        let btnStartSamePageEvt001Handle1Ele = document.getElementById("btnStartSamePageEvt001Handle1");
+        let btnStopSamePageEvt001Handle1Ele = document.getElementById("btnStopSamePageEvt001Handle1");
+        let samePageEvt001ListenState1Ele = document.getElementById("samePageEvt001ListenState1");
+        function samePageEvt001Handle1(data) {
+            document.getElementById("samePageEvt001Result1").innerHTML = data;
+        }
+        function startSamePageEvt001Handle1() {
+            myEvt.on("same-page-evt-001", samePageEvt001Handle1);
+            btnStartSamePageEvt001Handle1Ele.style.display = "none";
+            btnStopSamePageEvt001Handle1Ele.style.display = "inline-block";
+            samePageEvt001ListenState1Ele.innerHTML = "正在监听……";
+            samePageEvt001ListenState1Ele.style.color = "#3cb878";
+        }
+        function stopSamePageEvt001Handle1() {
+            myEvt.off("same-page-evt-001", samePageEvt001Handle1);
+            btnStartSamePageEvt001Handle1Ele.style.display = "inline-block";
+            btnStopSamePageEvt001Handle1Ele.style.display = "none";
+            samePageEvt001ListenState1Ele.innerHTML = "停止监听……";
+            samePageEvt001ListenState1Ele.style.color = "#cc0000";
+        }
+        btnStartSamePageEvt001Handle1Ele.addEventListener("click", startSamePageEvt001Handle1);
+        btnStopSamePageEvt001Handle1Ele.addEventListener("click", stopSamePageEvt001Handle1);
+        //  事件监听之监听实例2
+        let btnStartSamePageEvt001Handle2Ele = document.getElementById("btnStartSamePageEvt001Handle2");
+        let btnStopSamePageEvt001Handle2Ele = document.getElementById("btnStopSamePageEvt001Handle2");
+        let samePageEvt001ListenState2Ele = document.getElementById("samePageEvt001ListenState2");
+        let samePageEvt001Handle2Flag = null;
+        function samePageEvt001Handle2(data) {
+            document.getElementById("samePageEvt001Result2").innerHTML = data;
+        }
+        function startSamePageEvt001Handle2() {
+            samePageEvt001Handle2Flag = myEvt.on("same-page-evt-001", samePageEvt001Handle2);
+            btnStartSamePageEvt001Handle2Ele.style.display = "none";
+            btnStopSamePageEvt001Handle2Ele.style.display = "inline-block";
+            samePageEvt001ListenState2Ele.innerHTML = "正在监听……";
+            samePageEvt001ListenState2Ele.style.color = "#3cb878";
+        }
+        function stopSamePageEvt001Handle2() {
+            myEvt.off("same-page-evt-001", samePageEvt001Handle2Flag);
+            btnStartSamePageEvt001Handle2Ele.style.display = "inline-block";
+            btnStopSamePageEvt001Handle2Ele.style.display = "none";
+            samePageEvt001ListenState2Ele.innerHTML = "停止监听……";
+            samePageEvt001ListenState2Ele.style.color = "#cc0000";
+        }
+        btnStartSamePageEvt001Handle2Ele.addEventListener("click", startSamePageEvt001Handle2);
+        btnStopSamePageEvt001Handle2Ele.addEventListener("click", stopSamePageEvt001Handle2);
+        //  事件监听之监听实例3
+        let btnStartSamePageEvt001Handle3Ele = document.getElementById("btnStartSamePageEvt001Handle3");
+        let btnStopSamePageEvt001Handle3Ele = document.getElementById("btnStopSamePageEvt001Handle3");
+        let samePageEvt001ListenState3Ele = document.getElementById("samePageEvt001ListenState3");
+        let samePageEvt001Handle3Flag = null;
+        function startSamePageEvt001Handle3() {
+            samePageEvt001Handle3Flag = myEvt.on("same-page-evt-001", (data) => {
+                document.getElementById("samePageEvt001Result3").innerHTML = data;
+            });
+            btnStartSamePageEvt001Handle3Ele.style.display = "none";
+            btnStopSamePageEvt001Handle3Ele.style.display = "inline-block";
+            samePageEvt001ListenState3Ele.innerHTML = "正在监听……";
+            samePageEvt001ListenState3Ele.style.color = "#3cb878";
+        }
+        function stopSamePageEvt001Handle3() {
+            myEvt.off("same-page-evt-001", samePageEvt001Handle3Flag);
+            btnStartSamePageEvt001Handle3Ele.style.display = "inline-block";
+            btnStopSamePageEvt001Handle3Ele.style.display = "none";
+            samePageEvt001ListenState3Ele.innerHTML = "停止监听……";
+            samePageEvt001ListenState3Ele.style.color = "#cc0000";
+        }
+        btnStartSamePageEvt001Handle3Ele.addEventListener("click", startSamePageEvt001Handle3);
+        btnStopSamePageEvt001Handle3Ele.addEventListener("click", stopSamePageEvt001Handle3);
+
+        //  事件触发
+        document.getElementById("btnSamePageEvt001Emit").addEventListener("click", function () {
+            myEvt.emit("same-page-evt-001", Date.now(), true);
+        });
+
+        //  页面加载时开始监听
+        startSamePageEvt001Handle1();
+        startSamePageEvt001Handle2();
+        startSamePageEvt001Handle3();
+
+        //#endregion
+
+
+        myEvt.on("diff-page-evt-001", function (data) {
+            document.getElementById("diffPageEvt001Result1").innerHTML = data;
+        });
+        document.getElementById("btnDiffPageEvt001Emit").addEventListener("click", function () {
+            myEvt.emit("diff-page-evt-001", Date.now(), { a: "a" }, {
+                crossPage: true
+            });
+        });
     </script>
 </body>
 
