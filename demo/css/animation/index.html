@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>animation | 动画 - xiaodu114.github.io</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        body {
+            padding: 50px;
+            overflow-y: auto;
+        }
+
+        fieldset {
+            width: 100%;
+            margin-bottom: 25px;
+        }
+    </style>
+</head>
+
+<body>
+    <ul>
+        <li>
+            <a href="https://devsnap.me/css-buttons" target="_blank">150+ CSS Buttons - Free Code + Demos</a>
+        </li>
+    </ul>
+    <fieldset>
+        <legend>
+            <strong>实例X</strong> 参考链接：<a href="" target="_blank"></a>
+        </legend>
+        <div class="demox">
+
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>
+            <strong>实例1</strong> 参考链接：<a href="https://codepen.io/b29/pen/jmNvJq" target="_blank">Play Button</a>
+        </legend>
+        <style>
+            .demo1 {
+                padding: 36px;
+                background: #444;
+            }
+
+            .demo1>.demo1-eg {
+                position: relative;
+                width: 100px;
+                height: 100px;
+                background: radial-gradient(rgba(255, 0, 128, 0.8) 60%, rgba(255, 255, 255, 1) 62%);
+                border-radius: 50%;
+                box-shadow: 0px 0px 25px 3px rgba(255, 0, 128, 0.8);
+            }
+
+            .demo1>.demo1-eg:before {
+                content: "";
+                width: 150%;
+                height: 150%;
+                position: absolute;
+                top: -30%;
+                left: -30%;
+                /* 组合写法 */
+                animation: demo1-eg-kf 2s infinite;
+                /* 也可以像下面一样分开写 */
+                /* animation: demo1-eg-kf 2s;
+                animation-iteration-count: infinite; */
+                opacity: 1;
+                border-radius: 50%;
+                border: 5px solid rgba(255, 255, 255, .75);
+                background: rgba(198, 16, 0, 0);
+            }
+
+            @keyframes demo1-eg-kf {
+                0% {
+                    transform: scale(0.6);
+                    opacity: 1;
+                    box-shadow: inset 0px 0px 25px 3px rgba(255, 255, 255, 0.75), 0px 0px 25px 10px rgba(255, 255, 255, 0.75);
+                }
+
+                100% {
+                    transform: scale(1);
+                    opacity: 0;
+                    box-shadow: none;
+
+                }
+            }
+        </style>
+        <div class="demo1">
+            <div class="demo1-eg"></div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>
+            <strong>实例2</strong> 参考链接：
+            <a href="https://codepen.io/magnificode/pen/zGVyQm" target="_blank">Simple Button Hover</a>
+        </legend>
+        <style>
+            .demo2 {
+                display: inline-grid;
+                grid-auto-flow: column;
+                grid-gap: 5rem;
+                padding: 36px;
+            }
+
+            .demo2>.demo2-eg,
+            .demo2>.demo2-eg-copy-1 {
+                position: relative;
+                width: 80px;
+                height: 80px;
+                background: #ed1c5b;
+                border-radius: 50%;
+                border: none;
+                transition: box-shadow 400ms cubic-bezier(0.2, 0, 0.7, 1);
+            }
+
+            .demo2>.demo2-eg:hover {
+                box-shadow:
+                    0 0 1px 15px rgba(138, 59, 88, 0.4),
+                    0 0 1px 30px rgba(138, 59, 88, 0.1),
+                    0 0 1px 45px rgba(138, 59, 88, 0.1);
+            }
+
+            .demo2>.demo2-eg-copy-1:hover {
+                box-shadow:
+                    0 0 1px 15px rgba(138, 59, 88, 0.9),
+                    0 0 1px 30px rgba(138, 59, 88, 0.7),
+                    0 0 1px 45px rgba(138, 59, 88, 0.5),
+                    0 0 1px 60px rgba(138, 59, 88, 0.3),
+                    0 0 1px 75px rgba(138, 59, 88, 0.1);
+            }
+
+            .demo2>.demo2-eg-copy-2 {
+                position: relative;
+                width: 80px;
+                height: 80px;
+                background: #ed1c5b;
+                border-radius: 50%;
+                border: none;
+                /* animation: demo2-eg-copy-2-kf 1s cubic-bezier(0.2, 0, 0.7, 1) infinite; */
+                animation: demo2-eg-copy-2-kf 2s ease-in-out infinite;
+            }
+
+            @keyframes demo2-eg-copy-2-kf {
+                0% {
+                    box-shadow: none;
+                }
+
+                50% {
+                    box-shadow:
+                        0 0 1px 15px rgba(138, 59, 88, 0.4),
+                        0 0 1px 30px rgba(138, 59, 88, 0.1),
+                        0 0 1px 45px rgba(138, 59, 88, 0.1);
+                }
+
+                100% {
+                    box-shadow: none;
+                }
+            }
+        </style>
+        <div class="demo2">
+            <div class="demo2-eg"></div>
+        </div>
+        <hr>
+        <div class="demo2">
+            <div class="demo2-eg-copy-1"></div>
+            <div class="demo2-eg-copy-2"></div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>
+            <strong>实例3</strong> 参考链接：
+            <a href="https://codepen.io/oliviale/pen/vPvvyr" target="_blank">CSS Animations: Obvious CTA Buttons</a>
+        </legend>
+        <style>
+            .demo3,
+            .demo3-copy {
+                width: 100%;
+                display: inline-grid;
+                grid-auto-flow: column;
+                grid-auto-columns: max-content;
+                grid-gap: 5rem;
+                position: relative;
+                overflow: hidden;
+            }
+
+            /* 案例一 */
+            .demo3-eg-1 {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+            }
+
+            .demo3-eg-1>button {
+                position: relative;
+                width: 200px;
+                height: 65px;
+                background: #f1c40f;
+                color: #fff;
+                border: 3px solid #fff;
+                border-radius: 50px;
+                font: 24px "Margarine", sans-serif;
+                cursor: pointer;
+                animation: demo3-eg-1-kf1 4s infinite;
+            }
+
+            .demo3-eg-1>button:hover {
+                animation: demo3-eg-1-kf2 0.2s infinite;
+            }
+
+            @keyframes demo3-eg-1-kf1 {
+
+                5%,
+                50% {
+                    transform: scale(1);
+                }
+
+                10% {
+                    transform: scale(0.9);
+                }
+
+                15% {
+                    transform: scale(1.15);
+                }
+
+                20% {
+                    transform: scale(1.15) rotate(-5deg);
+                }
+
+                25% {
+                    transform: scale(1.15) rotate(5deg);
+                }
+
+                30% {
+                    transform: scale(1.15) rotate(-3deg);
+                }
+
+                35% {
+                    transform: scale(1.15) rotate(2deg);
+                }
+
+                40% {
+                    transform: scale(1.15) rotate(0);
+                }
+            }
+
+            @keyframes demo3-eg-1-kf2 {
+                50% {
+                    transform: scale(1.1);
+                }
+            }
+
+            /* 案例二 */
+            .demo3-eg-2 {
+                display: inline-block;
+                position: relative;
+                width: 200px;
+                height: 65px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .demo3-eg-2>button {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: 2;
+                background: #e67e22;
+                color: #fff;
+                border: 3px solid #fff;
+                border-radius: 50px;
+                font: 24px "Margarine", sans-serif;
+                cursor: pointer;
+            }
+
+            .demo3-eg-2>.demo3-eg-2-pulsing {
+                width: 99%;
+                height: 99%;
+                border-radius: 50px;
+                z-index: 1;
+                position: relative;
+            }
+
+            .demo3-eg-2>.demo3-eg-2-pulsing:before,
+            .demo3-eg-2>.demo3-eg-2-pulsing:after {
+                content: "";
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                border: inherit;
+                top: 0;
+                left: 0;
+                z-index: 0;
+                background: #fff;
+                border-radius: inherit;
+                animation: demo3-eg-2-kf1 2.5s linear infinite;
+            }
+
+            .demo3-eg-2>.demo3-eg-2-pulsing:after {
+                animation: demo3-eg-2-kf2 2.5s linear infinite;
+            }
+
+            @keyframes demo3-eg-2-kf1 {
+                0% {
+                    opacity: 1;
+                    transform: scaleY(1) scaleX(1);
+                }
+
+                20% {
+                    opacity: 0.5;
+                }
+
+                70% {
+                    opacity: 0.2;
+                    transform: scaleY(1.8) scaleX(1.4);
+                }
+
+                80% {
+                    opacity: 0;
+                    transform: scaleY(1.8) scaleX(1.4);
+                }
+
+                90% {
+                    opacity: 0;
+                    transform: scaleY(1) scaleX(1);
+                }
+            }
+
+            @keyframes demo3-eg-2-kf2 {
+                0% {
+                    opacity: 1;
+                    transform: scaleY(1) scaleX(1);
+                }
+
+                20% {
+                    opacity: 0.5;
+                }
+
+                70% {
+                    opacity: 0.2;
+                    transform: scaleY(1.3) scaleX(1.15);
+                }
+
+                80% {
+                    opacity: 0;
+                    transform: scaleY(1.3) scaleX(1.15);
+                }
+
+                90% {
+                    opacity: 0;
+                    transform: scaleY(1) scaleX(1);
+                }
+            }
+
+            /* 案例三 */
+            .demo3-eg-3 {
+                display: flex;
+                justify-content: center;
+                align-items: flex-end;
+                height: 100%;
+                padding: 15px;
+            }
+
+            .demo3-eg-3>button {
+                position: relative;
+                width: 200px;
+                height: 65px;
+                background: #3498db;
+                color: #fff;
+                border: 3px solid #fff;
+                border-radius: 50px;
+                font: 24px "Margarine", sans-serif;
+                cursor: pointer;
+            }
+
+            .demo3-eg-3>button:before {
+                position: absolute;
+                content: "👇";
+                font-size: 60px;
+                transform: scaleX(-1);
+                right: 0px;
+                top: -68px;
+                animation: demo3-eg-3-kf1 1s infinite;
+            }
+
+            @keyframes demo3-eg-3-kf1 {
+                50% {
+                    margin-top: -20px;
+                }
+            }
+
+            /* 案例四 */
+            .demo3-eg-4>button {
+                position: relative;
+                width: 200px;
+                height: 65px;
+                background: #c0392b;
+                color: #fff;
+                border: 3px solid #fff;
+                border-radius: 50px;
+                font: 24px "Margarine", sans-serif;
+                cursor: pointer;
+                animation: demo3-eg-4-kf1 3s infinite, demo3-eg-4-kf2 0.6s infinite;
+            }
+
+            .demo3-eg-4>button>.rainbow {
+                width: 140px;
+                height: 140px;
+                border-radius: 50%;
+                position: absolute;
+                left: 0;
+                right: 0;
+                margin: auto;
+                top: -40px;
+                transition: 0.5s ease;
+                opacity: 0;
+                transform: rotate(0);
+            }
+
+            .demo3-eg-4>button>.rainbow:before {
+                content: "🌈";
+                position: absolute;
+                left: 0;
+            }
+
+            .demo3-eg-4>button:hover>.rainbow {
+                opacity: 1;
+                animation: demo3-eg-4-kf3 1s infinite;
+            }
+
+            @keyframes demo3-eg-4-kf1 {
+                0% {
+                    background: #1abc9c;
+                }
+
+                10% {
+                    background: #2ecc71;
+                }
+
+                20% {
+                    background: #3498db;
+                }
+
+                30% {
+                    background: #9b59b6;
+                }
+
+                40% {
+                    background: #e74c3c;
+                }
+
+                50% {
+                    background: #e67e22;
+                }
+
+                60% {
+                    background: #f1c40f;
+                }
+
+                70% {
+                    background: #2c3e50;
+                }
+
+                80% {
+                    background: #9b59b6;
+                }
+            }
+
+            @keyframes demo3-eg-4-kf2 {
+                50% {
+                    transform: scale(1.1);
+                }
+            }
+
+            @keyframes demo3-eg-4-kf3 {
+                50% {
+                    /* 这个旋转的度数需要好好计算一下啊 */
+                    transform: rotate(90deg);
+                }
+            }
+
+
+            .demo3-copy {
+                border: 1px solid #3cb878;
+                height: 110px;
+            }
+
+            .demo3-eg-2-copy-1 {
+                width: 50px;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #fff;
+                background-color: #3cb878;
+                border-radius: 50%;
+                cursor: pointer;
+                box-shadow: 0 3px 5px -1px rgb(0 0 0 / 20%), 0 6px 10px 0 rgb(0 0 0 / 14%), 0 1px 18px 0 rgb(0 0 0 / 12%);
+            }
+
+            .demo3-eg-2-copy-1 {
+                position: absolute;
+                bottom: -25px;
+                transition: bottom 0.5s;
+                transition-timing-function: cubic-bezier(.8, -.5, .2, 1.4);
+            }
+
+            .demo3-eg-2-copy-1:hover {
+                bottom: 15px;
+            }
+
+            .demo3-eg-2-copy-1>.demo3-eg-2-copy-1-pulsing {
+                width: 100%;
+                height: 200%;
+                border-radius: 50%;
+                position: absolute;
+            }
+
+            .demo3-eg-2-copy-1>.demo3-eg-2-copy-1-pulsing:before,
+            .demo3-eg-2-copy-1>.demo3-eg-2-copy-1-pulsing:after {
+                content: "";
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                border: inherit;
+                top: 0;
+                left: 0;
+                z-index: 0;
+                background: #3cb878;
+                border-radius: inherit;
+                animation: demo3-eg-2-kf1 2.5s linear infinite;
+            }
+
+            .demo3-eg-2-copy-1>.demo3-eg-2-copy-1-pulsing:after {
+                animation: demo3-eg-2-kf2 2.5s linear infinite;
+            }
+        </style>
+        <div class="demo3">
+            <div style="width: 325px; height: 160px; background-color: #f1c40f;">
+                <div class="demo3-eg-1">
+                    <button type="button"> Click Me!</button>
+                </div>
+            </div>
+            <div
+                style="width: 325px;display: flex;justify-content: center;align-items: center;background-color: #e67e22;">
+                <div class="demo3-eg-2">
+                    <div class="demo3-eg-2-pulsing"></div>
+                    <button type="button">&#10004</button>
+                </div>
+            </div>
+            <div style="width: 325px; background-color: #3498db;">
+                <div class="demo3-eg-3">
+                    <button type="button"> Click Me!</button>
+                </div>
+            </div>
+            <div
+                style="width: 325px;display: flex;justify-content: center;align-items: center; background-color: #ecf0f1;">
+                <div class="demo3-eg-4">
+                    <button>Click Me!
+                        <div class="rainbow"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="demo3-copy">
+            <div class="demo3-eg-2-copy-1">
+                <div class="demo3-eg-2-copy-1-pulsing"></div>
+                <span>&#10004</span>
+            </div>
+        </div>
+    </fieldset>
+</body>
+
+</html>
