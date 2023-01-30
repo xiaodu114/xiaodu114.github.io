@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Visual Studio Code - xiaodu114.github.io</title>
+        <meta name="keywords" content="Visual Studio Code,Prettier" />
+        <meta name="description" content="整理收集一下 Visual Studio Code 相关的东东。VSCode自身相关，一些常用的插件：Prettier" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：p/ide/vscode/index.html -->
+        <div class="blog-page">
+            <h1>Visual Studio Code</h1>
+            <p>这里整理收集一些<line-code>Visual Studio Code</line-code>相关的东东，包括：其自身、常用插件……由于<line-code>Visual Studio Code</line-code>有点长，后面使用<line-code>VSCode</line-code>代替。</p>
+            <h2>官网</h2>
+            <p>官网地址：<a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code - Code Editing. Redefined</a></p>
+            <h2>插件</h2>
+            <p>这里整理介绍一下常用的插件……插件官网：<a href="https://marketplace.visualstudio.com/VSCode" target="_blank">Extensions for Visual Studio family of products | Visual Studio Marketplace</a></p>
+            <h3>Prettier - Code formatter</h3>
+            <p>格式化代码必备插件。官网地址：<a href="https://prettier.io/" target="_blank">Prettier · Opinionated Code Formatter</a>、在线预览效果：<a href="https://prettier.io/playground/" target="_blank">Prettier Online</a> 。其实<line-code>VSCode</line-code>自带也不错，但是支持文件类型有限（尤其是.vue文件），所以选择了她。<line-code>Prettier</line-code>有很多配置项，详细的可以看一下官网：<a href="https://prettier.io/docs/en/options.html" target="_blank">Options · Prettier</a>，有些配置项是有代码示例的。</p>
+            <p>下面是我们的配置项：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="json">
+{
+    "arrowParens":"always",
+    "bracketSameLine":true,
+    "bracketSpacing":true,
+    "embeddedLanguageFormatting":"auto",
+    "endOfLine":"lf",
+    "htmlWhitespaceSensitivity":"css",
+    "jsxSingleQuote":false,
+    "printWidth":1024,
+    "proseWrap":"preserve",
+    "quoteProps":"consistent",
+    "requirePragma":false,
+    "semi":true,
+    "singleAttributePerLine":false,
+    "singleQuote": false,
+    "tabWidth": 4,
+    "trailingComma": "none",
+    "useTabs":false,
+    "vueIndentScriptAndStyle":true
+}
+            </pre>
+            <p>你可以将上面的配置项放到一个JSON文件中，并添加到<line-code>Prettier: Config Path</line-code>配置项中</p>
+        </div>
+    </body>
+</html>
