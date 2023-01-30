@@ -121,33 +121,26 @@
                         };
                     },
                     methods: {
-                        loadMoreData() {
-                            let tempTableData = [];
+                        assembleData() {
+                            let tempData = [];
                             for (let index = 0; index < 30; index++) {
-                                tempTableData.push({
+                                tempData.push({
                                     id: du.utils.getGUID(),
-                                    textType: du.utils.getRandomZhOrEnStr(200),
+                                    textType: du.utils.getRandomZhOrEnStr(du.utils.getInRangeInteger(5)),
                                     numberType: du.utils.getInRangeInteger(100),
                                     dateType: du.date.getInRangeDate("2022-01-01 08:00:00", "2022-07-27 08:00:00").format("yyyy-MM-dd hh:mm:ss"),
                                     remarks: du.utils.getRandomZhOrEnStr(du.utils.getInRangeInteger(200))
                                 });
                             }
+                            return tempData;
+                        },
+                        loadMoreData() {
                             // this.items = this.items.concat(tempTableData);
-                            this.items.push(...tempTableData);
+                            this.items.push(...this.assembleData());
                         }
                     },
                     created() {
-                        let tempTableData = [];
-                        for (let index = 0; index < 50; index++) {
-                            tempTableData.push({
-                                id: du.utils.getGUID(),
-                                textType: du.utils.getRandomZhOrEnStr(du.utils.getInRangeInteger(2)),
-                                numberType: du.utils.getInRangeInteger(100),
-                                dateType: du.date.getInRangeDate("2022-01-01 08:00:00", "2022-07-27 08:00:00").format("yyyy-MM-dd hh:mm:ss"),
-                                remarks: du.utils.getRandomZhOrEnStr(du.utils.getInRangeInteger(200))
-                            });
-                        }
-                        this.items = tempTableData;
+                        this.items = this.assembleData();
                     }
                 });
             })();
