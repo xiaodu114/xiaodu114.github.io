@@ -1,41 +1,39 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>PowerShell - xiaodu114.github.io</title>
+        <meta name="keywords" content="PowerShell,computer hardware,cpu,IIS Site" />
+        <meta name="description" content="整理记录一些 PowerShell 的使用情况" />
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>PowerShell - xiaodu114.github.io</title>
-    <meta name="keywords" content="PowerShell,computer hardware,cpu,IIS Site">
-    <meta name="description" content="整理记录一些 PowerShell 的使用情况">
+        <script src="/p/_/js/main.js"></script>
+    </head>
 
-    <script src="/p/_/js/main.js"></script>
-</head>
-
-<body>
-    <!-- github访问地址：/p/powershell/index.html -->
-    <div class="blog-page">
-        <h1>PowerShell相关</h1>
-        <p>这里整理记录一些日常<line-code>PowerShell</line-code>使用情况</p>
-        <h2>电脑硬件信息</h2>
-        <p></p>
-        <details>
-            <summary>仅在运行终端输出信息</summary>
-            <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
-                data-url="/p/powershell/code/get-computer-hardware-info.txt" ddz-lang="bash"></div>
-        </details>
-        <p></p>
-        <details>
-            <summary>在运行终端输出信息并且可以选择性保存到txt文档</summary>
-            <div ddz-class="here-need-to-handle-by-highlight-and-request-html"
-                data-url="/p/powershell/code/get-computer-hardware-info-saveas-txt.txt" ddz-lang="bash"></div>
-        </details>
-        <p></p>
-        <h2>IIS站点</h2>
-        <p>这个是个什么需求呢！我们在IIS上部署了好多<line-code>ASP.NET</line-code>
-            的站点，还有好多静态站点。其中后端站点会在响应的目录下记录日志（按照日期和日志类型的txt文件），随着时间的正常这些日志文件越来越多，磁盘占用量越来越大……于是就想着弄一个简单的方式删除这些文件，想到两种方式：一是列出所有的后端站点路径删除；二是遍历IIS的所有站点，找出后端站点之后删除。这里只是记录一下第二种方式：
-        </p>
-        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+    <body>
+        <!-- github访问地址：/p/powershell/index.html -->
+        <div class="blog-page">
+            <h1>PowerShell相关</h1>
+            <p>这里整理记录一些日常<line-code>PowerShell</line-code>使用情况</p>
+            <h2>电脑硬件信息</h2>
+            <p></p>
+            <details>
+                <summary>仅在运行终端输出信息</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="/p/powershell/code/get-computer-hardware-info.txt" ddz-lang="bash"></div>
+            </details>
+            <p></p>
+            <details>
+                <summary>在运行终端输出信息并且可以选择性保存到txt文档</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="/p/powershell/code/get-computer-hardware-info-saveas-txt.txt" ddz-lang="bash"></div>
+            </details>
+            <p></p>
+            <h2>IIS站点</h2>
+            <p>
+                这个是个什么需求呢！我们在IIS上部署了好多<line-code>ASP.NET</line-code>
+                的站点，还有好多静态站点。其中后端站点会在响应的目录下记录日志（按照日期和日志类型的txt文件），随着时间的正常这些日志文件越来越多，磁盘占用量越来越大……于是就想着弄一个简单的方式删除这些文件，想到两种方式：一是列出所有的后端站点路径删除；二是遍历IIS的所有站点，找出后端站点之后删除。这里只是记录一下第二种方式：
+            </p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 
 #region 强制管理员权限执行
 
@@ -87,9 +85,23 @@ Write-Host  '执行完毕...'
 # https://stackoverflow.com/questions/16739322/how-to-keep-the-shell-window-open-after-running-a-powershell-script
 
 Read-Host -Prompt "Press Enter to exit"
+            </pre>
+            <h2>强制删除文件夹</h2>
+            <p><line-code>Beyond Compare</line-code>这款比较工具很好用，但是试用期过去之后需要( $ _ $ )了，这里找到了一种方式可以解决这个问题，但是操作频率比较高……</p>
+            <pre>
+if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) 
+{
+ Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs; exit 
+}
 
-        </pre>
-    </div>
-</body>
+#	删除用户数据
+Remove-Item 'C:\Users\hj6\AppData\Roaming\Scooter Software\Beyond Compare 4' -Force -Recurse
 
+#	执行结束
+Write-Host  '删除成功...'
+#	按任意键退出
+Read-Host -Prompt "按任意键退出"
+            </pre>
+        </div>
+    </body>
 </html>
