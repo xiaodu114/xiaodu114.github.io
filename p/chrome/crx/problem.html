@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>chrome 插件 - xiaodu114.github.io</title>
+        <meta name="keywords" content="Chromium,Chrome,Chrome Extensions,Chrome 扩展,Chrome 插件" />
+        <meta name="description" content="整理收集一些 Chrome 扩展 相关的问题" />
+
+        <script src="/p/_/js/main.js"></script>
+        <script src="./js/LogView.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/chrome/crx/problem.html -->
+        <div class="blog-page">
+            <h1>Chrome Extensions</h1>
+            <p>整理收集一些 Chrome 扩展 相关的问题</p>
+            <h2>uBlock Origin</h2>
+            <p>官方：一款高效的网络请求过滤工具，占用极低的内存和 CPU。</p>
+            <p>这里作为广告过滤插件使用，感觉还不错……有一次发现本地站点的某个页面异常（使用的是 Edge ）：其他同事的没有问题，后来自己使用 chrome 也没有问题（现在知道是什么原因了，chrome 没有安装该插件）。于是就忽略这个问题，似乎将它忘记了。没想到过了几天再次访问这个页面时当然还是异常，这时想着去查一下原因。</p>
+            <p>排查发现：异常页面依赖的JS文件加载异常，如下图</p>
+            <p>
+                <img src="./images/1.png" alt="net::ERR_BLOCKED_BY_CLIENT" />
+            </p>
+            <p>开始以为是JS内容的问题：新语法或者书写错误等。后来清空了JS之后还是有问题，就发现不是JS内容的问题了。于是查了一下：有的说是跨域的问题（这里不是）；有的说是广告过滤插件的问题（ <a href="https://blog.csdn.net/itwangyang520/article/details/104992015" target="_blank">Chrome等浏览器下出现net::ERR_BLOCKED_BY_CLIENT的解决办法</a> ）。最后发现还真是插件的问题，如下图：</p>
+            <p>
+                <img src="./images/2.png" />
+            </p>
+            <p>本页面也引了一个名为<line-code>LogView.js</line-code>的JS。如果你也使用了<line-code>uBlock Origin</line-code>，那么你应该可以看到具体效果。</p>
+        </div>
+    </body>
+</html>
