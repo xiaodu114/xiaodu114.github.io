@@ -88,7 +88,7 @@ Read-Host -Prompt "Press Enter to exit"
             </pre>
             <h2>强制删除文件夹</h2>
             <p><line-code>Beyond Compare</line-code>这款比较工具很好用，但是试用期过去之后需要( $ _ $ )了，这里找到了一种方式可以解决这个问题，但是操作频率比较高……</p>
-            <pre>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) 
 {
  Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs; exit 
