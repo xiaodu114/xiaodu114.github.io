@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>工作中遇到的一些CSS奇葩问题 - xiaodu114.github.io</title>
+        <meta name="keywords" content="css,问题,span 间距,position: fixed,transform,chrome 73" />
+        <meta name="description" content="工作中遇到的一些CSS奇葩问题，例如：span 间距、position: fixed 和 transform、低版本 chrome ……" />
+
+        <style>
+            .position-fixed-chrome-73 {
+                position: fixed;
+                height: 156px;
+                overflow-y: auto;
+                background-color: antiquewhite;
+                border-radius: 4px;
+            }
+
+            .position-fixed-chrome-73 > .item-box {
+                height: 36px;
+                line-height: 36px;
+            }
+
+            .position-fixed-chrome-73-1 {
+                position: fixed;
+                height: 156px;
+                background-color: antiquewhite;
+                border-radius: 4px;
+            }
+
+            .position-fixed-chrome-73-1 .item-box {
+                height: 36px;
+                line-height: 36px;
+            }
+        </style>
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/web/css/problem.html -->
+        <div class="blog-page">
+            <h1>工作中遇到的一些CSS奇葩问题</h1>
+            <p>这里该说点什么呢……</p>
+            <h2>类<line-code>span</line-code>之间的间隙</h2>
+            <p>行内元素或者设置了<line-code>inline</line-code>、<line-code>inline-block</line-code>的元素在编码时没有放在同一行（或者在同一行并且元素之间有空格等），那么在浏览器浏览该页面时对应的元素之间就会有间隙。</p>
+            <h3>事故现场</h3>
+            <fieldset>
+                <legend>下面是几个案例</legend>
+                <strong>案例一</strong>
+                <p>此案例使用<line-code>div</line-code>容器包含<line-code>span</line-code>元素复现</p>
+                <div>
+                    <span>祈祷</span>
+                    <span>甘心情愿</span>
+                    <span>片片枫叶情</span>
+                </div>
+                <p></p>
+                <strong>案例二</strong>
+                <p>此案例使用<line-code>div</line-code>容器包含<line-code>div</line-code>元素并且设置<line-code>display: inline</line-code>复现</p>
+                <div>
+                    <div style="display: inline">手心里的温柔</div>
+                    <div style="display: inline">西海情歌</div>
+                    <div style="display: inline">情人</div>
+                </div>
+            </fieldset>
+            <h3>解决方式</h3>
+            <fieldset>
+                <legend>方式1</legend>
+                <p>编码时控制在同一行并且元素之间没有空格等。</p>
+                <strong>案例一</strong>
+                <div><span>祈祷</span><span>甘心情愿</span><span>片片枫叶情</span></div>
+                <p></p>
+                <strong>案例二</strong>
+                <p><strong>注意：</strong>这个没有觉得的原因是自动格式化之后换行了。如果在同一行没有问题。</p>
+                <div>
+                    <div style="display: inline">手心里的温柔</div>
+                    <div style="display: inline">西海情歌</div>
+                    <div style="display: inline">情人</div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>方式2</legend>
+                <p>css样式解决：子元素设置<line-code>float: left</line-code></p>
+                <strong>案例一</strong>
+                <div>
+                    <span style="float: left">祈祷</span>
+                    <span style="float: left">甘心情愿</span>
+                    <span>片片枫叶情</span>
+                </div>
+                <p></p>
+                <strong>案例二</strong>
+                <div>
+                    <div style="float: left">手心里的温柔</div>
+                    <div style="float: left">西海情歌</div>
+                    <div style="float: left">情人</div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>方式3</legend>
+                <p>css样式解决：父容器设置<line-code>font-size: 0</line-code>,子元素设置<line-code>font-size: 1rem</line-code></p>
+                <strong>案例一</strong>
+                <div style="font-size: 0">
+                    <span style="font-size: 1rem">祈祷</span>
+                    <span style="font-size: 1rem">甘心情愿</span>
+                    <span style="font-size: 1rem">片片枫叶情</span>
+                </div>
+                <p></p>
+                <strong>案例二</strong>
+                <div style="font-size: 0">
+                    <div style="display: inline; font-size: 1rem">手心里的温柔</div>
+                    <div style="display: inline; font-size: 1rem">西海情歌</div>
+                    <div style="display: inline; font-size: 1rem">情人</div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>方式4</legend>
+                <p>css样式解决：父容器设置<line-code>display: flex</line-code></p>
+                <strong>案例一</strong>
+                <div style="display: flex">
+                    <span>祈祷</span>
+                    <span>甘心情愿</span>
+                    <span>片片枫叶情</span>
+                </div>
+                <p></p>
+                <strong>案例二</strong>
+                <div style="display: flex">
+                    <div style="display: inline">手心里的温柔</div>
+                    <div style="display: inline">西海情歌</div>
+                    <div style="display: inline">情人</div>
+                </div>
+            </fieldset>
+            <h2><line-code>position: fixed</line-code>的一些问题</h2>
+            <h3>和<line-code>transform</line-code>的宿怨</h3>
+            <fieldset>
+                <legend>案例</legend>
+                <div>
+                    <p>这里是<line-code>div</line-code>容器，没有设置<line-code>transform</line-code></p>
+                    <div style="position: fixed; top: 0; left: 0; width: 123px; height: 123px; background-color: bisque">position: fixed 测试一。父容器没有设置 transform ，所以位置正常</div>
+                </div>
+                <div style="transform: perspective(10px)">
+                    <p>这里是<line-code>div</line-code>容器，已设置<line-code>transform</line-code></p>
+                    <div style="position: fixed; top: 20px; left: 88px; width: 123px; height: 123px; background-color: cadetblue">position: fixed 测试。父容器已设置 transform ，所以位置异常</div>
+                </div>
+            </fieldset>
+            <p></p>
+            <mark-block>
+                <p>设置<line-code>position: fixed</line-code>样式元素的父元素或者祖先元素如果设置了<line-code>transform</line-code>样式（不是所有的该属性值对其有影响，测试发现有些值没有影响），那么<line-code>position: fixed</line-code>样式会失效。</p>
+            </mark-block>
+            <h3>chrome 73下的问题</h3>
+            <fieldset>
+                <legend>案例</legend>
+                <div>
+                    <p>这里是<line-code>div</line-code>容器</p>
+                    <p><strong>注意：</strong>经测试发现这是<line-code>position: fixed;</line-code>、<line-code>overflow-y: auto;</line-code>、<line-code>border-radius: 4px;</line-code>相互影响的结果。屏蔽掉overflow-y或者border-radius之后都可以显示出来，但是不是我们想要的结果。</p>
+                    <div class="position-fixed-chrome-73" style="top: 135px; left: 0">
+                        <div class="item-box">
+                            <div class="item-self-box">祈祷</div>
+                            <div class="position-fixed-chrome-73 item-children-box" style="top: 145px; left: 162px">
+                                <p>让我们敲希望的钟啊</p>
+                                <p>多少祈祷在心中</p>
+                                <p>让大家看不到失败</p>
+                                <p>叫成功永远在</p>
+                                <p>让地球忘记了转动啊</p>
+                                <p>四季少了夏秋冬</p>
+                                <p>让宇宙关不了天窗</p>
+                                <p>叫太阳不西冲</p>
+                                <p>让欢喜代替了哀愁啊</p>
+                                <p>微笑不会再害羞</p>
+                                <p>让时光懂得去倒流</p>
+                                <p>叫青春不开溜</p>
+                                <p>让贫穷开始去逃亡啊</p>
+                                <p>快乐健康留四方</p>
+                                <p>让世界找不到黑暗</p>
+                                <p>幸福像花开放</p>
+                                <p>让我们敲希望的钟啊</p>
+                                <p>多少祈祷在心中</p>
+                                <p>让大家看不到失败</p>
+                                <p>叫成功永远在</p>
+                                <p>让大家看不到失败</p>
+                                <p>叫成功永远在</p>
+                            </div>
+                        </div>
+                        <div class="item-box">
+                            <div class="item-self-box">红尘有你</div>
+                        </div>
+                        <div class="item-box">
+                            <div class="item-self-box">谁明浪子心</div>
+                        </div>
+                        <div class="item-box">
+                            <div class="item-self-box">一场游戏一场梦</div>
+                        </div>
+                        <div class="item-box">
+                            <div class="item-self-box">忘了你忘了我</div>
+                        </div>
+                        <div class="item-box">
+                            <div class="item-self-box">是否我真的一无所有</div>
+                        </div>
+                        <div class="item-box">
+                            <div class="item-self-box">安妮</div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>解决方式</legend>
+                <div>
+                    <p>这里是<line-code>div</line-code>容器</p>
+                    <p>案例现场是<line-code>position: fixed;</line-code>的元素直接作为了滚动容器（也就是设置了<line-code>overflow-y: auto;</line-code>），这里的解决方式是给<line-code>position: fixed;</line-code>元素添加子元素作为滚动容器。</p>
+                    <p><strong>注意：</strong>这里仅仅为了演示效果，二级菜单（也就是歌词部分）没有添加滚动容器。如果是嵌套组件（或者此处还有下级菜单），也应该添加额外的滚动容器</p>
+                    <div class="position-fixed-chrome-73-1" style="top: 300px; left: 0">
+                        <div style="height: 100%; overflow-x: hidden; overflow-y: auto">
+                            <div class="item-box">
+                                <div class="item-self-box">祈祷</div>
+                                <div class="position-fixed-chrome-73 item-children-box" style="top: 305px; left: 162px">
+                                    <p>让我们敲希望的钟啊</p>
+                                    <p>多少祈祷在心中</p>
+                                    <p>让大家看不到失败</p>
+                                    <p>叫成功永远在</p>
+                                    <p>让地球忘记了转动啊</p>
+                                    <p>四季少了夏秋冬</p>
+                                    <p>让宇宙关不了天窗</p>
+                                    <p>叫太阳不西冲</p>
+                                    <p>让欢喜代替了哀愁啊</p>
+                                    <p>微笑不会再害羞</p>
+                                    <p>让时光懂得去倒流</p>
+                                    <p>叫青春不开溜</p>
+                                    <p>让贫穷开始去逃亡啊</p>
+                                    <p>快乐健康留四方</p>
+                                    <p>让世界找不到黑暗</p>
+                                    <p>幸福像花开放</p>
+                                    <p>让我们敲希望的钟啊</p>
+                                    <p>多少祈祷在心中</p>
+                                    <p>让大家看不到失败</p>
+                                    <p>叫成功永远在</p>
+                                    <p>让大家看不到失败</p>
+                                    <p>叫成功永远在</p>
+                                </div>
+                            </div>
+                            <div class="item-box">
+                                <div class="item-self-box">红尘有你</div>
+                            </div>
+                            <div class="item-box">
+                                <div class="item-self-box">谁明浪子心</div>
+                            </div>
+                            <div class="item-box">
+                                <div class="item-self-box">一场游戏一场梦</div>
+                            </div>
+                            <div class="item-box">
+                                <div class="item-self-box">忘了你忘了我</div>
+                            </div>
+                            <div class="item-box">
+                                <div class="item-self-box">是否我真的一无所有</div>
+                            </div>
+                            <div class="item-box">
+                                <div class="item-self-box">安妮</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </body>
+</html>
