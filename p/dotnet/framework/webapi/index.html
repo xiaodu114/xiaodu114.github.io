@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>ASP.NET Web 应用程序 - xiaodu114.github.io</title>
+        <meta name="keywords" content="ASP.NET Web 应用程序;ASP.NET Web API;.NET Framework;入门;" />
+        <meta name="description" content="整理记录一些 .NET Framework 下的 Web API 相关的东西……" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/dotnet/framework/webapi/index.html -->
+        <div class="blog-page">
+            <h1>ASP.NET Web 应用程序</h1>
+            <p>整理记录一些<line-code>.NET Framework</line-code>下的<line-code>Web API</line-code>相关的东西……</p>
+            <mark-block explain="说明">
+                <ul>
+                    <li>Visual Studio 2022</li>
+                    <li>.NET Framework 4.7.2</li>
+                </ul>
+            </mark-block>
+            <h2>创建项目</h2>
+            <p>这里不是重点，就不直接展开了，要是想看……</p>
+            <details>
+                <summary>点击查看详细步骤截图</summary>
+                <p>
+                    <img src="./images/1.png" alt="Visual Studio 2022 创建项目，选择：ASP.NET Web 应用程序(.NET Framework)" />
+                </p>
+                <p>
+                    <img src="./images/2.png" alt="ASP.NET Web 应用程序：项目名称、位置等" />
+                </p>
+                <p>
+                    <img src="./images/3.png" alt="ASP.NET Web 应用程序：选择 空 模板，并添加 Web API" />
+                </p>
+            </details>
+            <h2>“根路由”响应</h2>
+            <p>新建完成之后，你可以直接运行项目。但是结果可能不是你想要的……</p>
+            <p>
+                <img src="./images/4.png" alt="ASP.NET Web 应用程序，创建成功之后直接运行" />
+            </p>
+            <p>咱们选的是空模板，啥也没有就正常了。</p>
+            <p>
+                <img src="./images/5.png" alt="ASP.NET Web 应用程序，Global.asax.cs 和 WebApiConfig.cs" />
+            </p>
+            <p>这个项目到目前为止还没有添加任何静态文件，也就没有什么默认页面。那么对于<line-code>protocol//host</line-code>请求怎么做出响应呢？请看下面的两处改动：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="c#">
+public static void Register(HttpConfiguration config)
+{
+    //  ……
+    //  添加“根节点”路由
+    config.Routes.MapHttpRoute(
+        name: "RootNode",
+        routeTemplate: "",
+        defaults: null,
+        constraints: null,
+        handler: new RootNodeRouteMessageHandler()
+    );
+}
+            </pre>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="c#">
+/// <summary>
+/// 根路由消息处理程序
+///     参考：https://learn.microsoft.com/zh-cn/aspnet/web-api/overview/advanced/http-message-handlers
+/// </summary>
+public class RootNodeRouteMessageHandler : DelegatingHandler
+{
+    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    {
+        var response = request.CreateResponse(System.Net.HttpStatusCode.OK);
+        response.Content = new StringContent("这你都发现了……");
+        return Task.FromResult(response);
+    }
+}
+            </pre>
+            <p>
+                <img src="./images/6.png" alt="ASP.NET Web 应用程序，添加控制器" />
+            </p>
+            <h2>添加控制器</h2>
+            <details>
+                <summary>点击查看截图</summary>
+                <p>
+                    <img src="./images/7.png" alt="ASP.NET Web 应用程序，添加控制器" />
+                </p>
+            </details>
+            <h3>简单类型控制器</h3>
+            <p><line-code>SimpleTypeController</line-code>控制器，做一些简单类型的示例。</p>
+            <details>
+                <summary>点击查看代码</summary>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="c#">
+public class SimpleTypeController : ApiController
+{
+
+    #region 布尔类型
+
+    [HttpGet, Route("api/SimpleType/TestBool1")]
+    public bool TestBool1()
+    {
+        return true;
+    }
+
+    [HttpGet, Route("api/SimpleType/TestBool2")]
+    public bool TestBool2()
+    {
+        return false;
+    }
+
+    #endregion
+
+    #region 数值类型
+
+    [HttpGet, Route("api/SimpleType/TestInt")]
+    public int TestInt()
+    {
+        return 666;
+    }
+
+    #endregion
+
+    #region 字符串类型
+
+    [HttpGet, Route("api/SimpleType/TestString")]
+    public string TestString()
+    {
+        return "我爱你中国";
+    }
+
+    #endregion
+
+    #region 时间类型
+
+    [HttpGet, Route("api/SimpleType/TestDateTime")]
+    public DateTime TestDateTime()
+    {
+        return DateTime.Now;
+    }
+
+    #endregion
+
+    #region 自定义实体类
+
+    public class PersonModel
+    {
+        public string Id { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+    }
+
+    [HttpGet, Route("api/SimpleType/TestClass")]
+    public PersonModel TestClass()
+    {
+        return new PersonModel()
+        {
+            Id = "1",
+            UserName = "xiaodu114",
+            Password = "zhelishimima……",
+        };
+    }
+
+    #endregion
+}
+                </pre>
+            </details>
+            <h3>测试API</h3>
+            <details>
+                <summary>浏览器和Postman请求测试</summary>
+                <p>
+                    <img src="./images/8.png" alt="ASP.NET Web 应用程序，浏览器Get请求" />
+                </p>
+                <p>
+                    <img src="./images/9.png" alt="ASP.NET Web 应用程序，Postman Get请求" />
+                </p>
+            </details>
+            <h2>默认返回JSON</h2>
+            <p>这里你会发现该API项目默认返回的<line-code>xml</line-code>格式，但是如果请求头设置<line-code>Accept:application/json</line-code>则返回的就是json格式的。那么能不能默认返回JSON呢？</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="c#">
+//    方式0
+//    API方法级别的控制。方法返回：HttpResponseMessage 并设置 Content-Type
+//    方式1
+config.Formatters.Clear();
+config.Formatters.Add(new JsonMediaTypeFormatter());
+//    方式2
+config.Formatters.Remove(config.Formatters.XmlFormatter);
+//    方式3
+config.Formatters.XmlFormatter.SupportedMediaTypes.Clear();
+            </pre>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="c#">
+//    方式4 
+config.Services.Replace(typeof(IContentNegotiator), new JsonContentNegotiator(new JsonMediaTypeFormatter()));
+
+/// <summary>
+/// JSON内容协商
+///     参考：https://www.cnblogs.com/acles/archive/2013/06/21/3147667.html
+/// </summary>
+public class JsonContentNegotiator : IContentNegotiator
+{
+    private readonly JsonMediaTypeFormatter _jsonFormatter;
+
+    public JsonContentNegotiator(JsonMediaTypeFormatter formatter)
+    {
+        _jsonFormatter = formatter;
+    }
+
+    public ContentNegotiationResult Negotiate(Type type, HttpRequestMessage request, IEnumerable<MediaTypeFormatter> formatters)
+    {
+        var result = new ContentNegotiationResult(_jsonFormatter, new MediaTypeHeaderValue("application/json"));
+        return result;
+    }
+}
+            </pre>
+            <h2>返回驼峰形式</h2>
+            <p>在测试API返回实体类时（例如：人员实体），返回的属性名称首字母都是大写的。这对前端不是很友好……</p>
+            <p>
+                <img src="./images/10.png" alt="ASP.NET Web 应用程序，Postman Get请求" />
+            </p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="c#">
+config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            </pre>
+            <mark-block>
+                <p>注意：默认返回JSON的几种处理方式，方式1、2、3结合上面的代码都可以实现首字母小写。方式0没有测试。方式4不行。</p>
+            </mark-block>
+        </div>
+    </body>
+</html>
