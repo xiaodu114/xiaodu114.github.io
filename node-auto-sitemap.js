@@ -2,7 +2,7 @@ const path = require("path");
 const fs = require("fs");
 
 /**
- * 读取文件内容
+ * 获取文件内容
  * @param {String}  filePath    文件路径
  * @returns {String}    文件文本内容
  */
@@ -64,6 +64,7 @@ function handler(rootPath, verifyFn, targetArr) {
         } else if (stat.isFile() && path.extname(item)?.toLowerCase() === ".html") {
             if (isPush) {
                 branch.isFile = true;
+                branch.latestModifyTime = stat.mtime;
                 branch.hyperlink = {
                     href: branch.shortPath,
                     title: getHtmlPageTitle(branch.path)
@@ -132,6 +133,65 @@ function addNavToHomePage(obj) {
     });
 }
 
+/**
+ * 获取需要添加到站点地图的节点
+ * @param {Array} treeNodes 所有的节点
+ * @param {Array} outputArr 需要添加到站点地图的节点
+ * @returns
+ */
+function findSitemapPages(treeNodes, outputArr) {
+    if (!(Array.isArray(treeNodes) && treeNodes.length)) return;
+    if (!Array.isArray(outputArr)) outputArr = [];
+
+    [].forEach.call(treeNodes, (item) => {
+        if (item.isDir) {
+            findSitemapPages(item.children, outputArr);
+        } else if (item.isFile) {
+            outputArr.push(item);
+        }
+    });
+    return outputArr;
+}
+
+/**
+ * 生成站点地图
+ * @param {Array} treeNodes 需要添加到站点地图的节点
+ * @param {Object} options 配置项
+ * @returns
+ */
+function generateSitemapXML(treeNodes, options) {
+    if (!Array.isArray(treeNodes)) treeNodes = [];
+
+    let siteName = "https://xiaodu114.github.io";
+    treeNodes.unshift({
+        shortPath: "/",
+        priority: "1.0",
+        latestModifyTime: new Date()
+    });
+
+    let prefix = `
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+    `;
+    let suffix = "</urlset>";
+    let xmlLines = [prefix];
+    [].forEach.call(treeNodes, (item) => {
+        xmlLines.push("  <url>");
+        xmlLines.push(`    <loc>${siteName + item.shortPath}</loc>`);
+        xmlLines.push(`    <lastmod>${item.latestModifyTime.toISOString()}</lastmod>`);
+        //  这里的权重，过后需要研究一下
+        xmlLines.push(`    <priority>${item.priority ? item.priority : 0.8}</priority>`);
+        xmlLines.push("  </url>");
+    });
+    xmlLines.push(suffix);
+    fs.writeFile("sitemap.xml", xmlLines.join("\r\n"), (err) => {
+        console.error(JSON.stringify(err));
+    });
+}
+
 const root_p = path.join(__dirname, "p");
 const excludePaths_p = ["/p/_", "/p/0", "/p/web/js/a2bei4", "/p/web/problem/crossDomain/cookie1.html", "/p/web/problem/crossDomain/documentDomain1.html", "/p/web/problem/crossDomain/locationHash0.html", "/p/web/problem/crossDomain/locationHash1.html", "/p/web/problem/crossDomain/postMessage1.html", "/p/web/problem/crossDomain/windowName0.html", "/p/web/problem/crossDomain/windowName1.html", "/p/web/problem/sameOrigin/index-vue.html", "/p/web/vue3/0introduction/code"];
 const root_demo = path.join(__dirname, "demo");
@@ -145,7 +205,13 @@ let treeNodes_demo = handler(root_demo, (branch) => {
     return !excludePaths_demo.includes(branch.shortPath);
 });
 
+//  将某些页面添加到主页
 addNavToHomePage({
     "<!-- xiaodu114-placeholder-p -->": generateHTMLSnippet(treeNodes_p, 3),
     "<!-- xiaodu114-placeholder-demo -->": generateHTMLSnippet(treeNodes_demo, 3)
 });
+
+//  自动生成站点地图
+let sitemapPages_p = findSitemapPages(treeNodes_p);
+let sitemapPages_demo = findSitemapPages(treeNodes_demo);
+generateSitemapXML([...sitemapPages_p, ...sitemapPages_demo]);
