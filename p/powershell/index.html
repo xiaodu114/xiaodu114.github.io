@@ -16,6 +16,14 @@
         <div class="blog-page">
             <h1>PowerShell相关</h1>
             <p>这里整理记录一些日常<line-code>PowerShell</line-code>使用情况</p>
+            <ul>
+                <li>
+                    <a href="https://learn.microsoft.com/zh-cn/powershell/" target="_blank">PowerShell 文档 - PowerShell | Microsoft Learn</a>
+                </li>
+                <li>
+                    <a href="https://learn.microsoft.com/zh-cn/powershell/module/microsoft.powershell.core/about/about_execution_policies" target="_blank">关于执行策略 - PowerShell | Microsoft Learn</a>
+                </li>
+            </ul>
             <h2>电脑硬件信息</h2>
             <p></p>
             <details>
@@ -76,7 +84,7 @@ if($allIISSites -and ($allIISSites.count -gt 0))
 		Write-Host  $site.Applications["/"].VirtualDirectories["/"].PhysicalPath
 	}
 }
-Write-Host  '执行完毕...'
+Write-Host  'End of execution...'
 
 #endregion
 
@@ -84,24 +92,48 @@ Write-Host  '执行完毕...'
 # https://blog.danskingdom.com/keep-powershell-console-window-open-after-script-finishes-running/
 # https://stackoverflow.com/questions/16739322/how-to-keep-the-shell-window-open-after-running-a-powershell-script
 
-Read-Host -Prompt "Press Enter to exit"
+Read-Host -Prompt "Press any key to exit"
             </pre>
             <h2>强制删除文件夹</h2>
             <p><line-code>Beyond Compare</line-code>这款比较工具很好用，但是试用期过去之后需要( $ _ $ )了，这里找到了一种方式可以解决这个问题，但是操作频率比较高……</p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
-if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) 
-{
- Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs; exit 
-}
-
 #	删除用户数据
 Remove-Item 'C:\Users\hj6\AppData\Roaming\Scooter Software\Beyond Compare 4' -Force -Recurse
 
 #	执行结束
-Write-Host  '删除成功...'
+Write-Host  'Successfully deleted ...'
 #	按任意键退出
-Read-Host -Prompt "按任意键退出"
+Read-Host -Prompt 'Press any key to exit'
             </pre>
+            <mark-block type="error">
+                <ul>
+                    <li>下面的测试都是在ps1脚本文件中测试的</li>
+                    <li>
+                        <dl>
+                            <dt>路径中包含中文</dt>
+                            <dd><strong>语句：</strong>Remove-Item 'D:\Scooter Software\Beyond Compare 4 - 副本' -Force -Recurse</dd>
+                            <dd><strong>乱码异常，删除失败：</strong><span style="color: #ff0000">Remove-Item : 找不到路径“D:\Scooter Software\Beyond Compare 4 - 鍓湰”，因为该路径不存在。</span></dd>
+                            <dd><strong>说明：</strong>如果路径中不包含中文，则可以删除成功</dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt>添加中文打印提示</dt>
+                            <dd><strong>语句：</strong>Write-Host '删除成功...'</dd>
+                            <dd><strong>乱码异常，删除成功：</strong>鎴愬姛鍒犻櫎 ...</dd>
+                            <dd><strong>说明：</strong>如果是英文提示，则没有问题。Write-Host 'Successfully deleted ...'</dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt>添加按任意键退出</dt>
+                            <dd><strong>语句：</strong>Read-Host -Prompt '按任意键退出'</dd>
+                            <dd><strong>直接闪退，删除失败</strong></dd>
+                            <dd><strong>说明：</strong>如果是英文提示，则没有问题。Read-Host -Prompt "Press any key to exit"</dd>
+                        </dl>
+                    </li>
+                </ul>
+            </mark-block>
         </div>
     </body>
 </html>
