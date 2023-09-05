@@ -1,0 +1,524 @@
+﻿using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
+using System.Data;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+
+namespace DDZ.Excel
+{
+    public class NpoiGaokaoHelper
+    {
+        #region 属性、字段
+
+        /// <summary>
+        /// 【普通高等学校本科专业目录】Excel列头到类属性名称的映射
+        /// </summary>
+        private static readonly Dictionary<string, string> zhToEnMapSpecialty = new()
+        {
+            { "专业代码", "Code" },
+            { "专业名称", "Name" },
+            { "门类、专业类", "SpecialtyClass" },
+            { "门类", "Category" },
+            { "学位授予门类", "DegreeCategory" },
+            { "修业年限", "DegreeLength" },
+            { "增设年度", "AdditionalYears" }
+        };
+
+        /// <summary>
+        /// 【全国普通高等学校名单】Excel列头到类属性名称的映射
+        /// </summary>
+        private static readonly Dictionary<string, string> zhToEnMapUniversity = new()
+        {
+            { "学校名称", "Name" },
+            { "学校标识码", "Code" },
+            { "主管部门", "CompetentDepartment" },
+            { "所在地", "Location" },
+            { "办学层次", "EducationalLevel" },
+            { "备注", "Remarks" }
+        };
+
+        #endregion
+
+        #region 私有方法
+
+        /// <summary>
+        /// 将文件内容反序列化成指定类型
+        /// </summary>
+        /// <typeparam name="T">反序列化的目标类型</typeparam>
+        /// <param name="filePath">文件绝对路径</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="FileNotFoundException"></exception>
+        private static T? DeserializeFromTextFile<T>(string filePath)
+        {
+            //  1、验证是否为空
+            if (string.IsNullOrEmpty(filePath)) throw new ArgumentNullException(nameof(filePath));
+
+            //  2、验证文件是否存在
+            if (!File.Exists(filePath)) throw new FileNotFoundException();
+
+            //  3、读取文件内容
+            string content = File.ReadAllText(filePath);
+            ////    你也可以这样读取文件内容
+            //FileInfo fileInfo = new(filePath);
+            //using StreamReader file = fileInfo.OpenText();
+            //string content = file.ReadToEnd();
+
+            //  4、反序列化
+            try
+            {
+                return JsonSerializer.Deserialize<T>(content);
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException ?? ex;
+            }
+        }
+
+        /// <summary>
+        /// 根据指定Excel文件路径获取 IWorkbook
+        /// </summary>
+        /// <param name="filePath">文件绝对路径</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="FileNotFoundException"></exception>
+        /// <exception cref="Exception"></exception>
+        private static IWorkbook? GetWorkbook(string filePath)
+        {
+            //  1、验证是否为空
+            if (string.IsNullOrEmpty(filePath)) throw new ArgumentNullException(nameof(filePath));
+
+            //  2、验证文件是否存在
+            FileInfo fileInfo = new(filePath);
+            if (!fileInfo.Exists) throw new FileNotFoundException();
+
+            //  3、弄一个Workbook
+            using FileStream fs = fileInfo.Open(FileMode.Open);
+            IWorkbook? workbook = null;
+            switch (fileInfo.Extension.ToLower())
+            {
+                case ".xlsx":
+                    {
+                        workbook = new XSSFWorkbook(fs);
+                        break;
+                    }
+                case ".xls":
+                    {
+                        workbook = new HSSFWorkbook(fs);
+                        break;
+                    }
+                default: 
+                    {
+                        throw new Exception($"支持的文件格式为：.xlsx、.xls。您的为：{fileInfo.Extension.ToLower()}");
+                    }
+            }
+            return workbook;
+        }
+
+        /// <summary>
+        /// 获取单元格的值
+        ///     【说明】这里先简单获取值的字符串形式
+        /// </summary>
+        /// <param name="cell"></param>
+        /// <returns></returns>
+        private static string GetCellValue(ICell cell)
+        {
+            string? cellValue = null;
+            if (cell == null) return cellValue;
+
+            switch (cell.CellType)
+            {
+                case CellType.Unknown:
+                    break;
+                case CellType.Numeric:
+                    cellValue = cell.NumericCellValue.ToString();
+                    break;
+                case CellType.String:
+                    cellValue = cell.StringCellValue;
+                    break;
+                case CellType.Formula:
+                    break;
+                case CellType.Blank:
+                    break;
+                case CellType.Boolean:
+                    break;
+                case CellType.Error:
+                    break;
+                default:
+                    break;
+            }
+            return cellValue;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// 【普通高等学校本科专业目录】Excel转为JSON数据格式
+        /// 【说明】
+        ///     1、网上的“普通高等学校本科专业目录”一版都是PDF，可以先转为Excel（pdf转excel,你可以试试：https://www.ilovepdf.com/zh-cn）
+        ///     2、生成Excel需要稍微处理一下：请将（序号 门类、专业类 专业代码 专业名称 学位授予门类 修业年限 增设年度）作为第一行，前面没用的可以删掉
+        /// </summary>
+        /// <param name="inputExcelPath">Excel文件路径</param>
+        /// <param name="outJsonPath">输出JSON文件路径</param>
+        /// <param name="columnHead2Code">Excel列头到类属性名称的映射</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="FileNotFoundException"></exception>
+        /// <exception cref="Exception"></exception>
+        public static bool Excel2JsonSpecialtyCatalog(string inputExcelPath, string outJsonPath, Dictionary<string, string>? columnHead2Code = null)
+        {
+            //  1、空验证
+            if (string.IsNullOrEmpty(inputExcelPath)) throw new ArgumentNullException(nameof(inputExcelPath));
+            if (string.IsNullOrEmpty(outJsonPath)) throw new ArgumentNullException(nameof(outJsonPath));
+
+            //  2、进一步检测Excel
+            var workbook = GetWorkbook(inputExcelPath) ?? throw new Exception($"根据 {inputExcelPath} 文件获取 IWorkbook 失败！");
+            var sheet = workbook.GetSheetAt(0) ?? throw new Exception("没有找到第一个工作簿");
+            if (!(sheet.NumMergedRegions > 0 && sheet.MergedRegions != null && sheet.MergedRegions.Any())) throw new Exception("请检查Excel格式，是否存在以合并单元格存在的‘门类’。");
+            var header = sheet.GetRow(sheet.FirstRowNum) ?? throw new Exception($"第一个工作簿中没有找到第一行表头");
+
+            if (columnHead2Code == null || !columnHead2Code.Any()) columnHead2Code = zhToEnMapSpecialty;
+
+            var propertyName2Prop = new SpecialtyModel().GetType().GetProperties().ToDictionary(x => x.Name, x => x);
+
+            //  3、根据映射关系组装Excel列和SpecialtyModel类属性的对应关系
+            Dictionary<int, string> kv = new();
+            int columnCounter = header.LastCellNum;  //  获取总的列数（header.LastCellNum得到的就是总列数，并不是最后一列的索引值）
+            for (int i = 0; i < columnCounter; i++)
+            {
+                var cell = header.GetCell(i);
+                if (cell == null) continue;
+
+                string cellValue = GetCellValue(cell);
+                if (string.IsNullOrEmpty(cellValue)) continue;
+
+                if (columnHead2Code.ContainsKey(cellValue) && propertyName2Prop.ContainsKey(columnHead2Code[cellValue]))
+                {
+                    kv.Add(i, columnHead2Code[cellValue]);
+                }
+            }
+            if (!kv.Any()) throw new Exception("请检查Excel文件列头和[SpecialtyModel]类属性的映射关系。你可以传入；如果没有传入，将使用默认值。");
+
+            //  4、开始读取数据  
+            List<SpecialtyModel> specialties = new();
+            var mergedRegions = sheet.MergedRegions.OrderBy(x => x.FirstRow).ToList();
+            for (int i = 0; i < mergedRegions.Count; i++)
+            {
+                var region = mergedRegions[i];
+                if (region == null) continue;
+                if (!(region.MinColumn == 0 && region.MaxColumn == columnCounter - 1)) continue;
+
+                //  获取合并单元格（这里指的是门类，例如：哲学、理学、工学等）
+                ICell? mergedCell = sheet.GetRow(region.FirstRow)?.GetCell(region.FirstColumn);
+                if (mergedCell == null) continue;
+
+                int startIndex = region.LastRow + 1;
+                int endIndex = (i == mergedRegions.Count - 1) ? sheet.LastRowNum : mergedRegions[i + 1].FirstRow;
+                if (startIndex > endIndex) continue;
+
+                string category = GetCellValue(mergedCell);
+                for (int j = startIndex; j < endIndex; j++)
+                {
+                    var row = sheet.GetRow(j);
+                    if (row == null) continue;
+
+                    var specialty = new SpecialtyModel();
+                    foreach (var item in kv)
+                    {
+                        var cell = row.GetCell(item.Key);
+                        if (cell == null) continue;
+                        string cellValue = GetCellValue(cell);
+                        propertyName2Prop[item.Value].SetValue(specialty, cellValue);
+                    }
+                    specialty.Category = category;
+                    specialties.Add(specialty);
+                }
+            }
+
+            //  5、保存到json文件
+            //  https://learn.microsoft.com/zh-cn/dotnet/standard/serialization/system-text-json/character-encoding
+            File.WriteAllText(outJsonPath, JsonSerializer.Serialize(specialties, new JsonSerializerOptions()
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                WriteIndented = true
+            }), Encoding.UTF8);
+
+            return true;
+        }
+
+        /// <summary>
+        /// 【全国普通高等学校名单】Excel转为JSON数据格式
+        /// 【说明】
+        ///     1、这份名单对于我们来说比较友好，是Excel格式的
+        ///     2、这里也需要稍微处理一下：请将（序号 学校名称 学校标识码 主管部门 所在地 办学层次 备注）作为第一行，前面没用的可以删掉
+        /// </summary>
+        /// <param name="inputExcelPath">Excel文件路径</param>
+        /// <param name="outJsonPath">输出JSON文件路径</param>
+        /// <param name="columnHead2Code">Excel列头到类属性名称的映射</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="FileNotFoundException"></exception>
+        /// <exception cref="Exception"></exception>
+        public static bool Excel2JsonUniversity(string inputExcelPath, string outJsonPath, Dictionary<string, string>? columnHead2Code = null)
+        {
+            //  1、空验证
+            if (string.IsNullOrEmpty(inputExcelPath)) throw new ArgumentNullException(nameof(inputExcelPath));
+            if (string.IsNullOrEmpty(outJsonPath)) throw new ArgumentNullException(nameof(outJsonPath));
+
+            //  2、进一步检测Excel
+            var workbook = GetWorkbook(inputExcelPath) ?? throw new Exception($"根据 {inputExcelPath} 文件获取 IWorkbook 失败！");
+            var sheet = workbook.GetSheetAt(0) ?? throw new Exception("没有找到第一个工作簿");
+            var header = sheet.GetRow(sheet.FirstRowNum) ?? throw new Exception($"第一个工作簿中没有找到第一行表头");
+
+            if (columnHead2Code == null || !columnHead2Code.Any()) columnHead2Code = zhToEnMapUniversity;
+
+            var propertyName2Prop = new UniversityModel().GetType().GetProperties().ToDictionary(x => x.Name, x => x);
+
+            //  3、根据映射关系组装Excel列和UniversityModel类属性的对应关系
+            Dictionary<int, string> kv = new();
+            int columnCounter = header.LastCellNum; //  获取总的列数（header.LastCellNum得到的就是总列数，并不是最后一列的索引值）
+            for (int i = 0; i < columnCounter; i++)
+            {
+                var cell = header.GetCell(i);
+                if (cell == null) continue;
+
+                string cellValue = GetCellValue(cell);
+                if (cellValue == null) continue;
+
+                if (columnHead2Code.ContainsKey(cellValue) && propertyName2Prop.ContainsKey(columnHead2Code[cellValue]))
+                {
+                    kv.Add(i, columnHead2Code[cellValue]);
+                }
+            }
+            if (!kv.Any()) throw new Exception("请检查Excel文件列头和[UniversityModel]类属性的映射关系。你可以传入；如果没有传入，将使用默认值。");
+
+            //  4、开始读取数据  
+            List<UniversityModel> universities = new();
+            for (int i = sheet.FirstRowNum + 1; i <= sheet.LastRowNum; i++)
+            {
+                var row = sheet.GetRow(i);
+                if (row == null || row.Cells == null || row.Cells[0].IsMergedCell) continue;
+
+                var university = new UniversityModel();
+                foreach (var item in kv)
+                {
+                    var cell = row.GetCell(item.Key);
+                    if (cell == null) continue;
+
+                    string cellValue = GetCellValue(cell);
+                    propertyName2Prop[item.Value].SetValue(university, cellValue);
+                }
+                universities.Add(university);
+            }
+
+            //  5、保存到json文件
+            File.WriteAllText(outJsonPath, JsonSerializer.Serialize(universities, new JsonSerializerOptions()
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                WriteIndented = true
+            }), Encoding.UTF8);
+
+            return true;
+        }
+
+        
+        public static bool AddNewColumnToExcel<T>(string inputExcelPath, string inputJsonPath, string outExcelPath, Dictionary<string, string> newColumnName2Code, int matchColumnIndex, Func<List<T>, string, T> matchT) where T : class, new()
+        {
+            //  1、空验证
+            if (string.IsNullOrEmpty(inputExcelPath)) throw new ArgumentNullException(nameof(inputExcelPath));
+            if (string.IsNullOrEmpty(inputJsonPath)) throw new ArgumentNullException(nameof(inputJsonPath));
+            if (string.IsNullOrEmpty(outExcelPath)) throw new ArgumentNullException(nameof(outExcelPath));
+            if (newColumnName2Code == null || !newColumnName2Code.Any()) throw new ArgumentNullException(nameof(newColumnName2Code));
+            if (matchT == null) throw new ArgumentNullException(nameof(matchT));
+
+            //  2、进一步检测Excel
+            var workbook = GetWorkbook(inputExcelPath) ?? throw new Exception($"根据 {inputExcelPath} 文件获取 IWorkbook 失败！");
+            var sheet = workbook.GetSheetAt(0) ?? throw new Exception("没有找到第一个工作簿");
+            var header = sheet.GetRow(sheet.FirstRowNum) ?? throw new Exception($"第一个工作簿中没有找到第一行表头");
+
+            //  3、进一步检测json
+            List<T>? items = DeserializeFromTextFile<List<T>>(inputJsonPath);
+            if (items == null || !items.Any()) throw new Exception($"根据 {inputJsonPath} 文件内容反序列化 {typeof(T)} 失败！");
+
+            //  4、进一步检测添加列的映射
+            var propertyName2Prop = new T().GetType().GetProperties().ToDictionary(x => x.Name, x => x);
+            Dictionary<string, string> validColumnName2Code = newColumnName2Code.Where(x => propertyName2Prop.ContainsKey(x.Value)).ToDictionary(x => x.Key, x => x.Value);
+            if (!validColumnName2Code.Any()) throw new Exception("请检查新添加列名称和UniversityModel类属性名称之间的映射！");
+
+            //  5、获取总的列数
+            var firstHeadCell = header.GetCell(0);
+            int columnCounter = header.LastCellNum;//  获取总的列数（header.LastCellNum得到的就是总列数，并不是最后一列的索引值）
+            int columnNewIndex = columnCounter;
+
+            //  6、列头添加新增加的列
+            foreach (var kv in validColumnName2Code)
+            {
+                ICell cell = header.CreateCell(columnNewIndex);
+                cell.SetCellValue(kv.Key);
+                if (firstHeadCell != null && firstHeadCell.CellStyle != null)
+                {
+                    cell.CellStyle = firstHeadCell.CellStyle;
+                }
+                columnNewIndex++;
+            }
+
+            //  7、数据行中添加新增加的列
+            for (int i = sheet.FirstRowNum + 1; i <= sheet.LastRowNum; i++)
+            {
+                var row = sheet.GetRow(i);
+                if (row == null) continue;
+
+                string matchValue = GetCellValue(row.GetCell(matchColumnIndex));
+                if (string.IsNullOrEmpty(matchValue)) continue;
+
+                T instance = matchT(items, matchValue);
+                if (instance == null) continue;
+
+                var firstCell = row.GetCell(0);
+                var isFillStyle = firstCell != null && firstCell.CellStyle != null;
+
+                columnNewIndex = columnCounter;
+                foreach (var kv in validColumnName2Code)
+                {
+                    string? cellValue = propertyName2Prop[kv.Value].GetValue(instance)?.ToString();
+                    ICell cell = row.CreateCell(columnNewIndex);
+                    cell.SetCellValue(cellValue);
+                    if (isFillStyle)
+                    {
+                        cell.CellStyle = firstCell.CellStyle;
+                    }
+                    columnNewIndex++;
+                }
+            }
+
+            //  8、保存一个新的Excel
+            using FileStream fs2 = new(outExcelPath, FileMode.Create, FileAccess.Write);
+            workbook.Write(fs2, true);
+            workbook.Close();
+
+            return true;
+        }
+
+        /// <summary>
+        /// 【普通高校招生本科批平行志愿投档情况统计】Excel中补充专业信息
+        /// 【说明】
+        ///     1、这里以“2022年河北省普通高校招生本科批平行志愿投档情况统计”为例 
+        ///     2、Excel需要稍微处理一下：请将（院校代码 院校名称 专业代号 专业名称 投档最低分 语数成绩……）作为第一行。这里先拆分单元格，之后删除没用的行
+        /// </summary>
+        /// <param name="inputExcelPath">Excel文件路径</param>
+        /// <param name="inputJsonPath">JSON文件路径（可以利用 NpoiGaokaoHelper.Excel2JSONSpecialtyCatalog 方法生成）</param>
+        /// <param name="outExcelPath">输出Excel文件路径</param>
+        /// <param name="newColumnName2Code"></param>
+        /// <param name="matchColumnIndex">专业名称列的索引位置（从0开始）,这里使用每一行中该列的值进行匹配</param>
+        /// <returns></returns>
+        public static bool AddSpecialtyCategory(string inputExcelPath, string inputJsonPath, string outExcelPath, Dictionary<string, string> newColumnName2Code, int matchColumnIndex)
+        {
+            return AddNewColumnToExcel<SpecialtyModel>(inputExcelPath, inputJsonPath, outExcelPath, newColumnName2Code, matchColumnIndex, (items, matchValue) =>
+            {
+                SpecialtyModel? item = null;
+                item = items.Where(x => x.Name == matchValue).FirstOrDefault();
+                item ??= items.Where(x => matchValue.StartsWith(x.Name)).FirstOrDefault();
+                item ??= items.Where(x => x.Name.StartsWith(matchValue)).FirstOrDefault();
+                item ??= items.Where(x => matchValue.Contains(x.Name)).FirstOrDefault();
+                return item;
+            });
+        }
+
+        /// <summary>
+        /// 【普通高校招生本科批平行志愿投档情况统计】Excel中补充学校信息
+        /// 【说明】
+        ///     1、使用上面 AddSpecialtyCategory 生成的Excel
+        /// </summary>
+        /// <param name="inputExcelPath">Excel文件路径</param>
+        /// <param name="inputJsonPath">JSON文件路径（可以利用 NpoiGaokaoHelper.Excel2JsonUniversity 方法生成）</param>
+        /// <param name="outExcelPath">输出Excel文件路径</param>
+        /// <param name="newColumnName2Code"></param>
+        /// <param name="matchColumnIndex">院校名称列的索引位置（从0开始）,这里使用每一行中该列的值进行匹配</param>
+        /// <returns></returns>
+        public static bool AddUniversityInfo(string inputExcelPath, string inputJsonPath, string outExcelPath, Dictionary<string, string> newColumnName2Code, int matchColumnIndex)
+        {
+            return AddNewColumnToExcel<UniversityModel>(inputExcelPath,inputJsonPath, outExcelPath,newColumnName2Code, matchColumnIndex, (items, matchValue) => 
+            {
+                UniversityModel? item = null;
+                item = items.Where(x => x.Name == matchValue).FirstOrDefault();
+                item ??= items.Where(x => matchValue.StartsWith(x.Name)).FirstOrDefault();
+                item ??= items.Where(x => x.Name.StartsWith(matchValue)).FirstOrDefault();
+                item ??= items.Where(x => matchValue.Contains(x.Name)).FirstOrDefault();
+                return item;
+            });
+        }
+    }
+
+    public class SpecialtyModel
+    {
+        /// <summary>
+        /// 专业代码
+        /// </summary>
+        public string Code { get; set; }
+
+        /// <summary>
+        /// 专业名称
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// 专业所属的【专业类】
+        /// </summary>
+        public string SpecialtyClass { get; set; }
+
+        /// <summary>
+        /// 专业所属的【门类】  
+        /// </summary>
+        public string Category { get; set; }
+
+        /// <summary>
+        /// 学位授予门类
+        /// </summary>
+        public string DegreeCategory { get; set; }
+
+        /// <summary>
+        /// 修业年限
+        /// </summary>
+        public string DegreeLength { get; set; }
+
+        /// <summary>
+        /// 增设年度
+        /// </summary>
+        public string AdditionalYears { get; set; }
+    }
+
+    public class UniversityModel
+    {
+        /// <summary>
+        /// 学校标识码
+        /// </summary>
+        public string Code { get; set; }
+
+        /// <summary>
+        /// 学校名称
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// 主管部门
+        /// </summary>
+        public string CompetentDepartment { get; set; }
+
+        /// <summary>
+        /// 所在地
+        /// </summary>
+        public string Location { get; set; }
+
+        /// <summary>
+        /// 办学层次
+        /// </summary>
+        public string EducationalLevel { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string Remarks { get; set; }
+    }
+}
