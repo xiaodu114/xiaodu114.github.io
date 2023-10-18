@@ -6,7 +6,7 @@
     
   <url>
     <loc>https://xiaodu114.github.io/</loc>
-    <lastmod>2023-09-05T00:28:44.722Z</lastmod>
+    <lastmod>2023-10-17T09:45:36.603Z</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
@@ -60,6 +60,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://xiaodu114.github.io/p/edu/index.html</loc>
+    <lastmod>2023-09-21T11:31:14.584Z</lastmod>
+    <priority>0.3</priority>
+  </url>
+  <url>
     <loc>https://xiaodu114.github.io/p/fav/imageSite/index.html</loc>
     <lastmod>2023-06-09T04:28:41.534Z</lastmod>
     <priority>0.8</priority>
@@ -105,8 +110,18 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://xiaodu114.github.io/p/llm/chatglm2/index.html</loc>
+    <lastmod>2023-10-17T03:24:39.157Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://xiaodu114.github.io/p/llm/index.html</loc>
-    <lastmod>2023-08-22T02:44:54.298Z</lastmod>
+    <lastmod>2023-10-17T01:30:17.217Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/p/llm/langchainChatchat/index.html</loc>
+    <lastmod>2023-10-17T09:38:39.507Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
