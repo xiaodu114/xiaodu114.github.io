@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Langchain-Chatchat - xiaodu114.github.io</title>
+        <meta name="keywords" content="Langchain-Chatchat,查特查特,ChatGLM2-6B,大语言模型,llm,langchain,本地部署,知识库,本地知识库问答" />
+        <meta name="description" content="Langchain-Chatchat 本地部署，使用的大语言模型是ChatGLM2-6B 的量化版chatglm2-6b-int4，Embedding 模型为moka-ai/m3e-base；仍然使用的是win10 + cpu 部署" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/llm/langchainChatchat/index.html -->
+        <div class="blog-page">
+            <h1>Langchain-Chatchat</h1>
+            <p>如果说部署<line-code>ChatGLM2-6B</line-code>的成功算是体验<line-code>llm</line-code>的起点，那么<line-code>Langchain-Chatchat</line-code>的出现以及这里的成功部署，则拉近了与<line-code>llm</line-code>的距离，可以嗨皮一下了。</p>
+            <p>这里不得不提一下：<line-code>Langchain</line-code>，<a href="https://github.com/langchain-ai/langchain" target="_blank">GitHub - langchain-ai/langchain: ⚡ Building applications with LLMs through composability ⚡</a>。她现在大火，火，火，火……</p>
+            <p>
+                <a href="https://github.com/chatchat-space/Langchain-Chatchat" target="_blank">GitHub - chatchat-space/Langchain-Chatchat: Langchain-Chatchat（原Langchain-ChatGLM）基于 Langchain 与 ChatGLM 等语言模型的本地知识库问答</a>
+            </p>
+            <h2>前期准备</h2>
+            <p>本笔记是<a href="/p/llm/chatglm2/index.html" target="_blank">ChatGLM2-6B - xiaodu114.github.io</a>的后续，还是先根据这篇准备好环境吧！机器必须还是我的老朋友。</p>
+            <h2>好戏开场了</h2>
+            <h3>下载LLM 模型</h3>
+            <p>上篇已经下载。对，这里使用的还是量化版：chatglm2-6b-int4</p>
+            <h3>下载Embedding 模型</h3>
+            <p>虽然这只是一扇窗，但是咱还得在说一下： <a href="https://aliendao.cn/" target="_blank">互链高科</a></p>
+            <p>这里将下载的Embedding 模型<line-code>moka-ai/m3e-base</line-code>放到<line-code>D:\llm\moka-ai\m3e-base</line-code>路径下了。如下图：</p>
+            <p>
+                <img src="./image/1.png" alt="m3e-base 结构目录" />
+            </p>
+            <h3>下载仓库</h3>
+            <p>这里将下载的仓库放到<line-code>E:\llm\Langchain-Chatchat-master</line-code>路径下了，如下图：</p>
+            <p>
+                <img src="./image/2.png" alt="Langchain-Chatchat GitHub项目结构目录" />
+            </p>
+            <p>说明：这里的仓库是今天（2023-10-17）在GitHub获取的。</p>
+            <h4>创建配置文件</h4>
+            <p>项目的配置在根目录的<line-code>configs</line-code>文件夹下 ：<line-code>*.py.example</line-code>。也不是特别多，你可以修改文件的后缀名，删除<line-code>.example</line-code>；或者你也可以在项目根目录打开命令行之后执行：python copy_config_example.py</p>
+            <h4>修改配置文件</h4>
+            <h5>model_config.py 文件</h5>
+            <p>这里就是对LLM 模型、Embedding 模型等配置的地方了，具体修改了哪些，你可以看下面的截图：</p>
+            <p>
+                <img src="./image/3.png" alt="Langchain-Chatchat GitHub项目之model_config.py 文件修改对比图" />
+            </p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+#   示例：LLM模型的绝对路径
+#       model_config.py 
+#           MODEL_ROOT_PATH 字符串变量
+#           MODEL_PATH      字典变量
+#           LLM_MODEL       字符串变量  默认使用哪个模型
+MODEL_ROOT_PATH + MODEL_PATH["llm_model"][LLM_MODEL] 
+            </pre>
+            <h5>server_config.py 文件</h5>
+            <p>跑通之后发现，该项目有很多API的调用，启动了好几个服务器……这里应该是关于Web服务器的配置，修改如下图：</p>
+            <p>
+                <img src="./image/4.png" alt="Langchain-Chatchat GitHub项目之server_config.py 文件修改对比图" />
+            </p>
+            <p><line-code>HTTPX_DEFAULT_TIMEOUT</line-code>配置文件中有解释。知道会很慢，所以就弄的大了一点点……</p>
+            <h3>虚拟环境</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   创建虚拟环境
+python -m venv venv
+#   激活虚拟环境
+.\venv\scripts\activate
+            </pre>
+            <p>
+                <img src="./image/5.png" alt="Python 创建虚拟环境" />
+            </p>
+            <h3>安装依赖</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   我这里设置全局的清华镜像源
+pip install -r requirements.txt
+#   如果你不想全局设置，也可以仅本次安装时使用镜像源（如下面的截图）
+pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+            </pre>
+            <p>
+                <img src="./image/6.png" alt="Langchain-Chatchat 安装依赖" />
+            </p>
+            <h3>知识库初始化</h3>
+            <p>因为我们这是第一次部署，可以直接初始化知识库。其他的可以看官方文档。</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   初始化或重建知识库
+python init_database.py --recreate-vs
+            </pre>
+            <p>
+                <img src="./image/7.png" alt="Langchain-Chatchat 初始化或重建知识库" />
+            </p>
+            <p>你可能发现了，这里还有对拥抱脸<line-code>https://huggingface.co/</line-code>的访问，但是我这里设置的都是本地，不知道后续会不会优化。哈哈，最后你会发现这并不影响项目的运行。</p>
+            <h3>跑起来</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   一键启动脚本 startup.py，一键启动所有 FastChat 服务、API 服务、WebUI 服务
+python startup.py -a
+            </pre>
+            <p>
+                <img src="./image/8.png" alt="Langchain-Chatchat 一键启动所有 FastChat 服务、API 服务、WebUI 服务，异常之端口配占用" />
+            </p>
+            <p>不出意外，还是出意外了，出现了一大推错误，并没有看到想看到的WebUI页面。这个问题，弄了好几天，试了N种方式，最后发现是<line-code>20001</line-code>端口配占用了</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   查看被占用端口对应的 PID
+netstat -aon|findstr 20001
+
+#   查看指定 PID 的进程
+tasklist|findstr 7836
+            </pre>
+            <p>
+                <img src="./image/9.png" alt="查找端口占用" />
+            </p>
+            <p>郁闷的是这进程还干不掉（内部问题，具体的原因就不和大家说了啊）。于是我只能修改代码了，文件为<line-code>server_config.py</line-code>，哪个位置：你直接搜索 20001 就行了。改成了：30001</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+# fastchat controller server
+FSCHAT_CONTROLLER = {
+    "host": DEFAULT_BIND_HOST,
+    "port": 30001,
+    "dispatch_method": "shortest_queue",
+}
+            </pre>
+            <p>修改完之后继续一键启动，需要耐心等待。没想到啊！就这么一点一点的成功了。这你妹的绝对不按套路出牌啊！这时你就问了：怎么成功了，怎么还这样说啊？曰：“客官，你听我细细道来。前几天也跑通了，但是可不是就这么简简单单的，那真是废了九牛二虎之力啊！前几次的一键启动失败，我认为可能是CPU太弱，内存太小，多进程或者什么原因之类，我就将 startup.py 拷贝了五份，当然我修改其中的代码了啊！每一个文件只启动一个服务，最后开五个命令行依次执行这五个文件。你还别说，利用这种方式还真的跑通了。但是今天写部署文档时想着在重新来一遍，结果你也看到了……”。都是泪啊！</p>
+            <details>
+                <summary>不行这里必须得记录一下</summary>
+                <p>下面已修改其中一个文件为例，其他的类似，如下图：</p>
+                <p>
+                    <img src="./image/10.png" alt="Langchain-Chatchat 修改一键启动所有" />
+                </p>
+            </details>
+            <p>
+                <img src="./image/11.png" alt="Langchain-Chatchat 一键启动所有 FastChat 服务、API 服务、WebUI 服务，成功之 20000" />
+            </p>
+            <p>
+                <img src="./image/12.png" alt="Langchain-Chatchat 一键启动所有 FastChat 服务、API 服务、WebUI 服务，成功之 7861" />
+            </p>
+            <p>
+                <img src="./image/13.png" alt="Langchain-Chatchat 一键启动所有 FastChat 服务、API 服务、WebUI 服务，成功之 8501" />
+            </p>
+            <p>
+                <img src="./image/14.png" alt="Langchain-Chatchat WebUI LLM对话" />
+            </p>
+            <p>LLM 直接对话正常。下面测试一下知识库，在网上找了两个2023年的PDF，看一下成功添加的截图：</p>
+            <p>
+                <img src="./image/15.png" alt="Langchain-Chatchat WebUI 添加文件到知识库" />
+            </p>
+            <p>再来试一下：知识库问答。请她帮忙分析一下，结果如下图：</p>
+            <p>
+                <img src="./image/16.png" alt="Langchain-Chatchat WebUI 本地知识库问答" />
+            </p>
+            <p>看着界面效果，确实是针对本地文件的回答，但是好像没有回答完？确实是这样的，命令行显示超时了。如下图：</p>
+            <p>
+                <img src="./image/17.png" alt="Langchain-Chatchat WebUI 本地知识库问答超时" />
+            </p>
+            <p>针对上面的超时问题，我在<line-code>X</line-code>上问了一下<line-code>Langchain-Chatchat</line-code>项目的发起人：<a rel="nofollow me" class="Link--primary" href="https://twitter.com/LiuQian1992">@LiuQian1992</a>。非常高兴，他给出了回复，截图如下：</p>
+            <p>
+                <img src="./image/18.png" alt="Langchain-Chatchat WebUI 本地知识库问答超时，项目发起人回复" />
+            </p>
+        </div>
+    </body>
+</html>

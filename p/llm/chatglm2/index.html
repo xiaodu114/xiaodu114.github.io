@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>ChatGLM2-6B - xiaodu114.github.io</title>
+        <meta name="keywords" content="chatglm2-6b,chatglm2-6b-int4,大语言模型,llm,量化,CPU,本地部署,微调" />
+        <meta name="description" content="开源双语对话语言模型 - ChatGLM2-6B 量化版 chatglm2-6b-int4 的本地部署：win10 + cpu" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/llm/chatglm2/index.html -->
+        <div class="blog-page">
+            <h1>ChatGLM2-6B</h1>
+            <p><line-code>ChatGLM2-6B</line-code>还是很厉害的。国内的，中文支持比较友好，必须得支持一下。多的就不说了，自己看官网或者搜搜吧！这里主要说一下<line-code>ChatGLM2-6B</line-code>的本地部署。对，是本地部署啊。重点在说一下，用的是CPU，用的是CPU，用的是CPU。</p>
+            <p>
+                <a href="https://github.com/THUDM/ChatGLM2-6B" target="_blank">GitHub - THUDM/ChatGLM2-6B: ChatGLM2-6B: An Open Bilingual Chat LLM | 开源双语对话语言模型</a>
+            </p>
+            <h2>我的老朋友</h2>
+            <p>都是泪啊！硬件跟不上，又上不了云，又想搞一下，只能先弄个丐版了……先透露一下，那响应速度简直了……</p>
+            <mark-block explain="身体条件">
+                <div style="display: flex">
+                    <div style="flex: 1">
+                        <p>OS 名称： Microsoft Windows 10 教育版</p>
+                        <p>处理器： i5-4590T CPU @ 2.00GHz</p>
+                        <p>系统类型： x64-based PC</p>
+                    </div>
+                    <div style="flex: 1">
+                        <p>OS 版本： 10.0.19042 暂缺 Build 19042</p>
+                        <p>机带RAM： 12.0GB</p>
+                        <p>GPU： 你猜</p>
+                    </div>
+                </div>
+            </mark-block>
+            <p>你可以命令行输入<line-code>systeminfo</line-code>或者<line-code>win + R</line-code>dxdiag 查看这些信息。</p>
+            <h2>还需要什么</h2>
+            <p>光有硬件还不行，还得来点软件，咱得两手抓。现在这个行情，必须得把<line-code>Python</line-code>弄上，麻利点。不过，咱也不能骄傲啊，听说<line-code>Rust</line-code>、<line-code>Mojo</line-code>已经行动了。尤其是这个<line-code>Rust</line-code>，腐蚀性太强了，名曰：“锈化”，不是已经锈化，就是在被锈化的路上，大有腐蚀一切之势啊；这个<line-code>Mojo</line-code>也不简单啊，35000这个数字就十分吓人。所以啊，你得努力了<line-code>Python</line-code>。按照官网的说法，要想在CPU上跑，还得需要GCC，那咱就得安排上啊，是吧。</p>
+            <h3>Python</h3>
+            <p>人生苦短，我用Python。之前已经安装过了，版本是：Python 3.10.2。如果没有安装过，先去官网下载一下：<a href="https://www.python.org/" target="_blank">Welcome to Python.org</a></p>
+            <p>多说一句：安装的时候，记得添加到<line-code>Path</line-code>，也就是添加到环境变量，添加之后使用起来就比较方便了。</p>
+            <p>注意：这里还设置了<line-code>pip</line-code>的全局镜像源，使用的是清华的：<a href="https://mirrors.tuna.tsinghua.edu.cn/help/pypi/" target="_blank"> pypi | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror</a></p>
+            <h3>GCC</h3>
+            <p><line-code>ChatGLM2-6B</line-code>的GitHub文档介绍，还需要GCC环境，推荐的是：TDM-GCC。<a href="https://jmeubank.github.io/tdm-gcc/" target="_blank">tdm-gcc</a>。安装的时候别忘了勾选<line-code>openmp</line-code>。这里的版本是：10.3.0</p>
+            <h2>好戏开场了</h2>
+            <h3>下载模型</h3>
+            <p>又火了一个站点：Hugging Face。看看这吉祥物多可爱：🤗。按理说咱应该去人家拥抱脸那里下载，都不知道网上好多教程的大神们是怎么串门的，反正我这里是不行啊，难道她没有给我发请帖，太难了。还好，又给我开了一扇窗：<a href="https://aliendao.cn/" target="_blank">互链高科</a>，不过这窗户始终是窗户啊，太慢了。这里不得不说一下人家<line-code>ChatGLM2-6B</line-code>了，太贴心了，就会给咱们自己人开小差：<a href="https://cloud.tsinghua.edu.cn/d/674208019e314311ab5c/" target="_blank">清华大学云盘</a>，你在这里下载就爽歪歪了。</p>
+            <p>重点：【互链高科】下载【清华大学云盘】中没有的文件，两者合并，完美。</p>
+            <p>这里将下载的模型放到<line-code>D:\llm\THUDM\chatglm2-6b-int4</line-code>路径下了，记住这个路径，下面会用到。如下图：</p>
+            <p>
+                <img src="./image/1.png" alt="ChatGLM2-6B 大语言模型 结构目录" />
+            </p>
+            <h3>下载仓库</h3>
+            <p>这个就比较简单了，直接去GitHub搞就行了。你可以使用 git 克隆；也可以官网上下载zip压缩包；如果有发布版本，你也可以下载稳定的版本（这里没有啊）。</p>
+            <p>这里将下载的仓库放到<line-code>E:\llm\ChatGLM2-6B-main</line-code>路径下了，如下图：</p>
+            <p>
+                <img src="./image/2.png" alt="ChatGLM2-6B GitHub项目结构目录" />
+            </p>
+            <p>说明：这里的仓库是今天（2023-10-16）在GitHub获取的。</p>
+            <h4>新建 modelPath.py 文件</h4>
+            <p>在代码中搜索<line-code>THUDM/chatglm2-6b</line-code>，结果出现了好多次，要修改时同步的地方太多了，这里新建的这个文件就是设置大模型的绝对路径，用的地方直接引入即可。该文件放在了根目录下，代码如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+Model_Local_Path = "D:\llm\THUDM\chatglm2-6b-int4"
+            </pre>
+            <h4>本地模型和CPU部署</h4>
+            <p>为了支持本地模型和CPU部署，需要修改一下代码。模型支持三种访问模式：命令行、API、WebUI。先用WebUI测试一下，展示效果比较好。修改<line-code>web_demo2.py</line-code>文件代码如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+#   引入本地模型绝对路径
+from modelPath import Model_Local_Path
+            </pre>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+#   原始代码
+tokenizer = AutoTokenizer.from_pretrained("THUDM/chatglm2-6b", trust_remote_code=True)
+model = AutoModel.from_pretrained("THUDM/chatglm2-6b", trust_remote_code=True).cuda()
+
+#   用下面的两行代码替换上面的
+#       .float() 支持CPU
+tokenizer = AutoTokenizer.from_pretrained(Model_Local_Path, trust_remote_code=True)
+model = AutoModel.from_pretrained(Model_Local_Path, trust_remote_code=True).float()
+            </pre>
+            <h3>虚拟环境</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   创建虚拟环境
+python -m venv venv
+#   激活虚拟环境
+.\venv\scripts\activate
+            </pre>
+            <p>
+                <img src="./image/3.png" alt="Python 虚拟环境" />
+            </p>
+            <h3>安装依赖</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   我这里设置全局的清华镜像源
+pip install -r requirements.txt
+#   如果你不想全局设置，也可以仅本次安装时使用镜像源（如下面的截图）
+pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+            </pre>
+            <p>
+                <img src="./image/4.png" alt="ChatGLM2-6B 安装依赖" />
+            </p>
+            <h3>跑起来</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   命令行 Demo
+python cli_demo.py
+#   基于 Gradio 的网页版 demo       【注意】问答时出现bug，前端操作dom的问题
+python web_demo.py
+#   基于 Streamlit 的网页版 demo
+streamlit run web_demo2.py
+#   API Demo
+python api.py
+            </pre>
+            <p>这里运行的是基于 Streamlit 的网页版。命令行会出现一些错误，但是并不影响运行。效果图如下：</p>
+            <p>
+                <img src="./image/5.png" alt="ChatGLM2-6B 命令行 streamlit run web_demo2.py 运行结果。" />
+            </p>
+            <p>
+                <img src="./image/6.png" alt="ChatGLM2-6B WebUI界面效果。" />
+            </p>
+            <h3>赶紧聊聊吧</h3>
+            <p>
+                <img src="./image/7.png" alt="ChatGLM2-6B WebUI问答：你好； javascript 实现 斐波那契数列" />
+            </p>
+            <p>这家伙生成的代码，很有随机性。这次回答的和上次差异很大啊！我都不好意思截图了。不过，咱也得体谅啊，毕竟这是改版啊，你说是吧。下面的截图是前几天第一次跑通时的截图：</p>
+            <p>
+                <img src="./image/8.png" alt="ChatGLM2-6B WebUI问答，javascript 实现 斐波那契数列" />
+            </p>
+            <h2>微调</h2>
+            <p>这才是硬菜。在通用大语言模型的基础上，添加些自己特色的语料，让其成为你的贴心小助手。</p>
+            <p>理想很丰满，显示很苗条。暂时没有调通，还得继续吃啊！得赶紧胖起来。</p>
+            <p>记录一下我的微调过程：</p>
+            <dl>
+                <dt>安装依赖</dt>
+                <dd>pip install rouge_chinese nltk jieba datasets</dd>
+                <dt>准备数据集</dt>
+                <dd>可以按照官网上的关于广告的，也可以自己弄点。感觉广告的有点大，怕把我这老朋友累着，这里参考的是：<a href="https://zhuanlan.zhihu.com/p/643531454" target="_blank">LangChain + ChatGLM2-6B 搭建个人专属知识库 - 知乎</a></dd>
+                <dt>修改 main.py 文件</dt>
+                <dd>仅依靠CPU，需要修改一下。CPU不支持<line-code>half</line-code></dd>
+                <dt>禁用 W&B</dt>
+                <dd>控制台： export WANDB_DISABLED=true</dd>
+                <dd>【说明】如果不禁用可能会中断微调训练，以防万一，还是禁了吧</dd>
+                <dt>.sh转.bat</dt>
+                <dd>运行 .sh文件会有问题，哪怕已经安装 git 。</dd>
+                <dd>转.bat文件，这里参考的是：<a href="https://blog.csdn.net/oddrock/article/details/132230680" target="_blank">ChatGLM2-6B在Windows下的微调_豪杰笑开怀的博客-CSDN博客</a></dd>
+                <dd>
+                    <dl>
+                        <dt>官方参数解说</dt>
+                        <dd>train.sh 中的 PRE_SEQ_LEN 和 LR 分别是 soft prompt 长度和训练的学习率，可以进行调节以取得最佳的效果。</dd>
+                        <dd>P-Tuning-v2 方法会冻结全部的模型参数，可通过调整 quantization_bit 来被原始模型的量化等级，不加此选项则为 FP16 精度加载。</dd>
+                        <dd>在默认配置 quantization_bit=4、per_device_train_batch_size=1、gradient_accumulation_steps=16 下， INT4 的模型参数被冻结，一次训练迭代会以 1 的批处理大小进行 16 次累加的前后向传播，等效为 16 的总批处理大小，此时最低只需 6.7G 显存。 若想在同等批处理大小下提升训练效率，可在二者乘积不变的情况下，加大 per_device_train_batch_size 的值，但也会带来更多的显存消耗，请根据实际情况酌情调整。</dd>
+                    </dl>
+                </dd>
+                <dt>微调时间太长了</dt>
+                <dd>参数 max_steps 必须大于 save_steps 。他们哥俩的值越大时间越长……</dd>
+            </dl>
+            <p>革命尚未成功，还得继续搞啊！我的微调……</p>
+        </div>
+    </body>
+</html>
