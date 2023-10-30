@@ -15,13 +15,13 @@
         <!-- github访问地址：/p/llm/chatglmCpp/index.html -->
         <div class="blog-page">
             <h1>chatglm.cpp</h1>
-            <p><a href="https://github.com/li-plus/chatglm.cpp" target="_blank">GitHub - li-plus/chatglm.cpp: C++ implementation of ChatGLM-6B & ChatGLM2-6B & more LLMs</a>，这个项目咱不能说别的，只能说：牛逼、牛逼、牛逼……为啥这么说呢？天下武功，唯快不破。前面关于LLM的两篇（<a href="/p/llm/chatglm2/index.html" target="_blank">ChatGLM2-6B</a>、<a href="/p/llm/langchainChatchat/index.html" target="_blank">Langchain-Chatchat</a> 没别的意思，就是想让你点进去看看）你也看到了，两个的运行速度都不好意思说（当然这是咱机器的原因）。但是在他的加持下那速度是飕飕的！</p>
-            <p>再简单说一下和他的渊源：其实，先知道的是<line-code>llama.cpp</line-code>这个项目（至于怎么发现的他，就不记得了），非常非常非常，是吧。于是就想赶紧试试，种种原因吧，没有跑成功，再加上手头的<line-code>ChatGLM2-6B</line-code>项目已经跑通了。于是就开始乱想了，既然有<line-code>llama</line-code>系列的cpp，那就不能有<line-code>chatglm</line-code>的cpp吗？酸爽的是还真有，就是他了。好了，我俩的故事讲完了。</p>
-            <p>这里在插播一下：目前国内开源的大模型也就那几个，除了上面提到的，还有百川、悟道·天鹰、中文LLaMA-2 & Alpaca-2、千问等。其中百川、悟道·天鹰、中文LLaMA-2 & Alpaca-2已经被<line-code>llama.cpp</line-code>收纳了。你可能想到了，那么千问有没有对应的cpp，哈哈，必须得安排上啊，并且还是亲儿子，都隶属于<line-code>QwenLM</line-code>。</p>
+            <p><a href="https://github.com/li-plus/chatglm.cpp" target="_blank">GitHub - li-plus/chatglm.cpp: C++ implementation of ChatGLM-6B & ChatGLM2-6B & more LLMs</a>，这个项目咱不能说别的，只能说：牛逼、牛逼、牛逼……为啥这么说呢？天下武功，唯快不破。LLM系列的前两篇（<a href="/p/llm/chatglm2/index.html" target="_blank">ChatGLM2-6B</a>、<a href="/p/llm/langchainChatchat/index.html" target="_blank">Langchain-Chatchat</a> 没别的意思，就是想让你点进去看看）你也看到了，他俩的运行速度都不好意思说（当然这是咱机器的原因）。但是在他的加持下那速度是飕飕的！</p>
+            <p>再简单说一下和他的渊源：其实，先知道的是<line-code>llama.cpp</line-code>这个项目（至于怎么遇到的他，就不记得了），非常非常非常，是吧。于是就想赶紧试试，种种原因吧，没有跑成功，再加上手头的<line-code>ChatGLM2-6B</line-code>项目已经跑通了。于是就开始乱想了，既然有<line-code>llama</line-code>系列的cpp，那就不能有<line-code>chatglm</line-code>的cpp吗？酸爽的是还真有，就是他了。好了，我俩的故事讲完了。</p>
+            <p>这里再插播一下：目前国内开源的大模型也就那几个，除了上面提到的，还有百川、悟道·天鹰、中文LLaMA-2 & Alpaca-2、千问等。其中百川、悟道·天鹰、中文LLaMA-2 & Alpaca-2已经被<line-code>llama.cpp</line-code>收纳了。你可能想到了，那么千问有没有对应的cpp，哈哈，必须得安排上啊，并且还是亲儿子，都隶属于<line-code>QwenLM</line-code>。</p>
             <h2>前期准备</h2>
             <p>本笔记是<a href="/p/llm/chatglm2/index.html" target="_blank">ChatGLM2-6B - xiaodu114.github.io</a>的后续，还是先根据这篇准备好环境吧！机器必须还是我的老朋友。</p>
             <h2>还需要什么</h2>
-            <p>这是一个<line-code>c++</line-code>项目，并且作者没有发布编译之后的程序，所以需要咱们自己编译。参考之前的<line-code>llama.cpp</line-code>项目，<line-code>Make</line-code>、<line-code>CMake</line-code>等编译工具，参数……真头大啊！</p>
+            <p>这是一个<line-code>c++</line-code>项目，并且作者没有发布编译之后的程序（写这篇笔记的时候没有），所以需要咱们自己编译。参考之前的<line-code>llama.cpp</line-code>项目，<line-code>Make</line-code>、<line-code>CMake</line-code>等编译工具，参数……真头大啊！</p>
             <h3>CMake</h3>
             <p>选择这个的原因是电脑上已经有了宇宙第一的IDE。果然已经安装了，如下图：</p>
             <p>
@@ -31,14 +31,8 @@
                 <p>这里安装是安装了，但是不能任性的使用<line-code>CMake</line-code>，因为他没有被添加到环境变量中。这里已经添加到环境变量了。</p>
                 <p>添加的时候也遇到一个小问题：<line-code>CMake</line-code>不知道放到哪个文件夹下了，利用<line-code>where cmake</line-code>也没有找到，最后是使用<line-code>Everything</line-code>神器找到的。</p>
             </mark-block>
-            <h2>好戏开场了</h2>
-            <h3>下载LLM 模型</h3>
-            <p>之前使用的都是量化版：chatglm2-6b-int4。这里需要使用：chatglm2-6b。下载方式和之前的相同。</p>
-            <p>重点：【互链高科】下载【清华大学云盘】中没有的文件，两者合并，完美。</p>
-            <p>这里将下载的模型放到<line-code>D:\llm\THUDM\chatglm2-6b</line-code>路径下了，记住这个路径，下面会用到。如下图：</p>
-            <p>
-                <img src="./image/2.png" alt="ChatGLM2-6B 大语言模型 结构目录" />
-            </p>
+            <h2>主角登场</h2>
+            <p><line-code>chatglm.cpp</line-code>项目中包括两部分：C/C++部分，也就是需要编译的，他可以帮你和llm对话等；Python部分，它可以帮你转换为GGUF格式。这里记录一下编译过程：</p>
             <h3>下载仓库</h3>
             <p>下载项目源码，官网推荐使用<line-code>git</line-code>，因为需要安装第三方依赖。安装命令如下：</p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
@@ -67,10 +61,11 @@ cmake --build build -j --config Release
             <p>
                 <img src="./image/5.png" alt="chatglm.cpp cmake build" />
             </p>
-            <h3>转GGML</h3>
-            <p>这里算是<line-code>python</line-code>的东东了</p>
+            <h3>Python</h3>
+            <p>这里准备一下该项目的Python部分</p>
             <h4>虚拟环境</h4>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   PowerShell进入项目根目录，这里是：E:\llm\chatglm.cpp
 #   创建虚拟环境
 python -m venv venv
 #   激活虚拟环境
@@ -80,6 +75,28 @@ python -m venv venv
                 <img src="./image/6.png" alt="Python 虚拟环境" />
             </p>
             <h4>安装依赖</h4>
+            <p>这里还有个小插曲：如果参照官网的说明安装依赖包，会有点问题（下面会详细说下）。因为有了之前<line-code>ChatGLM2-6B</line-code>跑通的经验，这里创建了一个<line-code>requirements.txt</line-code>文件，并且将项目依赖项添加进去，之后根据<line-code>ChatGLM2-6B</line-code>项目修改对应库的版本，如下图：</p>
+            <p>
+                <img src="./image/11.png" alt="chatglm.cpp python依赖 添加 requirements.txt 并修改版本" />
+            </p>
+            <p>下面的两个命令都可以，视情况而定。</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   我这里设置全局的清华镜像源
+pip install -r requirements.txt
+#   如果你不想全局设置，也可以仅本次安装时使用镜像源
+pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+            </pre>
+            <p>注意：安装完依赖之后，先别着急关掉啊！后面有小弟要表演，请耐心等待。</p>
+            <p>大佬已到位。他的小弟还行，下面我们挑几个遛遛：</p>
+            <h2>ChatGLM2-6B</h2>
+            <h3>下载LLM 模型</h3>
+            <p>之前使用的都是量化版：chatglm2-6b-int4。这里需要使用：chatglm2-6b。下载方式和之前的相同。</p>
+            <p>重点：【互链高科】下载【清华大学云盘】中没有的文件，两者合并，完美。</p>
+            <p>这里将下载的模型放到<line-code>D:\llm\THUDM\chatglm2-6b</line-code>路径下了，记住这个路径，下面会用到。如下图：</p>
+            <p>
+                <img src="./image/2.png" alt="ChatGLM2-6B 大语言模型 结构目录" />
+            </p>
+            <h3>转GGUF</h3>
             <details>
                 <summary>失败的经历，如果有兴趣，可以点开看看</summary>
                 <p>这里需要注意一下，按照官网的方式添加依赖，安装包的时候报错了，不知道是否和这边创建虚拟环境有关（人家官网也没有让你创建虚拟环境啊，静瞎搞，出错了吧！）。官方截图以及异常如下：</p>
@@ -105,18 +122,7 @@ python chatglm_cpp/convert.py -i D:\llm\THUDM\chatglm2-6b -t q4_0 -o E:\llm\chat
                     <img src="./image/10.png" alt="chatglm.cpp 转GGML 异常" />
                 </p>
             </details>
-            <p>上面失败的经历你看了吗？没关系，这里才是重点。因为有了之前<line-code>ChatGLM-6B</line-code>跑通的经验，这里创建了一个<line-code>requirements.txt</line-code>文件，并且将项目依赖项添加进去，之后根据<line-code>ChatGLM-6B</line-code>项目修改对应库的版本，如下图：</p>
-            <p>
-                <img src="./image/11.png" alt="chatglm.cpp python依赖 添加 requirements.txt 并修改版本" />
-            </p>
-            <p>下面的两个命令都可以，视情况而定。</p>
-            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
-#   我这里设置全局的清华镜像源
-pip install -r requirements.txt
-#   如果你不想全局设置，也可以仅本次安装时使用镜像源
-pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
-            </pre>
-            <p>安装成功了，下面开始转换了，使用下面的命令：</p>
+            <p>接着上面创建的Python虚拟环境，赶紧表演吧，已经等不及了。</p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 python chatglm_cpp/convert.py -i D:\llm\THUDM\chatglm2-6b -t q4_0 -o E:\llm\chatglm.cpp\build\bin\Release\chatglm2-6b-ggml.bin
             </pre>
