@@ -6,7 +6,7 @@
     
   <url>
     <loc>https://xiaodu114.github.io/</loc>
-    <lastmod>2023-10-20T07:30:39.304Z</lastmod>
+    <lastmod>2023-10-30T03:15:56.018Z</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
@@ -116,7 +116,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/chatglmCpp/index.html</loc>
-    <lastmod>2023-10-20T06:59:31.161Z</lastmod>
+    <lastmod>2023-10-30T02:58:04.987Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -126,7 +126,12 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/langchainChatchat/index.html</loc>
-    <lastmod>2023-10-17T09:38:39.507Z</lastmod>
+    <lastmod>2023-10-18T00:09:47.931Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/p/llm/llamaCpp/index.html</loc>
+    <lastmod>2023-10-30T03:12:49.326Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
