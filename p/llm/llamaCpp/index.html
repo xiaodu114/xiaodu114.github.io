@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>llama.cpp - xiaodu114.github.io</title>
+        <meta name="keywords" content="llama.cpp,chatglm2-6b,大语言模型,llm,CPU,本地部署" />
+        <meta name="description" content="【博客描述】" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/llm/llamaCpp/index.html -->
+        <div class="blog-page">
+            <h1>llama.cpp</h1>
+            <p><a href="https://github.com/ggerganov/llama.cpp" target="_blank">GitHub - ggerganov/llama.cpp: Port of Facebook's LLaMA model in C/C++</a>，这个项目只能膜拜啊,😍😍😍。这是有胆儿搞<line-code>llm</line-code>，但又没有<line-code>GPU</line-code>的福音啊！当然，你要是有<line-code>GPU</line-code>，人家也不能让你浪费，必须得安排上，同样支持。从项目名称上可以看出这是<line-code>llama</line-code>系列的，那其他模型的有没有呢？那是必须的，简直是雨后春笋啊（谁先谁后我还没有弄清楚，但第一个发现的是你）。</p>
+            <p>下面先看一下那些让人爽歪歪的<line-code>cpp</line-code>项目：</p>
+            <ul>
+                <li>
+                    <a href="https://github.com/ggerganov/llama.cpp" target="_blank">GitHub - ggerganov/llama.cpp: Port of Facebook's LLaMA model in C/C++</a>
+                </li>
+                <li>
+                    <a href="https://github.com/antimatter15/alpaca.cpp" target="_blank">GitHub - antimatter15/alpaca.cpp: Locally run an Instruction-Tuned Chat-Style LLM</a>
+                </li>
+                <li>
+                    <a href="https://github.com/li-plus/chatglm.cpp" target="_blank">GitHub - li-plus/chatglm.cpp: C++ implementation of ChatGLM-6B & ChatGLM2-6B & more LLMs</a>
+                </li>
+                <li>
+                    <a href="https://github.com/QwenLM/qwen.cpp" target="_blank">GitHub - QwenLM/qwen.cpp: C++ implementation of Qwen-LM</a>
+                </li>
+                <li>
+                    <a href="https://github.com/saharNooby/rwkv.cpp" target="_blank">GitHub - saharNooby/rwkv.cpp: INT4/INT5/INT8 and FP16 inference on CPU for RWKV language model</a>
+                </li>
+                <li>您看，这儿位置怎么样？虚位以待，火热招商中……</li>
+            </ul>
+            <h2>前期准备</h2>
+            <p>本笔记是<a href="/p/llm/chatglm2/index.html" target="_blank">ChatGLM2-6B - xiaodu114.github.io</a>的后续，还是先根据这篇准备好环境吧！机器必须还是我的老朋友。</p>
+            <h2>还需要什么</h2>
+            <p>虽然先遇到了你，但是前期遇到了编译失败等一些问题，所以就先有了她：<a href="/p/llm/chatglmCpp/index.html" target="_blank">chatglm.cpp - xiaodu114.github.io</a>，看看这里是怎么安装<line-code>CMake</line-code>的。</p>
+            <h2>主角登场</h2>
+            <p><line-code>llama.cpp</line-code>项目中包括两部分：C/C++部分，也就是需要编译的，他可以帮你量化、和llm对话等；Python部分，它可以帮你转换为GGUF格式（GGML,已不再支持，但是有GGML转GGUF的脚本）。其实，现在使用起来方便多了，官网上已经发布了<line-code>exe</line-code>压缩包了，就不用我们自己编译了。这里记录一下编译过程：</p>
+            <h3>下载仓库</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   你想把项目放到哪个目录下，在该目录下进入命令行
+git clone https://github.com/ggerganov/llama.cpp
+            </pre>
+            <p>这里将项目下载到<line-code>E:\llm\llama.cpp</line-code>路径下了，如下图：</p>
+            <p>
+                <img src="./image/1.png" alt="llama.cpp GitHub项目结构目录" />
+            </p>
+            <p>说明：这里的仓库是今天（2023-10-26）下载的。</p>
+            <h3>编译项目</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+cmake -B build
+            </pre>
+            <p>
+                <img src="./image/2.png" alt="llama.cpp cmake build" />
+            </p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   上面的命令 cmake -B build 成功之后，执行下面这个  
+cmake --build build -j --config Release
+            </pre>
+            <p>编译的时候，虽然还是一大堆黄色，但是比以前淡定多了，毕竟看的多了。之前用同样的方式，编译时会报错，建议使用<line-code>make</line-code>（不记得从哪里看到的了……）。另外发布的版本中已经有<line-code>exe</line-code>文件了，所以也就没有测试。别说，今天为了写这篇笔记，再试一下，竟让成功了，您上眼：</p>
+            <p>
+                <img src="./image/3.png" alt="llama.cpp cmake build" />
+            </p>
+            <h3>Python</h3>
+            <p>这里准备一下该项目的Python部分</p>
+            <h4>虚拟环境</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   创建虚拟环境
+python -m venv venv
+#   激活虚拟环境
+.\venv\scripts\activate
+            </pre>
+            <p>
+                <img src="./image/4.png" alt="Python 虚拟环境" />
+            </p>
+            <h4>安装依赖</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+pip install -r requirements.txt
+            </pre>
+            <p>
+                <img src="./image/5.png" alt="llama.cpp Python 依赖 添加 requirements.txt" />
+            </p>
+            <p>注意：安装完依赖之后，先别着急关掉啊！后面有小弟要表演，请耐心等待。</p>
+            <p>大佬已到位。他的小弟可真不少啊，下面我们挑几个遛遛：</p>
+            <h2>Baichuan2-7B-Chat</h2>
+            <p>百川：让我先来，让我先来，我来了，哈哈！下面请看我的表演。</p>
+            <h3>下载LLM 模型</h3>
+            <p>这个下载就比<line-code>chatglm2-6b</line-code>方便多了。虽然拥抱脸🤗还是联系不上。但是但是但是这次遇到了她：<a href="https://modelscope.cn/" target="_blank">魔搭社区</a>，这里还是有很多模型的，就比如我们要用的<line-code>Baichuan2-7B-Chat</line-code>。下载方式也很方便：使用<line-code>git</line-code>，就像你克隆<line-code>GitHub</line-code>的项目一样。只是有一点需要注意，因为需要下载大文件，所以需要<line-code>lfs</line-code>支持。最新版的<line-code>git</line-code>在安装时就有<line-code>lfs</line-code>的选项。这里使用的是：<line-code>git version 2.42.0.windows.2</line-code>赶紧上代码：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+git lfs install
+git clone https://modelscope.cn/baichuan-inc/Baichuan2-7B-Chat.git 
+            </pre>
+            <p>
+                <img src="./image/6.png" alt="Baichuan2-7B-Chat 大语言模型 结构目录" />
+            </p>
+            <h3>开始转了啊</h3>
+            <p>接着上面创建的Python虚拟环境，赶紧表演吧，已经等不及了。</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   convert.py文件在 llama.cpp 项目的根目录
+#   下面命令会在相同的目录下生成转换之后的文件，这里是：ggml-model-f16.gguf
+#   暂时还有去确实是否有指定输出目录的参数
+python convert.py D:\llm\baichuan-inc\Baichuan2-7B-Chat
+            </pre>
+            <p>
+                <img src="./image/7.png" alt="llama.cpp 转 GGUF 成功" />
+            </p>
+            <h3>量化</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   首先找到 llama.cpp 项目编译之后生成一堆exe的文件夹，之后执行如下：
+.\quantize.exe D:\llm\baichuan-inc\Baichuan2-7B-Chat\ggml-model-f16.gguf D:\llm\baichuan-inc\Baichuan2-7B-Chat-GGUF\ggml-model-q4_0.gguf q4_0
+            </pre>
+            <p>
+                <img src="./image/8.png" alt="llama.cpp 量化 q4_0 成功" />
+            </p>
+            <h3>赶紧聊聊吧</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   更多参数的使用，还得多去官网逛逛啊
+#   第一问
+.\main.exe -m D:\llm\baichuan-inc\Baichuan2-7B-Chat-GGUF\ggml-model-q4_0.gguf -p "What's your name？"
+#   第二问
+.\main.exe -m D:\llm\baichuan-inc\Baichuan2-7B-Chat-GGUF\ggml-model-q4_0.gguf -p "你叫什么名字?"
+            </pre>
+            <p>
+                <img src="./image/9.png" alt="llama.cpp 转 GGUF 对话1" />
+            </p>
+            <p>
+                <img src="./image/10.png" alt="llama.cpp 转 GGUF 对话2 中文 乱码" />
+            </p>
+            <p>都说<line-code>llama</line-code>的中文支持不友好……他不友好，我认了。但是<line-code>Baichuan2-7B-Chat</line-code>不行，毕竟，毕竟，毕竟是吧！还有就是，<line-code>chatglm.cpp</line-code>中体验<line-code>ChatGLM-6B</line-code>就没这个问题。尝试了几种办法，如下：</p>
+            <dl>
+                <dt>1、<line-code>PowerShell</line-code>中文的问题（该电脑一直有这个问题）</dt>
+                <dd><line-code>chcp 65001</line-code>，不好使</dd>
+                <dt>2、cmd</dt>
+                <dd>这个也试了一下，不好使</dd>
+                <dt>3、<a href="https://github.com/ymcui/Chinese-LLaMA-Alpaca/wiki/常见问题" target="_blank">常见问题 · ymcui/Chinese-LLaMA-Alpaca Wiki · GitHub</a></dt>
+                <dd>根据这里的：问题6。也没有解决</dd>
+            </dl>
+            <p>开始以为<line-code>PowerShell</line-code>或者<line-code>cmd</line-code>就没希望了，但是下面的命令带来了希望，请看：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+.\main.exe -m D:\llm\baichuan-inc\Baichuan2-7B-Chat-GGUF\ggml-model-q4_0.gguf `
+--color -i -c 4096 -t 8 --temp 0.5 --top_k 40 --top_p 0.9 --repeat_penalty 1.1 `
+--in-prefix-bos --in-prefix '[INST]' --in-suffix '[/INST]' -p `
+"[INST] &lt;&lt;SYS>>\nThe following is a conversation between a human user and an intelligent assistant.\n&lt;&lt;/SYS>>\n\n你叫什么名字? [/INST]"
+            </pre>
+            <p>补充：开始还不明白这里的<line-code>INST、SYS</line-code>的意思，后来看<line-code>langchain</line-code>时，有好多提示模型，例如：<line-code>SystemMessagePromptTemplate</line-code>等，感觉有点类似，后面慢慢研究……</p>
+            <p>
+                <img src="./image/11.png" alt="llama.cpp 转 GGUF 对话3 中文正常" />
+            </p>
+            <p>这里还发现一个问题，咱得老老实实的按照官网的例子来，要不容易出现乱码😅😅😅。你在看看这个例子：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   下面的txt文件，llama.cpp项目中就有啊
+.\main.exe -m D:\llm\baichuan-inc\Baichuan2-7B-Chat-GGUF\ggml-model-q4_0.gguf -n 256 --repeat_penalty 1.0 --color -i -r "User:" -f "E:\llm\llama.cpp\prompts\chat-with-baichuan.txt"
+            </pre>
+            <p>先看一下上面说的txt文件的内容，如下图：</p>
+            <p>
+                <img src="./image/12.png" alt="llama.cpp prompts\chat-with-baichuan.txt" />
+            </p>
+            <p>
+                <img src="./image/13.png" alt="llama.cpp 基于 prompts\chat-with-baichuan.txt 对话" />
+            </p>
+            <p>从上面的截图可以看出：中文应该没有问题。但是这里也发现了一个问题，就是俩人一直在对话（我没问啊），不知道啥时候结束，就直接强制停止了，后面有时间研究一下。</p>
+            <h2>LM Studio</h2>
+            <p><line-code>llama.cpp</line-code>有了之后，可以让我们在普通的电脑上体验<line-code>llm</line-code>了。之后就开始苦苦寻找支持<line-code>GGUF</line-code>的框架、WebUI、软件等等，类似<line-code>Langchain-Chatchat</line-code>的项目（支持<line-code>GGUF</line-code>），那绝对高兴的不行。前期也发现了一些，例如：<a href="https://github.com/oobabooga/text-generation-webui" target="_blank">GitHub - oobabooga/text-generation-webui: A Gradio web UI for Large Language Models. Supports transformers, GPTQ, AWQ, llama.cpp (GGUF), Llama models.</a>，可惜没有跑成功。某天发了她：<a href="https://lmstudio.ai/" target="_blank">LM Studio - Discover, download, and run local LLMs</a>，完美啊！啥中文乱码啊！重要吗？不不不重要，我有了她……</p>
+            <p>安装之后，首先设置一下模型目录<line-code>Local models folder</line-code>，这里设置的是<line-code>D:\llm</line-code>，看过我的llm系列文章的应该发现了，所有的模型都放到这里了。设置好之后，她会自动检测出她需要的文件：</p>
+            <p>
+                <img src="./image/14.png" alt="LM Studio 设置本地模型文件夹" />
+            </p>
+            <p>之后就可以对话了。当然还需要选择要给模型，如果不支持，她会告诉你的：</p>
+            <p>
+                <img src="./image/15.png" alt="LM Studio 对话" />
+            </p>
+            <p>还有很多关于模型的参数配置后面慢慢研究。她还支持<line-code>Http Server</line-code>，据说兼容OpenAI的API……</p>
+        </div>
+    </body>
+</html>
