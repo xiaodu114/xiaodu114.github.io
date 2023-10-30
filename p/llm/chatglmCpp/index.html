@@ -119,7 +119,7 @@ pip install torch tabulate tqdm transformers accelerate sentencepiece
 python chatglm_cpp/convert.py -i D:\llm\THUDM\chatglm2-6b -t q4_0 -o E:\llm\chatglm.cpp\build\bin\Release\chatglm2-6b-ggml.bin
                 </pre>
                 <p>
-                    <img src="./image/10.png" alt="chatglm.cpp 转GGML 异常" />
+                    <img src="./image/10.png" alt="chatglm.cpp ChatGLM2-6B转GGML 异常" />
                 </p>
             </details>
             <p>接着上面创建的Python虚拟环境，赶紧表演吧，已经等不及了。</p>
@@ -128,7 +128,7 @@ python chatglm_cpp/convert.py -i D:\llm\THUDM\chatglm2-6b -t q4_0 -o E:\llm\chat
             </pre>
             <p>嗨皮不，必须的，成功了，哈哈！就是依赖类库的版本问题。是否成功，全靠碰……</p>
             <p>
-                <img src="./image/12.png" alt="chatglm.cpp 转GGML 成功" />
+                <img src="./image/12.png" alt="chatglm.cpp ChatGLM2-6B转GGML 成功" />
             </p>
             <mark-block explain="提示">
                 <p>如果你熟悉<line-code>llama.cpp</line-code>这个项目：他是先转换，之后在量化。而<line-code>chatglm.cpp</line-code>可以一步到位。</p>
@@ -143,7 +143,38 @@ python chatglm_cpp/convert.py -i D:\llm\THUDM\chatglm2-6b -t q4_0 -o E:\llm\chat
 .\main.exe -m chatglm2-6b-ggml.bin -p javascript实现斐波那契数列
             </pre>
             <p>
-                <img src="./image/13.png" alt="chatglm.cpp 转GGML 对话" />
+                <img src="./image/13.png" alt="chatglm.cpp ChatGLM2-6B转GGML 对话" />
+            </p>
+            <h2>ChatGLM3-6B</h2>
+            <p><line-code>ChatGLM3-6B</line-code>：二哥，小弟我来啦！</p>
+            <h3>下载LLM 模型</h3>
+            <p>三弟就比较友好了，下载很方便。虽然拥抱脸🤗还是联系不上，但是你可以使用：<a href="https://modelscope.cn/" target="_blank">魔搭社区</a>或者<a href="https://wisemodel.cn/" target="_blank">始智AI-wisemodel-中国AI开源创新社区</a>。</p>
+            <p>这里将模型下载到了：<line-code>D:\llm\THUDM\chatglm3-6b</line-code>，下载命令如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   在目录 D:\llm\THUDM 打开命令行
+git lfs install
+git clone https://modelscope.cn/ZhipuAI/chatglm3-6b.git 
+            </pre>
+            <p>
+                <img src="./image/14.png" alt="ChatGLM3-6B 大语言模型 结构目录" />
+            </p>
+            <h3>三弟的表演</h3>
+            <p>不知道之前项目是否支持<line-code>ChatGLM3-6B</line-code>，没有测试。今天打开官网，发现已经支持了，果断重新下载一下，还是老地方：</p>
+            <p>
+                <img src="./image/15.png" alt="chatglm.cpp GitHub项目结构目录 2023-10-30" />
+            </p>
+            <p>编译、Python环境、对话都比较顺利，这里就不详细写了。只是简单记录一下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   重点是 transformers 的版本
+pip install torch tabulate tqdm transformers==4.30.2 accelerate sentencepiece
+#   转化并量化    
+python chatglm_cpp/convert.py -i D:\llm\THUDM\chatglm3-6b -t q4_0 -o E:\llm\chatglm.cpp\build\bin\Release\chatglm3-6b-gguf.bin
+#   对话
+.\main.exe -m chatglm3-6b-gguf.bin -p 你好 --top_p 0.8 --temp 0.8
+.\main.exe -m chatglm3-6b-gguf.bin -p 说一下你和chatglm2-6b的区别
+            </pre>
+            <p>
+                <img src="./image/16.png" alt="chatglm.cpp 安装Python依赖； ChatGLM3-6B转GGUF； 对话" />
             </p>
         </div>
     </body>
