@@ -127,6 +127,104 @@ python api.py
             <p>
                 <img src="./image/8.png" alt="ChatGLM2-6B WebUI问答，javascript 实现 斐波那契数列" />
             </p>
+            <h2>开始码砖</h2>
+            <p>上面基于命令行、Web UI简单的体验了一下。咱肯定不能止步于此啊，是吧！赶紧操作起来吧！</p>
+            <h3>示例1：ChatGLM2-6B/api.py + langchain</h3>
+            <h4>服务器端</h4>
+            <p>项目中已经提供了<line-code>ChatGLM2-6B/api.py</line-code>，用它来练练手。看看都改了哪些代码：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+if __name__ == '__main__':
+    Model_Local_Path = "D:\llm\THUDM\chatglm2-6b-int4"
+    tokenizer = AutoTokenizer.from_pretrained(Model_Local_Path, trust_remote_code=True)
+    model = AutoModel.from_pretrained(Model_Local_Path, trust_remote_code=True).float()
+    # 多显卡支持，使用下面三行代替上面两行，将num_gpus改为你实际的显卡数量
+    # model_path = "THUDM/chatglm2-6b"
+    # tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+    # model = load_model_on_gpus(model_path, num_gpus=2)
+    model.eval()
+    uvicorn.run(app, host='127.0.0.1', port=8899, workers=1)
+            </pre>
+            <p>好了，代码弄好了，赶紧让API跑起来吧！请您输入启动命令：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   API Demo
+python api.py
+            </pre>
+            <p>
+                <img src="./image/9.png" alt="ChatGLM2-6B python api.py" />
+            </p>
+            <h4>客户端</h4>
+            <p>API跑起来之后，先用大名鼎鼎的<line-code>langchain</line-code>尝试一下。</p>
+            <details>
+                <summary>第一个例子</summary>
+                <p>具体代码如下：</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+import traceback
+
+from langchain.prompts import PromptTemplate
+from langchain.llms.chatglm import ChatGLM
+from langchain.chains import LLMChain
+
+template = """{question}"""
+prompt = PromptTemplate(template=template, input_variables=["question"])
+llm = ChatGLM(
+    endpoint_url="http://127.0.0.1:8899",
+    max_token=80000,
+    history=[],
+    top_p=0.9,
+    model_kwargs={"sample_model_args": False},
+)
+llm_chain = LLMChain(prompt=prompt, llm=llm)
+
+try:
+    question1 = "你的名字是什么啊"
+    print("问：" + question1)
+    answer1 = llm_chain.run(question1)
+    print("答：" + str(answer1))
+
+    question2 = "你知道 xiaodu114 吗"
+    print("问：" + question2)
+    answer2 = llm_chain.run(question2)
+    print("答：" + str(answer2))
+except Exception as ex:
+    print(ex.args)
+    print("="*24+">")
+    print(traceback.format_exc())
+                </pre>
+            </details>
+            <details>
+                <summary>第二个例子</summary>
+                <p>具体代码如下：</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+import traceback
+
+from langchain.llms.chatglm import ChatGLM
+from langchain.chains.question_answering import load_qa_chain
+
+llm = ChatGLM(
+    endpoint_url="http://127.0.0.1:8899",
+    max_token=80000,
+    history=[],
+    top_p=0.9,
+    model_kwargs={"sample_model_args": False},
+)
+chain = load_qa_chain(llm, chain_type="stuff")
+
+question = "你知道 xiaodu114 吗？"
+
+try:
+    print("问：" + question)
+    answer = chain.run(input_documents=[], question=question)
+    print("答：" + str(answer))
+except Exception as ex:
+    print(ex.args)
+    print("="*24+">")
+    print(traceback.format_exc())
+                </pre>
+            </details>
+            <p>上面的两个例子分别使用：LLMChain 和 load_qa_chain，在结果上有所不同，回答结果和日志信息也有些令人吃惊，下面是结果：</p>
+            <p>
+                <img src="./image/11.png" alt="ChatGLM2-6B api.py langchain + load_qa_chain" />
+            </p>
             <h2>微调</h2>
             <p>这才是硬菜。在通用大语言模型的基础上，添加些自己特色的语料，让其成为你的贴心小助手。</p>
             <p>理想很丰满，显示很苗条。暂时没有调通，还得继续吃啊！得赶紧胖起来。</p>
