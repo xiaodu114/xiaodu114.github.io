@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>ChatGLM2-6B - xiaodu114.github.io</title>
-        <meta name="keywords" content="chatglm2-6b,chatglm2-6b-int4,大语言模型,llm,量化,CPU,本地部署,微调" />
+        <meta name="keywords" content="chatglm2-6b,chatglm2-6b-int4,大语言模型,llm,量化,CPU,本地部署,fastapi,uvicorn,流式响应,微调" />
         <meta name="description" content="开源双语对话语言模型 - ChatGLM2-6B 量化版 chatglm2-6b-int4 的本地部署：win10 + cpu" />
 
         <script src="/p/_/js/main.js"></script>
@@ -222,6 +222,289 @@ except Exception as ex:
             <p>上面的两个例子分别使用：LLMChain 和 load_qa_chain，在结果上有所不同，回答结果和日志信息也有些令人吃惊，下面是结果：</p>
             <p>
                 <img src="./image/10.png" alt="ChatGLM2-6B api.py langchain + load_qa_chain" />
+            </p>
+            <h3>示例2：ChatGLM2-6B/openai_api.py + javascript</h3>
+            <h4>服务器端</h4>
+            <p>这个示例使用<line-code>ChatGLM2-6B/openai_api.py</line-code>。仍然修改一下模型路径和CPU支持，具体的和示例1相同，这里就不展示了。下面请您输入启动命令：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   API Demo（模拟 openai api）
+python openai_api.py
+            </pre>
+            <p>
+                <img src="./image/11.png" alt="ChatGLM2-6B python openai_api.py" />
+            </p>
+            <h4>客户端</h4>
+            <details>
+                <summary>javascript 调用代码</summary>
+                <p>具体代码如下：</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+const btnOpenAiAPIEle = document.getElementById("btnOpenAiAPI");
+btnOpenAiAPIEle.addEventListener("click", () => {
+    let myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Accept", "text/event-stream");
+
+    const url = "http://127.0.0.1:8899/v1/chat/completions";
+    fetch(url, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify({
+            model: "xxx",
+            stream: true,
+            messages: [{ role: "user", content: "你好" }]
+        })
+    }).then(
+        (response) => {
+            if (!(response && response.ok)) {
+                console.error("异常：" + response.status);
+                return;
+            }
+            let reader = response.body.getReader();
+            reader.read().then(function processResult(result) {
+                if (result.done) {
+                    console.log("Event stream ended.");
+                    return;
+                }
+                const decoder = new TextDecoder();
+                const decodedString = decoder.decode(result.value);
+                console.log(decodedString);
+                // 继续读取下一个事件流数据
+                reader.read().then(processResult);
+            });
+        },
+        (error) => {
+            console.error(`异常：${JSON.stringify(error)}`);
+        }
+    );
+});
+                </pre>
+            </details>
+            <p>果然是不顺利啊！这异常可真长……</p>
+            <p>
+                <img src="./image/12.png" alt="ChatGLM2-6B python openai_api.py TypeError: `dumps_kwargs` keyword arguments are no longer supported." />
+            </p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   修改之前的代码。可以用下面的代码替换。这里共修改了三处
+"{}".format(chunk.json(exclude_unset=True, ensure_ascii=False))
+#   修改之后
+"{}".format(chunk.model_dump_json(exclude_unset=True))
+            </pre>
+            <p>修改完代码之后，重新执行<line-code>python openai_api.py</line-code>，这回就比较嗨皮了：</p>
+            <p>
+                <img src="./image/13.png" alt="ChatGLM2-6B python openai_api.py 前端JS调用" />
+            </p>
+            <h3>示例3：服务器 Hello World</h3>
+            <p>采用<line-code>fastapi</line-code>+<line-code>uvicorn</line-code>的方式……</p>
+            <h4>服务器端</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+import datetime
+import uvicorn
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/GetDateTime")
+def get_server_datetime():
+    return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+if __name__ == '__main__':
+    uvicorn.run(app, host='127.0.0.1', port=8899, workers=1)
+            </pre>
+            <p>启动一个服务器不要太方便哦！还贴心的带上了API文档，简直不要太爽啊！请看：</p>
+            <p>
+                <img src="./image/14.png" alt="fastapi 之 获取服务器时间" />
+            </p>
+            <h4>客户端</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+const btnGetDateTimeEle = document.getElementById("btnGetDateTime");
+btnGetDateTimeEle.addEventListener("click", () => {
+    fetch("http://127.0.0.1:8899/GetDateTime")
+        .then(
+            (response) => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    console.error(`异常！响应状态码：${response.status} ；响应状态信息：${response.statusText}`);
+                }
+            },
+            (error) => {
+                console.error(`异常！ ${JSON.stringify(error)}`);
+            }
+        )
+        .then((data) => {
+            alert("服务器端时间：" + data);
+        });
+});
+            </pre>
+            <h3>示例4：偷师 openai_api.py</h3>
+            <p>这里想着学习一下<line-code>openai_api.py</line-code>，自己也试着写一个简单的流式响应的接口并且支持对话历史，并且……，好吧，没有了</p>
+            <h4>服务器端</h4>
+            <details>
+                <summary>点击查看代码</summary>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+import datetime
+import json
+import traceback
+import uvicorn
+from transformers import AutoTokenizer, AutoModel
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from sse_starlette.sse import EventSourceResponse
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/GetDateTime")
+def get_server_datetime():
+    return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+async def process(prompt, max_length, top_p, temperature, history):
+    """
+    发文字消息
+    """
+    # 不能是空消息
+    if not prompt:
+        yield "prompt 不能为空"
+        return
+
+    try:
+        current_length = 0
+        #   经测试发现，历史对话也就是 history 参数需要的格式如下：
+        #       [('中国的首都是哪里', '中国的首都是北京。'), ('他的面积是多少', '北京市的总面积大约为16,800平方公里。')]
+        for response, history in model.stream_chat(tokenizer,
+                                                   prompt, 
+                                                   history=history,
+                                                   max_length=max_length if max_length else 999999,
+                                                   top_p=top_p if top_p else 0.7,
+                                                   temperature=temperature if temperature else 0.95):
+            if len(response) == current_length:
+                continue
+            new_text = response[current_length:]
+            current_length = len(response)
+            yield json.dumps({"text":str(new_text)},ensure_ascii=False)
+    except Exception as ex:
+        yield ex.args +"\n" + traceback.format_exc()
+        return
+
+@app.post("/ChatStream")
+async def create_item(request: Request):
+    global model, tokenizer
+    json_post_raw = await request.json()
+    json_post = json.dumps(json_post_raw)
+    json_post_list = json.loads(json_post)
+
+    prompt = json_post_list.get('prompt')
+    max_length = json_post_list.get('max_length')
+    top_p = json_post_list.get('top_p')
+    temperature = json_post_list.get('temperature')
+    history = json_post_list.get('history')
+    #   先这样定一下客户端传入 history 的格式，如下：
+    #       [["中国的首都是哪里", "中国的首都是北京。"],["他的面积是多少", "北京市的总面积大约为16,800平方公里。"]]
+    #   这里在转成 model.stream_chat 需要的格式
+    history = [tuple(h) for h in history] 
+
+    answer_text = process(prompt, max_length, top_p, temperature,history)
+    return EventSourceResponse(answer_text, media_type="text/event-stream")
+
+
+if __name__ == '__main__':
+    model_path = "D:\llm\THUDM\chatglm2-6b-int4"
+    tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+    model = AutoModel.from_pretrained(model_path, trust_remote_code=True).float()
+
+    model = model.eval()
+    uvicorn.run(app, host='127.0.0.1', port=8899, workers=1)
+                </pre>
+            </details>
+            <h4>客户端</h4>
+            <p>这里还是使用<line-code>JavaScript</line-code>调用的，毕竟以后……你说是吧</p>
+            <details>
+                <summary>点击查看代码</summary>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+const btnTest1Ele = document.getElementById("btnTest1");
+btnTest1Ele.addEventListener("click", () => {
+    let myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Accept", "text/event-stream");
+
+    //  陆续询问下面这几个问题：
+    //  中国的首都是哪里
+    //  他的面积是多少
+    //  他有机场吗？几座？
+    //  下辖哪些行政区域
+    const url = "http://127.0.0.1:8899/ChatStream";
+    fetch(url, {
+        method: "POST",
+        headers: myHeaders,
+        // body: JSON.stringify({
+        //     prompt: "中国的首都是哪里",
+        //     history: []
+        // })
+        // body: JSON.stringify({
+        //     prompt: "他的面积是多少",
+        //     history: [["中国的首都是哪里", "中国的首都是北京。"]]
+        // })
+        body: JSON.stringify({
+            prompt: "他有机场吗？几座？",
+            history: [
+                ["中国的首都是哪里", "中国的首都是北京。"],
+                ["他的面积是多少", "北京市的总面积大约为16,800平方公里。"]
+            ]
+        })
+    }).then(
+        (response) => {
+            if (!(response && response.ok)) {
+                console.error("异常：" + response.status);
+                return;
+            }
+            let answer = "";
+            let reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            reader.read().then(function processResult(result) {
+                if (result.done) {
+                    console.log("Event stream ended.");
+                    console.log(answer);
+                    return;
+                }
+                try {
+                    let decodedString = decoder.decode(result.value);
+                    console.log(decodedString);
+                    if (decodedString.startsWith("data:")) {
+                        let data = JSON.parse(decodedString.slice("data:".length).trim());
+                        answer += data.text;
+                    }
+                } catch (error) {}
+
+                // 继续读取下一个事件流数据
+                reader.read().then(processResult);
+            });
+        },
+        (error) => {
+            console.error(`异常：${JSON.stringify(error)}`);
+        }
+    );
+});
+                </pre>
+            </details>
+            <p>不行，我得截个图，让你们看看效果：</p>
+            <p>
+                <img src="./image/15.png" alt="fastapi 之 获取服务器时间" />
             </p>
             <h2>微调</h2>
             <p>这才是硬菜。在通用大语言模型的基础上，添加些自己特色的语料，让其成为你的贴心小助手。</p>
