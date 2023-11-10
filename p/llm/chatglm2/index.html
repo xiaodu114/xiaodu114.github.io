@@ -45,6 +45,11 @@
             <p>注意：这里还设置了<line-code>pip</line-code>的全局镜像源，使用的是清华的：<a href="https://mirrors.tuna.tsinghua.edu.cn/help/pypi/" target="_blank"> pypi | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror</a></p>
             <h3>GCC</h3>
             <p><line-code>ChatGLM2-6B</line-code>的GitHub文档介绍，还需要GCC环境，推荐的是：TDM-GCC。<a href="https://jmeubank.github.io/tdm-gcc/" target="_blank">tdm-gcc</a>。安装的时候别忘了勾选<line-code>openmp</line-code>。这里的版本是：10.3.0</p>
+            <h3>Git</h3>
+            <p>克隆<line-code>GitHub</line-code>上的项目或者在<a href="https://modelscope.cn/" target="_blank">魔搭社区</a>下载模型权重中文件都需要她。安装时需要注意一下，因为需要下载大文件，所以需要<line-code>lfs</line-code>支持。最新版的<line-code>git</line-code>在安装时就有<line-code>lfs</line-code>的选项。这里使用的是：<line-code>git version 2.42.0.windows.2</line-code></p>
+            <p>
+                <img src="./image/0.png" alt="git 安装过程之 lfs" />
+            </p>
             <h2>好戏开场了</h2>
             <h3>下载模型</h3>
             <p>又火了一个站点：Hugging Face。看看这吉祥物多可爱：🤗。按理说咱应该去人家拥抱脸那里下载，都不知道网上好多教程的大神们是怎么串门的，反正我这里是不行啊，难道她没有给我发请帖，太难了。还好，又给我开了一扇窗：<a href="https://aliendao.cn/" target="_blank">互链高科</a>，不过这窗户始终是窗户啊，太慢了。这里不得不说一下人家<line-code>ChatGLM2-6B</line-code>了，太贴心了，就会给咱们自己人开小差：<a href="https://cloud.tsinghua.edu.cn/d/674208019e314311ab5c/" target="_blank">清华大学云盘</a>，你在这里下载就爽歪歪了。</p>
@@ -349,6 +354,7 @@ btnGetDateTimeEle.addEventListener("click", () => {
             </pre>
             <h3>示例4：偷师 openai_api.py</h3>
             <p>这里想着学习一下<line-code>openai_api.py</line-code>，自己也试着写一个简单的流式响应的接口并且支持对话历史，并且……，好吧，没有了</p>
+            <p>你可以看看这篇文章：<a href="https://zhuanlan.zhihu.com/p/617929228" target="_blank">ChatGLM-6B是如何生成回复的？技术详解 - 知乎</a></p>
             <h4>服务器端</h4>
             <details>
                 <summary>点击查看代码</summary>
