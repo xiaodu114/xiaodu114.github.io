@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>大语言模型-番外篇 - xiaodu114.github.io</title>
+        <meta name="keywords" content="大语言模型,llm,Python,镜像源,包管理器,虚拟环境,CUDA Toolkit,cuDNN" />
+        <meta name="description" content="" />
+
+        <script src="/p/_/js/main.js"></script>
+        <script src="../_common/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/llm/extraChapter/index.html -->
+        <div class="blog-page">
+            <h1>大语言模型-番外篇</h1>
+            <p>在接触大语言模型的时候，除了他本身，还有许多其他的……</p>
+            <h2>LLM 社区</h2>
+            <ul>
+                <li>
+                    <a href="https://huggingface.co/" target="_blank">Hugging Face</a>
+                </li>
+                <li>
+                    <a href="https://modelscope.cn/" target="_blank">魔搭社区</a>
+                </li>
+                <li>
+                    <a href="https://wisemodel.cn/" target="_blank">始智AI-wisemodel-中国AI开源创新社区</a>
+                </li>
+            </ul>
+            <p>你可以利用上面的这些社区下载模型权重，例如：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+git lfs install
+#   进入魔搭社区的某个项目之后，相对路径地址可以拷贝
+git clone https://modelscope.cn/ZhipuAI/chatglm3-6b.git 
+            </pre>
+            <h2>Python系列</h2>
+            <h3>Python</h3>
+            <p>对于<line-code>Python</line-code>的印象原来只有一个：人生苦短，我用Python。现在又多了一个：这家伙和JavaScript好像啊，包管理器很多，安装的依赖包更多……</p>
+            <ul>
+                <li>
+                    <a href="https://www.python.org/" target="_blank">Welcome to Python.org</a>
+                </li>
+                <li>
+                    <a href="https://docs.python.org/zh-cn/" target="_blank">Python Documentation</a>
+                </li>
+            </ul>
+            <h3>包管理器</h3>
+            <h4>pip</h4>
+            <p>官网：<a href="https://pypi.org/project/pip/" target="_blank">pip · PyPI</a></p>
+            <p>别人安装速度怎么样？咱不知道。反正我这里的速度那是龟速啊！咱们国人也真够苦逼的，弄各种各种的镜像……</p>
+            <ul>
+                <li>
+                    <a href="https://pypi.tuna.tsinghua.edu.cn/simple" target="_blank">清华</a>
+                </li>
+                <li>
+                    <a href="http://pypi.mirrors.ustc.edu.cn/simple/" target="_blank">中国科学技术大学</a>
+                </li>
+                <li>
+                    <a href="https://mirrors.bfsu.edu.cn/pypi/web/simple/" target="_blank">中科大镜像</a>
+                </li>
+                <li>
+                    <a href="http://mirrors.aliyun.com/pypi/simple/" target="_blank">阿里</a>
+                </li>
+                <li>
+                    <a href="http://pypi.douban.com/simple/" target="_blank">豆瓣</a>
+                </li>
+            </ul>
+            <p>这里已<a href="https://mirrors.tuna.tsinghua.edu.cn/help/pypi/" target="_blank"> pypi | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror</a>为例，看看如何设置国内镜像源。</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   安装依赖（使用最初设置的镜像源或者使用已经修改的全局镜像源）
+pip install -r requirements.txt
+#   仅本次安装时使用指定镜像源
+pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+            </pre>
+            <h4>conda</h4>
+            <h4>pipenv</h4>
+            <h4>Poetry</h4>
+            <h4>PDM</h4>
+            <h3>虚拟环境管理工具</h3>
+            <h4>venv</h4>
+            <p>官网：<a href="https://docs.python.org/zh-cn/3/library/venv.html" target="_blank">venv --- 创建虚拟环境</a></p>
+            <p>这个使用起来比较方便，如果你现在安装Python，venv已经默认安装了。</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   创建虚拟环境
+python -m venv venv
+#   激活虚拟环境
+.\venv\scripts\activate
+#   退出虚拟环境
+deactivate
+            </pre>
+            <h4>conda</h4>
+            <h4>pipenv</h4>
+            <h4>Poetry</h4>
+            <h4>virtualenv</h4>
+            <h4>pyenv</h4>
+            <h2>Rust系列</h2>
+            <ul>
+                <li>
+                    <a href="https://www.rust-lang.org/" target="_blank">Rust Programming Language</a>
+                </li>
+            </ul>
+            <h2>Mojo系列</h2>
+            <ul>
+                <li>
+                    <a href="https://www.modular.com/mojo" target="_blank">Mojo 🔥: Programming language for all of AI</a>
+                </li>
+                <li>
+                    <a href="https://mojocn.org/" target="_blank">Mojo官网 Mojo社区 | Mojo中文网</a>
+                </li>
+            </ul>
+        </div>
+    </body>
+</html>
