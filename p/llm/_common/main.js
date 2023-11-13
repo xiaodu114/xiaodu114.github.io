@@ -45,6 +45,9 @@ customElements.define(
                         <li>
                             <a href="/p/llm/fastChat/index.html" target="_blank">FastChat</a>
                         </li>
+                        <li>
+                            <a href="/p/llm/extraChapter/index.html" target="_blank">番外篇</a>
+                        </li>
                     </ol>
                 </div>
             </details>
