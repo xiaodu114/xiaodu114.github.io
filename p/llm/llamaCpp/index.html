@@ -44,8 +44,9 @@
             <p><line-code>llama.cpp</line-code>项目中包括两部分：C/C++部分，也就是需要编译的，他可以帮你量化、和llm对话等；Python部分，它可以帮你转换为GGUF格式（GGML,已不再支持，但是有GGML转GGUF的脚本）。其实，现在使用起来方便多了，官网上已经发布了<line-code>exe</line-code>压缩包了，就不用我们自己编译了。这里记录一下编译过程：</p>
             <h3>下载仓库</h3>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
-#   你想把项目放到哪个目录下，在该目录下进入命令行
+#   你想把项目放到哪个目录下，在该目录下进入命令行或者PowerShell。这里是：E:\llm
 git clone https://github.com/ggerganov/llama.cpp
+cd llama.cpp
             </pre>
             <p>这里将项目下载到<line-code>E:\llm\llama.cpp</line-code>路径下了，如下图：</p>
             <p>
@@ -112,7 +113,9 @@ python convert.py D:\llm\baichuan-inc\Baichuan2-7B-Chat
             </p>
             <h3>量化</h3>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
-#   首先找到 llama.cpp 项目编译之后生成一堆exe的文件夹，之后执行如下：
+#   首先找到 llama.cpp 项目编译之后生成一堆exe的文件夹
+cd build\bin\Release
+#   之后执行下面的命令
 .\quantize.exe D:\llm\baichuan-inc\Baichuan2-7B-Chat\ggml-model-f16.gguf D:\llm\baichuan-inc\Baichuan2-7B-Chat-GGUF\ggml-model-q4_0.gguf q4_0
             </pre>
             <p>
