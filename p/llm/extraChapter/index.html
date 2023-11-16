@@ -35,6 +35,25 @@ git lfs install
 #   进入魔搭社区的某个项目之后，相对路径地址可以拷贝
 git clone https://modelscope.cn/ZhipuAI/chatglm3-6b.git 
             </pre>
+            <h2>NVIDIA</h2>
+            <details>
+                <summary>科普</summary>
+                <ul>
+                    <li>
+                        <a href="https://zhuanlan.zhihu.com/p/91334380" target="_blank">显卡，显卡驱动,nvcc, cuda driver,cudatoolkit,cudnn到底是什么？ - 知乎</a>
+                    </li>
+                    <li>
+                        <a href="https://blog.csdn.net/qq_41094058/article/details/116207333" target="_blank">【精选】一文讲清楚CUDA、CUDA toolkit、CUDNN、NVCC关系_健0000的博客-CSDN博客</a>
+                    </li>
+                    <li>
+                        <a href="https://blog.csdn.net/peacefairy/article/details/108577930" target="_blank">如何查看windows中安装的CUDA版本（无需配置环境变量）_如何在黑窗口中查看cuda-CSDN博客</a>
+                    </li>
+                </ul>
+            </details>
+            <h3>CUDA Toolkit</h3>
+            <p>官网：<a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">CUDA Toolkit - Free Tools and Training | NVIDIA Developer</a>、<a href="https://developer.nvidia.com/cuda-toolkit-archive" target="_blank">CUDA Toolkit Archive | NVIDIA Developer</a></p>
+            <h3>cuDNN</h3>
+            <p>官网：<a href="https://developer.nvidia.com/cudnn" target="_blank">CUDA Deep Neural Network (cuDNN) | NVIDIA Developer</a></p>
             <h2>Python系列</h2>
             <h3>Python</h3>
             <p>对于<line-code>Python</line-code>的印象原来只有一个：人生苦短，我用Python。现在又多了一个：这家伙和JavaScript好像啊，包管理器很多，安装的依赖包更多……</p>
@@ -67,7 +86,7 @@ git clone https://modelscope.cn/ZhipuAI/chatglm3-6b.git
                     <a href="http://pypi.douban.com/simple/" target="_blank">豆瓣</a>
                 </li>
             </ul>
-            <p>这里已<a href="https://mirrors.tuna.tsinghua.edu.cn/help/pypi/" target="_blank"> pypi | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror</a>为例，看看如何设置国内镜像源。</p>
+            <p>你可以参照这篇：<a href="https://mirrors.tuna.tsinghua.edu.cn/help/pypi/" target="_blank"> pypi | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror</a>，看看如何设置国内镜像源。</p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 #   安装依赖（使用最初设置的镜像源或者使用已经修改的全局镜像源）
 pip install -r requirements.txt
@@ -75,6 +94,11 @@ pip install -r requirements.txt
 pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
             </pre>
             <h4>conda</h4>
+            <p>官网：<a href="https://github.com/conda/conda" target="_blank">GitHub - conda/conda</a> 、<a href="https://docs.conda.io/en/latest/" target="_blank">Conda — conda documentation</a></p>
+            <p>Conda 是一个开源的包管理系统和环境 在 Windows、macOS 和 Linux 上运行的管理系统。注：翻译的。你也可以看看维基百科是如果解释的：<a href="https://zh.wikipedia.org/wiki/Conda" target="_blank">Conda - 维基百科，自由的百科全书</a></p>
+            <p>工具软件：<a href="https://anaconda.org/" target="_blank"> :: Anaconda.org</a>、<a href="https://docs.conda.io/projects/miniconda/en/latest/" target="_blank">Miniconda — miniconda documentation</a></p>
+            <p>设置镜像：<a href="https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/" target="_blank"> Anaconda | Miniconda 镜像使用帮助</a></p>
+            <p>你可以看看这篇文章：<a href="https://zhuanlan.zhihu.com/p/646757552" target="_blank">深度解析：Anaconda与Miniconda之间的选择 - 知乎</a></p>
             <h4>pipenv</h4>
             <h4>Poetry</h4>
             <h4>PDM</h4>
