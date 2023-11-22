@@ -6,7 +6,7 @@
     
   <url>
     <loc>https://xiaodu114.github.io/</loc>
-    <lastmod>2023-11-13T08:29:46.016Z</lastmod>
+    <lastmod>2023-11-20T08:42:24.636Z</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
@@ -116,17 +116,17 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/chatglmCpp/index.html</loc>
-    <lastmod>2023-11-07T08:45:54.944Z</lastmod>
+    <lastmod>2023-11-17T03:50:24.541Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/extraChapter/index.html</loc>
-    <lastmod>2023-11-13T08:23:44.460Z</lastmod>
+    <lastmod>2023-11-16T08:04:45.082Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/fastChat/index.html</loc>
-    <lastmod>2023-11-07T08:47:13.162Z</lastmod>
+    <lastmod>2023-11-16T06:39:53.402Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -141,7 +141,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/llamaCpp/index.html</loc>
-    <lastmod>2023-11-07T08:59:10.350Z</lastmod>
+    <lastmod>2023-11-16T06:49:04.828Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -233,6 +233,11 @@
     <loc>https://xiaodu114.github.io/p/web/vue3/0introduction/index.html</loc>
     <lastmod>2022-06-29T09:16:32.000Z</lastmod>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/p/web/webComponents/index.html</loc>
+    <lastmod>2023-11-20T08:40:56.484Z</lastmod>
+    <priority>0.3</priority>
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/web/webComponents/my/index.html</loc>
