@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>高度相关</title>
+        <style>
+            .containers {
+                display: flex;
+            }
+
+            .containers > .item {
+                position: relative;
+                width: 50%;
+                height: 235px;
+                padding-top: 50px;
+                padding-bottom: 50px;
+                margin-top: 20px;
+                margin-bottom: 20px;
+                overflow: auto;
+                border-top: 30px solid rebeccapurple;
+                border-bottom: 30px solid lightcoral;
+            }
+
+            .containers > .item > .lrc {
+                white-space: nowrap;
+            }
+
+            .containers > .item > .info {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background-color: #3cb878;
+                color: #fff;
+                padding: 10px;
+            }
+
+            .container1 {
+            }
+
+            .container2 {
+                box-sizing: border-box;
+            }
+        </style>
+    </head>
+
+    <body>
+        <p>给一个元素分配大小（height和width）之后,属性box-sizing不同的值会影响元素的真正大小。</p>
+        <dl>
+            <dt>● box-sizing值为content-box(默认值)时，实际高度 = 你设置的高度 + 上下内边距 + 上下边框</dt>
+            <dd>
+                <p>说明：你设置的高度 = 实际内容可视区域的高度 + 横向滚动条(如果存在)</p>
+            </dd>
+            <dt>● box-sizing值为border-box时，实际高度 = 你设置的高度</dt>
+            <dd>
+                <p>说明：实际高度 = 你设置的高度 = 实际内容可视区域的高度 + 上下内边距 + 上下边框 + 横向滚动条(如果存在)</p>
+                <p>注意：测试发现浏览器F12下，当鼠标移到元素，盒子模型显示的高度包括横向滚动条的高度，这一点和上面不同。</p>
+            </dd>
+        </dl>
+        <div class="containers">
+            <div class="item container1">
+                <p>祈祷 王杰|王韵禅</p>
+                <p>祈祷 王杰|王韵禅</p>
+                <p>祈祷 王杰|王韵禅</p>
+                <p>祈祷 王杰|王韵禅</p>
+                <p>祈祷 王杰|王韵禅</p>
+                <p>祈祷 王杰|王韵禅</p>
+                <p>祈祷 王杰|王韵禅</p>
+                <p>祈祷 王杰|王韵禅</p>
+                <p>祈祷 王杰|王韵禅</p>
+                <p class="lrc">让我们敲希望的钟啊 多少祈祷在心中 让大家看不到失败 叫成功永远在 让地球忘记了转动啊 四季少了夏秋冬 让宇宙关不了天窗 叫太阳不西冲 让欢喜代替了哀愁啊 微笑不会再害羞 让时光懂得去倒流 叫青春不开溜 让贫穷开始去逃亡啊 快乐健康留四方 让世界找不到黑暗 幸福像花开放 让我们敲希望的钟啊 多少祈祷在心中 让大家看不到失败 叫成功永远在 让大家看不到失败 叫成功永远在</p>
+                <div class="info"></div>
+            </div>
+            <div class="item container2">
+                <p>祈祷 王杰|王韵禅</p>
+                <p>祈祷 王杰|王韵禅</p>
+                <p>祈祷 王杰|王韵禅</p>
+                <p>祈祷 王杰|王韵禅</p>
+                <p>祈祷 王杰|王韵禅</p>
+                <p>祈祷 王杰|王韵禅</p>
+                <p>祈祷 王杰|王韵禅</p>
+                <p>祈祷 王杰|王韵禅</p>
+                <p>祈祷 王杰|王韵禅</p>
+                <p class="lrc">让我们敲希望的钟啊 多少祈祷在心中 让大家看不到失败 叫成功永远在 让地球忘记了转动啊 四季少了夏秋冬 让宇宙关不了天窗 叫太阳不西冲 让欢喜代替了哀愁啊 微笑不会再害羞 让时光懂得去倒流 叫青春不开溜 让贫穷开始去逃亡啊 快乐健康留四方 让世界找不到黑暗 幸福像花开放 让我们敲希望的钟啊 多少祈祷在心中 让大家看不到失败 叫成功永远在 让大家看不到失败 叫成功永远在</p>
+                <div class="info"></div>
+            </div>
+        </div>
+        <p>左侧元素的实际高度 = 235(你设置的高度：内容和横向滚动条共享) + 50*2(上下内边距) + 30*2(上下边框) = 395</p>
+        <p>右侧元素的实际高度 = 235(你设置的高度) = 75(包括横向滚动条) + 50*2(上下内边距) + 30*2(上下边框)</p>
+        <p>
+            clientHeight 是元素内部的高度(单位像素)，包含内边距，但不包括水平滚动条、边框和外边距。<br />
+            clientHeight 可以通过 CSS height + CSS padding - 水平滚动条高度 (如果存在)来计算。<br />
+        </p>
+        <p>注：clientHeight = 实际内容可视区域的高度 + 上下内边距 （注意：border-box时，盒子模型中的元素的高度包括横向滚动条）</p>
+        <p>
+            offsetHeight 返回该元素的像素高度，高度包含该元素的垂直内边距和边框，且是一个整数。<br />
+            offsetHeight 包括元素的边框、内边距和元素的水平滚动条（如果存在且渲染的话），不包含:before或:after等伪类元素的高度。
+        </p>
+        <p>注：offsetHeight、DOMRect.height和上文说的“实际高度”是一样的。</p>
+        <p>scrollHeight 的值等于该元素在不使用滚动条的情况下为了适应视口中所用内容所需的最小高度。 没有垂直滚动条的情况下，scrollHeight值与元素视图填充所有内容所需要的最小值clientHeight相同。包括元素的padding，但不包括元素的border和margin。scrollHeight也包括 ::before 和 ::after这样的伪元素。</p>
+        <script>
+            document.querySelectorAll(".containers>.item").forEach((containerDom) => {
+                var infoText = "介绍<br>",
+                    domRect = containerDom.getBoundingClientRect(),
+                    rectAttrs = ["width", "height", "x", "y", "top", "right", "bottom", "left"];
+                infoText += "设置上下外边距：20<br>";
+                infoText += "设置上下边框：30<br>";
+                infoText += "设置上下内边距：50<br>";
+                infoText += "设置高度:235<br>";
+                infoText += "clientHeight:" + containerDom.clientHeight + "<br>";
+                infoText += "offsetHeight:" + containerDom.offsetHeight + "<br>";
+                infoText += "scrollHeight:" + containerDom.scrollHeight + "<br>";
+                rectAttrs.forEach((attr) => {
+                    infoText += `DOMRect.${attr}:${domRect[attr]}<br>`;
+                });
+                containerDom.querySelector(".info").innerHTML = infoText;
+            });
+            window.addEventListener("scroll", function (evt) {
+                //console.info("window 说：我监听到了");
+                let totalY = document.documentElement.scrollHeight || document.body.parentNode.scrollHeight || document.body.scrollHeight;
+                let clientY = document.documentElement.clientHeight || document.body.parentNode.clientHeight || window.innerHeight || document.body.clientHeight;
+                let scrollY = // For scrollY
+                    (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.scrollTop == "number" ? t : document.body).scrollTop;
+
+                let ele = document.documentElement;
+                if (document.documentElement && typeof document.documentElement.scrollTop === "number") {
+                    ele = document.documentElement;
+                } else if (document.body.parentNode && typeof document.body.parentNode.scrollTop === "number") {
+                    ele = document.body.parentNode;
+                }
+
+                console.log("totalY 之 document.documentElement.scrollHeight :" + document.documentElement.scrollHeight);
+                console.log("totalY 之 document.body.parentNode.scrollHeight :" + document.body.parentNode.scrollHeight);
+                console.log("totalY 之 document.body.scrollHeight :" + document.body.scrollHeight);
+
+                // console.log("clientY 之 document.documentElement.clientHeight :" + document.documentElement
+                //     .clientHeight);
+                // console.log("clientY 之 document.body.parentNode.clientHeight :" + document.body
+                //     .parentNode.clientHeight);
+                // console.log("clientY 之 window.innerHeight :" + window.innerHeight);
+                // console.log("clientY 之 document.body.clientHeight :" + document.body.clientHeight);
+
+                // console.log("scrollY 之 document.documentElement.scrollTop :" + document.documentElement.scrollTop);
+                // console.log("scrollY 之 document.body.parentNode.scrollTop :" + document.body.parentNode.scrollTop);
+                // console.log("scrollY 之 document.body.scrollTop :" + document.body.scrollTop);
+
+                // // 页面总高
+                // let totalH = document.body.scrollHeight || document.documentElement.scrollHeight;
+                // // 可视高
+                // let clientH = window.innerHeight || document.documentElement.clientHeight;
+                // // 滚动条卷去高度
+                // let scrollH = document.body.scrollTop || document.documentElement.scrollTop;
+            });
+            // document.addEventListener("scroll", function (evt) {
+            //     console.info("document 说：我监听到了");
+            // });
+            // document.querySelector("html").addEventListener("scroll", function (evt) {
+            //     console.info("html 说：我监听到了");
+            // });
+            // document.querySelector("body").addEventListener("scroll", function (evt) {
+            //     console.info("body 说：我监听到了");
+            // });
+            // document.querySelector(".container").addEventListener("scroll", function (evt) {
+            //     console.info(".container 说：我监听到了。");
+            // });
+        </script>
+    </body>
+</html>
