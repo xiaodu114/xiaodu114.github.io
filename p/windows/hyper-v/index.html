@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Hyper-V - xiaodu114.github.io</title>
+        <meta name="keywords" content="windows,win 10,Hyper-V,Ubuntu,xRDP,复制,粘贴,分辨率" />
+        <meta name="description" content="整理一些 Hyper-V 相关的东东……" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/windows/hyper-v/index.html -->
+        <div class="blog-page">
+            <h1>Hyper-V</h1>
+            <p>整理一些<line-code>Hyper-V</line-code>相关的东东……</p>
+            <h2>安装 Hyper-V</h2>
+            <details>
+                <summary>点击查看详细步骤</summary>
+                <p>1、程序和功能：<line-code>appwiz.cpl</line-code></p>
+                <p>
+                    <img src="./image/1-1.png" />
+                </p>
+                <p>2、启用或关闭Windows功能</p>
+                <p>
+                    <img src="./image/1-2.png" />
+                </p>
+                <p>3、选中Hyper-V并重启</p>
+                <p>
+                    <img src="./image/1-3.png" />
+                </p>
+                <p>4、Hyper-V 管理器</p>
+                <p>
+                    <img src="./image/1-4.png" />
+                </p>
+                <p>5、连接到本地服务器</p>
+                <p>
+                    <img src="./image/1-5.png" />
+                </p>
+                <p>6、Hyper-V 设置</p>
+                <p>
+                    <img src="./image/1-6.png" />
+                </p>
+                <p>这里将“虚拟硬盘”和“虚拟机”的路径切换到了D盘</p>
+                <p>7、新建虚拟交换机</p>
+                <p>
+                    <img src="./image/1-7.png" />
+                </p>
+                <p>
+                    <img src="./image/1-8.png" />
+                </p>
+                <p>
+                    <img src="./image/1-9.png" />
+                </p>
+                <p>想要虚拟机有一个独立的IP地址，所以选择用了“外部网络”</p>
+            </details>
+            <h2>新建虚拟机</h2>
+            <h3>新建虚拟机向导</h3>
+            <details>
+                <summary>点击查看详细步骤</summary>
+                <p>1、新建-》虚拟机</p>
+                <p>
+                    <img src="./image/2-1.png" />
+                </p>
+                <p>2、指定名称和位置</p>
+                <p>
+                    <img src="./image/2-2.png" />
+                </p>
+                <p>你也可以勾中复选框，修改位置。</p>
+                <p>3、二代虚拟机</p>
+                <p>
+                    <img src="./image/2-3.png" />
+                </p>
+                <p>4、分配内存</p>
+                <p>
+                    <img src="./image/2-4.png" />
+                </p>
+                <p>5、配置网络</p>
+                <p>
+                    <img src="./image/2-5.png" />
+                </p>
+                <p>6、连接虚拟硬盘</p>
+                <p>
+                    <img src="./image/2-6.png" />
+                </p>
+                <p>选择映像文件，这里是 ubuntu 22.04</p>
+                <p>
+                    <img src="./image/2-7.png" />
+                </p>
+                <p>7、摘要</p>
+                <p>
+                    <img src="./image/2-8.png" />
+                </p>
+            </details>
+            <h3>虚拟机设置</h3>
+            <details>
+                <summary>点击查看详细步骤</summary>
+                <p>1、设置CPU</p>
+                <p>
+                    <img src="./image/2-9.png" />
+                </p>
+                <p>你还可以在这里修改其他配置</p>
+                <p>2、连接 启动</p>
+                <p>
+                    <img src="./image/2-10.png" />
+                </p>
+                <p>注：这里启动异常了，这应该是第二代的问题，如果选择第一代没有这个问题。异常如下图：</p>
+                <p>
+                    <img src="./image/2-11.png" />
+                </p>
+                <p>解决办法如下：</p>
+                <p>
+                    <img src="./image/2-12.png" />
+                </p>
+            </details>
+            <h2>Ubuntu</h2>
+            <h3>安装 ubuntu 22.04</h3>
+            <p>在<line-code>Hyper-V</line-code>中ubuntu 22.04的安装步骤</p>
+            <details>
+                <summary>点击查看详细步骤</summary>
+                <p>1、入口</p>
+                <p>
+                    <img src="./image/3-1.png" />
+                </p>
+                <p>2、选择语言</p>
+                <p>
+                    <img src="./image/3-2.png" />
+                </p>
+                <p>3、键盘布局</p>
+                <p>
+                    <img src="./image/3-3.png" />
+                </p>
+                <p>4、更新和其他软件</p>
+                <p>
+                    <img src="./image/3-4.png" />
+                </p>
+                <p>说明：根据自己的实际情况选择。这里选择最小化安装。因为安装的时候断网了，所以你可以忽略“安装 Ubuntu 时下载更新”不可用</p>
+                <p>5、安装类型</p>
+                <p>
+                    <img src="./image/3-5.png" />
+                </p>
+                <p>
+                    <img src="./image/3-6.png" />
+                </p>
+                <p>6、您在什么地方？</p>
+                <p>
+                    <img src="./image/3-7.png" />
+                </p>
+                <p>7、你是谁？</p>
+                <p>
+                    <img src="./image/3-8.png" />
+                </p>
+                <p>注意：这里的“自动登录”要针对自己的实际情况看看是否需要选中。这里当时就是勾中了，导致一开机就直接登录了，如果此时想远程这台虚拟机，要么将登录的用老虎注销，要么添加一个新的用户</p>
+                <p>8、安装过程</p>
+                <p>
+                    <img src="./image/3-9.png" />
+                </p>
+                <p>9、安装完成（重启）</p>
+                <p>
+                    <img src="./image/3-10.png" />
+                </p>
+                <p>10、首次进入</p>
+                <p>
+                    <img src="./image/3-11.png" />
+                </p>
+            </details>
+            <h4>选择软件源</h4>
+            <p>你可以参考：<a href="/p/linux/ubuntu/index.html" target="_blank">Ubuntu - xiaodu114.github.io</a></p>
+            <h3>配置远程连接</h3>
+            <p>这里用到的是：<a href="http://www.c-nergy.be/products.html" target="_blank">Products | c-nergy.be</a>。当时下载的版本是 1.4.8，例如：xrdp-installer-1.4.8.zip。之后解压，得到：<line-code>xrdp-installer-1.4.8.sh</line-code>。安装之后可以解决复制粘贴、ubuntu不能全屏（分辨率）的问题。</p>
+            <details>
+                <summary>点击查看详细步骤</summary>
+                <p>1、安装 xRDP 之前</p>
+                <p>
+                    <img src="./image/4-1.png" />
+                </p>
+                <p>2、修改权限</p>
+                <p>
+                    <img src="./image/4-2.png" />
+                </p>
+                <p>3、执行 xrdp-installer-1.4.8.sh</p>
+                <p>
+                    <img src="./image/4-3.png" />
+                </p>
+                <p>
+                    <img src="./image/4-4.png" />
+                </p>
+                <p>4、远程连接</p>
+                <p>
+                    <img src="./image/4-5.png" />
+                </p>
+                <p>因为这里远程时没有指定用户名，所以会有下面的步骤5。如果在这里指定了用户名，就不会出现下面步骤5中的界面了。如果你点击左下角的“显示选项”，会出现一些设置，例如：显示、本地资源等，和我们平时远程其他的windows电脑就一样了。</p>
+                <p>5、用户登录</p>
+                <p>
+                    <img src="./image/4-6.png" />
+                </p>
+                <p>注意：这里需要说明一点，选择的用户必须是注销或者没有登录状态，否则就连不上，具体的效果如下图：</p>
+                <p>
+                    <img src="./image/4-7.png" />
+                </p>
+                <p>因为这个问题，才会有上面安装时额外说明：不要勾中“自动登录”。当然，还得看你的个人需求，是吧。</p>
+            </details>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Ubuntu - xiaodu114.github.io</title>
+        <meta name="keywords" content="Ubuntu,Hyper-V,镜像源,常用命令,IP地址" />
+        <meta name="description" content="Ubuntu 相关知识整理" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/linux/ubuntu/index.html -->
+        <div class="blog-page">
+            <h1>Ubuntu</h1>
+            <p>整理收集一些<line-code>Ubuntu</line-code>相关的东东……</p>
+            <h2>常用命令</h2>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   重启
+reboot
+#   立即关机
+sudo shutdown now
+            </pre>
+            <h2>安装</h2>
+            <h3>Hyper-V</h3>
+            <p>你可以参考：<a href="/p/windows/hyper-v/index.html" target="_blank">Hyper-V - xiaodu114.github.io</a></p>
+            <h2>选择软件源</h2>
+            <details>
+                <summary>点击查看详细步骤</summary>
+                <p>1、点击“软件和更新”图标</p>
+                <p>
+                    <img src="./image/1-1.png" />
+                </p>
+                <p>2、点击“下载自”下拉框并选择“其他”</p>
+                <p>
+                    <img src="./image/1-2.png" />
+                </p>
+                <p>3、选择最佳服务器</p>
+                <p>
+                    <img src="./image/1-3.png" />
+                </p>
+                <p>你会看到这里有很多内置的中国服务器，“选择最佳服务器”测试哪个最适合你。</p>
+                <p>4、认证</p>
+                <p>
+                    <img src="./image/1-4.png" />
+                </p>
+                <p>测出最佳之后，点击“选择服务器”时会有认证提示框。</p>
+                <p>5、重新载入软件的列表信息</p>
+                <p>
+                    <img src="./image/1-5.png" />
+                </p>
+            </details>
+            <h2>查看IP地址</h2>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   方式1
+hostname -I
+#   方式2
+ip addr show eth0
+#   方式3
+nmcli -p device show               
+            </pre>
+        </div>
+    </body>
+</html>
