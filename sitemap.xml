@@ -6,7 +6,7 @@
     
   <url>
     <loc>https://xiaodu114.github.io/</loc>
-    <lastmod>2023-11-26T12:32:47.393Z</lastmod>
+    <lastmod>2023-11-30T10:46:26.490Z</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
@@ -126,7 +126,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/extraChapter/index.html</loc>
-    <lastmod>2023-11-26T02:57:24.442Z</lastmod>
+    <lastmod>2023-11-30T00:52:15.294Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -251,17 +251,22 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/windows/hyper-v/index.html</loc>
-    <lastmod>2023-11-26T12:26:12.606Z</lastmod>
+    <lastmod>2023-11-26T12:45:40.979Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/windows/index.html</loc>
-    <lastmod>2023-11-26T02:57:24.565Z</lastmod>
+    <lastmod>2023-11-27T12:13:15.559Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/windows/problem.html</loc>
     <lastmod>2023-11-26T04:43:55.225Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/p/windows/wsl2/index.html</loc>
+    <lastmod>2023-11-30T06:29:16.494Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
