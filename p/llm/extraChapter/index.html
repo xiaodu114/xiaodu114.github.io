@@ -56,6 +56,46 @@ git clone https://modelscope.cn/ZhipuAI/chatglm3-6b.git
                     </li>
                 </ul>
             </details>
+            <h3>Driver Version for CUDA</h3>
+            <p>要想安装<line-code>CUDA Toolkit</line-code>和<line-code>cuDNN</line-code>，我们得首先知道<line-code>NVIDIA Driver</line-code>的版本。网上基本上都是这样的：</p>
+            <ol>
+                <li>
+                    打开 NVIDIA 控制面板。
+                    <ul>
+                        <li>右键单击Windows桌面，从上下文菜单中选择“NVIDIA控制面板”。</li>
+                        <li>你也可以通过在任务栏上找到 NVIDIA 图标，右键单击它，然后选择“NVIDIA 控制面板”来打开。</li>
+                    </ul>
+                </li>
+                <li>
+                    在 NVIDIA 控制面板中，点击“帮助”菜单，然后选择“系统信息”。
+                    <ul>
+                        <li>说明：在 NVIDIA 控制面板左下角也有“系统信息”的链接</li>
+                    </ul>
+                </li>
+                <li>
+                    在“系统信息”窗口中，你将看到“驱动程序版本”信息，其中包括你当前安装的 NVIDIA 驱动程序的版本号。
+                    <ul>
+                        <li>在“系统信息”窗口中，有“显示”和“组件”两个页签。默认选中“显示”，上面的信息也是“显示”页签下</li>
+                        <li>重点：网上搜索时，一般说的都是在“组件”页签下“NVCUDA64.dll”的产品名称“NVIDIA CUDA 12.2.138 Driver”。对，就是其中的那串数字。</li>
+                    </ul>
+                </li>
+            </ol>
+            <p>
+                <img src="./image/1.png" />
+            </p>
+            <p>嗯，有了这个之后我们就可以去下载<line-code>CUDA Toolkit</line-code>和<line-code>cuDNN</line-code>了。我这里还在<line-code>NVIDIA</line-code>的官网发现了下面两个链接：</p>
+            <ul>
+                <li>
+                    <a href="https://docs.nvidia.com/deploy/cuda-compatibility/" target="_blank">CUDA Compatibility :: NVIDIA Data Center GPU Driver Documentation</a>
+                </li>
+                <li>
+                    <a href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html" target="_blank">NVIDIA CUDA Toolkit Release Notes</a>
+                </li>
+            </ul>
+            <p>😵😵😵，感觉这里是按照 Driver Version 对应 CUDA 版本的，并且还有兼容模式……暂时按照不兼容的选吧。如下：<a href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html#id5" target="_blank">Table 3:CUDA Toolkit and Corresponding Driver Versions</a></p>
+            <p>
+                <img src="./image/2.png" />
+            </p>
             <h3>CUDA Toolkit</h3>
             <p>官网：<a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">CUDA Toolkit - Free Tools and Training | NVIDIA Developer</a>、<a href="https://developer.nvidia.com/cuda-toolkit-archive" target="_blank">CUDA Toolkit Archive | NVIDIA Developer</a></p>
             <h3>cuDNN</h3>
