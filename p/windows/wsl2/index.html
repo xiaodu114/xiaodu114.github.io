@@ -46,6 +46,17 @@ ubuntu2204.exe config --default-user root
                 <p>
                     <img src="./image/1-4.png" alt="Ubuntu 22.04 设置默认root账户" />
                 </p>
+                <mark-block type="error">
+                    <p>打开“Ubuntu22.04”时报如下错误：</p>
+                    <p>无法将磁盘“C:\Users\admin\AppData\Local\Packages\CanonicalGroupLimited.Ubuntu22.04LTS_79rhkp1fndgsc\LocalState\ext4.vhdx”附加到 WSL2： 系统找不到指定的文件。</p>
+                    <p>解决办法：</p>
+                    <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   查看一下，你打开的是哪一个
+wsl -l --all
+#   注销一下，之后重新打开时会重新安装
+wsl --unregister Ubuntu-22.04
+                    </pre>
+                </mark-block>
             </details>
             <h3>Windows访问Windows子系统目录</h3>
             <p>在我的电脑（win + E）中的地址栏或者运行（win + R）中输入：<line-code>\\wsl$</line-code></p>
