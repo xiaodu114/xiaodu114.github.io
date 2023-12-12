@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>Ubuntu - xiaodu114.github.io</title>
-        <meta name="keywords" content="Ubuntu,Hyper-V,镜像源,常用命令,IP地址" />
+        <meta name="keywords" content="Ubuntu,Hyper-V,镜像源,常用命令,IP地址,安装 deb 软件包" />
         <meta name="description" content="Ubuntu 相关知识整理" />
 
         <script src="/p/_/js/main.js"></script>
@@ -18,12 +18,25 @@
             <p>整理收集一些<line-code>Ubuntu</line-code>相关的东东……</p>
             <h2>常用命令</h2>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   系统监视器
+gnome-system-monitor
+
+#   查看内存占用
+free -h -w
+
 #   重启
 reboot
+
 #   立即关机
 sudo shutdown now
+
+#   创建文件夹
+mkdir demo1
+
+#   删除文件或者文件夹
+rm -rf demo1
             </pre>
-            <h2>安装</h2>
+            <h2>安装系统</h2>
             <h3>Hyper-V</h3>
             <p>你可以参考：<a href="/p/windows/hyper-v/index.html" target="_blank">Hyper-V - xiaodu114.github.io</a></p>
             <h2>选择软件源</h2>
@@ -60,6 +73,84 @@ hostname -I
 ip addr show eth0
 #   方式3
 nmcli -p device show               
+            </pre>
+            <details>
+                <summary>IP 地址</summary>
+                <ul>
+                    <li>
+                        <a href="https://whatismyipaddress.com/" target="_blank">What Is My IP Address - See Your Public Address - IPv4 & IPv6</a>
+                    </li>
+                    <li>
+                        <a href="https://www.iplocation.net/" target="_blank">IP Address Lookup | Geolocation</a>
+                    </li>
+                    <li>
+                        <a href="https://www.showmyip.com/" target="_blank">What Is My IP Address? (IPv4 & IPv6) - Show My IP</a>
+                    </li>
+                    <li>
+                        <a href="https://ip.me/" target="_blank">What is my public IP address - IP.ME</a>
+                    </li>
+                </ul>
+            </details>
+            <h2>安装软件</h2>
+            <h3>安装<line-code>deb</line-code></h3>
+            <p><line-code>deb</line-code>应该就类似<line-code>windows</line-code>中的<line-code>exe</line-code>了吧</p>
+            <h4>Microsoft Edge</h4>
+            <p>下载地址：<a href="https://www.microsoft.com/zh-cn/edge/download" target="_blank">下载 Microsoft Edge</a></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   这里下载的是：microsoft-edge-stable_120.0.2210.61-1_amd64.deb
+#   在上面下载文件的文件夹进入终端，执行下面的命令
+sudo dpkg -i microsoft-edge-stable_120.0.2210.61-1_amd64.deb     
+            </pre>
+            <h4>Visual Studio Code</h4>
+            <p>下载地址：<a href="https://code.visualstudio.com/Download" target="_blank">Download Visual Studio Code - Mac, Linux, Windows</a></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   这里下载的是：code_1.85.0-1701902998_amd64.deb
+#   和Edge一样
+sudo dpkg -i code_1.85.0-1701902998_amd64.deb    
+            </pre>
+            <h3>apt 安装</h3>
+            <h4>Git | LFS</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   检查 Git 版本：git --version
+sudo apt install git git-lfs    
+            </pre>
+            <h4>Python</h4>
+            <p>已经默认安装了<line-code>Python</line-code>，版本为：3.10.12</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   检查 Python 版本
+python3 -V    
+            </pre>
+            <h5>安装 pip</h5>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   检查 pip 版本：pip -V
+sudo apt install python3-pip
+            </pre>
+            <h6>设置清华镜像源</h6>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   临时使用清华镜像来升级 pip
+python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade pip
+#   全局设置
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+            </pre>
+            <h5>安装 venv</h5>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo apt install python3-venv
+            </pre>
+            <h6>虚拟环境</h6>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   创建
+python3 -m venv venv
+#   激活
+source ./venv/bin/activate
+#   退出虚拟环境
+deactivate
+
+#   你可以创建多个虚拟环境
+python3 -m venv venv1
+source ./venv1/bin/activate
+
+python3 -m venv venv2
+source ./venv2/bin/activate
             </pre>
         </div>
     </body>
