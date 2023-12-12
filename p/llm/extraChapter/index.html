@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>大语言模型-番外篇 - xiaodu114.github.io</title>
-        <meta name="keywords" content="大语言模型,llm,Python,镜像源,包管理器,虚拟环境,CUDA Toolkit,cuDNN" />
+        <meta name="keywords" content="大语言模型,llm,魔搭社区,Python,镜像源,包管理器,虚拟环境,CUDA Toolkit,cuDNN,PyTorch" />
         <meta name="description" content="" />
 
         <script src="/p/_/js/main.js"></script>
@@ -35,12 +35,47 @@
                     <a href="https://wisemodel.cn/" target="_blank">始智AI-wisemodel-中国AI开源创新社区</a>
                 </li>
             </ul>
-            <p>你可以利用上面的这些社区下载模型权重，例如：</p>
-            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+            <details>
+                <summary>已经尝试的模型</summary>
+                <dl>
+                    <dt>魔搭社区</dt>
+                    <dd>
+                        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 git lfs install
+
 #   进入魔搭社区的某个项目之后，相对路径地址可以拷贝
-git clone https://modelscope.cn/ZhipuAI/chatglm3-6b.git 
-            </pre>
+
+git clone https://modelscope.cn/ZhipuAI/chatglm2-6b.git
+git clone https://modelscope.cn/ZhipuAI/chatglm3-6b.git
+git clone https://modelscope.cn/ZhipuAI/codegeex2-6b.git
+
+git clone https://modelscope.cn/baichuan-inc/Baichuan2-7B-Chat.git
+
+git clone https://modelscope.cn/qwen/Qwen-7B-Chat.git
+
+git clone https://modelscope.cn/01ai/Yi-6B-Chat.git
+
+git clone https://modelscope.cn/WisdomShell/CodeShell-7B-Chat.git 
+                        </pre>
+                    </dd>
+                    <dt>Huggingface 镜像站</dt>
+                    <dd>
+                        <p>魔搭社区没有的只能依靠他了</p>
+                        <ul>
+                            <li>defog/sqlcoder-7b</li>
+                            <li>moka-ai/m3e-base</li>
+                            <li>deepseek-ai/deepseek-coder-6.7b-instruct</li>
+                        </ul>
+                    </dd>
+                    <dt>官网下载</dt>
+                    <dd>
+                        <p>还有可以在官网下载的</p>
+                        <ul>
+                            <li><a href="https://model.baai.ac.cn/model-detail/100117" target="_blank">BAAI\AquilaChat2-7B</a></li>
+                        </ul>
+                    </dd>
+                </dl>
+            </details>
             <h2>NVIDIA</h2>
             <details>
                 <summary>科普</summary>
@@ -165,6 +200,11 @@ deactivate
             <h4>Poetry</h4>
             <h4>virtualenv</h4>
             <h4>pyenv</h4>
+            <h3>包</h3>
+            <h4>PyTorch</h4>
+            <p>官网介绍：PyTorch is an optimized tensor library for deep learning using GPUs and CPUs.</p>
+            <p>安装最新版本：<a href="https://pytorch.org/get-started/locally/" target="_blank">Start Locally | PyTorch</a></p>
+            <p>安装以前版本：<a href="https://pytorch.org/get-started/previous-versions/" target="_blank">Previous PyTorch Versions | PyTorch</a></p>
             <h2>Rust系列</h2>
             <ul>
                 <li>
