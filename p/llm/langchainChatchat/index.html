@@ -154,6 +154,100 @@ FSCHAT_CONTROLLER = {
             <p>
                 <img src="./image/18.png" alt="Langchain-Chatchat WebUI 本地知识库问答超时，项目发起人回复" />
             </p>
+            <h2>源码</h2>
+            <h3>保存拆分之后的文档</h3>
+            <p>你有这样的需求吗？我们想看一下他拆分之后的文档怎样的……于是写了两个扩展方法：添加和删除</p>
+            <p>修改的文件为：<line-code>server\knowledge_base\kb_service\base.py</line-code></p>
+            <p>下面是新增的两个方法：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+#   保存拆分后的内容
+def extend_add_split_docs_to_file(self, kb_file: KnowledgeFile, docs: List[Document] = []):
+    print("-"*50 +" ddz extend_add_split_docs_to_file " +"-"*50)
+    #   self.kb_name  : 知识库名称          ，例如：ddz002
+    #   self.kb_info  : 知识库知识库介绍    ，例如：关于ddz002的知识库
+    #   self.kb_path  : 知识库绝对路径      ，例如：D:\2-code\Langchain-Chatchat-0.2.6\knowledge_base\ddz002
+    #   self.doc_path : 知识库文档绝对路径  ，例如：D:\2-code\Langchain-Chatchat-0.2.6\knowledge_base\ddz002\content
+    if(kb_file is None or kb_file.filepath is None): return
+    if(docs is None or len(docs) == 0): return
+    
+    fileName = os.path.basename(kb_file.filepath)
+    split_docs_folder_name = "split_docs_content"
+    split_docs_path = os.path.join(self.kb_path, split_docs_folder_name)
+    if not os.path.exists(split_docs_path):
+        os.makedirs(split_docs_path)
+    
+    with open(os.path.join(split_docs_path, fileName + ".txt"), "a", encoding="utf-8") as file:
+        counter = 0
+        for doc in docs:
+            counter = counter + 1
+            file.write("-"*10 + ">【程序添加】 第 " + str(counter) + " 块 【程序添加】&lt;" + "-"*10+"\n")
+            file.write(doc.page_content)
+            file.write("\n")
+    
+    print("-"*50 +" ddz extend_add_split_docs_to_file " +"-"*50)
+    return
+
+#   删除
+def extend_delele_split_docs_file(self, kb_file: KnowledgeFile, delete_content: bool = False):
+    print("-"*50 +" ddz extend_delele_split_docs_file " +"-"*50)
+    #   self.kb_name  : 知识库名称          ，例如：ddz002
+    #   self.kb_info  : 知识库知识库介绍    ，例如：关于ddz002的知识库
+    #   self.kb_path  : 知识库绝对路径      ，例如：D:\2-code\Langchain-Chatchat-0.2.6\knowledge_base\ddz002
+    #   self.doc_path : 知识库文档绝对路径  ，例如：D:\2-code\Langchain-Chatchat-0.2.6\knowledge_base\ddz002\content
+    if(kb_file is None or kb_file.filepath is None): return
+
+    fileName = os.path.basename(kb_file.filepath)
+    split_docs_folder_name = "split_docs_content"
+    split_docs_path = os.path.join(self.kb_path, split_docs_folder_name)
+    filePath = os.path.join(split_docs_path, fileName + ".txt")
+
+    if delete_content and os.path.exists(filePath):
+        os.remove(filePath)
+
+    print("-"*50 +" ddz extend_delele_split_docs_file " +"-"*50)
+    return
+            </pre>
+            <p>调用两个新增的方法：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+#   添加时调用  extend_add_split_docs_to_file 
+def add_doc(self, kb_file: KnowledgeFile, docs: List[Document] = [], **kwargs):
+    """
+    向知识库添加文件
+    如果指定了docs，则不再将文本向量化，并将数据库对应条目标为custom_docs=True
+    """
+    if docs:
+        custom_docs = True
+        for doc in docs:
+            doc.metadata.setdefault("source", kb_file.filepath)
+    else:
+        docs = kb_file.file2text()
+        custom_docs = False
+
+    if docs:
+        self.delete_doc(kb_file)
+        doc_infos = self.do_add_doc(docs, **kwargs)
+        #   ddz 添加
+        self.extend_add_split_docs_to_file(kb_file, docs)
+        status = add_file_to_db(kb_file,
+                                custom_docs=custom_docs,
+                                docs_count=len(docs),
+                                doc_infos=doc_infos)
+    else:
+        status = False
+    return status
+
+#   删除时同步删除
+def delete_doc(self, kb_file: KnowledgeFile, delete_content: bool = False, **kwargs):
+    """
+    从知识库删除文件
+    """
+    self.do_delete_doc(kb_file, **kwargs)
+    status = delete_file_from_db(kb_file)
+    if delete_content and os.path.exists(kb_file.filepath):
+        os.remove(kb_file.filepath)
+    self.extend_delele_split_docs_file(kb_file,delete_content)
+    return status
+            </pre>
         </div>
     </body>
 </html>
