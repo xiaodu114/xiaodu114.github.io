@@ -154,6 +154,50 @@ FSCHAT_CONTROLLER = {
             <p>
                 <img src="./image/18.png" alt="Langchain-Chatchat WebUI 本地知识库问答超时，项目发起人回复" />
             </p>
+            <h2>快速启动</h2>
+            <h3>Windows 环境</h3>
+            <p>这里使用<line-code>PowerShell</line-code>脚本快速启动。<line-code>Langchain-Chatchat.ps1</line-code>文件内容如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+# 进入Python项目目录
+$projectPath = "E:\llm\Langchain-Chatchat-master"
+Set-Location -Path $projectPath
+
+# 激活虚拟环境
+$venvPath = ".\venv\Scripts\Activate.ps1"
+if (Test-Path $venvPath) {
+    & $venvPath
+} else {
+    Write-Host "Python Virtual environment not found."
+}
+
+# 执行Python脚本
+$pythonScript = ".\startup.py"
+if (Test-Path $pythonScript) {
+    python $pythonScript -a
+} else {
+    Write-Host "Python script not found."
+}
+
+Read-Host | Out-Null
+            </pre>
+            <mark-block>
+                <p>关于执行脚本策略和默认执行程序你可以参考：<a href="/p/powershell/index.html" target="_blank">PowerShell - xiaodu114.github.io</a></p>
+            </mark-block>
+            <h3>Ubuntu 环境</h3>
+            <p>这里使用<line-code>sh</line-code>脚本快速启动。<line-code>Langchain-Chatchat.sh</line-code>文件内容如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#!/bin/bash
+
+# 打开一个新的终端，并在指定目录进入虚拟环境venv
+gnome-terminal --working-directory=/home/xxx/llm/2-code/Langchain-Chatchat-master -- /bin/bash -c 'source ./venv/bin/activate; python startup.py -a'
+
+exit
+            </pre>
+            <mark-block>
+                <p>如果这个脚本文件你是在Windows下创建编辑的，一定要注意换行符 Windows(CR LF)和 Unix(LF)。如果使用的是Windows(CR LF)，那么在 Ubuntu 下执行时会报错。参考：<a href="https://www.cnblogs.com/zh76412950/p/16060160.html" target="_blank">$'\r': 未找到命令的解决办法 - 菜鸟辉哥 - 博客园</a></p>
+                <p>右键“*.sh”文件->属性->“权限”页签->勾中“允许执行文件”</p>
+                <p>右键“*.sh”文件->作为程序运行即可</p>
+            </mark-block>
             <h2>源码</h2>
             <h3>保存拆分之后的文档</h3>
             <p>你有这样的需求吗？我们想看一下他拆分之后的文档怎样的……于是写了两个扩展方法：添加和删除</p>
