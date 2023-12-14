@@ -152,6 +152,31 @@ source ./venv1/bin/activate
 python3 -m venv venv2
 source ./venv2/bin/activate
             </pre>
+            <h2>GNOME</h2>
+            <p>一些GNOME相关的东东</p>
+            <h3>GNOME 扩展</h3>
+            <p>参考：<a href="https://linux.cn/article-12414-1.html" target="_blank">桌面应用|如何在 Ubuntu 20.04 上禁用坞站（dock）</a></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo apt install gnome-shell-extensions
+            </pre>
+            <h3>Desktop Icons NG(DING)</h3>
+            <p>扩展介绍：Adds icons to the desktop. Fork of the original Desktop Icons extension, with several enhancements .</p>
+            <h4>主目录</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   参考：https://www.sysgeek.cn/ubuntu-hide-home-icon/
+#   显示
+gsettings set org.gnome.shell.extensions.ding show-home true
+#   隐藏
+gsettings set org.gnome.shell.extensions.ding show-home false
+            </pre>
+            <h4>回收站</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   参考：https://www.sysgeek.cn/show-trash-on-ubuntu-desktop-22-04/
+#   显示
+gsettings set org.gnome.shell.extensions.ding show-trash true
+#   隐藏
+gsettings set org.gnome.shell.extensions.ding show-trash false
+            </pre>
         </div>
     </body>
 </html>
