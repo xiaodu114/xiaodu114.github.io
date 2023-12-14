@@ -20,9 +20,6 @@
                 <li>
                     <a href="https://learn.microsoft.com/zh-cn/powershell/" target="_blank">PowerShell 文档 - PowerShell | Microsoft Learn</a>
                 </li>
-                <li>
-                    <a href="https://learn.microsoft.com/zh-cn/powershell/module/microsoft.powershell.core/about/about_execution_policies" target="_blank">关于执行策略 - PowerShell | Microsoft Learn</a>
-                </li>
             </ul>
             <h2>电脑硬件信息</h2>
             <p></p>
@@ -36,6 +33,30 @@
                 <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="/p/powershell/code/get-computer-hardware-info-saveas-txt.txt" ddz-lang="bash"></div>
             </details>
             <p></p>
+            <h2>执行策略</h2>
+            <p>官网：<a href="https://learn.microsoft.com/zh-cn/powershell/module/microsoft.powershell.core/about/about_execution_policies" target="_blank">关于执行策略 - PowerShell | Microsoft Learn</a></p>
+            <h3>获取执行策略</h3>
+            <p>官网：<a href="https://learn.microsoft.com/zh-cn/powershell/module/microsoft.powershell.security/get-executionpolicy" target="_blank">Get-ExecutionPolicy (Microsoft.PowerShell.Security) - PowerShell | Microsoft Learn</a></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#	获取当前会话的执行策略
+Get-ExecutionPolicy
+            </pre>
+            <h3>设置执行策略</h3>
+            <p>官网：<a href="https://learn.microsoft.com/zh-cn/powershell/module/microsoft.powershell.security/set-executionpolicy" target="_blank">Set-ExecutionPolicy (Microsoft.PowerShell.Security) - PowerShell | Microsoft Learn</a></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#	设置 PowerShell 执行策略：脚本可以运行
+Set-ExecutionPolicy RemoteSigned
+            </pre>
+            <h2>双击执行ps1</h2>
+            <p>修改<line-code>*.ps1</line-code>文件的默认执行程序</p>
+            <ol>
+                <li>右键<line-code>*.ps1</line-code>文件，鼠标移动到“打开方式”</li>
+                <li>在“打开方式”的二级菜单点击“选择其他应用”</li>
+                <li>在“你要如何打开这个文件？”窗口中点击“更多应用”</li>
+                <li>滚动条拖到最后点击“在这台电脑上查找其他应用”</li>
+                <li>选择：<line-code>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</line-code></li>
+                <li>勾选“始终使用此应用打开ps1文件”</li>
+            </ol>
             <h2>IIS站点</h2>
             <p>
                 这个是个什么需求呢！我们在IIS上部署了好多<line-code>ASP.NET</line-code>
