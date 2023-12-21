@@ -6,7 +6,7 @@
     
   <url>
     <loc>https://xiaodu114.github.io/</loc>
-    <lastmod>2023-11-30T10:46:26.490Z</lastmod>
+    <lastmod>2023-12-21T03:56:55.856Z</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
@@ -71,7 +71,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/fav/ladder/index.html</loc>
-    <lastmod>2023-11-26T02:57:24.257Z</lastmod>
+    <lastmod>2023-12-12T06:03:33.623Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -111,7 +111,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/linux/ubuntu/index.html</loc>
-    <lastmod>2023-11-26T11:57:22.703Z</lastmod>
+    <lastmod>2023-12-14T06:19:26.808Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -125,8 +125,13 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://xiaodu114.github.io/p/llm/codeShell/index.html</loc>
+    <lastmod>2023-12-21T03:55:07.081Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://xiaodu114.github.io/p/llm/extraChapter/index.html</loc>
-    <lastmod>2023-11-30T00:52:15.294Z</lastmod>
+    <lastmod>2023-12-14T02:14:18.836Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -141,7 +146,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/langchainChatchat/index.html</loc>
-    <lastmod>2023-11-26T02:57:24.499Z</lastmod>
+    <lastmod>2023-12-14T02:19:09.832Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -161,7 +166,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/powershell/index.html</loc>
-    <lastmod>2023-11-26T02:57:24.518Z</lastmod>
+    <lastmod>2023-12-14T01:25:40.071Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -256,7 +261,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/windows/index.html</loc>
-    <lastmod>2023-11-27T12:13:15.559Z</lastmod>
+    <lastmod>2023-12-01T08:50:40.664Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -266,7 +271,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/windows/wsl2/index.html</loc>
-    <lastmod>2023-11-30T06:29:16.494Z</lastmod>
+    <lastmod>2023-11-30T11:04:46.565Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
