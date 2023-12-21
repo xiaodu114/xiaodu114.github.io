@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>CodeShell - xiaodu114.github.io</title>
+        <meta name="keywords" content="CodeShell,code large language model,编码大语言模型,代码大语言模型,编程大语言模型,llm,code llm,CodeShell VSCode,llama cpp for codeshell,Text Generation Inference" />
+        <meta name="description" content="这里整理介绍一下 CodeShell 的本地部署过程，包括：WisdomShell/CodeShell-7B-Chat 大语言模型、llama cpp for codeshell、CodeShell VSCode 插件、Text Generation Inference" />
+
+        <script src="/p/_/js/main.js"></script>
+        <script src="../_common/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/llm/codeShell/index.html -->
+        <div class="blog-page">
+            <h1>CodeShell</h1>
+            <p><line-code>CodeShell VSCode Extension</line-code>是一款 Visual Studio Code 的智能编码助手插件。官方的配套设施是：<line-code>WisdomShell/CodeShell-7B-Chat</line-code>大语言模型；服务器端API支持<line-code>llama cpp for codeshell</line-code>的CPU部署和<line-code>Text Generation Inference</line-code>（后面叫做TGI）的GPU部署。他的优势就是可以使用自己的API服务器，不用担心代码泄露……</p>
+            <h2>CodeShell-7B-Chat 模型下载</h2>
+            <p>魔搭社区就有这个模型，很方便。这里将模型放到了：<line-code>D:\llm\WisdomShell\CodeShell-7B-Chat</line-code></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+git lfs install
+git clone https://modelscope.cn/WisdomShell/CodeShell-7B-Chat.git
+            </pre>
+            <h2>CPU部署</h2>
+            <p>这里先测试一下 CPU的推理方式：利用<line-code>llama cpp for codeshell</line-code>项目，首先转换、量化得到GGUF，之后用server.exe启动API</p>
+            <h3>llama cpp for codeshell</h3>
+            <p>这是一个<a href="https://github.com/ggerganov/llama.cpp" target="_blank">llama.cpp</a>的Fork项目。项目地址为：<a href="https://github.com/WisdomShell/llama_cpp_for_codeshell" target="_blank">GitHub - WisdomShell/llama_cpp_for_codeshell: CodeShell model in C/C++</a>。这里将项目放到了<line-code>E:\llm\llama_cpp_for_codeshell</line-code>下。</p>
+            <p>
+                <img src="./image/1.png" alt="llama_cpp_for_codeshell 项目结构" />
+            </p>
+            <p>编译时参考<a href="/p/llm/llamaCpp/index.html" target="_blank">llama.cpp - xiaodu114.github.io</a>，如下图：</p>
+            <p>
+                <img src="./image/2.png" alt="llama_cpp_for_codeshell 编译成功截图" />
+            </p>
+            <p>接着创建 Python虚拟环境、安装依赖并将模型权重转为GGUF</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   在这个目录：E:\llm\llama_cpp_for_codeshell
+python -m venv venv
+.\venv\scripts\activate
+pip install -r requirements.txt
+python convert.py D:\llm\WisdomShell\CodeShell-7B-Chat
+            </pre>
+            <p>
+                <img src="./image/3.png" alt="创建 Python虚拟环境、安装依赖并将模型权重转为GGUF" />
+            </p>
+            <p>转换失败了，已经习惯了，是吧！这里没有去研究报错的原因，无意间发现了她……</p>
+            <h3>直接下载GGUF</h3>
+            <p>上面的方式失败之后，无意间在<a href="https://hf-mirror.com/" target="_blank">hf-mirror.com - Huggingface 镜像站</a>搜索<line-code>CodeShell</line-code>发现，<line-code>WisdomShell/CodeShell-7B-Chat-int4</line-code>这个项目竟然存在GGUF文件，哈哈，不要太爽哦，直接下载。文件这里的路径为：<line-code>D:\llm\WisdomShell\CodeShell-7B-Chat-int4\codeshell-chat-q4_0.gguf</line-code></p>
+            <h3>启动API</h3>
+            <p>进入上面<line-code>llama cpp for codeshell</line-code>项目编译之后的目录，这里是：<line-code>E:\llm\llama_cpp_for_codeshell\build\bin\Release</line-code></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+./server.exe -m D:\llm\WisdomShell\CodeShell-7B-Chat-int4\codeshell-chat-q4_0.gguf --host 127.0.0.1 --port 10002
+            </pre>
+            <p>
+                <img src="./image/4.png" alt="llama_cpp_for_codeshell Server.exe 启动API" />
+            </p>
+            <h2>TGI</h2>
+            <p>纯血版TGI：<a href="https://github.com/huggingface/text-generation-inference" target="_blank">GitHub - huggingface/text-generation-inference</a></p>
+            <p>官方接口文档：<a href="https://huggingface.github.io/text-generation-inference/" target="_blank">Text Generation Inference API</a></p>
+            <p>WisdomShell版：<a href="https://github.com/WisdomShell/text-generation-inference" target="_blank">GitHub - WisdomShell/text-generation-inference</a></p>
+            <p>这个项目简直了，部署实在是太曲折了，怪不得官网建议使用<line-code>docker</line-code>。好不容易部署成功了，启动<line-code>WisdomShell/CodeShell-7B-Chat</line-code>模型时还报错……还得用 WisdomShell 的版本。fork版本部署成功之后，你以为这就结束了，怎么可能，在<line-code>16GB内存 + 12GB显存</line-code>机器上的<line-code>WSL2</line-code>启动模型时直接卡死了……一度想着放弃，直到公司来了一台相对牛逼的服务器（Ubuntu 22.04），才看到了希望，要不然就没有这篇文章了。</p>
+            <p>参考文章：<a href="https://zhuanlan.zhihu.com/p/645732302" target="_blank">vllm vs TGI 部署 llama v2 7B 踩坑笔记</a>、<a href="https://www.kuxai.com/article/1504" target="_blank">主流推理框架哪家强？看看它们在Llama 2上的性能比较</a></p>
+            <h3>Rust</h3>
+            <p>安装<line-code>Rust</line-code>参考：<a href="/p/windows/wsl2/index.html" target="_blank">WSL2 - xiaodu114.github.io</a></p>
+            <h3>安装其他依赖</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   gcc版本检测
+gcc --version
+#   安装依赖
+sudo apt install libssl-dev gcc pkg-config unzip
+            </pre>
+            <h3>protoc</h3>
+            <p>这个可以先去<a href="https://github.com/protocolbuffers/protobuf" target="_blank">GitHub - protocolbuffers/protobuf: Protocol Buffers - Google's data interchange format</a>。这里下载的是<line-code>protoc-25.1-linux-x86_64.zip</line-code></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   在文件 protoc-25.1-linux-x86_64.zip 的目录进入终端
+sudo unzip -o protoc-25.1-linux-x86_64.zip -d /usr/local bin/protoc
+sudo unzip -o protoc-25.1-linux-x86_64.zip -d /usr/local 'include/*'
+            </pre>
+            <h3>源码修改</h3>
+            <p>自己对<line-code>Python</line-code>和<line-code>Rust</line-code>项目不是很熟悉，对着编译时的报错，尝试修改，哪里报错改哪里……</p>
+            <p>
+                <img src="./image/5.png" alt="WisdomShell/text-generation-inference 项目修改文件" />
+            </p>
+            <h4>server\Makefile</h4>
+            <p>这里删除了<line-code>install-torch</line-code>，没有这个也会安装<line-code>torch</line-code></p>
+            <p>
+                <img src="./image/6.png" alt="WisdomShell\text-generation-inference\server\Makefile 修改" />
+            </p>
+            <h4>server\poetry.lock</h4>
+            <p>这个应该算是<line-code>torch</line-code>版本修改的一部分，当时测试该项目的时候，他的最新版本是<line-code>2.1.1</line-code>。具体的内容是在纯血版TGI项目中拷过来的。</p>
+            <p>
+                <img src="./image/7.png" alt="WisdomShell\text-generation-inference-main\server\poetry.lock 修改" />
+            </p>
+            <h4>server\pyproject.toml</h4>
+            <p>这个也是<line-code>torch</line-code>版本修改</p>
+            <p>
+                <img src="./image/8.png" alt="WisdomShell\text-generation-inference-main\server\pyproject.toml 修改" />
+            </p>
+            <h4>server\requirements.txt</h4>
+            <p>这个也是<line-code>torch</line-code>版本修改</p>
+            <p>
+                <img src="./image/9.png" alt="WisdomShell\text-generation-inference-main\server\requirements.txt 修改" />
+            </p>
+            <h4>\rust-toolchain.tom</h4>
+            <p>这里指定的<line-code>Rust</line-code>版本和安装（项目中指定的太老了）的不一致，所以直接删除了</p>
+            <p>
+                <img src="./image/10.png" alt="WisdomShell\text-generation-inference-main\rust-toolchain.tom 修改" />
+            </p>
+            <h3>创建虚拟环境</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+python3 -m venv venv
+source ./venv/bin/activate
+            </pre>
+            <h3>执行make命令</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   在上面激活的虚拟环境中执行
+BUILD_EXTENSIONS=True make install
+            </pre>
+            <p>经过上面的修改，应该可以编译成功了。可以使用下面的命令检测一下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+text-generation-launcher --help
+            </pre>
+            <p>
+                <a href="./text/text-generation-launcher-help.txt" target="_blank" rel="noopener noreferrer">点击查看 text-generation-launcher --help 输出</a>
+            </p>
+            <p>编译成功之后还会<line-code>.cargo/bin</line-code>目录下添加两个文件，因为该目录已经添加到了<line-code>$PATH</line-code>，所以可以任意终端目录使用</p>
+            <p>
+                <img src="./image/11.png" alt=".cargo/bin 目录" />
+            </p>
+            <h3>启动API</h3>
+            <p><line-code>max-total-tokens</line-code>等参数参考官方<a href="https://github.com/WisdomShell/codeshell-vscode" target="_blank">GitHub - WisdomShell/codeshell-vscode</a> docker的启动参数</p>
+            <h4>项目目录启动</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   tgi-codeshell目录打开终端
+
+#   进入虚拟环境
+source ./venv/bin/activate
+
+#   启动    注意：替换自己的模型权重路径、IP地址、端口等
+CUDA_VISIBLE_DEVICES=1 text-generation-launcher \
+--model-id /llm/0-model/WisdomShell/CodeShell-7B-Chat \
+--hostname 192.168.xxx.xxx -p 10002 \
+--num-shard 1 \
+--max-total-tokens 5000 --max-input-length 4096 \
+--max-stop-sequences 12 \
+--trust-remote-code
+            </pre>
+            <h4>sh脚本启动</h4>
+            <p>每次进入项目、打开终端、激活虚拟环境、启动，太繁琐了。弄一个sh脚本，“双击”启动，多爽。脚本内容如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#!/bin/bash
+
+# 打开一个新的终端，并在指定目录进入虚拟环境venv
+gnome-terminal --working-directory=/llm/2-code/tgi-codeshell -- /bin/bash -c 'source ./venv/bin/activate; 
+CUDA_VISIBLE_DEVICES=1 /home/xxx/.cargo/bin/text-generation-launcher \
+--model-id /llm/0-model/WisdomShell/CodeShell-7B-Chat \
+--hostname 192.168.xxx.xxx -p 10002 \
+--num-shard 1 \
+--max-total-tokens 5000 --max-input-length 4096 \
+--max-stop-sequences 12 \
+--trust-remote-code;
+exec /bin/bash'
+
+exit
+            </pre>
+            <mark-block type="warning">
+                <ul>
+                    <li>
+                        sh脚本启动，目前还有问题，根据错误提示，搜索项目找到
+                        <p>
+                            <img src="./image/12.png" alt="launcher\src\main.rs 源码" />
+                        </p>
+                        <p>根据代码发现，应该是这里的问题：<line-code>Command::new("text-generation-router")</line-code>。不知道这里替换成绝对路径行不行，还没有来得及测试</p>
+                    </li>
+                    <li>sh脚本好像不能访问<line-code>$PATH</line-code>中的命令，所以上面<line-code>text-generation-launcher</line-code>使用的是绝对路径</li>
+                </ul>
+            </mark-block>
+            <h2>CodeShell VSCode Extension</h2>
+            <p>项目地址：<a href="https://github.com/WisdomShell/codeshell-vscode" target="_blank">GitHub - WisdomShell/codeshell-vscode</a></p>
+            <p>怎么安装插件咱就不说了</p>
+            <h3>CPU推理对应配置</h3>
+            <p>
+                <img src="./image/13.png" alt="CodeShell VSCode Extension 插件配置 CPU推理对应配置" />
+            </p>
+            <h3>TGI对应配置</h3>
+            <p>
+                <img src="./image/14.png" alt="CodeShell VSCode Extension 插件配置 TGI对应配置" />
+            </p>
+        </div>
+    </body>
+</html>
