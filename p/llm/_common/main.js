@@ -48,6 +48,9 @@ customElements.define(
                         <li>
                             <a href="/p/llm/extraChapter/index.html" target="_blank">番外篇</a>
                         </li>
+                        <li>
+                            <a href="/p/llm/codeShell/index.html" target="_blank">CodeShell</a>
+                        </li>
                     </ol>
                 </div>
             </details>
