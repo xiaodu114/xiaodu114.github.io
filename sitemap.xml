@@ -6,7 +6,7 @@
     
   <url>
     <loc>https://xiaodu114.github.io/</loc>
-    <lastmod>2023-12-21T03:56:55.856Z</lastmod>
+    <lastmod>2024-01-02T06:41:24.132Z</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
@@ -111,7 +111,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/linux/ubuntu/index.html</loc>
-    <lastmod>2023-12-14T06:19:26.808Z</lastmod>
+    <lastmod>2023-12-29T02:05:46.479Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -126,12 +126,12 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/codeShell/index.html</loc>
-    <lastmod>2023-12-21T03:55:07.081Z</lastmod>
+    <lastmod>2023-12-21T03:58:34.772Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/extraChapter/index.html</loc>
-    <lastmod>2023-12-14T02:14:18.836Z</lastmod>
+    <lastmod>2023-12-29T08:10:16.653Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -152,6 +152,11 @@
   <url>
     <loc>https://xiaodu114.github.io/p/llm/llamaCpp/index.html</loc>
     <lastmod>2023-11-26T02:57:24.514Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/p/llm/sqlcoder/index.html</loc>
+    <lastmod>2024-01-02T06:38:59.684Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
