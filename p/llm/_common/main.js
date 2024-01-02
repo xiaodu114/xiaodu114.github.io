@@ -51,6 +51,9 @@ customElements.define(
                         <li>
                             <a href="/p/llm/codeShell/index.html" target="_blank">CodeShell</a>
                         </li>
+                        <li>
+                            <a href="/p/llm/sqlcoder/index.html" target="_blank">sqlcoder</a>
+                        </li>
                     </ol>
                 </div>
             </details>
