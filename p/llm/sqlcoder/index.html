@@ -18,7 +18,7 @@
             <h1>sqlcoder</h1>
             <p>官网：<a href="https://github.com/defog-ai/sqlcoder" target="_blank">GitHub - defog-ai/sqlcoder: SoTA LLM for converting natural language questions to SQL queries</a></p>
             <p>参考：<a href="https://cloud.baidu.com/qianfandev/live/7e3996d969" target="_blank">大模型应用实践:「智能问数应用」SQL Coder 构建大模型数据分析助手 - 百度智能云千帆社区</a></p>
-            <p>这次的测试环境不是我的老朋友了，是公司的一台机器（i5-6600K CPU + 16GB 内存 + RTX 3060 12GB）</p>
+            <p>这次的测试环境不是我的老朋友了，是公司的一台机器（ Windows 10 22H2 19045 + i5-6600K CPU + 16GB 内存 + RTX 3060 12GB ）</p>
             <h2>模型权重</h2>
             <p>这里测试的模型是：<line-code>defog/sqlcoder-7b</line-code>。国内的魔搭社区或者始智AI都没有，只能使用Huggingface 镜像站了。这里的模型路径为：<line-code>D:\0-llm\defog\sqlcoder-7b</line-code></p>
             <p>
@@ -46,8 +46,9 @@ python
 import torch  
 print("torch版本："+torch.__version__+" ；cuda是否可用："+str(torch.cuda.is_available()))
 
-#   安装 GPU版本 torch
+#   安装 GPU版本 torch 下面两个都可以
 pip install torch==2.1.2+cu121 -f https://download.pytorch.org/whl/torch_stable.html
+pip install torch --extra-index-url https://download.pytorch.org/whl/cu121
             </pre>
             <p>
                 <img src="./image/3.png" alt="defog-ai/sqlcoder 项目安装依赖，检查 torch，安装 GPU版本 torch" />
