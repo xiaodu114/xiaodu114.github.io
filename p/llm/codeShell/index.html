@@ -139,6 +139,9 @@ text-generation-launcher --help
 source ./venv/bin/activate
 
 #   启动    注意：替换自己的模型权重路径、IP地址、端口等
+#   如果是多显卡，需要 CUDA_VISIBLE_DEVICES 和 num-shard 配合使用。
+#       CUDA_VISIBLE_DEVICES=0 #第1块显卡   CUDA_VISIBLE_DEVICES=1 #第2块显卡   CUDA_VISIBLE_DEVICES=0,1 #第1、2块显卡
+#       num-shard 感觉像是使用的显卡的块数
 CUDA_VISIBLE_DEVICES=1 text-generation-launcher \
 --model-id /llm/0-model/WisdomShell/CodeShell-7B-Chat \
 --hostname 192.168.xxx.xxx -p 10002 \
