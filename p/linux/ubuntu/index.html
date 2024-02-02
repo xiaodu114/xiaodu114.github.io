@@ -18,6 +18,9 @@
             <p>整理收集一些<line-code>Ubuntu</line-code>相关的东东……</p>
             <h2>常用命令</h2>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#显示 CPU 的详细信息
+lscpu
+
 #   系统监视器
 gnome-system-monitor
 
@@ -154,6 +157,43 @@ source ./venv1/bin/activate
 python3 -m venv venv2
 source ./venv2/bin/activate
             </pre>
+            <h4>Node.js</h4>
+            <p>直接使用 apt 安装，默认安装的版本太老了，需要先设置一下安装源。</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   20.x 是你想要安装的版本
+curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+#   之后安装即可
+sudo apt install nodejs -y
+            </pre>
+            <h3>压缩包安装</h3>
+            <h4>Node.js</h4>
+            <p>官网：<a href="https://nodejs.org/" target="_blank">Node.js</a> | <a href="https://nodejs.org/en/download" target="_blank">Node.js — Download</a></p>
+            <p>这里下载的是（2024-01-30）<line-code>node-v20.11.0-linux-x64.tar.xz</line-code>，放在了桌面，并在此解压。</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   在解压之后的文件夹所在目录（这里是桌面）打开终端
+#   1、移动到你想安装的目录（这里是 /usr/local/bin）
+sudo mv node-v20.11.0-linux-x64 /usr/local/bin/node-v20.11.0
+#   2、添加环境变量
+#   2.1、修改 /etc/profile 文件权限
+sudo chmod 777 /etc/profile
+#   2.2、编辑 /etc/profile 文件，在末尾添加如下内容
+export NODE_HOME=/usr/local/bin/node-v20.11.0
+export PATH=$NODE_HOME/bin:$PATH
+#   2.3、环境变量立即生效
+source /etc/profile
+#   3、版本检测
+node -v
+npm -v
+            </pre>
+            <details>
+                <summary>点击查看安装截图</summary>
+                <p>
+                    <img src="./image/2-1.png" alt="*.tar.xz的方式安装nodejs 事前准备" />
+                </p>
+                <p>
+                    <img src="./image/2-2.png" alt="*.tar.xz的方式安装nodejs 成功" />
+                </p>
+            </details>
             <h2>GNOME</h2>
             <p>一些GNOME相关的东东</p>
             <h3>GNOME 扩展</h3>
