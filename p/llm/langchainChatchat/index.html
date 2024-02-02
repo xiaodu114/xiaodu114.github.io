@@ -292,6 +292,33 @@ def delete_doc(self, kb_file: KnowledgeFile, delete_content: bool = False, **kwa
     self.extend_delele_split_docs_file(kb_file,delete_content)
     return status
             </pre>
+            <h3>添加HTTPS支持</h3>
+            <p>WebUI采用的<line-code>streamlit</line-code>框架。想要 Chatchat 支持 HTTPS，需要<line-code>streamlit</line-code>他的支持。官网好像建议不要用到生产环境……</p>
+            <p><line-code>streamlit</line-code>官方文档：<a href="https://docs.streamlit.io/library/advanced-features/configuration#server" target="_blank">Configuration - Streamlit Docs</a></p>
+            <p>
+                <img src="./image/19.png" alt="streamlit https配置 官网截图" />
+            </p>
+            <p>虽然不建议，又没说不行，还是试了一下，这里修改的文件是项目根目录下的<line-code>startup.py</line-code>文件，具体如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+#   https相关证书文件了解的不太多，这里测试的是下面的两种类型
+def run_webui(started_event: mp.Event = None):
+    from server.utils import set_httpx_config
+    set_httpx_config()
+    host = WEBUI_SERVER["host"]
+    port = WEBUI_SERVER["port"]
+    p = subprocess.Popen(["streamlit", "run", "webui.py",
+                          "--server.address", host,
+                          "--server.port", str(port),
+                          "--server.sslCertFile", "C:/*.crt", #  HTTPS　看这里
+                          "--server.sslKeyFile", "C:/*.key",  #  请您再看一眼
+                          "--theme.base", "light",
+                          "--theme.primaryColor", "#165dff",
+                          "--theme.secondaryBackgroundColor", "#f5f5f5",
+                          "--theme.textColor", "#000000",
+                        ])
+    started_event.set()
+    p.wait()
+            </pre>
         </div>
     </body>
 </html>
