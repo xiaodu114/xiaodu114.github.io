@@ -25,6 +25,10 @@ customElements.define(
                 summary {
                     cursor: pointer;
                 }
+
+                .ddz-llm-study-nav-container ol li {
+                    line-height: 1.6;
+                }
             </style>
             <details>
                 <summary>LLM 系列：你可以了解更多，点开看看吧！</summary>
@@ -53,6 +57,9 @@ customElements.define(
                         </li>
                         <li>
                             <a href="/p/llm/sqlcoder/index.html" target="_blank">sqlcoder</a>
+                        </li>
+                        <li>
+                            <a href="/p/llm/ollama/index.html" target="_blank">Ollama</a>
                         </li>
                     </ol>
                 </div>
