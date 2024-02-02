@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Ollama - xiaodu114.github.io</title>
+        <meta name="keywords" content="Ollama,LLM,大语言模型,deepseek,deepseek-coder" />
+        <meta name="description" content="体验一下Ollama" />
+
+        <script src="/p/_/js/main.js"></script>
+        <script src="../_common/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/llm/ollama/index.html -->
+        <div class="blog-page">
+            <h1>Ollama</h1>
+            <p>官网：<a href="https://ollama.ai/" target="_blank">Ollama</a></p>
+            <p>GitHub：<a href="https://github.com/ollama/ollama" target="_blank">GitHub - ollama/ollama: Get up and running with Llama 2, Mistral, and other large language models locally.</a></p>
+            <h2>安装</h2>
+            <h3>Linux</h3>
+            <p>这里的测试环境是：Ubuntu 22.04 + Intel(R)Xeon(R) CPU E5-2699 v4 2.20GHZ + RAM（512GB）</p>
+            <h4>官网推荐</h4>
+            <p>官网给的 Linux 的安装方式很简单，只需一个命令，如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+curl https://ollama.ai/install.sh | sh
+            </pre>
+            <p>尝试了一下，安装失败了……看了一下原因，上面的脚本会在<line-code>GitHub</line-code>上下载文件，你懂的，被墙了，这台服务器又没有梯子……</p>
+            <h4>自己动手</h4>
+            <p>这点小事儿不能阻挡咱的脚步，是不？于是就看了一下上面的脚本，发现文件下载地址是这个：<a href="https://github.com/ollama/ollama/releases" target="_blank" rel="noopener noreferrer">Releases · ollama/ollama · GitHub</a>。于是就下了最新版本的（2024-02-01，版本是 0.1.22）：<line-code>ollama-linux-amd64</line-code></p>
+            <p>问了一下大模型，下载了文件之后怎么安装，下面是他的回复：</p>
+            <fieldset>
+                <legend>大语言模型是这样回答的</legend>
+                <p>如果已经提前下载了Ollama的Linux版本（ollama-linux-amd64文件），可以按照以下步骤进行安装：</p>
+                <ol>
+                    <li>将下载的ollama-linux-amd64文件复制到你希望安装Ollama的目录中。</li>
+                    <li>打开终端，并进入到包含ollama-linux-amd64文件的目录。</li>
+                    <li>运行以下命令，将ollama-linux-amd64文件设置为可执行文件： chmod +x ollama-linux-amd64</li>
+                    <li>运行以下命令，将ollama-linux-amd64文件移动到/usr/local/bin目录（或其他你希望安装的目录）： sudo mv ollama-linux-amd64 /usr/local/bin/ollama</li>
+                    <li>现在，你可以在终端中运行ollama命令来启动Ollama。</li>
+                </ol>
+                <p>注意：在上述步骤中，假设你已经拥有足够的权限来执行sudo命令。如果没有sudo权限，请使用其他适当的方式来移动ollama-linux-amd64文件到所需的目录。</p>
+            </fieldset>
+            <p>看了他的回复之后，瞬间明白了。这不就相当于 exe 嘛，不过这里是免安装的</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo chmod +x ollama-linux-amd64
+sudo mv ollama-linux-amd64 /usr/local/bin/ollama
+            </pre>
+            <p>
+                <img src="./image/1.png" alt="安装 ollama-linux-amd64" />
+            </p>
+            <h2>跑起来</h2>
+            <p>先看看他有哪些命令</p>
+            <p>
+                <img src="./image/2.png" alt="ollama -h" />
+            </p>
+            <p>看了这个<a href="https://ollama.ai/library/deepseek-coder" target="_blank">deepseek-coder</a>之后，选一个合适大小的大模型直接走起：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+ollama run deepseek-coder:6.7b
+            </pre>
+            <p>
+                <img src="./image/3.png" alt="执行命令： ollama run deepseek-coder:6.7b 异常" />
+            </p>
+            <h3>启动服务</h3>
+            <p>按照上面的指示，需要先启动服务</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   默认监听 127.0.0.1
+ollama serve
+#   指定监听的IP地址
+OLLAMA_HOST=192.168.x.x ollama serve
+            </pre>
+            <p>
+                <img src="./image/4.png" alt="执行命令启动服务： ollama serve" />
+            </p>
+            <p>注意：上面的截图并不是第一次执行<line-code>ollama serve</line-code>；第一次启动时还会提示生成一个<line-code>Public Key</line-code>，暂时还没有用到这个key，如下图：</p>
+            <p>
+                <img src="./image/5.png" alt="第一次启动服务： ollama serve" />
+            </p>
+            <h3>拉取模型</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   拉取一个模型
+ollama pull deepseek-coder:6.7b
+
+#   运行一个模型。如果本地没有，会先拉取。之后进入命令行交互模式
+ollama run deepseek-coder:6.7b
+            </pre>
+            <p>
+                <img src="./image/6.png" alt="ollama run deepseek-coder:6.7b  拉取模型部分" />
+            </p>
+            <p>
+                <img src="./image/7.png" alt="ollama run deepseek-coder:6.7b  命令行交互部分" />
+            </p>
+            <h3>客户端</h3>
+            <h4>curl</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+curl http://localhost:11434/api/generate -d '{
+  "model": "deepseek-coder:6.7b",
+  "prompt":"javascript 实现斐波那契数列"
+}'
+
+
+curl http://localhost:11434/api/chat -d '{
+  "model": "deepseek-coder:6.7b",
+  "messages": [
+    { "role": "user", "content": "javascript 实现斐波那契数列" }
+  ]
+}'
+            </pre>
+            <h4>Postman</h4>
+            <p>
+                <img src="./image/8.png" alt="Postman api/chat 测试" />
+            </p>
+        </div>
+    </body>
+</html>
