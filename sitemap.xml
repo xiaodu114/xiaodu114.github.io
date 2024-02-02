@@ -6,7 +6,7 @@
     
   <url>
     <loc>https://xiaodu114.github.io/</loc>
-    <lastmod>2024-01-02T06:41:24.132Z</lastmod>
+    <lastmod>2024-02-02T00:36:59.624Z</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
@@ -71,7 +71,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/fav/ladder/index.html</loc>
-    <lastmod>2023-12-12T06:03:33.623Z</lastmod>
+    <lastmod>2024-01-22T03:47:27.376Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -111,7 +111,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/linux/ubuntu/index.html</loc>
-    <lastmod>2023-12-29T02:05:46.479Z</lastmod>
+    <lastmod>2024-01-31T02:25:28.884Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -126,12 +126,12 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/codeShell/index.html</loc>
-    <lastmod>2023-12-21T03:58:34.772Z</lastmod>
+    <lastmod>2024-01-31T01:08:04.950Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/extraChapter/index.html</loc>
-    <lastmod>2023-12-29T08:10:16.653Z</lastmod>
+    <lastmod>2024-01-15T03:36:58.215Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -146,7 +146,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/langchainChatchat/index.html</loc>
-    <lastmod>2023-12-14T02:19:09.832Z</lastmod>
+    <lastmod>2024-01-30T07:50:29.188Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -155,8 +155,13 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://xiaodu114.github.io/p/llm/ollama/index.html</loc>
+    <lastmod>2024-02-01T08:35:20.950Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://xiaodu114.github.io/p/llm/sqlcoder/index.html</loc>
-    <lastmod>2024-01-02T06:38:59.684Z</lastmod>
+    <lastmod>2024-01-03T05:40:04.048Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -276,7 +281,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/windows/wsl2/index.html</loc>
-    <lastmod>2023-11-30T11:04:46.565Z</lastmod>
+    <lastmod>2024-01-03T05:57:07.220Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
