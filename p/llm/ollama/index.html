@@ -28,7 +28,7 @@ curl https://ollama.ai/install.sh | sh
             </pre>
             <p>尝试了一下，安装失败了……看了一下原因，上面的脚本会在<line-code>GitHub</line-code>上下载文件，你懂的，被墙了，这台服务器又没有梯子……</p>
             <h4>自己动手</h4>
-            <p>这点小事儿不能阻挡咱的脚步，是不？于是就看了一下上面的脚本，发现文件下载地址是这个：<a href="https://github.com/ollama/ollama/releases" target="_blank" rel="noopener noreferrer">Releases · ollama/ollama · GitHub</a>。于是就下了最新版本的（2024-02-01，版本是 0.1.22）：<line-code>ollama-linux-amd64</line-code></p>
+            <p>这点小事儿不能阻挡咱的脚步，是不？于是就看了一下上面的脚本，发现文件下载地址是这个：<a href="https://github.com/ollama/ollama/releases" target="_blank">Releases · ollama/ollama · GitHub</a>。于是就下了最新版本的（2024-02-01，版本是 0.1.22）：<line-code>ollama-linux-amd64</line-code></p>
             <p>问了一下大模型，下载了文件之后怎么安装，下面是他的回复：</p>
             <fieldset>
                 <legend>大语言模型是这样回答的</legend>
@@ -129,6 +129,49 @@ curl http://localhost:11434/api/chat -d '{
                 <img src="./image/11.png" alt="Privy 解释代码" />
             </p>
             <p>竟然是用英文回答的……他怎么知道咱的英文水平很溜，😅😅😅</p>
+            <h4>Code GPT: Chat & AI Agents</h4>
+            <p>官网：<a href="https://www.codegpt.co/" target="_blank">Code like a Pro with the CodeGPT AI Copilot</a> | <a href="https://docs.codegpt.co/zh-Hans/docs/intro" target="_blank">关于CodeGPT | CodeGPT</a></p>
+            <p>这个插件感觉挺厉害，下载量不小，支持的 Provider 挺多的，当然这里测试的是<line-code>Ollama</line-code>。测试时发现，你只能在下拉框中选择 Provider ，选择之后没有配置IP地址和端口的地方，访问的是<line-code>localhost:11434</line-code>……我去，这是让我们人手一个的意思啊！之后查了一下，看看能不能配置IP地址，在 GitHub 的官方仓储上搜索的，有不少关于这个话题。其中的解决办法有：</p>
+            <dl>
+                <dt>选择 Provider 时，选择 Custom</dt>
+                <dd>配置 Custom Link，这里配置的是： http://IP:11434/api/chat ; Key，随便写了一个</dd>
+                <dd>对话时，从Ollama 服务打印的日志来看，访问的地址竟然是 http://IP:11434/chat/completions 。这不是 openai api 的格式吗？后来用 LM Studio 启动服务做测试，还真的可以</dd>
+                <dt>用代理</dt>
+                <dd>提到了<a href="https://github.com/BerriAI/litellm" target="_blank">LiteLLM</a>，这里没有测试</dd>
+                <dd>倒是想到了正在使用的 nginx ，后面细说</dd>
+            </dl>
+            <p>凑巧正在尝试 nginx ，下面是<line-code>conf\nginx.conf</line-code>文件的配置内容：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="txt">
+worker_processes  1;
+
+events {
+    worker_connections  1024;
+}
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    sendfile        on;
+
+    keepalive_timeout  65;
+
+    server {
+        listen       11434;
+        server_name  localhost;
+
+        location / {
+            #   访问 localhost:11434 时，会转发到下面的地址
+            proxy_pass http://192.168.xxx.xxx:11434;
+            proxy_connect_timeout 600s;
+        } 
+    }
+}
+            </pre>
+            <p>配置好之后，选择 Provider 时就可以选择 Ollama 了，测试如下图：</p>
+            <p>
+                <img src="./image/12.png" alt="Code GPT: Chat & AI Agents 插件测试" />
+            </p>
         </div>
     </body>
 </html>
