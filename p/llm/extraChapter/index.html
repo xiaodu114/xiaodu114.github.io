@@ -220,6 +220,28 @@ python -m venv venv2
             <p>官网介绍：PyTorch is an optimized tensor library for deep learning using GPUs and CPUs.</p>
             <p>安装最新版本：<a href="https://pytorch.org/get-started/locally/" target="_blank">Start Locally | PyTorch</a></p>
             <p>安装以前版本：<a href="https://pytorch.org/get-started/previous-versions/" target="_blank">Previous PyTorch Versions | PyTorch</a></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#	命令行输入 python 进入 python 交互模式
+python 
+
+#	引入 torch
+import torch
+
+#	查看 PyTorch 版本、cuda 是否可用等
+#		注意：torch.cuda.get_device_capability() 可以传递参数，例如：0 或者 1
+print('PyTorch 版本：',torch.__version__)
+print('显卡数量：',torch.cuda.device_count())
+print('CUDA 是否可用：',torch.cuda.is_available())
+print('CUDA 版本：',torch.version.cuda)
+print('CUDA 算力(大,小)：',torch.cuda.get_device_capability())
+print('是否支持 bf16：',torch.cuda.is_bf16_supported())
+print('cuDNN 版本：',torch.backends.cudnn.version())
+
+print(f"PyTorch 版本：{str(torch.__version__)} \n显卡数量：{str(torch.cuda.device_count())} \nCUDA 是否可用：{str(torch.cuda.is_available())} \nCUDA 版本：{torch.version.cuda} \nCUDA 算力(大,小)：{torch.cuda.get_device_capability()} \n是否支持 bf16：{torch.cuda.is_bf16_supported()} \ncuDNN 版本：{torch.backends.cudnn.version()}")
+
+#	退出交互模式
+exit()
+            </pre>
             <h4>Transformers</h4>
             <p>官网：<a href="http://https://github.com/huggingface/transformers" target="_blank">GitHub - huggingface/transformers: 🤗 Transformers: State-of-the-art Machine Learning for Pytorch, TensorFlow, and JAX.</a></p>
             <p>教程：<a href="https://hf-mirror.com/docs/transformers/main/zh/index" target="_blank">🤗 Transformers 文档</a></p>
