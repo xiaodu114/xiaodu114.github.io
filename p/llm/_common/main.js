@@ -61,6 +61,9 @@ customElements.define(
                         <li>
                             <a href="/p/llm/ollama/index.html" target="_blank">Ollama</a>
                         </li>
+                        <li>
+                            <a href="/p/llm/bigdl/index.html" target="_blank">BigDL-LLM</a>
+                        </li>
                     </ol>
                 </div>
             </details>
