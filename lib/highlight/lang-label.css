@@ -28,11 +28,33 @@ pre[class*="language-"] {
     background-color: #f9f9f9;
 }
 
+pre[class*="language-"] > .copy-icon-box {
+    position: absolute;
+    top: 7px;
+    right: 1em;
+    color: #0e9f54;
+    cursor: pointer;
+}
+
+pre[class*="language-"] > .copied-msg-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 32px;
+    right: 1em;
+    color: #fff;
+    background-color: #3cb878;
+    padding: 5px;
+    font-size: 12px;
+    visibility: hidden;
+}
+
 pre[class*="language-"]::before {
     position: absolute;
     z-index: 3;
     top: 0.5em;
-    right: 0.5em;
+    right: 4em;
     font-size: 0.75rem;
     color: #fff;
     background-color: #3cb878;
@@ -45,6 +67,10 @@ pre[class~="language-bash"]:before {
 
 pre[class~="language-c#"]:before {
     content: 'c#';
+}
+
+pre[class~="language-csharp"]:before {
+    content: 'csharp';
 }
 
 pre[class~="language-c"]:before {
