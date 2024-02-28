@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>CodeMirror 示例 - xiaodu114.github.io</title>
+        <meta name="keywords" content="CodeMirror,输入,选择" />
+        <meta name="description" content="CodeMirror的示例项目，用来实现在同一文本框中用户既可以输入又可以在下拉框中选择（选择之后显示的可能是一个复杂的组件）" />
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+            }
+
+            h5 {
+                margin-top: 15px;
+                margin-bottom: 15px;
+            }
+
+            html,
+            body {
+                height: 100%;
+                width: 100%;
+                margin: 0;
+                overflow: hidden;
+            }
+
+            .highlightjs-demo {
+                height: 100%;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .highlightjs-demo > .header {
+                flex-shrink: 0;
+                position: relative;
+            }
+
+            .highlightjs-demo > .header::after {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                left: 0;
+                height: 1px;
+                content: "";
+                -webkit-transform: scaleY(0.5);
+                transform: scaleY(0.5);
+                background-color: #ccc;
+            }
+
+            .highlightjs-demo > .main {
+                flex: 1;
+                overflow: hidden;
+                display: flex;
+            }
+
+            .highlightjs-demo > .main > .main-left {
+                width: 345px;
+                flex-shrink: 0;
+                position: relative;
+                background-color: #f1f2f3;
+                padding: 15px;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .highlightjs-demo > .main > .main-left::after {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                width: 1px;
+                content: "";
+                -webkit-transform: scaleX(0.5);
+                transform: scaleX(0.5);
+                background-color: #ccc;
+            }
+
+            .highlightjs-demo > .main > .main-left > .form-item {
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 15px;
+            }
+
+            .highlightjs-demo > .main > .main-left > .form-item > label {
+                margin-bottom: 5px;
+            }
+
+            .highlightjs-demo > .main > .main-left > .form-item > textarea {
+                height: 100%;
+                width: 100%;
+            }
+
+            .highlightjs-demo > .main > .main-left > #btnConfirm {
+                padding: 6px 12px;
+                cursor: pointer;
+                user-select: none;
+                border: 1px solid transparent;
+                border-radius: 4px;
+
+                color: #333;
+                background-color: #fff;
+                border-color: #ccc;
+            }
+
+            .highlightjs-demo > .main > .main-left > #btnConfirm:focus {
+                outline: none;
+            }
+
+            .highlightjs-demo > .main > .main-left > #btnConfirm:active {
+                background-color: #e6e6e6;
+                border-color: #adadad;
+            }
+
+            .highlightjs-demo > .main > .main-content {
+                flex: 1;
+                padding: 36px;
+            }
+
+            .highlightjs-demo > .main > .main-content > .highlight-code-wrapper {
+                height: 100%;
+                overflow-y: auto;
+                box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
+            }
+
+            pre[class*="language-"] > .copy-icon-box {
+                position: absolute;
+                top: 7px;
+                right: 1em;
+                color: #0e9f54;
+                cursor: pointer;
+            }
+
+            pre[class*="language-"] > .copied-msg-box {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: absolute;
+                top: 32px;
+                right: 1em;
+                color: #fff;
+                background-color: #3cb878;
+                padding: 5px;
+                font-size: 12px;
+                visibility: hidden;
+            }
+        </style>
+
+        <link rel="stylesheet" href="/lib/highlight/github.css" />
+        <link rel="stylesheet" href="/lib/highlight/lang-label.css" />
+        <script src="/lib/highlight/highlight.min.js"></script>
+    </head>
+
+    <body>
+        <div class="highlightjs-demo">
+            <div class="header">
+                <h1>highlight.js 示例，当时版本为： 11.9.0</h1>
+            </div>
+            <div class="main">
+                <div class="main-left">
+                    <div class="form-item">
+                        <label>语言</label>
+                        <select id="selectLang"></select>
+                    </div>
+                    <div class="form-item" style="flex: 1">
+                        <label>代码</label>
+                        <textarea id="textareaCode"></textarea>
+                    </div>
+                    <button type="button" id="btnConfirm">确定</button>
+                </div>
+                <div class="main-content">
+                    <div class="highlight-code-wrapper"></div>
+                </div>
+            </div>
+        </div>
+        <script type="module">
+            import { copyTextToClipboard } from "/lib/_/utils.js";
+
+            //#region 编程语言集合  数据来源：https://highlightjs.org/demo
+            const codeLangs = [
+                "1c",
+                "abnf",
+                "accesslog",
+                "actionscript",
+                "ada",
+                "angelscript",
+                "apache",
+                "applescript",
+                "arcade",
+                "arduino",
+                "armasm",
+                "xml",
+                "asciidoc",
+                "aspectj",
+                "autohotkey",
+                "autoit",
+                "avrasm",
+                "awk",
+                "axapta",
+                "bash",
+                "basic",
+                "bnf",
+                "brainfuck",
+                "c",
+                "cal",
+                "capnproto",
+                "ceylon",
+                "clean",
+                "clojure",
+                "clojure-repl",
+                "cmake",
+                "coffeescript",
+                "coq",
+                "cos",
+                "cpp",
+                "crmsh",
+                "crystal",
+                "csharp",
+                "csp",
+                "css",
+                "d",
+                "markdown",
+                "dart",
+                "delphi",
+                "diff",
+                "django",
+                "dns",
+                "dockerfile",
+                "dos",
+                "dsconfig",
+                "dts",
+                "dust",
+                "ebnf",
+                "elixir",
+                "elm",
+                "ruby",
+                "erb",
+                "erlang-repl",
+                "erlang",
+                "excel",
+                "fix",
+                "flix",
+                "fortran",
+                "fsharp",
+                "gams",
+                "gauss",
+                "gcode",
+                "gherkin",
+                "glsl",
+                "gml",
+                "go",
+                "golo",
+                "gradle",
+                "graphql",
+                "groovy",
+                "haml",
+                "handlebars",
+                "haskell",
+                "haxe",
+                "hsp",
+                "http",
+                "hy",
+                "inform7",
+                "ini",
+                "irpf90",
+                "isbl",
+                "java",
+                "javascript",
+                "jboss-cli",
+                "json",
+                "julia",
+                "julia-repl",
+                "kotlin",
+                "lasso",
+                "latex",
+                "ldif",
+                "leaf",
+                "less",
+                "lisp",
+                "livecodeserver",
+                "livescript",
+                "llvm",
+                "lsl",
+                "lua",
+                "makefile",
+                "mathematica",
+                "matlab",
+                "maxima",
+                "mel",
+                "mercury",
+                "mipsasm",
+                "mizar",
+                "perl",
+                "mojolicious",
+                "monkey",
+                "moonscript",
+                "n1ql",
+                "nestedtext",
+                "nginx",
+                "nim",
+                "nix",
+                "node-repl",
+                "nsis",
+                "objectivec",
+                "ocaml",
+                "openscad",
+                "oxygene",
+                "parser3",
+                "pf",
+                "pgsql",
+                "php",
+                "php-template",
+                "plaintext",
+                "pony",
+                "powershell",
+                "processing",
+                "profile",
+                "prolog",
+                "properties",
+                "protobuf",
+                "puppet",
+                "purebasic",
+                "python",
+                "python-repl",
+                "q",
+                "qml",
+                "r",
+                "reasonml",
+                "rib",
+                "roboconf",
+                "routeros",
+                "rsl",
+                "ruleslanguage",
+                "rust",
+                "sas",
+                "scala",
+                "scheme",
+                "scilab",
+                "scss",
+                "shell",
+                "smali",
+                "smalltalk",
+                "sml",
+                "sqf",
+                "sql",
+                "stan",
+                "stata",
+                "step21",
+                "stylus",
+                "subunit",
+                "swift",
+                "taggerscript",
+                "yaml",
+                "tap",
+                "tcl",
+                "thrift",
+                "tp",
+                "twig",
+                "typescript",
+                "vala",
+                "vbnet",
+                "vbscript",
+                "vbscript-html",
+                "verilog",
+                "vhdl",
+                "vim",
+                "wasm",
+                "wren",
+                "x86asm",
+                "xl",
+                "xquery",
+                "zephir"
+            ];
+            //#endregion
+
+            const svgCopyStr = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z"></path>
+                    <path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1"></path>
+                </svg>`;
+
+            const selectLangEle = document.getElementById("selectLang");
+            const textareaCodeEle = document.getElementById("textareaCode");
+            const btnConfirmEle = document.getElementById("btnConfirm");
+            const highlightBoxEle = document.querySelector(".highlight-code-wrapper");
+            const range = document.createRange();
+
+            codeLangs.forEach((item) => {
+                const newOption = document.createElement("option");
+                newOption.value = item;
+                newOption.text = item;
+                selectLangEle.add(newOption);
+            });
+            selectLangEle.value = "javascript";
+
+            btnConfirmEle.addEventListener("click", () => {
+                highlightBoxEle.innerHTML = "";
+                let lang = selectLangEle.value;
+                let code = textareaCodeEle.value;
+                highlightBoxEle.append(range.createContextualFragment(`<pre class="language-${lang}"><code class="language-${lang} hljs">${hljs.highlightAuto(code).value}</code><span class="copy-icon-box" title="复制代码">${svgCopyStr}</span><span class="copied-msg-box">已复制</span></pre>`));
+                textareaCodeEle.value = "";
+                let copyBoxEle = highlightBoxEle.querySelector('pre[class*="language-"] > .copy-icon-box');
+                let copiedMsgEle = highlightBoxEle.querySelector('pre[class*="language-"] > .copied-msg-box');
+                copyBoxEle.setAttribute("data-code", code);
+                copyBoxEle.addEventListener("click", (evt) => {
+                    let strCode = evt.currentTarget.getAttribute("data-code");
+                    copyTextToClipboard(strCode).then(() => {
+                        copiedMsgEle.style.visibility = "visible";
+                        setTimeout(() => {
+                            copiedMsgEle.style.visibility = "hidden";
+                        }, 3000);
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
