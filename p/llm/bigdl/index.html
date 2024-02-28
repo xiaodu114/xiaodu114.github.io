@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>BigDL-LLM - xiaodu114.github.io</title>
+        <meta name="keywords" content="LLM,大语言模型,BigDL,BigDL-LLM,Baichuan2-7B-Chat,chatglm2-6b,chatglm2-3b,Qwen-7B-Chat,Yi-6B-Chat" />
+        <meta name="description" content="BigDL-LLM 是一个针对大语言模型的优化加速库。这里记录一下对他的体验……" />
+
+        <script src="/p/_/js/main.js"></script>
+        <script src="../_common/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/llm/bigdl/index.html -->
+        <div class="blog-page">
+            <h1>BigDL-LLM</h1>
+            <p>GitHub官网：<a href="https://github.com/intel-analytics/BigDL" target="_blank">GitHub - intel-analytics/BigDL: Accelerate LLM with low-bit (FP4 / INT4 / FP8 / INT8) optimizations using bigdl-llm</a></p>
+            <p>官网教程：<a href="https://github.com/intel-analytics/bigdl-llm-tutorial" target="_blank">GitHub - intel-analytics/bigdl-llm-tutorial: Accelerate LLM with low-bit (FP4 / INT4 / FP8 / INT8) optimizations using bigdl-llm</a></p>
+            <p>格局小了！ LLM 功能只是 BigDL 的一部分，原以为只是关于大语言模型的。英特尔出品</p>
+            <p>说是针对大语言模型的优化加速库，也确实是如此，有点类似<line-code>llama.cpp</line-code>。因为电脑的配置比较低，所以大语言模型加速类的项目还是很有吸引力的。支持的模型很多，使用方式方式也很简单，所以计划用此对不同的大模型做以下测试：历史对话、知识库问答、封装API等</p>
+            <p>这次的测试环境还是我的老朋友，和初次体验<line-code>ChatGLM2-6B</line-code>用的机器相同</p>
+            <h2>项目介绍</h2>
+            <p>为了测试上述功能，新建了一个项目。根据不同的功能做一个分类：01_history_chat 、02_knowledge_chat 、 03_api 、 config 等。</p>
+            <h3>config 目录</h3>
+            <p>这里存放一些配置文件或者公共变量等</p>
+            <h4>model.py</h4>
+            <p>模型相关的配置放到这里，例如：本地模型的路径</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+model_path_dict = {
+    "baichuan" : {
+        "2-7B-Chat" : "D:\\llm\\baichuan-inc\\Baichuan2-7B-Chat",
+    },
+    "THUDM" : {
+        "2-6b" : "D:\llm\THUDM\chatglm2-6b",
+        "3-6b" : "D:\llm\THUDM\chatglm3-6b"
+    },
+    "Qwen" : {
+        "7B-Chat" : "D:\llm\Qwen\Qwen-7B-Chat"
+    },
+    "01ai" : {
+        "6B-Chat" : "D:\\llm\\01ai\\Yi-6B-Chat"
+    }
+}
+            </pre>
+            <h4>question.py</h4>
+            <p>准备了一些测试问题，放在了该文件中</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+history_chat_questions = ["你好", "中国的首都是", "他的面积是多少", "他有几座机场", "一共问了你几个问题"]
+            </pre>
+            <h3>虚拟环境</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+python -m venv venv
+.\venv\scripts\activate
+
+#   退出虚拟环境
+deactivate
+
+pip install --pre --upgrade bigdl-llm[all]
+            </pre>
+            <mark-block explain="说明">
+                <p>bigdl-llm[all] 包依赖 transformers ， 安装时会自动将其带上</p>
+                <p>2024-02-26 bigdl-llm[all]的版本是：2.5.0b20240225 ，对应的 transformers 版本是：4.31.0</p>
+                <p>2024-02-27 bigdl-llm[all]的版本是：2.5.0b20240226 ，对应的 transformers 版本是：4.31.0</p>
+            </mark-block>
+            <h2>历史对话</h2>
+            <h3>Baichuan2-7B-Chat</h3>
+            <details>
+                <summary>点击查看代码</summary>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+#   引用本地依赖需要，例如：引用 config.model
+import sys
+sys.path.append(".")
+
+from transformers import AutoTokenizer
+from bigdl.llm.transformers import AutoModelForCausalLM
+
+from config.model import model_path_dict
+from config.question import history_chat_questions
+
+model_path = model_path_dict["baichuan"]["2-7B-Chat"]
+tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained(model_path, load_in_4bit=True, trust_remote_code=True, use_cache=True)
+
+#   model.chat 方法位于模型权重文件夹的 modeling_baichuan.py 文件中，如下：
+'''
+def chat(self, tokenizer, messages: List[dict], stream=False, generation_config: Optional[GenerationConfig]=None)
+'''
+#   该方法没有 temperature 、 top_p 等参数， generation_config 参数这里没有传入。默认采用的是 generation_config.json 文件中的配置
+#   你可以这样获取模型权重的 GenerationConfig
+'''
+from transformers.generation.utils import GenerationConfig
+generation_config = GenerationConfig.from_pretrained(model_path)
+print(str(generation_config))
+'''
+
+messages=[]
+
+for question in history_chat_questions:
+    print("问：" + question)
+    messages.append({"role": "user", "content": question})
+    response = model.chat(tokenizer, messages)
+    messages.append({"role": "assistant", "content": response})
+    print("答：" + str(response))
+
+print(str(messages))
+                </pre>
+            </details>
+            <p>这个比较顺利，仅安装<line-code>bigdl-llm[all]</line-code>即可，下面看一下运行效果：</p>
+            <p>
+                <img src="./image/1.png" alt="bigdl-llm 之 Baichuan2-7B-Chat 模型，历史对话测试" />
+            </p>
+            <h3>chatglm2-6b</h3>
+            <details>
+                <summary>点击查看代码</summary>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+import sys
+sys.path.append(".")
+
+from transformers import AutoTokenizer
+from bigdl.llm.transformers import AutoModel
+
+from config.model import model_path_dict
+from config.question import history_chat_questions
+
+model_path = model_path_dict["THUDM"]["2-6b"]
+tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+model = AutoModel.from_pretrained(model_path, load_in_4bit=True, trust_remote_code=True)
+
+#   model.chat 方法位于模型权重文件夹的 modeling_chatglm.py 文件中，如下：
+'''
+def chat(self, tokenizer, query: str, history: List[Tuple[str, str]] = None, max_length: int = 8192, num_beams=1,do_sample=True, top_p=0.8, temperature=0.8, logits_processor=None, **kwargs)
+'''
+
+messages = []
+history = None
+
+for question in history_chat_questions:
+    print("问：" + question)
+    response, history = model.chat(tokenizer, question, history=history)
+    print("答：" + str(response))
+
+for question, response in history:
+        messages.append({"role": "user", "content": question})
+        messages.append({"role": "assistant", "content": response})
+print(str(messages))
+                </pre>
+            </details>
+            <p>chatglm2-6b 模型官方建议依赖的 transformers 版本为：4.30.2 。transformers 4.31.0，这个版本也可以，下面看一下运行效果：</p>
+            <p>
+                <img src="./image/2.png" alt="bigdl-llm 之 chatglm2-6b 模型，历史对话测试" />
+            </p>
+            <h3>chatglm3-6b</h3>
+            <details>
+                <summary>点击查看代码</summary>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+import sys
+sys.path.append(".")
+
+from transformers import AutoTokenizer
+from bigdl.llm.transformers import AutoModel
+
+from config.model import model_path_dict
+from config.question import history_chat_questions
+
+model_path = model_path_dict["THUDM"]["3-6b"]
+tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+model = AutoModel.from_pretrained(model_path, load_in_4bit=True, trust_remote_code=True)
+
+#   model.chat 方法位于模型权重文件夹的 modeling_chatglm.py 文件中，如下：
+'''
+def chat(self, tokenizer, query: str, history: List[Tuple[str, str]] = None, role: str = "user", max_length: int = 8192, num_beams=1, do_sample=True, top_p=0.8, temperature=0.8, logits_processor=None, **kwargs)
+'''
+#   【说明】感觉形参 history 的数据类型写错了，该方法内部会调用 tokenization_chatglm.py 文件中的 build_chat_input 方法（类型明显不一致）
+
+history = None
+
+for question in history_chat_questions:
+    print("问：" + question)
+    response, history = model.chat(tokenizer, question, history=history)
+    print("答：" + str(response))
+
+print(str(history))
+                </pre>
+            </details>
+            <p>chatglm3-6b 也是如此，仅安装<line-code>bigdl-llm[all]</line-code>即可，下面看一下运行效果：</p>
+            <p>
+                <img src="./image/3.png" alt="bigdl-llm 之 chatglm3-6b 模型，历史对话测试" />
+            </p>
+            <h3>Qwen-7B-Chat</h3>
+            <details>
+                <summary>点击查看代码</summary>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+import sys
+sys.path.append(".")
+
+from transformers import AutoTokenizer
+from bigdl.llm.transformers import AutoModelForCausalLM
+
+from config.model import model_path_dict
+from config.question import history_chat_questions
+
+model_path = model_path_dict["Qwen"]["7B-Chat"]
+tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained(model_path, load_in_4bit=True, trust_remote_code=True)
+
+#   model.chat 方法位于模型权重文件夹的 modeling_qwen.py 文件中，如下：
+'''
+def chat(self,tokenizer: PreTrainedTokenizer,query: str,history: Optional[HistoryType],system: str = "You are a helpful assistant.",append_history: bool = True,stream: Optional[bool] = _SENTINEL,stop_words_ids: Optional[List[List[int]]] = None,generation_config: Optional[GenerationConfig] = None,**kwargs,) -> Tuple[str, HistoryType]
+'''    
+
+messages=[]
+history = None
+
+for question in history_chat_questions:
+    print("问：" + question)
+    response, history = model.chat(tokenizer, question, history=history)
+    print("答：" + str(response))
+
+for question, response in history:
+        messages.append({"role": "user", "content": question})
+        messages.append({"role": "assistant", "content": response})
+print(str(messages))
+                </pre>
+            </details>
+            <p>Qwen-7B-Chat 也还可以，除了已安装的<line-code>bigdl-llm[all]</line-code>，还需要安装<line-code>pip install tiktoken einops transformers_stream_generator</line-code>，下面看一下运行效果：</p>
+            <p>
+                <img src="./image/4.png" alt="bigdl-llm 之 Qwen-7B-Chat 模型，历史对话测试" />
+            </p>
+            <h3>Yi-6B-Chat</h3>
+            <p>比较爽的是，发现了这个站点：<a href="https://replicate.com/01-ai/yi-6b-chat" target="_blank">01-ai/yi-6b-chat – Run with an API on Replicate</a>，遗憾的是没有找到支持的其他模型。</p>
+            <details>
+                <summary>点击查看代码</summary>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+import sys
+sys.path.append(".")
+
+from typing import Optional, Tuple, List
+import copy
+
+from transformers import AutoTokenizer
+from bigdl.llm.transformers import AutoModelForCausalLM
+
+from config.model import model_path_dict
+from config.question import history_chat_questions
+
+model_path = model_path_dict["01ai"]["6B-Chat"]
+tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained(model_path, load_in_4bit=True, trust_remote_code=True)
+
+#   这个模型比较费劲啊，没有 model.chat 方法，下面是自己封装的一些方法
+
+def chat1(
+    model,
+    tokenizer,
+    query: str,
+    history: Optional[List[Tuple[str, str]]],
+    system: str = "You are a helpful assistant.",
+    **kwargs,
+) -> Tuple[str, List[Tuple[str, str]]]:
+    im_start, im_end = "&lt;|im_start|>", "&lt;|im_end|>"
+    #   tokenizer.encode("&lt;|im_start|>", return_tensors="pt")   =>  6
+    #   tokenizer.encode("&lt;|im_end|>", return_tensors="pt")     =>  7
+
+    if history is None:
+        history = []
+    else:
+        # make a copy of the user's input such that is is left untouched
+        history = copy.deepcopy(history)
+
+    raw_text = f"\n{im_start}system\n{system}{im_end}\n"
+
+    for turn_query, turn_response in history:
+        raw_text += f"{im_start}user\n{turn_query}{im_end}\n"
+        raw_text += f"{im_start}assistant\n{turn_response}{im_end}\n"
+
+    raw_text += f"{im_start}user\n{query}{im_end}\n"
+    raw_text += f"{im_start}assistant\n"
+    input_ids = tokenizer.encode(raw_text, return_tensors="pt")
+    outputs = model.generate(input_ids,
+                             do_sample=True,
+                             max_new_tokens=4096,
+                             top_p=0.8,
+                             temperature=0.8)
+    response = tokenizer.decode(outputs[0][len(input_ids[0]):], skip_special_tokens=True)
+    history.append((query, response))
+    return response, history
+
+def chat2(model, tokenizer, messages, system: str = "You are a helpful assistant."):
+    im_start, im_end = "&lt;|im_start|>", "&lt;|im_end|>"
+
+    prompt = f"\n{im_start}system\n{system}{im_end}\n"
+    for message in messages:
+        match message["role"]:
+            case "user":
+                prompt += f"{im_start}user\n{message['content']}{im_end}\n" 
+            case "assistant":
+                prompt += f"{im_start}assistant\n{message['content']}{im_end}\n"
+    prompt += f"{im_start}assistant\n"
+    input_ids = tokenizer.encode(prompt, return_tensors="pt")  
+    outputs = model.generate(input_ids,
+                             do_sample=True,
+                             max_new_tokens=4096,
+                             top_p=0.8,
+                             temperature=0.8)
+    response = tokenizer.decode(outputs[0][len(input_ids[0]):], skip_special_tokens=True)
+    return response
+
+def chat3(model,tokenizer,messages):
+    #   apply_chat_template 方法需要安装较新版本的 transformers
+    input_ids = tokenizer.apply_chat_template(conversation=messages, tokenize=True, add_generation_prompt=True, return_tensors='pt')
+    output_ids = model.generate(input_ids)
+    response = tokenizer.decode(output_ids[0][input_ids.shape[1]:], skip_special_tokens=True)
+    return response
+
+print("------第一轮------")
+messages1=[]
+history = None
+for question in history_chat_questions:
+    print("问：" + question)
+    response, history = chat1(model, tokenizer, question, history=history)
+    print("答：" + str(response))
+for question, response in history:
+        messages1.append({"role": "user", "content": question})
+        messages1.append({"role": "assistant", "content": response})
+print(str(messages1))
+
+print("------第二轮------")
+messages2=[]
+for question in history_chat_questions:
+    print("问：" + question)
+    messages2.append({"role": "user", "content": question})
+    response = chat2(model, tokenizer, messages2)
+    messages2.append({"role": "assistant", "content": response})
+    print("答：" + str(response))
+print(str(messages2))
+
+print("------第三轮------")
+messages3=[]
+for question in history_chat_questions:
+    print("问：" + question)
+    messages3.append({"role": "user", "content": question})
+    response = chat3(model,tokenizer, messages3)
+    messages3.append({"role": "assistant", "content": response})
+    print("答：" + str(response))
+print(str(messages3))
+                </pre>
+            </details>
+            <p>Yi-6B-Chat 这个就比较费劲儿了，没有类似上面的<line-code>model.chat</line-code>方法，得自己封装。对<line-code>transformers</line-code>的版本也比较挑剔，尝试了好几次，直到<line-code>4.35.0</line-code>这个版本才成功。</p>
+            <details>
+                <summary>点击查看 transformers 版本尝试</summary>
+                <mark-block type="error">
+                    <dl>
+                        <dt>bigdl-llm[all]：2.5.0b20240225 ，transformers：4.31.0</dt>
+                        <dd>
+                            <pre>
+------第一轮------
+问：你好
+答：你好！有什么我可以帮助你的吗？
+问：中国的首都是
+答：中国的首都是北京。
+问：他的面积是多少
+答：他的面积是多少？这个问题需要更多的信息才能给出一个准确的答案。如果你能
+提供更多的关于他的信息，比如他的名字，出生日期，住址等等，那么我就可以根据 
+你所提供的这些信息来帮助你回答这个问题：他的面积是多少？
+问：他有几座机场
+答：他有几座机场？这个问题需要更多的信息才能给出一个准确的答案。如果你能提
+供更多的关于他的信息，比如他的名字，出生日期，住址等等，那么我就可以根据你 
+所提供的这些信息来帮助你回答这个问题：他有几座机场？
+问：一共问了你几个问题
+答：一共问了你几个问题？这个问题需要更多的信息才能给出一个准确的答案。如果
+你能提供更多的关于你的信息，比如你的名字，出生日期，住址等等，那么我就可以 
+根据你所提供的这些信息来帮助你回答这个问题：一共问了你几个问题？？
+------第二轮------
+问：你好
+答：你好！有什么我可以帮助你的吗？
+问：中国的首都是
+答：中国的首都是北京。
+问：他的面积是多少
+答：他的面积是多少？看起来你可能是在询问某人的面积。但是，由于缺乏上下文，
+我无法提供你询问的面积。如果你能提供更多的上下文，我将很乐意帮助你找到你询 
+问的面积。
+问：他有几座机场
+答：他有几座机场？看起来你可能是在询问某人的机场数量。但是，由于缺乏上下文
+，我无法提供你询问的机场数量。如果你能提供更多的上下文，我将很乐意帮助你找 
+到你询问的机场数量。
+问：一共问了你几个问题
+答：一共问了你几个问题？看起来你可能是在询问你总共被问了几个问题。但是，由
+于缺乏上下文，我无法提供你询问的上下文。如果你能提供更多的上下文，我将很乐 
+意帮助你找到你询问的上下文。
+------第三轮------
+问：你好
+Traceback (most recent call last):
+  File "E:\llm\bigdl-001\01_history_chat\yi-6b-chat.py", line 109, in &lt;module>
+    response = chat3(model,tokenizer, messages3)
+  File "E:\llm\bigdl-001\01_history_chat\yi-6b-chat.py", line 77, in chat3 
+    input_ids = tokenizer.apply_chat_template(conversation=messages, tokenize=True, add_generation_prompt=True, return_tensors='pt')
+AttributeError: 'LlamaTokenizerFast' object has no attribute 'apply_chat_template'
+                            </pre>
+                            <p><strong>说明：</strong>在这个版本下没有根据上下文（对话历史）回答问题，并且第三轮还报错了，第三轮需要更高版本的 transformers 来支持 apply_chat_template 方法</p>
+                        </dd>
+                        <dt>bigdl-llm[all]：2.5.0b20240225 ，transformers：4.38.1</dt>
+                        <dd>
+                            <p>这个版本会报如下错误（去掉了一些堆栈信息）</p>
+                            <p>TypeError: LlamaRotaryEmbedding.forward() missing 1 required positional argument: 'position_ids'</p>
+                        </dd>
+                        <dt>bigdl-llm[all]：2.5.0b20240225 ，transformers：4.37.0 或者 4.36.0</dt>
+                        <dd>
+                            <p>
+                                <img src="./image/5.png" alt="bigdl-llm 之 Yi-6B-Chat 模型，历史对话测试，transformers==4.37.0 异常" />
+                            </p>
+                        </dd>
+                        <dd>
+                            <p>之前测试的时候（2024-02-19） 安装 transformers==4.37.2 配合 bigdl 测试时会有如下错误，这次没有验证，如下：</p>
+                            <p>KeyError: 'Cache only has 0 layers, attempted to access layer with index 0'</p>
+                        </dd>
+                    </dl>
+                </mark-block>
+            </details>
+            <p>下面看一下运行正常的截图：</p>
+            <p>
+                <img src="./image/6.png" alt="bigdl-llm 之 Yi-6B-Chat 模型，历史对话测试" />
+            </p>
+            <h2>知识库问答</h2>
+            <p>这里的测试是在<line-code>Langchain-Chatchat</line-code>之后，参考该项目的写法，做一下包含已知信息的对话测试。</p>
+            <h3>项目调整</h3>
+            <p>新增目录<line-code>02_knowledge_chat</line-code>；配置修改等。</p>
+            <p>1、<line-code>config</line-code>目录下新增<line-code>prompt_template.py</line-code>，代码如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+#   参考 Langchain-Chatchat 项目的写法
+#   会在知识库问答中使用
+knowledge_chat_prompt_template="""&lt;指令>根据已知信息，简洁和专业的来回答问题。如果无法从中得到答案，请说 “根据已知信息无法回答该问题”，不允许在答案中添加编造成分，答案请使用中文。 &lt;/指令>
+&lt;已知信息>{knowledge}&lt;/已知信息>
+&lt;问题>{question}&lt;/问题>"""
+            </pre>
+            <p>2、<line-code>config/question.py</line-code>文件修改，如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+from .prompt_template import knowledge_chat_prompt_template
+
+history_chat_questions = ["你好", "中国的首都是", "他的面积是多少", "他有几座机场", "一共问了你几个问题"]
+
+knowledge_chat_questions = [
+    "你好",
+    "中国的首都是",
+    "他的面积是多少",
+    "他有几座机场",
+    "你知道 xiaodu114 吗？",
+    knowledge_chat_prompt_template.format(knowledge='''一个关于xiaodu114的秘密
+xiaodu114很喜欢球类运动，例如：乒乓球、羽毛球、网球等。
+xiaodu114热爱学习，并且非常喜欢编程，🤭🤭🤭
+你知道吗？xiaodu114还是Reddit的注册用户哦！访问地址为：https://www.reddit.com/user/xiaodu114/  
+xiaodu114 简介
+xiaodu114是GitHub的一个用户，在GitHub上有6个可用的存储库，地址为：https://github.com/xiaodu114  。
+xiaodu114同时也是npmjs的注册用户，目前已经创建了两个库：a2bei4 和 a2bei4-rollup-plugin 。''', question="介绍一下 xiaodu114")]
+            </pre>
+            <h3>Baichuan2-7B-Chat</h3>
+            <details>
+                <summary>点击查看代码</summary>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+import sys
+sys.path.append(".")
+
+from transformers import AutoTokenizer
+from bigdl.llm.transformers import AutoModelForCausalLM
+
+from config.model import model_path_dict
+from config.question import knowledge_chat_questions
+
+model_path = model_path_dict["baichuan"]["2-7B-Chat"]
+tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained(model_path, load_in_4bit=True, trust_remote_code=True, use_cache=True)
+
+def chat(model,tokenizer,messages:list[dict]):
+    prompt = ""
+    for message in messages:
+        match message["role"]:
+            case "user":
+                prompt += "&lt;reserved_106>" + message["content"] + "\n"
+            case "assistant":
+                prompt += "&lt;reserved_107>" + message["content"] + "\n"
+    prompt += "&lt;reserved_107>"    
+    input_ids = tokenizer.encode(prompt, return_tensors="pt")  
+     
+    output_ids = model.generate(input_ids,
+                                do_sample=True,
+                                max_new_tokens=4096,
+                                top_p=0.8,
+                                temperature=0.8)
+    response = tokenizer.decode(output_ids[0][input_ids.shape[1]:], skip_special_tokens=True)
+    return response
+
+messages=[]
+for question in knowledge_chat_questions:
+    print("问：" + question)
+    messages.append({"role": "user", "content": question})
+    response = chat(model, tokenizer, messages)
+    messages.append({"role": "assistant", "content": response})
+    print("答：" + str(response))
+print(str(messages))
+                </pre>
+            </details>
+            <p>安装的依赖包和上面对应的历史对话章节相同。下面看一下运行效果：</p>
+            <p>
+                <img src="./image/7.png" alt="bigdl-llm 之 Baichuan2-7B-Chat 模型，已有知识问答测试" />
+            </p>
+            <h3>chatglm2-6b</h3>
+            <details>
+                <summary>点击查看代码</summary>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+import sys
+sys.path.append(".")
+
+from transformers import AutoTokenizer
+from bigdl.llm.transformers import AutoModel
+
+from config.model import model_path_dict
+from config.question import knowledge_chat_questions
+
+model_path = model_path_dict["THUDM"]["2-6b"]
+tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+model = AutoModel.from_pretrained(model_path, load_in_4bit=True, trust_remote_code=True)
+
+messages=[]
+history = None
+
+for question in knowledge_chat_questions:
+    print("问：" + question)
+    response, history = model.chat(tokenizer, question, history=history)
+    print("答：" + str(response))
+
+for question, response in history:
+        messages.append({"role": "user", "content": question})
+        messages.append({"role": "assistant", "content": response})
+print(str(messages))
+                </pre>
+            </details>
+            <p>安装的依赖包和上面对应的历史对话章节相同。下面看一下运行效果：</p>
+            <p>
+                <img src="./image/8.png" alt="bigdl-llm 之 chatglm2-6b 模型，已有知识问答测试" />
+            </p>
+            <h3>chatglm3-6b</h3>
+            <details>
+                <summary>点击查看代码</summary>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+import sys
+sys.path.append(".")
+
+from transformers import AutoTokenizer
+from bigdl.llm.transformers import AutoModel
+
+from config.model import model_path_dict
+from config.question import knowledge_chat_questions
+
+model_path = model_path_dict["THUDM"]["3-6b"]
+tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+model = AutoModel.from_pretrained(model_path, load_in_4bit=True, trust_remote_code=True)
+
+history = None
+for question in knowledge_chat_questions:
+    print("问：" + question)
+    response, history = model.chat(tokenizer, question, history=history)
+    print("答：" + str(response))
+
+print(str(history))
+                </pre>
+            </details>
+            <p>安装的依赖包和上面对应的历史对话章节相同。下面看一下运行效果：</p>
+            <p>
+                <img src="./image/9.png" alt="bigdl-llm 之 chatglm3-6b 模型，已有知识问答测试" />
+            </p>
+            <h3>Qwen-7B-Chat</h3>
+            <details>
+                <summary>点击查看代码</summary>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+import sys
+sys.path.append(".")
+
+from transformers import AutoTokenizer
+from bigdl.llm.transformers import AutoModelForCausalLM
+
+from config.model import model_path_dict
+from config.question import knowledge_chat_questions
+
+model_path = model_path_dict["Qwen"]["7B-Chat"]
+tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained(model_path, load_in_4bit=True, trust_remote_code=True)
+
+def chat(model, tokenizer, messages, system: str = "You are a helpful assistant."):
+    im_start, im_end = "&lt;|im_start|>", "&lt;|im_end|>"
+
+    prompt = f"{im_start}system\n{system}{im_end}\n"
+    for message in messages:
+        match message["role"]:
+            case "user":
+                prompt += f"{im_start}user\n{message['content']}{im_end}\n" 
+            case "assistant":
+                prompt += f"{im_start}assistant\n{message['content']}{im_end}\n"
+    prompt += f"{im_start}assistant\n"
+    input_ids = tokenizer.encode(prompt, return_tensors="pt")  
+    outputs = model.generate(input_ids,
+                             do_sample=True,
+                             max_new_tokens=1024,
+                             top_p=0.8,
+                             temperature=0.8)
+    response = tokenizer.decode(outputs[0][len(input_ids[0]):], skip_special_tokens=True)
+    return response
+
+messages=[]
+for question in knowledge_chat_questions:
+    print("问：" + question)
+    messages.append({"role": "user", "content": question})
+    response = chat(model, tokenizer, messages)
+    messages.append({"role": "assistant", "content": response})
+    print("答：" + str(response))
+print(str(messages))
+                </pre>
+            </details>
+            <p>安装的依赖包和上面对应的历史对话章节相同。下面看一下运行效果：</p>
+            <p>
+                <img src="./image/10.png" alt="bigdl-llm 之 Qwen-7B-Chat 模型，已有知识问答测试" />
+            </p>
+            <h3>Yi-6B-Chat</h3>
+            <details>
+                <summary>点击查看代码</summary>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+import sys
+sys.path.append(".")
+
+from transformers import AutoTokenizer
+from bigdl.llm.transformers import AutoModelForCausalLM
+
+from config.model import model_path_dict
+from config.question import knowledge_chat_questions
+
+model_path = model_path_dict["01ai"]["6B-Chat"]
+tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained(model_path, load_in_4bit=True, trust_remote_code=True)
+
+def chat3(model,tokenizer,messages):
+    input_ids = tokenizer.apply_chat_template(conversation=messages, tokenize=True, add_generation_prompt=True, return_tensors='pt')
+    output_ids = model.generate(input_ids)
+    response = tokenizer.decode(output_ids[0][input_ids.shape[1]:], skip_special_tokens=True)
+    return response
+
+messages3=[]
+for question in knowledge_chat_questions:
+    print("问：" + question)
+    messages3.append({"role": "user", "content": question})
+    response = chat3(model,tokenizer, messages3)
+    messages3.append({"role": "assistant", "content": response})
+    print("答：" + str(response))
+print(str(messages3))
+                </pre>
+            </details>
+            <p>这里采用的是上面历史对话中的“第三轮”的方式，因此需要<line-code>transformers==4.35.0</line-code></p>
+            <p>安装的依赖包和上面对应的历史对话章节相同。下面看一下运行效果：</p>
+            <p>
+                <img src="./image/11.png" alt="bigdl-llm 之 Yi-6B-Chat 模型，已有知识问答测试" />
+            </p>
+            <p>这里出现了点问题，先问一下：“你知道 xiaodu114 吗？（这个问题没有包含已知信息），后面的问题是：“介绍一下 xiaodu114”（这个问题是包含已知信息的）。截图中你可以看到，最后一个问题应该是受到上一个问题的影响，没有根据已知信息回答。再看一下没有干扰问题的情况，如下：</p>
+            <p>
+                <img src="./image/12.png" alt="bigdl-llm 之 Yi-6B-Chat 模型，已有知识问答测试" />
+            </p>
+            <mark-block type="warning">
+                <p>“你知道 xiaodu114 吗？”、“介绍一下 xiaodu114”（包含已知信息），连续对话时有的大模型会受到历史对话的影响。如果问的是同一个问题：“你知道 xiaodu114 吗？”只是后面一个包含已知信息，这种情况下更容易受到影响，如下：</p>
+                <p>
+                    <img src="./image/13.png" alt="bigdl-llm 之 chatglm2-6b 模型，已有知识问答测试" />
+                </p>
+            </mark-block>
+        </div>
+    </body>
+</html>
