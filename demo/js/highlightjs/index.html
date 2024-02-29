@@ -3,19 +3,14 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>CodeMirror 示例 - xiaodu114.github.io</title>
-        <meta name="keywords" content="CodeMirror,输入,选择" />
-        <meta name="description" content="CodeMirror的示例项目，用来实现在同一文本框中用户既可以输入又可以在下拉框中选择（选择之后显示的可能是一个复杂的组件）" />
+        <title>highlight.js 示例 - xiaodu114.github.io</title>
+        <meta name="keywords" content="highlight.js,代码高亮,复制代码,一键复制,复制代码到粘贴板" />
+        <meta name="description" content="highlight.js 演示项目，并添加复制代码的功能" />
         <style>
             *,
             *::before,
             *::after {
                 box-sizing: border-box;
-            }
-
-            h5 {
-                margin-top: 15px;
-                margin-bottom: 15px;
             }
 
             html,
@@ -26,19 +21,19 @@
                 overflow: hidden;
             }
 
-            .highlightjs-demo {
+            .demo-box {
                 height: 100%;
                 width: 100%;
                 display: flex;
                 flex-direction: column;
             }
 
-            .highlightjs-demo > .header {
+            .demo-box > .header {
                 flex-shrink: 0;
                 position: relative;
             }
 
-            .highlightjs-demo > .header::after {
+            .demo-box > .header::after {
                 position: absolute;
                 bottom: 0;
                 right: 0;
@@ -50,13 +45,13 @@
                 background-color: #ccc;
             }
 
-            .highlightjs-demo > .main {
+            .demo-box > .main {
                 flex: 1;
                 overflow: hidden;
                 display: flex;
             }
 
-            .highlightjs-demo > .main > .main-left {
+            .demo-box > .main > .main-left {
                 width: 345px;
                 flex-shrink: 0;
                 position: relative;
@@ -66,7 +61,7 @@
                 flex-direction: column;
             }
 
-            .highlightjs-demo > .main > .main-left::after {
+            .demo-box > .main > .main-left::after {
                 position: absolute;
                 top: 0;
                 bottom: 0;
@@ -78,22 +73,22 @@
                 background-color: #ccc;
             }
 
-            .highlightjs-demo > .main > .main-left > .form-item {
+            .demo-box > .main > .main-left > .form-item {
                 display: flex;
                 flex-direction: column;
                 margin-bottom: 15px;
             }
 
-            .highlightjs-demo > .main > .main-left > .form-item > label {
+            .demo-box > .main > .main-left > .form-item > label {
                 margin-bottom: 5px;
             }
 
-            .highlightjs-demo > .main > .main-left > .form-item > textarea {
+            .demo-box > .main > .main-left > .form-item > textarea {
                 height: 100%;
                 width: 100%;
             }
 
-            .highlightjs-demo > .main > .main-left > #btnConfirm {
+            .demo-box > .main > .main-left > #btnConfirm {
                 padding: 6px 12px;
                 cursor: pointer;
                 user-select: none;
@@ -105,21 +100,21 @@
                 border-color: #ccc;
             }
 
-            .highlightjs-demo > .main > .main-left > #btnConfirm:focus {
+            .demo-box > .main > .main-left > #btnConfirm:focus {
                 outline: none;
             }
 
-            .highlightjs-demo > .main > .main-left > #btnConfirm:active {
+            .demo-box > .main > .main-left > #btnConfirm:active {
                 background-color: #e6e6e6;
                 border-color: #adadad;
             }
 
-            .highlightjs-demo > .main > .main-content {
+            .demo-box > .main > .main-content {
                 flex: 1;
                 padding: 36px;
             }
 
-            .highlightjs-demo > .main > .main-content > .highlight-code-wrapper {
+            .demo-box > .main > .main-content > .highlight-code-wrapper {
                 height: 100%;
                 overflow-y: auto;
                 box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
@@ -154,9 +149,19 @@
     </head>
 
     <body>
-        <div class="highlightjs-demo">
+        <div class="demo-box">
             <div class="header">
-                <h1>highlight.js 示例，当时版本为： 11.9.0</h1>
+                <h1>
+                    highlight.js 示例，版本为： 11.9.0
+                    <span style="font-size: 1rem; font-weight: normal">
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <span>官网：</span>
+                        <a href="https://highlightjs.org/" target="_blank">highlight.js</a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <span>GitHub官网：</span>
+                        <a href="https://github.com/highlightjs/highlight.js" target="_blank">GitHub - highlightjs/highlight</a>
+                    </span>
+                </h1>
             </div>
             <div class="main">
                 <div class="main-left">
