@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>md-editor-v3 示例 - xiaodu114.github.io</title>
+        <meta name="keywords" content="md-editor-v3,Vue,Vu3,Markdown,Markdown 在线编辑" />
+        <meta name="description" content="md-editor-v3 示例项目。md-editor-v3 项目介绍：vue3 环境的 Markdown 编辑器，使用 jsx 和 typescript 语法开发，支持在 tsx 项目使用。" />
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                height: 100%;
+                width: 100%;
+                margin: 0;
+                overflow: hidden;
+            }
+
+            .demo-box {
+                height: 100%;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .demo-box > .header {
+                flex-shrink: 0;
+                position: relative;
+            }
+
+            .demo-box > .header::after {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                left: 0;
+                height: 1px;
+                content: "";
+                -webkit-transform: scaleY(0.5);
+                transform: scaleY(0.5);
+                background-color: #ccc;
+            }
+
+            .demo-box > .main {
+                flex: 1;
+                overflow: hidden;
+                display: flex;
+                padding: 15px;
+            }
+
+            .demo-box > .main > .md-editor-v3-wrapper {
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
+            }
+
+            .demo-box > .main > .md-editor-v3-wrapper > div {
+                height: 100%;
+            }
+        </style>
+        <link rel="stylesheet" href="https://registry.npmmirror.com/md-editor-v3/4.11.3/files/lib/style.css" />
+        <script src="https://registry.npmmirror.com/vue/3.4.21/files/dist/vue.global.js"></script>
+        <script src="https://registry.npmmirror.com/md-editor-v3/4.11.3/files/lib/umd/index.js"></script>
+    </head>
+
+    <body>
+        <div id="vue3App" class="demo-box">
+            <div class="header">
+                <h1>
+                    md-editor-v3 示例，版本为： 4.11.3
+                    <span style="font-size: 1rem; font-weight: normal">
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <span>GitHub官网：</span>
+                        <a href="https://github.com/imzbf/md-editor-v3" target="_blank">GitHub - imzbf/md-editor-v3</a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <span>文档：</span>
+                        <a href="https://imzbf.github.io/md-editor-v3/" target="_blank">MdEditorV3 Documentation</a>
+                    </span>
+                </h1>
+            </div>
+            <div class="main">
+                <div class="md-editor-v3-wrapper">
+                    <md-editor-v3 v-model="text" />
+                </div>
+            </div>
+        </div>
+        <script>
+            (() => {
+                if (!(window.Vue && window.MdEditorV3)) {
+                    alert(`vue.global.js 或者 md-editor-v3 加载异常`);
+                    return;
+                }
+
+                let vue3App = Vue.createApp({
+                    data() {
+                        return {
+                            text: "你好，MdEditorV3"
+                        };
+                    },
+                    methods: {},
+                    created() {}
+                });
+                vue3App.use(MdEditorV3.MdEditor);
+                vue3App.mount("#vue3App");
+            })();
+        </script>
+    </body>
+</html>
