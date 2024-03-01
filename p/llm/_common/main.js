@@ -64,6 +64,9 @@ customElements.define(
                         <li>
                             <a href="/p/llm/bigdl/index.html" target="_blank">BigDL-LLM</a>
                         </li>
+                        <li>
+                            <a href="/p/llm/pycorrector/index.html" target="_blank">pycorrector</a>
+                        </li>
                     </ol>
                 </div>
             </details>
