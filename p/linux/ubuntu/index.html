@@ -194,6 +194,20 @@ npm -v
                     <img src="./image/2-2.png" alt="*.tar.xz的方式安装nodejs 成功" />
                 </p>
             </details>
+            <h3>CUDA Toolkit 和 cuDNN</h3>
+            <p>CUDA Toolkit 和 cuDNN 大语言模型必备，请参考：<a href="/p/windows/wsl2/index.html" target="_blank">WSL2 - xiaodu114.github.io</a></p>
+            <mark-block type="warning">
+                <p>ubuntu 服务器遇到了几次 nvidia 驱动自动更新的情况，导致某些程序或者查看GPU占用无法正常使用。因此想着将自动更新禁掉，如下：</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#	1、显卡驱动版本号，下面两个都可以
+apt list --installed | grep nvidia-driver
+dpkg -l | grep -i nvidia-driver
+#	2、锁定（经过上面的查找，这里是 535）
+sudo apt-mark hold nvidia-driver-535
+#	3、解除锁定
+sudo apt-mark unhold nvidia-driver-535
+                </pre>
+            </mark-block>
             <h2>GNOME</h2>
             <p>一些GNOME相关的东东</p>
             <h3>GNOME 扩展</h3>
