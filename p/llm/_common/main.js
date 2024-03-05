@@ -67,6 +67,9 @@ customElements.define(
                         <li>
                             <a href="/p/llm/pycorrector/index.html" target="_blank">pycorrector</a>
                         </li>
+                        <li>
+                            <a href="/p/llm/llamaFactory/index.html" target="_blank">LLaMA Factory</a>
+                        </li>
                     </ol>
                 </div>
             </details>
