@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>LLaMA Factory - xiaodu114.github.io</title>
+        <meta name="keywords" content="LLaMA-Factory,LLM,大语言模型,微调,,,,,,,,,,,,,,,,,,,,,,,," />
+        <meta name="description" content="【博客描述】" />
+
+        <script src="/p/_/js/main.js"></script>
+        <script src="../_common/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/llm/llamaFactory/index.html -->
+        <div class="blog-page">
+            <h1>LLaMA-Factory</h1>
+            <p>GitHub官网：<a href="https://github.com/hiyouga/LLaMA-Factory" target="_blank">GitHub - hiyouga/LLaMA-Factory: Easy-to-use LLM fine-tuning framework (LLaMA, BLOOM, Mistral, Baichuan, Qwen, ChatGLM)</a></p>
+            <p>距离开始接触大语言模型已经有几个月的时间了，当初就知道“微调”这个高频词汇，一直没机会弄（一是机器不行，同时也没有比较小的模型；二是感觉应该不好弄，往后拖，先忙别的，哈哈），直到写这篇笔记的前几天才开始尝试，第一次使用<line-code>LLaMA Factory</line-code>微调还是挺顺利的，只能说这框架太牛了，比想象中省事儿不少……微调成功，很兴奋啊！</p>
+            <h2>环境准备</h2>
+            <p>物理环境是：Ubuntu 22.04 + Intel(R)Xeon(R) CPU E5-2699 v4 2.20GHZ + RAM（512GB）</p>
+            <h3>项目下载</h3>
+            <p>这里下载的是最新（2024-02-27）的发行版：<line-code>0.5.2</line-code>，将项目放到了这里，如下图：</p>
+            <p>
+                <img src="./image/1.png" alt="LLaMA-Factory 项目本地存放位置" />
+            </p>
+            <h3>微调数据集</h3>
+            <p>关于自定义数据集的写法以及一些配置你可以参照官网的：<a href="https://github.com/hiyouga/LLaMA-Factory/blob/main/data/README_zh.md" target="_blank">LLaMA-Factory/data/README_zh.md at main · hiyouga/LLaMA-Factory · GitHub</a></p>
+            <p>
+                <img src="./image/2.png" alt="LLaMA-Factory 项目之数据准备，官方截图" />
+            </p>
+            <p>自己整理了几条数据作为测试数据集，文件名称为<line-code>ddz001.json</line-code>，放到了<line-code>LLaMA-Factory-0.5.2/data</line-code>文件夹下，如图：</p>
+            <p>
+                <img src="./image/3.png" alt="LLaMA-Factory 项目之自定义数据集" />
+            </p>
+            <p>点击下载数据集：<a href="./data/ddz001.json" target="_blank">ddz001.json</a></p>
+            <p>还需要在同目录的<line-code>dataset_info.json</line-code>文件中添加对自定义数据集的描述，如下：</p>
+            <p>
+                <img src="./image/4.png" alt="LLaMA-Factory 项目之自定义数据集添加到 dataset_info.json" />
+            </p>
+            <h3>虚拟环境和安装依赖</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   创建
+python3 -m venv venv
+#   激活
+source ./venv/bin/activate
+#   退出虚拟环境
+deactivate
+
+pip install -r requirements.txt 
+            </pre>
+            <p>
+                <img src="./image/5.png" alt="创建并激活虚拟环境；安装依赖" />
+            </p>
+            <h2>deepseek-coder</h2>
+            <p><line-code>deepseek-coder</line-code>用他来开启微调的第一枪</p>
+            <h3>模型下载</h3>
+            <p>由于计算机资源比较紧张，所以下载了个1.3b的，下载路径为：<line-code>/home/xxx/llm/0-model/deepseek-ai/deepseek-coder-1.3b-instruct</line-code></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+git lfs install
+git clone https://modelscope.cn/deepseek-ai/deepseek-coder-1.3b-instruct.git
+            </pre>
+            <h3>指令监督微调</h3>
+            <h4>开始微调</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+CUDA_VISIBLE_DEVICES=0 python src/train_bash.py \
+    --stage sft \
+    --do_train \
+    --model_name_or_path /home/xxx/llm/0-model/deepseek-ai/deepseek-coder-1.3b-instruct \
+    --dataset ddz001 \
+    --template deepseekcoder \
+    --finetuning_type lora \
+    --lora_target q_proj,v_proj \
+    --output_dir output-ddz/deepseek-coder-1.3b-instruct \
+    --overwrite_cache \
+    --per_device_train_batch_size 4 \
+    --gradient_accumulation_steps 4 \
+    --lr_scheduler_type cosine \
+    --logging_steps 5 \
+    --save_steps 1000 \
+    --learning_rate 3e-3 \
+    --num_train_epochs 30.0 \
+    --plot_loss \
+    --fp16
+            </pre>
+            <p>在官网微调示例的基础上，主要对下面的几个参数做了修改</p>
+            <dl>
+                <dt>model_name_or_path</dt>
+                <dd>要微调的模型的ID或者路径。这里使用的是已经下载好的模型，所以写的是绝对路径</dd>
+                <dt>dataset</dt>
+                <dd>数据集。这里用的是上面提到的<line-code>ddz001</line-code></dd>
+                <dt>template 、 lora_target</dt>
+                <dd>不同的模型这两个参数的值可能不一样，你可以参考：<a href="https://github.com/hiyouga/LLaMA-Factory/blob/main/README_zh.md#%E6%A8%A1%E5%9E%8B" target="_blank">LLaMA-Factory/README_zh.md at main · hiyouga/LLaMA-Factory · GitHub</a></dd>
+                <dt>output_dir</dt>
+                <dd>输出路径</dd>
+                <dt>logging_steps、learning_rate、num_train_epochs</dt>
+                <dd>这几个参数可以根据实际情况调一下（不知所以然）</dd>
+            </dl>
+            <p>
+                <img src="./image/6.png" alt="LLaMA-Factory 微调 deepseek-coder-1.3b-instruct 开始" />
+            </p>
+            <p>
+                <img src="./image/7.png" alt="LLaMA-Factory 微调 deepseek-coder-1.3b-instruct 结束" />
+            </p>
+            <h4>导出模型</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+python src/export_model.py \
+    --model_name_or_path /home/xxx/llm/0-model/deepseek-ai/deepseek-coder-1.3b-instruct \
+    --adapter_name_or_path output-ddz/deepseek-coder-1.3b-instruct \
+    --template deepseekcoder \
+    --finetuning_type lora \
+    --export_dir /home/xxx/llm/0-model/xxx/xxx-deepseek-coder-1.3b-instruct \
+    --export_size 2 \
+    --export_legacy_format False
+            </pre>
+            <p>
+                <img src="./image/8.png" alt="LLaMA-Factory 微调 deepseek-coder-1.3b-instruct 之后，导出" />
+            </p>
+            <h3>推理测试</h3>
+            <p>这里测试的问题是：“javascript 基于时间戳的唯一标识符实现”</p>
+            <h4>微调前</h4>
+            <p>
+                <img src="./image/9.png" alt="deepseek-coder-1.3b-instruct 推理：javascript 基于时间戳的唯一标识符实现" />
+            </p>
+            <h4>微调后</h4>
+            <p>
+                <img src="./image/10.png" alt="deepseek-coder-1.3b-instruct 微调后推理：javascript 基于时间戳的唯一标识符实现" />
+            </p>
+        </div>
+    </body>
+</html>
