@@ -70,6 +70,9 @@ customElements.define(
                         <li>
                             <a href="/p/llm/llamaFactory/index.html" target="_blank">LLaMA Factory</a>
                         </li>
+                        <li>
+                            <a href="/p/llm/typeChat/index.html" target="_blank">TypeChat</a>
+                        </li>
                     </ol>
                 </div>
             </details>
