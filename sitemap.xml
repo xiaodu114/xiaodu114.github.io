@@ -6,7 +6,7 @@
     
   <url>
     <loc>https://xiaodu114.github.io/</loc>
-    <lastmod>2024-03-05T00:37:23.773Z</lastmod>
+    <lastmod>2024-03-11T01:37:30.252Z</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
@@ -116,7 +116,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/linux/ubuntu/index.html</loc>
-    <lastmod>2024-02-22T00:45:58.000Z</lastmod>
+    <lastmod>2024-03-05T02:03:58.299Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -141,7 +141,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/extraChapter/index.html</loc>
-    <lastmod>2024-02-22T00:45:58.000Z</lastmod>
+    <lastmod>2024-03-05T02:17:41.401Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -166,7 +166,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/llamaFactory/index.html</loc>
-    <lastmod>2024-03-05T00:36:33.230Z</lastmod>
+    <lastmod>2024-03-05T00:44:25.727Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -182,6 +182,11 @@
   <url>
     <loc>https://xiaodu114.github.io/p/llm/sqlcoder/index.html</loc>
     <lastmod>2024-02-22T00:45:58.000Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/p/llm/typeChat/index.html</loc>
+    <lastmod>2024-03-11T01:35:29.098Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
