@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>TypeChat - xiaodu114.github.io</title>
+        <meta name="keywords" content="TypeChat,大语言模型,LLM,ChatGLM3-6B,FastChat,openai,OPENAI_API,OPENAI_API_KEY" />
+        <meta name="description" content="TypeChat is a library that makes it easy to build natural language interfaces using types." />
+
+        <script src="/p/_/js/main.js"></script>
+        <script src="../_common/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/llm/typeChat/index.html -->
+        <div class="blog-page">
+            <h1>TypeChat</h1>
+            <p>GitHub官网介绍：TypeChat is a library that makes it easy to build natural language interfaces using types.</p>
+            <p>GitHub官网：<a href="https://github.com/microsoft/Typechat" target="_blank">GitHub - microsoft/TypeChat: TypeChat is a library that makes it easy to build natural language interfaces using types.</a></p>
+            <h2>写在前面</h2>
+            <p>先聊点其他的吧。我们之前确实有类似的需求：从一段文字中抽取特定字段（属性）的信息，组成一个JSON对象。举个例子吧：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="txt">
+从下方&lt;content>内的文本中提取出以下信息： 姓名,性别,年龄,地址 。
+结果输出JSON结构，无法提取的内容，使用null来表示。
+&lt;content>
+大家好，我是来自河北省唐山市的张三，大家都能看出来是吧，我是个男的，今年18岁了，非常喜欢听音乐，爱打乒乓球、羽毛球等，谢谢大家
+&lt;/content>
+            </pre>
+            <p>上面的内容是我们弄的提示词，也修改过好几版，这里就不一一列举了。我们希望得到的回答如下（至少得包含）：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="json">
+{
+    "name": "张三",
+    "gender": "男",
+    "age": 18,
+    "address": "河北省唐山市"
+}
+//  或者
+{
+    "姓名": "张三",
+    "性别": "男",
+    "年龄": 18,
+    "地址": "河北省唐山市"
+}
+            </pre>
+            <p>
+                <img src="./image/1.png" alt="FastChat + ChatGLM3-6B 的返回结果" />
+            </p>
+            <p>针对这里的测试，<line-code>ChatGLM3-6B</line-code>的回答还可以，除了地址没有找出来（也可能是描述的问题）。不过这仅仅是简单的例子，实际内容要复杂的多，测试了<line-code>ChatGLM3-2B</line-code>、<line-code>ChatGLM3-6B</line-code>、<line-code>Baichuan2-7B-Chat</line-code>、<line-code>Qwen-7B-Chat</line-code>这些模型，提示词模板也换了不少，效果不是很理想，回答不是很稳定，直到后来用了<line-code>Qwen-72B-Chat</line-code>才稳定一点。</p>
+            <h2>OPENAI_API</h2>
+            <p><line-code>TypeChat</line-code>在这里正式开始，首先上场的是API。</p>
+            <p><line-code>OPENAI_API_KEY</line-code>咱是没有啊！这里采用<line-code>FastChat</line-code>+<line-code>ChatGLM3-6B</line-code>来兼容<line-code>OPENAI_API</line-code>，具体怎么操作你可以查看：<a href="/p/llm/fastChat/index.html" target="_blank">FastChat - xiaodu114.github.io</a></p>
+            <h2>如何使用</h2>
+            <p>有两种使用方式：一是 GitHub 下载源码，自己编译；二是作为类库，直接使用<line-code>npm</line-code>安装</p>
+            <h3>源码方式</h3>
+            <h4>下载并编译</h4>
+            <p>下载源码有个好处就是其中包含了几个示例，这里项目的位置如下：</p>
+            <p>
+                <img src="./image/2.png" alt="TypeChat 项目目录" />
+            </p>
+            <p>
+                <img src="./image/3.png" alt="TypeChat 项目编译之前" />
+            </p>
+            <p>在项目的<line-code>typescript</line-code>目录打开终端，并执行<line-code>npm install</line-code>命令，没想到示例项目也直接编译了</p>
+            <p>
+                <img src="./image/4.png" alt="TypeChat 项目编译之后" />
+            </p>
+            <h4>创建 .env文件</h4>
+            <p>这里配置<line-code>OPENAI</line-code>相关的一些环境变量，内容如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="txt">
+OPENAI_MODEL=chatglm3-6b
+OPENAI_API_KEY=null
+OPENAI_ENDPOINT=http://IP:Port/v1/chat/completions
+            </pre>
+            <h4>运行示例项目 coffeeShop</h4>
+            <p>将上面的<line-code>.env</line-code>文件拷贝到<line-code>typescript\examples\coffeeShop</line-code>下，并在此处处打开终端，你可以尝试下面的命令：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="txt">
+#   这里需要你手动输入“提示词”
+node ./dist/main.js
+
+#   这里会遍历 input.txt 文件中的问题
+node ./dist/main.js ./dist/input.txt
+            </pre>
+            <p>
+                <img src="./image/5.png" alt="TypeChat 项目编译之后，node ./dist/main.js ./dist/input.txt 输出结果" />
+            </p>
+            <p>注意：这里开始测试的时候会提示一些JSON的问题，所以打印了一下API的返回结果。</p>
+            <h3>类库方式</h3>
+            <p>在自己写示例之前，看了一下上面示例项目 coffeeShop 的源码，大概了解了一下实现过程，如下：</p>
+            <p>
+                <img src="./image/6.png" alt="TypeChat 项目中 coffeeShop 示例项目" />
+            </p>
+            <p>这种方式使用起来就比较熟悉了，创建一个前端项目，直接<line-code>npm install typechat</line-code>就行了。示例代码如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+import { createJsonTranslator, createLanguageModel } from "typechat";
+
+const model = createLanguageModel({
+    OPENAI_MODEL: "chatglm3-6b",
+    OPENAI_API_KEY: "null",
+    OPENAI_ENDPOINT: "http://IP地址:端口/v1/chat/completions"
+});
+
+const translator = createJsonTranslator(
+    model,
+    `
+    interface Student {
+        姓名: string | null;
+        性别: string | null;
+        年龄: number | null;
+        地址: string | null;
+    }
+    `,
+    "Student"
+);
+let prompt = translator.createRequestPrompt("大家好，我是来自河北省唐山市的张三，大家都能看出来是吧，我是个男的，今年18岁了，非常喜欢听音乐，爱打乒乓球、羽毛球等，谢谢大家");
+console.log("--------------------------------------------------------- 提示词：");
+console.log(prompt);
+const response = await model.complete(prompt);
+console.log("--------------------------------------------------------- 返回结果：");
+console.log(response);
+            </pre>
+            <p>
+                <img src="./image/7.png" alt="TypeChat 测试项目，输出结果截图" />
+            </p>
+            <p>感觉这里最重要的就是<line-code>translator.createRequestPrompt</line-code>这个方法了，或者换个说法：我们想要的。这里也找了一下他是如何组装<line-code>prompt</line-code>的，如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  下方的代码位置：typescript\src\typechat.ts
+function createRequestPrompt(request: string) {
+    return `You are a service that translates user requests into JSON objects of type "${validator.getTypeName()}" according to the following TypeScript definitions:\n` +
+    `\`\`\`\n${validator.getSchemaText()}\`\`\`\n` + 
+    `The following is a user request:\n` + 
+    `"""\n${request}\n"""\n` + 
+`The following is the user request translated into a JSON object with 2 spaces of indentation and no properties with the value undefined:\n`;
+}
+            </pre>
+            <p>后面在慢慢看看项目的其他内容</p>
+        </div>
+    </body>
+</html>
