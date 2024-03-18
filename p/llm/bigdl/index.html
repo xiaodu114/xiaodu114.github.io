@@ -51,13 +51,23 @@ history_chat_questions = ["你好", "中国的首都是", "他的面积是多少
             </pre>
             <h3>虚拟环境</h3>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+#   创建、激活虚拟环境
 python -m venv venv
 .\venv\scripts\activate
+
+#   【linux】创建、激活虚拟环境
+python3 -m venv venv
+source ./venv/bin/activate
 
 #   退出虚拟环境
 deactivate
 
 pip install --pre --upgrade bigdl-llm[all]
+
+#   【linux】安装CPU版本的 torch
+#   说明：如果需要 linux 下 CPU 版本的 torch ，请先安装 torch 之后再安装 bigdl-llm
+#       ！！！测试发现先安装 bigdl-llm 之后再安装 CPU 版本的 torch 没有成功
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
             </pre>
             <mark-block explain="说明">
                 <p>bigdl-llm[all] 包依赖 transformers ， 安装时会自动将其带上</p>
@@ -111,6 +121,11 @@ print(str(messages))
             <p>
                 <img src="./image/1.png" alt="bigdl-llm 之 Baichuan2-7B-Chat 模型，历史对话测试" />
             </p>
+            <mark-block type="warning">
+                <p>执行时会有如下的警告</p>
+                <p>WARNING - Xformers is not installed correctly. If you want to use memory_efficient_attention to accelerate training use the following command to install Xformers</p>
+                <p>pip install xformers.</p>
+            </mark-block>
             <h3>chatglm2-6b</h3>
             <details>
                 <summary>点击查看代码</summary>
@@ -418,7 +433,7 @@ AttributeError: 'LlamaTokenizerFast' object has no attribute 'apply_chat_templat
                     </dl>
                 </mark-block>
             </details>
-            <p>下面看一下运行正常的截图：</p>
+            <p>在<line-code>transformers==4.35.0</line-code>这个版本下历史对话没有问题，也能解决<line-code>apply_chat_template</line-code>的问题，如下图：</p>
             <p>
                 <img src="./image/6.png" alt="bigdl-llm 之 Yi-6B-Chat 模型，历史对话测试" />
             </p>
@@ -658,16 +673,15 @@ print(str(messages3))
             <p>
                 <img src="./image/11.png" alt="bigdl-llm 之 Yi-6B-Chat 模型，已有知识问答测试" />
             </p>
-            <p>这里出现了点问题，先问一下：“你知道 xiaodu114 吗？（这个问题没有包含已知信息），后面的问题是：“介绍一下 xiaodu114”（这个问题是包含已知信息的）。截图中你可以看到，最后一个问题应该是受到上一个问题的影响，没有根据已知信息回答。再看一下没有干扰问题的情况，如下：</p>
+            <p>这里出现了点问题，先问一下：“你知道 xiaodu114 吗？（这个问题没有包含已知信息），后面的问题是：“介绍一下 xiaodu114”（这个问题是包含已知信息的）。截图中你可以看到，没有根据已知信息回答，猜测可能是受到上一个问题的影响。再看一下没有干扰问题的情况，如下：</p>
             <p>
                 <img src="./image/12.png" alt="bigdl-llm 之 Yi-6B-Chat 模型，已有知识问答测试" />
             </p>
-            <mark-block type="warning">
-                <p>“你知道 xiaodu114 吗？”、“介绍一下 xiaodu114”（包含已知信息），连续对话时有的大模型会受到历史对话的影响。如果问的是同一个问题：“你知道 xiaodu114 吗？”只是后面一个包含已知信息，这种情况下更容易受到影响，如下：</p>
-                <p>
-                    <img src="./image/13.png" alt="bigdl-llm 之 chatglm2-6b 模型，已有知识问答测试" />
-                </p>
-            </mark-block>
+            <h3>小结</h3>
+            <p>“你知道 xiaodu114 吗？”、“介绍一下 xiaodu114”（包含已知信息），连续对话时有的大模型会受到历史对话的影响。如果问的是同一个问题：“你知道 xiaodu114 吗？”只是后面一个包含已知信息，这种情况下更容易受到影响，都不太稳定，如下：</p>
+            <p>
+                <img src="./image/13.png" alt="bigdl-llm 之 chatglm2-6b 模型，已有知识问答测试" />
+            </p>
         </div>
     </body>
 </html>
