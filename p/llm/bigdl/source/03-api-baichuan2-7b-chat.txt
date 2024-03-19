@@ -1,0 +1,82 @@
+import sys
+sys.path.append(".")
+
+from typing import List,Dict, Any
+import json
+from transformers import AutoTokenizer
+from bigdl.llm.transformers import AutoModelForCausalLM
+import uvicorn
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from sse_starlette.sse import EventSourceResponse
+
+from config.model import model_path_dict
+from models.openai import ChatMessage, ChatCompletionRequest
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+async def chat_stream(messages:List[ChatMessage], generation_config: Dict[str, Any] = {}):
+    messages2 = []
+    for item in messages:
+        messages2.append({ "role": item.role,"content":item.content})
+    current_length = 0
+    for response in model.chat(tokenizer, messages2, stream=True):
+        if len(response) == current_length:
+            continue
+        new_text = response[current_length:]
+        current_length = len(response)
+        yield json.dumps({"text":str(new_text)},ensure_ascii=False)
+    #   算了 这个先不要了
+    #   yield "[DONE]"
+
+def chat(messages:List[ChatMessage], generation_config: Dict[str, Any] = {}):
+    prompt = ""
+    for message in messages:
+        match message.role:
+            case "user":
+                prompt += "<reserved_106>" + message.content + "\n"
+            case "assistant":
+                prompt += "<reserved_107>" + message.content + "\n"
+    prompt += "<reserved_107>"    
+    input_ids = tokenizer.encode(prompt, return_tensors="pt")  
+
+    default_config = {
+        "do_sample":True,
+        "max_new_tokens":2048,
+        "top_p":0.8,
+        "temperature":0.8
+    } 
+    if(generation_config is not None):
+        default_config.update(generation_config)
+    #   transformers\generation\utils.py
+    output_ids = model.generate(input_ids, **default_config)
+    response = tokenizer.decode(output_ids[0][input_ids.shape[1]:], skip_special_tokens=True)
+    return response
+
+@app.post("/chat")
+async def create_chat_completion(request: ChatCompletionRequest):
+    if (len(request.messages) == 0) :
+        raise HTTPException(status_code=400, detail="messages长度不能为0")
+    if (request.messages[-1].role != "user"):
+        raise HTTPException(status_code=400, detail="messages最后一项的role必须为user")
+    
+    if (request.stream):
+        generate = chat_stream(request.messages, request.generation_config)
+        return EventSourceResponse(generate, media_type="text/event-stream")
+    else:
+        return chat(request.messages, request.generation_config) 
+
+if __name__ == '__main__':
+    model_path = model_path_dict["baichuan"]["2-7B-Chat"]
+    global model, tokenizer
+    tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+    model = AutoModelForCausalLM.from_pretrained(model_path, load_in_4bit=True, trust_remote_code=True, use_cache=True)
+    uvicorn.run(app, host='IP地址', port=6666, workers=1)

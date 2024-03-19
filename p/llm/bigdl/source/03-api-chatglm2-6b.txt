@@ -1,0 +1,73 @@
+import sys
+sys.path.append(".")
+
+from typing import Dict, Any
+import json
+import traceback
+from transformers import AutoTokenizer
+from bigdl.llm.transformers import AutoModel
+import uvicorn
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from sse_starlette.sse import EventSourceResponse
+
+from config.model import model_path_dict
+from models.openai import ChatCompletionRequest
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+async def chat_stream(prompt,history, generation_config: Dict[str, Any] = {}):
+    try:
+        current_length = 0
+        for response, history in model.stream_chat(tokenizer,
+                                                   prompt, 
+                                                   history=history,
+                                                   max_length=4096,
+                                                   top_p=0.7,
+                                                   temperature=0.95):
+            if len(response) == current_length:
+                continue
+            new_text = response[current_length:]
+            current_length = len(response)
+            yield json.dumps({"text":str(new_text)},ensure_ascii=False)
+    except Exception as ex:
+        yield ex.args +"\n" + traceback.format_exc()
+        return
+
+@app.post("/chat")
+async def create_chat_completion(request: ChatCompletionRequest):
+    if (len(request.messages) == 0) :
+        raise HTTPException(status_code=400, detail="messages长度不能为0")
+    if (request.messages[-1].role != "user"):
+        raise HTTPException(status_code=400, detail="messages最后一项的role必须为user")
+    
+    prompt = request.messages[-1].content
+    history_messages = request.messages[:-1]
+    history = []
+    if len(history_messages) % 2 == 0:
+        for i in range(0, len(history_messages), 2):
+            if history_messages[i].role == "user" and history_messages[i+1].role == "assistant":
+                history.append((history_messages[i].content, history_messages[i+1].content))
+
+    if (request.stream):
+        answer_text = chat_stream(prompt, history, request.generation_config)
+        return EventSourceResponse(answer_text, media_type="text/event-stream")
+    else:
+        response, history = model.chat(tokenizer, prompt, history=history)
+        return response
+
+
+if __name__ == '__main__':
+    model_path = model_path_dict["THUDM"]["2-6b"]
+    global model, tokenizer
+    tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+    model = AutoModel.from_pretrained(model_path, load_in_4bit=True, trust_remote_code=True)
+    uvicorn.run(app, host='IP地址', port=6666, workers=1)
