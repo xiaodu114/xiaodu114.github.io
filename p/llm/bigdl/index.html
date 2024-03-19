@@ -682,6 +682,58 @@ print(str(messages3))
             <p>
                 <img src="./image/13.png" alt="bigdl-llm 之 chatglm2-6b 模型，已有知识问答测试" />
             </p>
+            <h2>API</h2>
+            <p>前面“历史对话”和“知识问答”的测试都是为了这里的API，将他们装进API来方便使用。</p>
+            <h3>Javascript 前端</h3>
+            <p>API提供之后怎么调用？为了测试一下这些API，写了一个简单的测试页面</p>
+            <details>
+                <summary>点击查看代码</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/03-api-index.html" ddz-lang="html"></div>
+            </details>
+            <h3>项目调整</h3>
+            <p>为了提供API，还要安装<line-code>pip install fastapi sse-starlette uvicorn</line-code>这几个库。</p>
+            <p>项目更目录下新增<line-code>models</line-code>目录，放置一些实体类。初次新增<line-code>openai.py</line-code>，代码如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+from typing import Literal, Optional, List, Dict, Any
+from pydantic import BaseModel
+
+class ChatMessage(BaseModel):
+    role: Literal["user", "assistant", "system"]
+    content: str
+
+class ChatCompletionRequest(BaseModel):
+    messages: List[ChatMessage]
+    stream: Optional[bool] = False
+    generation_config: Dict[str, Any] = {}
+            </pre>
+            <h3>Baichuan2-7B-Chat</h3>
+            <details>
+                <summary>点击查看代码</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/03-api-baichuan2-7b-chat.txt" ddz-lang="python"></div>
+            </details>
+            <h3>chatglm2-6b</h3>
+            <details>
+                <summary>点击查看代码</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/03-api-chatglm2-6b.txt" ddz-lang="python"></div>
+            </details>
+            <h3>chatglm3-6b</h3>
+            <details>
+                <summary>点击查看代码</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/03-api-chatglm3-6b.txt" ddz-lang="python"></div>
+            </details>
+            <h3>Qwen-7B-Chat</h3>
+            <details>
+                <summary>点击查看代码</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/03-api-qwen-7b-chat.txt" ddz-lang="python"></div>
+            </details>
+            <h3>Yi-6B-Chat</h3>
+            <details>
+                <summary>点击查看代码</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/03-api-yi-6b-chat.txt" ddz-lang="python"></div>
+            </details>
+            <p>还是<line-code>Yi</line-code>最麻烦，相对于其他几个。上面的代码参考<line-code>Yi</line-code>GitHub项目中的<line-code>demo\web_demo.py</line-code></p>
+            <h3>小结</h3>
+            <p>上面的几个都同时支持流式响应和非流式响应并且均以测试通过，后面有机会在逐步完善。</p>
         </div>
     </body>
 </html>
