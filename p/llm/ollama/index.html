@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>Ollama - xiaodu114.github.io</title>
-        <meta name="keywords" content="Ollama,LLM,大语言模型,deepseek,deepseek-coder,Visual Studio Code,Privy" />
+        <meta name="keywords" content="Ollama,LLM,大语言模型,deepseek,deepseek-coder,Visual Studio Code,Privy,Code GPT: Chat & AI Agents,Continue - Claude, CodeLlama, GPT-4, and more" />
         <meta name="description" content="体验一下Ollama" />
 
         <script src="/p/_/js/main.js"></script>
@@ -77,6 +77,13 @@ OLLAMA_HOST=192.168.x.x ollama serve
             <p>
                 <img src="./image/5.png" alt="第一次启动服务： ollama serve" />
             </p>
+            <mark-block>
+                <dl>
+                    <dt><strong>2024-03-21</strong></dt>
+                    <dd>&nbsp;</dd>
+                    <dd style="line-height: 1.8">再次回味时（要测试 Continue - Claude, CodeLlama, GPT-4, and more 插件），首先启动了<line-code>OLLAMA_HOST=192.168.x.x ollama serve</line-code>，之后运行一个模型<line-code>ollama run deepseek-coder:6.7b</line-code>，没想到提示服务没启动……后来换成<line-code>ollama serve</line-code>就好了，也就是<line-code>ollama run</line-code>只能<line-code>127.0.0.1</line-code>，他只是进入命令行交互模式，也就是说<strong>在已经拉取了某个模型之后，移动服务没有必要执行这个命令</strong></dd>
+                </dl>
+            </mark-block>
             <h3>拉取模型</h3>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 #   拉取一个模型
@@ -171,6 +178,19 @@ http {
             <p>配置好之后，选择 Provider 时就可以选择 Ollama 了，测试如下图：</p>
             <p>
                 <img src="./image/12.png" alt="Code GPT: Chat & AI Agents 插件测试" />
+            </p>
+            <h4>Continue - Claude, CodeLlama, GPT-4, and more</h4>
+            <p>插件地址：<a href="https://marketplace.visualstudio.com/items?itemName=Continue.continue" target="_blank">Continue - Claude, CodeLlama, GPT-4, and more - Visual Studio Marketplace</a></p>
+            <p>GitHub官网：<a href="https://github.com/continuedev/continue" target="_blank">GitHub - continuedev/continue: ⏩ The easiest way to code with any LLM—Continue is an open-source autopilot for VS Code and JetBrains</a></p>
+            <p>先占位置，知道有这么个插件，先简单的说一下该插件怎么使用</p>
+            <h5>如何配置</h5>
+            <p>按照下图中的步骤操作即可</p>
+            <p>
+                <img src="./image/13.png" alt="Continue - Claude, CodeLlama, GPT-4, and more 插件配置过程" />
+            </p>
+            <h5>对话测试</h5>
+            <p>
+                <img src="./image/14.png" alt="Continue - Claude, CodeLlama, GPT-4, and more 插件对话测试" />
             </p>
         </div>
     </body>
