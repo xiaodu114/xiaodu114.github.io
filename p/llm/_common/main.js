@@ -73,6 +73,9 @@ customElements.define(
                         <li>
                             <a href="/p/llm/typeChat/index.html" target="_blank">TypeChat</a>
                         </li>
+                        <li>
+                            <a href="/p/llm/faiss/index.html" target="_blank">Faiss</a>
+                        </li>
                     </ol>
                 </div>
             </details>
