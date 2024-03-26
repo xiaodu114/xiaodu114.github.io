@@ -192,7 +192,7 @@ function generateSitemapXML(treeNodes, options) {
 }
 
 const root_p = path.join(__dirname, "p");
-const excludePaths_p = ["/p/_", "/p/0", "/p/web/js/a2bei4", "/p/web/problem/crossDomain/cookie1.html", "/p/web/problem/crossDomain/documentDomain1.html", "/p/web/problem/crossDomain/locationHash0.html", "/p/web/problem/crossDomain/locationHash1.html", "/p/web/problem/crossDomain/postMessage1.html", "/p/web/problem/crossDomain/windowName0.html", "/p/web/problem/crossDomain/windowName1.html", "/p/web/problem/sameOrigin/index-vue.html", "/p/web/vue3/0introduction/code"];
+const excludePaths_p = ["/p/_", "/p/0", "/p/web/js/a2bei4", "/p/web/problem/crossDomain/cookie1.html", "/p/web/problem/crossDomain/documentDomain1.html", "/p/web/problem/crossDomain/locationHash0.html", "/p/web/problem/crossDomain/locationHash1.html", "/p/web/problem/crossDomain/postMessage1.html", "/p/web/problem/crossDomain/windowName0.html", "/p/web/problem/crossDomain/windowName1.html", "/p/web/problem/sameOrigin/index-vue.html", "/p/web/vue3/0introduction/code", "/p/llm/bigdl/source"];
 const root_demo = path.join(__dirname, "demo");
 const excludePaths_demo = ["/demo/angular1/angularjs-music", "/demo/angular1/angularjs-music-table/tabletr.html", "/demo/angular1/angularjs-music-table/translate3d.html", "/demo/angular1/angularjs-music-table", "/demo/angular1/angularjs-table/tpl", "/demo/js/Drag-and-Drop", "/demo/js/VideojsPlayer/index-unpkg.html", "/demo/js/VideojsPlayer/index-iframe.html", "/demo/vue2", "/demo/webpack"];
 //  获取需要添加主页的页面：博客目录
