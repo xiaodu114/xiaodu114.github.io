@@ -221,6 +221,21 @@ python -m venv venv2
             <p>官网介绍：PyTorch is an optimized tensor library for deep learning using GPUs and CPUs.</p>
             <p>安装最新版本：<a href="https://pytorch.org/get-started/locally/" target="_blank">Start Locally | PyTorch</a></p>
             <p>安装以前版本：<a href="https://pytorch.org/get-started/previous-versions/" target="_blank">Previous PyTorch Versions | PyTorch</a></p>
+            <h5>安装</h5>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   Windows 下安装 GPU 版本的 torch（说明：因为设置镜像的原因，参照上面的官网安装还是很慢甚至超时）
+pip install torch==2.2.1+cu121 torchvision==0.17.1+cu121 torchaudio==2.2.1+cu121 -f https://download.pytorch.org/whl/torch_stable.html
+
+#   Windows 下安装 CPU 版本的 torch
+pip install torch torchvision torchaudio
+
+#   Linux 下安装 GPU 版本的 torch
+pip3 install torch torchvision torchaudio
+
+#   Linux 下安装 CPU 版本的 torch
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+            </pre>
+            <h5>检测 torch</h5>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 #	命令行输入 python 进入 python 交互模式
 python 
