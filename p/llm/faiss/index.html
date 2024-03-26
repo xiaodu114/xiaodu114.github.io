@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>faiss - xiaodu114.github.io</title>
+        <meta name="keywords" content="faiss,相似性搜索,langchain,similarity_search,Langchain-Chatchat,查特查特,,,,,,,,,,,,,," />
+        <meta name="description" content="记录一下体验 faiss 的方式以及过程。基于 langchain 体验；不基于 langchain ，直接上手" />
+
+        <script src="/p/_/js/main.js"></script>
+        <script src="../_common/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/llm/faiss/index.html -->
+        <div class="blog-page">
+            <h1>Faiss</h1>
+            <p>简单记录一下对<line-code>faiss</line-code>的体验。这里使用两种方式体验：基于 langchain、不基于 langchain</p>
+            <p>GitHub官网：<a href="https://github.com/facebookresearch/faiss" target="_blank">GitHub - facebookresearch/faiss: A library for efficient similarity search and clustering of dense vectors.</a></p>
+            <p>官网：<a href="https://faiss.ai/" target="_blank">Welcome to Faiss Documentation — Faiss documentation</a></p>
+            <h2>参考 Langchain-Chatchat</h2>
+            <p>怎么知道的<line-code>faiss</line-code>呢！源于<a href="/p/llm/langchainChatchat/index.html" target="_blank">Langchain-Chatchat</a>这个项目，查看他是怎样实现基于知识库的问答的，下面的代码主要摘自或者参考该项目。</p>
+            <p>当时使用的<line-code>Langchain-Chatchat</line-code>版本为：v0.2.5 、 v0.2.6</p>
+            <h3>知识库问答逻辑</h3>
+            <p><line-code>Langchain-Chatchat</line-code>中知识库问答的调用逻辑大体如下：</p>
+            <ol style="line-height: 2">
+                <li><line-code>server\api.py > api: /chat/knowledge_base_chat</line-code> -></li>
+                <li><line-code>server\chat\knowledge_base_chat.py > def knowledge_base_chat</line-code> -></li>
+                <li><line-code>server\knowledge_base\kb_doc_api.py > def search_docs</line-code> -></li>
+                <li><line-code>server\knowledge_base\kb_service\base.py > def search_docs</line-code>（调用各个向量库对应的实现）-></li>
+                <li><line-code>server\knowledge_base\kb_service\faiss_kb_service.py > def do_search</line-code></li>
+            </ol>
+            <p>在最后一步中你会看到<line-code>vs.similarity_search_with_score(query, k=top_k, score_threshold=score_threshold)</line-code>，这就是<line-code>Langchain</line-code>封装<line-code>Faiss</line-code>暴露的查询方法了；至于他是怎么得到的 vs （也就是 FAISS），文件路径为<line-code>server\knowledge_base\kb_cache\faiss_cache.py</line-code>，过程如下图：</p>
+            <p>
+                <img src="./image/1.png" alt="Langchain-Chatchat 项目中 load_vector_store" />
+            </p>
+            <p>这里参考的是上图中的这条路线：本地如果没有，则新建一个；如果存在，则读取本地的。上图中如何读取本地的已经很明确，至于如果新创建一个还要看下图：</p>
+            <p>
+                <img src="./image/2.png" alt="Langchain-Chatchat 项目中，本地没有，新建一个 vector_store" />
+            </p>
+            <h3>知识库新建和添加文档逻辑</h3>
+            <p>上面的章节简单介绍了一下根据知识库问答的逻辑，那么知识库是怎么创建的，上传的文档又是怎么添加到知识库的？这个章节将介绍一下。</p>
+            <p><line-code>Langchain-Chatchat</line-code>中创建知识库的调用逻辑大体如下：</p>
+            <ol style="line-height: 2">
+                <li><line-code>server\api.py > api: /knowledge_base/create_knowledge_base</line-code> -></li>
+                <li><line-code>server\knowledge_base\kb_api.py > def create_kb</line-code> -></li>
+                <li><line-code>server\knowledge_base\kb_service\base.py > def create_kb</line-code>（调用各个向量库对应的实现）-></li>
+                <li><line-code>server\knowledge_base\kb_service\faiss_kb_service.py > def do_create_kb > def load_vector_store</line-code> -></li>
+                <li><line-code>server\knowledge_base\kb_cache\faiss_cache.py > class KBFaissPool > def load_vector_store</line-code></li>
+            </ol>
+            <p>这里的最后一步又回到了第一张图中的获取<line-code>vector_store</line-code>。</p>
+            <p><line-code>Langchain-Chatchat</line-code>中上传文档并添加到向量库的调用逻辑大体如下：</p>
+            <ol style="line-height: 2">
+                <li><line-code>server\api.py > api: /knowledge_base/upload_docs</line-code> -></li>
+                <li><line-code>server\knowledge_base\kb_doc_api.py > def upload_docs > def update_docs</line-code> -></li>
+                <li><line-code>server\knowledge_base\kb_service\base.py > def update_doc</line-code> -></li>
+                <li>
+                    <line-code>server\knowledge_base\kb_service\base.py > def add_doc</line-code>（调用各个向量库对应的实现）->
+                    <p style="margin-left: calc(40px - 1rem)">方法中在保存到向量库之前还需要拆分文档，如下：</p>
+                    <ol>
+                        <li><line-code>docs = kb_file.file2text()</line-code>（位于 add_doc 方法中）-></li>
+                        <li>
+                            <line-code>server\knowledge_base\utils.py > def file2text</line-code>
+                            <ol>
+                                <li><line-code>docs = self.file2docs()</line-code>（文档对应的Loader读取文档）</li>
+                                <li><line-code>self.splited_docs = self.docs2texts()</line-code>（拆分）</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    <line-code>server\knowledge_base\kb_service\faiss_kb_service.py > def do_add_doc</line-code>
+                    <ol>
+                        <li><line-code>ids = vs.add_documents(docs)</line-code></li>
+                        <li><line-code>vs.save_local(self.vs_path)</line-code></li>
+                    </ol>
+                </li>
+            </ol>
+            <p>过程就这样吧！是不是过几天再看就直接😵😵😵</p>
+            <h3>自己练练</h3>
+            <details>
+                <summary>点击查看知识库中的文档</summary>
+                <ul>
+                    <li>
+                        <a href="./source/xiaodu114-1.json" target="_blank">xiaodu114 介绍一</a>
+                    </li>
+                    <li>
+                        <a href="./source/xiaodu114-2.json" target="_blank">xiaodu114 介绍二</a>
+                    </li>
+                    <li>
+                        <a href="./source/xiaodu114-3.json" target="_blank">xiaodu114 介绍三</a>
+                    </li>
+                    <li>
+                        <a href="./source/wujing.json" target="_blank">吴京（摘自百度百科）</a>
+                    </li>
+                    <li>
+                        <a href="./source/guanyu.json" target="_blank">关羽（摘自百度百科）</a>
+                    </li>
+                </ul>
+                <p><strong>说明：</strong>开始使用的txt文档格式、UTF-8 编码，浏览器打开时乱码，所以改成了 json</p>
+            </details>
+            <h4>第一版</h4>
+            <p><line-code>Langchain-Chatchat</line-code>，在自己动手之前先膜拜一下。代码如下：</p>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/1.txt" ddz-lang="python"></div>
+            <p>上面代码想要运行起来还需要安装这些依赖（2024-03-25）： <line-code>pip install langchain-community langchain_text_splitters faiss-cpu sentence-transformers chardet</line-code>。最初的时候还没有<line-code>langchain-community、langchain-core</line-code>等，只有<line-code>langchain</line-code>。安装后依赖之后就可以执行了，运行结果如下：</p>
+            <p>
+                <img src="./image/3.png" alt="参考 Langchain-Chatchat 项目，相似度搜索结果" />
+            </p>
+            <mark-block>
+                <p>不同格式的文档对应不同的<line-code>loader</line-code>，到底有哪些，你可以查看<line-code>langchain_community\document_loaders\__init__.py</line-code></p>
+                <p>方法 getSplitDocs 的返回值格式：<line-code>[Document(page_content='文档拆分之后的块内容', metadata={'source': 'D:/llm/0-my/xiaodu114-1.txt', 'start_index': 0})]</line-code></p>
+                <p>vector_store.similarity_search_with_score 参数介绍，k : 返回的文档个数；score_threshold : 阈值。返回值得分：分数越小，相似度越高。这里将阈值控制在了0.5，搜索“你知道 xiaodu114 吗”时，如果不控制，那么吴京和关羽的内容也会返回回来</p>
+            </mark-block>
+            <h4>指定文档搜索</h4>
+            <p>对于本地知识库，我们应该会有N多文档，那么如果我们只想根据其中的一个或者几个文档搜索，该如何处理？查看<line-code>similarity_search_with_score</line-code>方法的源码，发现有<line-code>filter</line-code>参数，支持传入方法或者字典</p>
+            <h5>指定一个文档</h5>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+#   下面是新增加的代码
+similar_docs_2 = vector_store.similarity_search_with_score(query, k=10, score_threshold = 0.5,
+                                                filter = {"source": 'D:/llm/0-my/xiaodu114-1.txt'})
+print("相似度查询之指定一个文档搜索结束。结果如下：\n"+str(similar_docs_2))
+            </pre>
+            <p>
+                <img src="./image/4.png" alt="参考 Langchain 项目，相似度查询之指定一个文档搜索" />
+            </p>
+            <h5>指定多个文档</h5>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+#   下面是新增加的代码
+def filter1(metadata):
+    if metadata["source"] in ["D:/llm/0-my/xiaodu114-3.txt","D:/llm/0-my/xiaodu114-2.txt"]: return True
+similar_docs3 = vector_store.similarity_search_with_score(query, k=10, score_threshold = 0.5,filter=filter1)
+print("相似度查询之指定多个文档搜索结束。结果如下：\n"+str(similar_docs3))
+            </pre>
+            <p>
+                <img src="./image/5.png" alt="参考 Langchain 项目，相似度查询之指定多个文档搜索" />
+            </p>
+            <h5>小结</h5>
+            <p>从查看<line-code>langchain</line-code>的源码发现<line-code>FAISS</line-code>应该并不支持指定文档查询（或者说传入filter），是搜索到结果之后再次过滤来实现的，如下图：</p>
+            <p>
+                <img src="./image/6.png" alt="Langchain 项目，相似度查询实现" />
+            </p>
+            <h4>批量搜索</h4>
+            <p><line-code>langchain</line-code>封装的<line-code>FAISS</line-code>的查询接口是单个的，是不是我没有找到批量的？网上查了一下，<line-code>FAISS</line-code>是支持批量查询的。这里首先在<line-code>langchain</line-code>基础上扩展方法，来支持批量查询。新建一个<line-code>langchain_faiss_extend.py</line-code>的文件，代码如下：</p>
+            <details>
+                <summary>点击查看代码</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/2.txt" ddz-lang="python"></div>
+            </details>
+            <p>下面看一下如何使用</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+#   引入本地依赖使用，这里指的是 langchain_faiss_extend.py
+import sys
+sys.path.append(".")
+
+#   删掉上面示例代码中的这个
+from langchain_community.vectorstores.faiss import FAISS
+#   使用引入已经添加批量搜索的 FAISS
+from langchain_faiss_extend import FAISS
+
+#   调用批量查询
+query1 = "介绍一下 吴京"
+query2 = "你知道 xiaodu114 吗"
+similar_docs = vector_store.batch_similarity_search_with_score([query1, query2], k=10, score_threshold = 0.5)
+print("【批量】相似度查询结束。结果如下：\n"+str(similar_docs))
+            </pre>
+            <p>下面在看一下测试截图：</p>
+            <p>
+                <img src="./image/7.png" alt="Langchain 项目添加扩展方法，相似度查询批量实现" />
+            </p>
+            <h2>另起炉灶</h2>
+            <p>这里不再依赖<line-code>langchain</line-code>，开始单干了，当然该参考的时候还得参考啊。</p>
+            <h3>第一版</h3>
+            <p>第一次脱离<line-code>langchain</line-code>的怀抱，尚有些羞涩……后面在慢慢完善。</p>
+            <details>
+                <summary>点击查看代码</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/3.txt" ddz-lang="python"></div>
+            </details>
+            <p>
+                <img src="./image/8.png" alt="不依赖 Langchain 项目，相似度查询批量结果" />
+            </p>
+            <p>图中可以看到“xiaodu114”相关的几个文档的得分和上面使用<line-code>langchain</line-code>的得分基本相等</p>
+            <mark-block>
+                <p>上面示例代码中创建索引还可以使用<line-code>faiss.index_factory</line-code>来替代，例如：</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+#   这是上面示例代码中的代码
+index = faiss.IndexFlatL2(len(init_embedding))
+
+#   你还可以这样
+index = faiss.index_factory(len(init_embedding), 'Flat' ,faiss.METRIC_L2)
+                </pre>
+                <p>暂时还没有找到不同的索引和<line-code>faiss.index_factory</line-code>方法参数的对应关系</p>
+            </mark-block>
+        </div>
+    </body>
+</html>
