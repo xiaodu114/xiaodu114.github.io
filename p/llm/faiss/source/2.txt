@@ -1,0 +1,109 @@
+import os
+from typing import (Any,Dict,List,Optional)
+import operator
+import numpy as np
+
+from langchain_core.documents import Document
+from langchain_community.vectorstores.faiss import FAISS
+from langchain_community.vectorstores.utils import DistanceStrategy
+
+def dependable_faiss_import(no_avx2: Optional[bool] = None) -> Any:
+    """
+    Import faiss if available, otherwise raise error.
+    If FAISS_NO_AVX2 environment variable is set, it will be considered
+    to load FAISS with no AVX2 optimization.
+
+    Args:
+        no_avx2: Load FAISS strictly with no AVX2 optimization
+            so that the vectorstore is portable and compatible with other devices.
+    """
+    if no_avx2 is None and "FAISS_NO_AVX2" in os.environ:
+        no_avx2 = bool(os.getenv("FAISS_NO_AVX2"))
+
+    try:
+        if no_avx2:
+            from faiss import swigfaiss as faiss
+        else:
+            import faiss
+    except ImportError:
+        raise ImportError(
+            "Could not import faiss python package. "
+            "Please install it with `pip install faiss-gpu` (for CUDA supported GPU) "
+            "or `pip install faiss-cpu` (depending on Python version)."
+        )
+    return faiss
+
+def batch_similarity_search_with_score_by_vector(
+    self,
+    embeddings: List[List[float]],
+    k: int = 4,
+    filter: Optional[Dict[str, Any]] = None,
+    fetch_k: int = 20,
+    **kwargs: Any
+):
+    print("------------------------------------------------------调用批量查询----------------------------------------------->")
+    ret_list = []
+    faiss = dependable_faiss_import()
+    vector = np.array(embeddings, dtype=np.float32)
+    if self._normalize_L2:
+        faiss.normalize_L2(vector)
+
+    scores, indices = self.index.search(vector, k if filter is None else fetch_k)
+    for index,include in enumerate(indices):
+        docs = []
+        for j, i in enumerate(include):
+            if i == -1:
+                # This happens when not enough docs are returned.
+                continue
+            _id = self.index_to_docstore_id[i]
+            doc = self.docstore.search(_id)
+            if not isinstance(doc, Document):
+                raise ValueError(f"Could not find document for id {_id}, got {doc}")
+            if filter is not None:
+                filter = {
+                    key: [value] if not isinstance(value, list) else value
+                    for key, value in filter.items()
+                }
+                if all(doc.metadata.get(key) in value for key, value in filter.items()):
+                    docs.append((doc, scores[index][j]))
+            else:
+                docs.append((doc, scores[index][j]))
+
+        score_threshold = kwargs.get("score_threshold")
+        if score_threshold is not None:
+            cmp = (
+                operator.ge
+                if self.distance_strategy
+                in (DistanceStrategy.MAX_INNER_PRODUCT, DistanceStrategy.JACCARD)
+                else operator.le
+            )
+            docs = [
+                (doc, similarity)
+                for doc, similarity in docs
+                if cmp(similarity, score_threshold)
+            ]
+        ret_list.append(docs[:k])
+    return ret_list
+
+def batch_similarity_search_with_score(
+        self,
+        questions: List[str],
+        k: int = 4,
+        filter: Optional[Dict[str, Any]] = None,
+        fetch_k: int = 20,
+        **kwargs: Any,
+    ):
+        embeddings = []
+        for question in questions:
+            embedding = self._embed_query(question)
+            embeddings.append(embedding)
+        return self.batch_similarity_search_with_score_by_vector(
+                embeddings,
+                k,
+                filter=filter,
+                fetch_k=fetch_k,
+                **kwargs
+            )   
+
+FAISS.batch_similarity_search_with_score_by_vector = batch_similarity_search_with_score_by_vector
+FAISS.batch_similarity_search_with_score = batch_similarity_search_with_score

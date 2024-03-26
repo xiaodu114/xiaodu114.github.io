@@ -1,0 +1,56 @@
+import sys
+sys.path.append(".")
+
+from typing import List
+import os
+
+import faiss
+import numpy as np
+from sentence_transformers import SentenceTransformer
+
+embeddings_model = SentenceTransformer("D:\\llm\\moka-ai\\m3e-base", cache_folder=None, **{'device': "cpu"})
+
+def embed_documents(texts: List[str], multi_process:bool = False, encode_dict:dict = {}) -> List[List[float]]:
+    texts = list(map(lambda x: x.replace("\n", " "), texts))
+    if multi_process:
+        pool = embeddings_model.start_multi_process_pool()
+        embeddings = embeddings_model.encode_multi_process(texts, pool, **encode_dict)
+        SentenceTransformer.stop_multi_process_pool(pool)
+    else:
+        embeddings = embeddings_model.encode(texts, **encode_dict)
+    return embeddings.tolist()
+
+#   1、获取索引
+init_embedding = embed_documents(["init"])[0]
+index = faiss.IndexFlatL2(len(init_embedding)) 
+
+#   2、拆分文档（很不正规，哈哈）
+all_split_docs = []
+for file_name in ["guanyu.txt","xiaodu114-3.txt","xiaodu114-1.txt","wujing.txt","xiaodu114-2.txt"]:
+    with open(os.path.join("D:/llm/0-my/", file_name), "r", encoding="utf-8") as f:
+        content = f.read()
+        if(len(content)>250):
+            all_split_docs.extend(filter(lambda x:x.strip() != "", content.split("\n")))
+        else:
+            all_split_docs.append(content)
+
+#   3、拆分之后的块添加到索引
+vector_lib = np.array(embed_documents(all_split_docs), dtype=np.float32)
+faiss.normalize_L2(vector_lib)
+index.add(vector_lib)
+
+#   4、查询
+query_vectors = np.array(embed_documents(["介绍一下 吴京", "你知道 xiaodu114 吗"]),dtype=np.float32) 
+faiss.normalize_L2(query_vectors)
+distances, indices = index.search(query_vectors, k=3)
+
+#   5、组装查询结果
+for index, item in enumerate(indices):
+        docs = []
+        for j, i in enumerate(item):
+            if i == -1:
+                continue
+            doc = all_split_docs[i]
+            docs.append((doc, distances[index][j]))
+        print(str(docs)) 
+        print("\n")

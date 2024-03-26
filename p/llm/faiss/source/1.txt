@@ -1,0 +1,51 @@
+from typing import List
+import os
+
+from langchain_core.documents import Document
+from langchain_community.embeddings.huggingface import HuggingFaceEmbeddings
+from langchain_community.vectorstores.faiss import FAISS
+from langchain_community.document_loaders.text import TextLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+def getSplitDocs(filePath:str,chunk_size=250, chunk_overlap=50) -> List[Document]:
+    loader = TextLoader(filePath, autodetect_encoding=True)
+    docs = loader.load()
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap, add_start_index=True)
+    split_docs = text_splitter.split_documents(docs)
+    return split_docs
+
+def faiss_add_docs(vector_store, docs: List[Document]):
+    vector_store.add_documents(docs)
+
+def faiss_clear_docs(vector_store):
+    ids = list(vector_store.docstore._dict.keys())
+    if len(ids) > 0:
+        vector_store.delete(ids)
+
+def faiss_get_vector_store(local_path, embeddings):
+    if os.path.isdir(local_path) and os.path.isfile(os.path.join(local_path, "index.faiss")):
+        vector_store = FAISS.load_local(local_path, embeddings, allow_dangerous_deserialization = True, normalize_L2=True)
+    else:
+        if not os.path.exists(local_path):
+            os.makedirs(local_path)
+        vector_store = FAISS.from_documents([Document(page_content="init", metadata={})], embeddings, normalize_L2=True)
+        faiss_clear_docs(vector_store)
+        vector_store.save_local(local_path)
+    return vector_store
+
+embeddings = HuggingFaceEmbeddings(model_name="D:\\llm\\moka-ai\\m3e-base", model_kwargs={'device': "cpu"})
+
+faiss_local_folder_path = "E:/llm/local-knowledge-qa/faiss-local/first"
+vector_store = faiss_get_vector_store(faiss_local_folder_path, embeddings)
+
+#   初次执行会将向量化后的文档保存到本地，下次执行时就可以将下面的代码屏蔽掉了。暂时先这样，后面有时间优化
+vector_store.add_documents(getSplitDocs("D:/llm/0-my/xiaodu114-1.txt"))
+vector_store.add_documents(getSplitDocs("D:/llm/0-my/xiaodu114-2.txt"))
+vector_store.add_documents(getSplitDocs("D:/llm/0-my/xiaodu114-3.txt"))
+vector_store.add_documents(getSplitDocs("D:/llm/0-my/wujing.txt"))
+vector_store.add_documents(getSplitDocs("D:/llm/0-my/guanyu.txt"))
+vector_store.save_local(faiss_local_folder_path)
+
+query = "你知道 xiaodu114 吗"
+similar_docs = vector_store.similarity_search_with_score(query, k=10, score_threshold = 0.5)
+print("相似度查询结束。结果如下：\n"+str(similar_docs))
