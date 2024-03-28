@@ -178,7 +178,27 @@ cd build\bin\Release
             <p>
                 <img src="./image/15.png" alt="LM Studio 对话" />
             </p>
-            <p>还有很多关于模型的参数配置后面慢慢研究。她还支持<line-code>Http Server</line-code>，据说兼容OpenAI的API……</p>
+            <p>还有很多关于模型的参数配置后面慢慢研究。她还支持<line-code>Http Server</line-code>，并且兼容OpenAI的API……</p>
+            <h2>llama.cpp web server</h2>
+            <p>【2024-03-28 更新】</p>
+            <p><line-code>llama.cpp</line-code>还有web server，并且兼容 OpenAI API ，才知道吗？感觉错过了一个亿……虽然没有上面的<line-code>LM Studio</line-code>操作丝滑，但是这里还是要记录一下</p>
+            <p>【2024-03-28】用<line-code>git</line-code>克隆了一下最新的代码，按照上面的编译了一下，一起都很顺利。<line-code>GGUF</line-code>就不用转了，之前转的还留着呢。下面开始表演</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+./server.exe -m D:\llm\baichuan-inc\Baichuan2-7B-Chat-GGUF\ggml-model-q4_0.gguf --host 127.0.0.1 --port 10010
+            </pre>
+            <p>
+                <img src="./image/16.png" alt="启动 llama.cpp web server" />
+            </p>
+            <h3>web 页面测试</h3>
+            <p>启动服务之后，你可以用他提供的web页面进行对话，如下图：</p>
+            <p>
+                <img src="./image/17.png" alt="llama.cpp web server 启动之后，web 对话页面" />
+            </p>
+            <h3>OpenAI API 测试</h3>
+            <p>下面使用<line-code>postman</line-code>做一下<line-code>OpenAI API</line-code>测试</p>
+            <p>
+                <img src="./image/18.png" alt="llama.cpp web server 启动之后，postman 和 OpenAI API 测试" />
+            </p>
         </div>
     </body>
 </html>
