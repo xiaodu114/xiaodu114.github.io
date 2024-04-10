@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Qwen/Qwen-VL-Chat - xiaodu114.github.io</title>
+        <meta name="keywords" content="qwen/Qwen-VL-Chat,qwen,Qwen-VL-Chat,大规模视觉语言模型,图像,文本,检测" />
+        <meta name="description" content="Qwen-VL 是阿里云研发的大规模视觉语言模型（Large Vision Language Model, LVLM）。 Qwen-VL 可以以图像、文本、检测框作为输入，并以文本和检测框作为输出。" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/mllm/qwenVLChat/index.html -->
+        <div class="blog-page">
+            <h1>Qwen-VL-Chat</h1>
+            <p>官网：<a href="https://github.com/qwenLM/Qwen-VL/" target="_blank">GitHub - QwenLM/Qwen-VL: The official repo of Qwen-VL (通义千问-VL) chat & pretrained large vision language model proposed by Alibaba Cloud.</a></p>
+            <p>官方介绍：Qwen-VL 是阿里云研发的大规模视觉语言模型（Large Vision Language Model, LVLM）。 Qwen-VL 可以以图像、文本、检测框作为输入，并以文本和检测框作为输出。</p>
+            <p>官网介绍<line-code>Qwen-VL</line-code>有四个兄弟，分别是：<line-code>Qwen-VL</line-code>、<line-code>Qwen-VL-Chat</line-code>、<line-code>Qwen-VL-Plus</line-code>、<line-code>Qwen-VL-Max</line-code>。这里本地部署的是<line-code>Qwen-VL-Chat</line-code>，而Plus和Max可以在<a href="https://huggingface.co/" target="_blank">Hugging Face</a>中的<line-code>Spaces</line-code>体验，体验地址如下：</p>
+            <ul>
+                <li><a href="https://huggingface.co/spaces/Qwen/Qwen-VL-Plus" target="_blank">Qwen-VL-Plus - a Hugging Face Space by Qwen</a> | <a href="https://hf-mirror.com/spaces/Qwen/Qwen-VL-Plus" target="_blank">Qwen-VL-Plus(hf-mirror镜像)</a></li>
+                <li><a href="https://huggingface.co/spaces/Qwen/Qwen-VL-Max" target="_blank">Qwen-VL-Max - a Hugging Face Space by Qwen</a> | <a href="https://hf-mirror.com/spaces/Qwen/Qwen-VL-Max" target="_blank">Qwen-VL-Max(hf-mirror镜像)</a></li>
+            </ul>
+            <mark-block explain="说明">
+                <p>运行环境：Ubuntu 22.04 + Intel(R)Xeon(R) CPU E5-2699 v4 2.20GHZ + RAM（512GB）</p>
+            </mark-block>
+            <h2>下载模型</h2>
+            <p>阿里的东东，下载就比较方便了，直接<a href="https://modelscope.cn" target="_blank">魔搭</a>上下载就行，如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+git lfs install
+
+git clone https://modelscope.cn/qwen/Qwen-VL-Chat.git
+            </pre>
+            <p>这里将模型克隆到了<line-code>/home/xxx/llm/0-model/Qwen/Qwen-VL-Chat</line-code>，如下图：</p>
+            <p>
+                <img src="./image/1.png" alt="Qwen/Qwen-VL-Chat 模型 目录结构" />
+            </p>
+            <h2>官方的快速开始</h2>
+            <p>该章节跑一下官方介绍大模型时给出的示例代码。</p>
+            <h3>创建项目</h3>
+            <p>首先新建一个项目，如下图：</p>
+            <p>
+                <img src="./image/2.png" alt="官方介绍大模型时给出的示例代码项目截图" />
+            </p>
+            <p>说明：这张图片就是后面要测试的图片</p>
+            <h3>虚拟环境安装依赖</h3>
+            <p>因为GPU资源比较紧张，该项目的测试采用CPU，也就是需要安装CPU版本的<line-code>torch</line-code></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   创建虚拟环境并激活
+python3 -m venv venv
+source ./venv/bin/activate
+
+#   安装依赖
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+pip install transformers tiktoken matplotlib einops transformers_stream_generator accelerate
+            </pre>
+            <h3>Qwen-VL-Chat.py 文件</h3>
+            <p>新建<line-code>Qwen-VL-Chat.py</line-code>文件，将示例代码弄进去并稍作修改，代码如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
+
+model_path = '/home/xxx/llm/0-model/Qwen/Qwen-VL-Chat'
+revision = 'v1.1.0'
+
+tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained(model_path, device_map="cpu", trust_remote_code=True).eval()
+model.generation_config = GenerationConfig.from_pretrained(model_path, trust_remote_code=True)
+
+query = tokenizer.from_list_format([
+    {'image': './image/1.JPG'},
+    {'text': '这是谁？'},
+])
+response, history = model.chat(tokenizer, query=query, history=None)
+print(response)
+            </pre>
+            <h3>运行</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   激活虚拟环境之后
+python Qwen-VL-Chat.py 
+            </pre>
+            <p>
+                <img src="./image/3.png" alt="Qwen/Qwen-VL-Chat 大语言模型，图片问答" />
+            </p>
+            <h2>Web 示例</h2>
+            <p>该章节使用Web页面体验一下该模型，代码克隆自：<a href="https://github.com/QwenLM/Qwen-VL" target="_blank">GitHub - QwenLM/Qwen-VL: The official repo of Qwen-VL (通义千问-VL) chat & pretrained large vision language model proposed by Alibaba Cloud.</a></p>
+            <p>首先对<line-code>web_demo_mm.py</line-code>文件稍作修改，之后就是虚拟环境、安装依赖了</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   在项目的根路径打开终端
+python3 -m venv venv
+source ./venv/bin/activate
+
+#   安装依赖
+#   这里还是使用CPU，先安装CPU版本的 torch
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+pip install -r requirements.txt
+pip install -r requirements_web_demo.txt
+            </pre>
+            <p>
+                <img src="./image/4.png" alt="qwenLM/Qwen-VL/web_demo_mm.py 文件修改以及运行 web_demo_mm.py" />
+            </p>
+            <p>最后看一下web界面的效果</p>
+            <p>
+                <img src="./image/5.png" alt="qwenLM/Qwen-VL/ 项目，web页面运行效果" />
+            </p>
+        </div>
+    </body>
+</html>
