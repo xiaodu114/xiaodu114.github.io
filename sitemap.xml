@@ -6,7 +6,7 @@
     
   <url>
     <loc>https://xiaodu114.github.io/</loc>
-    <lastmod>2024-04-10T02:17:20.680Z</lastmod>
+    <lastmod>2024-04-11T07:23:39.985Z</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
@@ -116,7 +116,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/linux/ubuntu/index.html</loc>
-    <lastmod>2024-03-05T02:03:58.299Z</lastmod>
+    <lastmod>2024-04-10T02:29:15.768Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -195,13 +195,18 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://xiaodu114.github.io/p/llm/xorbitsInference/index.html</loc>
+    <lastmod>2024-04-11T07:22:01.221Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://xiaodu114.github.io/p/lowCode/index.html</loc>
     <lastmod>2024-02-22T00:45:58.000Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/mllm/qwenVLChat/index.html</loc>
-    <lastmod>2024-04-10T02:05:43.766Z</lastmod>
+    <lastmod>2024-04-10T02:21:37.939Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
