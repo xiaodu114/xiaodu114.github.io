@@ -76,6 +76,9 @@ customElements.define(
                         <li>
                             <a href="/p/llm/faiss/index.html" target="_blank">Faiss</a>
                         </li>
+                        <li>
+                            <a href="/p/llm/xorbitsInference/index.html" target="_blank">Xorbits Inference</a>
+                        </li>
                     </ol>
                 </div>
             </details>
