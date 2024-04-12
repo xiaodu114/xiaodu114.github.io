@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>Xorbits Inference - xiaodu114.github.io</title>
-        <meta name="keywords" content="Xorbits Inference,,,,,,,,,,," />
+        <meta name="keywords" content="Xorbits Inference,Embedding 模型,Rerank 模型,Ubuntu,Ubuntu 22.04,xinference.client" />
         <meta name="description" content="官方介绍：Xorbits Inference（Xinference）是一个性能强大且功能全面的分布式推理框架。可用于大语言模型（LLM），语音识别模型，多模态模型等各种模型的推理。通过 Xorbits Inference，你可以轻松地一键部署你自己的模型或内置的前沿开源模型。无论你是研究者，开发者，或是数据科学家，都可以通过 Xorbits Inference 与最前沿的 AI 模型，发掘更多可能。" />
 
         <script src="/p/_/js/main.js"></script>
@@ -67,6 +67,25 @@ xinference-local --host 192.168.xxx.xxx --port 9997
             <p>
                 <img src="./image/4.png" alt="xorbitsai/inference 项目，接口文档页面" />
             </p>
+            <h2>Windows 环境</h2>
+            <p>插一脚。不纯粹了，大环境是<line-code>ubuntu 22.04</line-code>，这里插一脚<line-code>windows</line-code></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   创建虚拟环境并激活
+python -m venv venv
+.\venv\scripts\activate
+
+#   安装依赖（根据电脑的实际情况安装）
+pip install "xinference[transformers]"
+
+#   启动
+$Env:HF_ENDPOINT="https://hf-mirror.com"; `
+$Env:XINFERENCE_MODEL_SRC="modelscope"; `
+$Env:XINFERENCE_HOME="D:\llm"; `
+xinference-local
+            </pre>
+            <p>
+                <img src="./image/win-001.png" alt="xorbitsai/inference 项目，windows 下项目启动" />
+            </p>
             <h2>Embedding 模型</h2>
             <p>已经下载了几个<line-code>Embedding</line-code>模型，如下图：</p>
             <p>
@@ -97,6 +116,16 @@ print(output)
             <p>再使用<line-code>Postman</line-code>直接调用API测试一下，如图：</p>
             <p>
                 <img src="./image/7.png" alt="Postman 方式调用Embedding 模型" />
+            </p>
+            <h2>Rerank 模型</h2>
+            <p>已经下载<line-code>Rerank</line-code>模型，如下图：</p>
+            <p>
+                <img src="./image/win-002.png" alt="xorbitsai/inference 项目，已下载Rerank 模型截图" />
+            </p>
+            <h3>Postman</h3>
+            <p><line-code>Postman</line-code>直接调用API测试一下，如图：</p>
+            <p>
+                <img src="./image/8.png" alt="Postman 方式调用Rerank 模型" />
             </p>
         </div>
     </body>
