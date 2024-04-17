@@ -6,7 +6,7 @@
     
   <url>
     <loc>https://xiaodu114.github.io/</loc>
-    <lastmod>2024-04-11T07:23:39.985Z</lastmod>
+    <lastmod>2024-04-17T00:57:25.252Z</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
@@ -32,6 +32,11 @@
   <url>
     <loc>https://xiaodu114.github.io/p/db/mysql/index.html</loc>
     <lastmod>2024-02-22T00:45:58.000Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/p/db/postgreSQL/index.html</loc>
+    <lastmod>2024-04-17T00:52:47.745Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -196,7 +201,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/xorbitsInference/index.html</loc>
-    <lastmod>2024-04-11T07:22:01.221Z</lastmod>
+    <lastmod>2024-04-12T03:09:49.038Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
