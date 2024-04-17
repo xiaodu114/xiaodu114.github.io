@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>PostgreSQL - xiaodu114.github.io</title>
+        <meta name="keywords" content="PostgreSQL,Ubuntu,,,," />
+        <meta name="description" content="" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/db/postgreSQL/index.html -->
+        <div class="blog-page">
+            <h1>PostgreSQL</h1>
+            <p>官网：<a href="https://www.postgresql.org/" target="_blank">PostgreSQL: The world's most advanced open source database</a></p>
+            <p><line-code>dify</line-code>项目本地部署用到了该数据库，顺便整理记录一下<line-code>PostgreSQL</line-code>相关的东东</p>
+            <h2>Ubuntu 22.04</h2>
+            <p>该节记录一下<line-code>Ubuntu</line-code>和她的花火</p>
+            <h3>安装</h3>
+            <p>参考：<a href="https://www.postgresql.org/download/linux/ubuntu/" target="_blank">PostgreSQL: Linux downloads (Ubuntu)</a></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+sudo apt update
+sudo apt -y install postgresql
+            </pre>
+            <p>
+                <img src="./image/1.png" alt="PostgreSQL 安装过程截图" />
+            </p>
+            <p>
+                <img src="./image/2-1.png" alt="PostgreSQL 安装过程截图" />
+            </p>
+            <p>
+                <img src="./image/2-2.png" alt="PostgreSQL 安装过程截图" />
+            </p>
+            <h3>检测</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo systemctl status postgresql
+
+#   备用
+sudo systemctl start postgresql
+sudo systemctl stop postgresql
+sudo systemctl restart postgresql
+sudo systemctl enable postgresql
+
+#   版本检测
+psql --version
+            </pre>
+            <p>
+                <img src="./image/3-1.png" alt="PostgreSQL 服务启动、版本检测" />
+            </p>
+            <details>
+                <summary>对于<line-code>systemctl</line-code>常用命令 Kimi.ai 的回答</summary>
+                <p>
+                    <img src="./image/3-2.png" alt="systemctl常用命令的解释" />
+                </p>
+            </details>
+            <h3>PostgreSQL Shell</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   在终端输入下面的命令，进入 PostgreSQL Shell
+sudo -u postgres psql
+
+#	退出 PostgreSQL Shell
+\q
+
+#	列出所有数据库
+\l
+
+#	查询所有的数据库名称
+SELECT datname FROM pg_database;
+
+#	创建、删除数据库（该数据库会在 dify 项目中用到）
+CREATE DATABASE dify;
+DROP DATABASE dify;
+
+#	修改超级用户 postgres 的密码
+ALTER USER postgres PASSWORD 'u1sql';
+
+#   验证修改超级用户 postgres 的密码是否修改成功
+#       注意：退出 shell 之后重启一下服务，否则会报错。第一次没有重启服务，又改了一次……
+\q
+sudo systemctl restart postgresql
+psql -h localhost -U postgres
+
+#   如果只是执行简单的语句，你还可以这样
+sudo -u postgres psql -c "\l"
+            </pre>
+            <p>
+                <img src="./image/4.png" alt="PostgreSQL 进入 Shell终端，查询数据库名称，修改用户密码" />
+            </p>
+            <p>
+                <img src="./image/5.png" alt="PostgreSQL 验证修改用户密码是否成功，连接失败" />
+            </p>
+            <p>
+                <img src="./image/6.png" alt="PostgreSQL 验证修改用户密码是否成功，验证成功" />
+            </p>
+            <h3>允许远程连接</h3>
+            <p>为了设置允许远程连接，需要修改两个文件，文件位置位于<line-code>/etc/postgresql/16/main</line-code>，文件默认没有修改权限，需要先修改一下</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   postgresql.conf
+sudo chmod 777 postgresql.conf
+#   找到 listen_addresses 并修改
+listen_addresses = '*'
+
+#   pg_hba.conf
+sudo chmod 777 pg_hba.conf
+#   在文件末尾添加
+host    all             all             0.0.0.0/0               md5
+            </pre>
+            <p>
+                <img src="./image/7.png" alt="PostgreSQL 修改文件 postgresql.conf 和 pg_hba.conf 的权限" />
+            </p>
+            <p>
+                <img src="./image/8.png" alt="PostgreSQL 修改文件 postgresql.conf" />
+            </p>
+            <p>
+                <img src="./image/9.png" alt="PostgreSQL 修改文件 pg_hba.conf" />
+            </p>
+            <p>修改完之后记得重启一下服务，在测试一下远程连接</p>
+            <p>
+                <img src="./image/10.png" alt="用 pgAdmin 4 v8 远程连接 PostgreSQL" />
+            </p>
+        </div>
+    </body>
+</html>
