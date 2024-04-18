@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Redis - xiaodu114.github.io</title>
+        <meta name="keywords" content="Redis,Ubuntu,Ubuntu 22.04,设置密码,允许远程连接,Redis GUI,Redis 可视化管理工具,RedisInsight,Tiny RDM" />
+        <meta name="description" content="记录一下 Redis 的安装过程，设置密码、允许远程连接等" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/db/redis/index.html -->
+        <div class="blog-page">
+            <h1>Redis</h1>
+            <p>官网：<a href="https://redis.io/" target="_blank">Redis - The Real-time Data Platform</a></p>
+            <p>最近听说<line-code>Redis</line-code>的许可换了，大家都开始寻找替代品，还有必要写关于他的笔记吗？谁让<line-code>dify</line-code>项目中用到了呢，那就整理一下吧</p>
+            <h2>Redis 替代品</h2>
+            <ul>
+                <li>
+                    <a href="https://github.com/microsoft/garnet" target="_blank">GitHub - microsoft/garnet</a>
+                </li>
+                <li>
+                    <a href="https://github.com/Snapchat/KeyDB" target="_blank">GitHub - Snapchat/KeyDB: A Multithreaded Fork of Redis</a>
+                </li>
+                <li>
+                    <a href="https://github.com/valkey-io/valkey" target="_blank">GitHub - valkey-io/valkey</a>
+                </li>
+                <li>
+                    <a href="https://redict.io/" target="_blank">Redict | Redict</a>
+                </li>
+                <li>
+                    <a href="https://github.com/dragonflydb/dragonfly" target="_blank">GitHub - dragonflydb/dragonfly: A modern replacement for Redis and Memcached</a>
+                </li>
+            </ul>
+            <h2>Redis 可视化管理工具</h2>
+            <p>参考：<a href="https://zhuanlan.zhihu.com/p/680776796" target="_blank">我最爱用的几款 Redis 可视化管理工具！好用到飞起！！ - 知乎</a></p>
+            <ul>
+                <li><a href="https://github.com/tiny-craft/tiny-rdm" target="_blank">GitHub - tiny-craft/tiny-rdm: A Modern Redis GUI Client</a> | <a href="https://redis.tinycraft.cc/" target="_blank">Tiny RDM | Redis Desktop Manager</a></li>
+                <li><a href="https://github.com/redisinsight/redisinsight" target="_blank">GitHub - RedisInsight/RedisInsight: Redis GUI by Redis</a> | <a href="https://redis.io/insight/" target="_blank">RedisInsight - The Best Redis GUI</a></li>
+            </ul>
+            <h2>Ubuntu 22.04</h2>
+            <p>该章节记录一下<line-code>Ubuntu</line-code>和她的花火</p>
+            <h3>安装</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo apt update
+sudo apt install redis-server
+            </pre>
+            <p>
+                <img src="./image/1.png" alt="Redis 安装过程截图" />
+            </p>
+            <h3>检查版本</h3>
+            <p>安装结束之后，首先检查一下版本</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+redis-cli --version
+redis-server --version
+apt policy redis-server
+            </pre>
+            <p>
+                <img src="./image/2.png" alt="Redis 检查版本" />
+            </p>
+            <h3>查看服务状态</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo systemctl status redis-server
+
+#   备用
+sudo systemctl start redis-server
+sudo systemctl stop redis-server
+sudo systemctl restart redis-server
+sudo systemctl enable redis-server
+            </pre>
+            <p>
+                <img src="./image/3.png" alt="Redis 查看服务状态" />
+            </p>
+            <h3>测试本地连接</h3>
+            <p>为了测试本地连接和下面的远程连接，特意搜了一下GUI，原来使用的软件太不好看了。连接过程比较简单直接上图：</p>
+            <p>
+                <img src="./image/4.png" alt="使用 Tiny RDM 本地连接 Redis" />
+            </p>
+            <p>
+                <img src="./image/5.png" alt="使用 RedisInsight 本地连接 Redis" />
+            </p>
+            <h3>设置远程连接和密码</h3>
+            <p>默认不支持远程连接并且也没有密码，需要修改一下配置文件，<line-code>/etc/redis</line-code>默认没有访问权限，需要首先修改一下</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   修改权限
+sudo chmod -R 777 /etc/redis
+
+#   允许远程连接
+#   在文件中搜索 bind 127.0.0.1，修改如下（既可以本地，又可以远程）：
+bind 192.168.xxx.xxx 127.0.0.1 ::1
+
+#   设置密码
+#   搜索“# requirepass foobared”，修改如下：
+requirepass u1666
+
+#   重启服务
+sudo systemctl restart redis-server
+
+#   ？？？这种方式无论是IP地址还是localhost都不用输入密码
+redis-cli -h localhost -p 6379
+            </pre>
+            <p>
+                <img src="./image/6.png" alt="Redis 修改 /etc/redis 权限" />
+            </p>
+            <p>
+                <img src="./image/7.png" alt="Redis 修改配置文件，允许远程连接" />
+            </p>
+            <p>
+                <img src="./image/8.png" alt="Redis 修改配置文件，设置密码" />
+            </p>
+            <h3>测试远程连接</h3>
+            <p>首先试一下在本机使用IP地址连接Redis</p>
+            <p>
+                <img src="./image/9.png" alt="使用 Tiny RDM 远程连接 Redis" />
+            </p>
+            <p>
+                <img src="./image/10.png" alt="使用 RedisInsight 远程连接 Redis" />
+            </p>
+            <p>在测试一下其他电脑远程连接Redis</p>
+            <p>
+                <img src="./image/11.png" alt="其他电脑使用 Tiny RDM 远程连接 Redis" />
+            </p>
+        </div>
+    </body>
+</html>
