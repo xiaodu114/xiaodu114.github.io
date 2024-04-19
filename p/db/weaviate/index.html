@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Weaviate - xiaodu114.github.io</title>
+        <meta name="keywords" content="Weaviate,open-source vector database,vector database,向量数据库" />
+        <meta name="description" content="整理记录一下 Weaviate 相关的东东" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/db/weaviate/index.html -->
+        <div class="blog-page">
+            <h1>Weaviate</h1>
+            <p>向量数据库也是数据库啊，是吧，就放到<line-code>db</line-code>下吧</p>
+            <p>官网：<a href="https://github.com/weaviate/weaviate" target="_blank">GitHub - weaviate/weaviate</a></p>
+            <p>官方文档：<a href="https://weaviate.io/developers/weaviate" target="_blank">Home | Weaviate - Vector Database</a></p>
+            <h2>Ubuntu 22.04</h2>
+            <p>该节记录一下<line-code>Ubuntu</line-code>和她的花火</p>
+            <h3>下载</h3>
+            <p><strong>2024-04-19</strong>下载的版本是<line-code>weaviate-v1.24.9-linux-amd64.tar.gz</line-code></p>
+            <h3>添加到 /usr/local/bin</h3>
+            <p>上面下载的是压缩包，需要将包内的可执行文件添加到<line-code>/usr/local/bin</line-code>，这里介绍两种方式，如下：</p>
+            <h4>tar</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo tar -zxvf weaviate-v1.24.9-linux-amd64.tar.gz -C /usr/local/bin
+#   推荐
+sudo tar -zxvf weaviate-v1.24.9-linux-amd64.tar.gz -C /usr/local/bin weaviate
+            </pre>
+            <p>解压时可以指定压缩包内某个文件解压到指定目录，如果不指定，则解压所有文件，如下图：</p>
+            <p>
+                <img src="./image/1.png" alt="tar 解压 weaviate" />
+            </p>
+            <p>
+                <img src="./image/2.png" alt="tar 解压 weaviate 中的指定文件" />
+            </p>
+            <h4>mv</h4>
+            <p>你也可以先在某个文件夹（例如：上面的桌面）解压，之后在移动指定文件到<line-code>/usr/local/bin</line-code></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo mv weaviate /usr/local/bin
+            </pre>
+            <h3>启动</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+weaviate --scheme http --host 192.168.xxx.xxx --port 8080
+
+#   如果是 https 则可能需要下面的这两个参数
+#       注意：这里没有测试
+--tls-certificate xxx --tls-key xxx
+            </pre>
+            <p>
+                <img src="./image/3.png" alt="weaviate 启动效果图" />
+            </p>
+            <mark-block type="warning">
+                <p>如下图，是在桌面打开的终端之后启动的 weaviate，他会在桌面创建 data 文件夹</p>
+                <p>
+                    <img src="./image/4.png" alt="weaviate 启动之后会在启动目录创建 data 文件夹" />
+                </p>
+            </mark-block>
+            <h3>脚本启动</h3>
+            <p>为了后面启动的时候比较方便，这里创建了一个快速启动的脚本<line-code>weaviate 向量数据库.sh</line-code>。脚本中指定的终端目录是<line-code>/home/xxx/.weaviate</line-code>，<line-code>.weaviate</line-code>文件夹需要自己创建一下，脚本中不会自动创建</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#!/bin/bash
+
+# 打开一个新的终端，并指定终端窗口标题，指定终端目录
+gnome-terminal --title 'weaviate 向量数据库' --working-directory=/home/u1/.weaviate -- /bin/bash -c 'weaviate --scheme http --host 192.168.xxx.xxx --port 8080'
+
+exit
+            </pre>
+            <p>
+                <img src="./image/5.png" alt="sh 脚本启动 weaviate" />
+            </p>
+        </div>
+    </body>
+</html>
