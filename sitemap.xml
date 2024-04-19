@@ -6,7 +6,7 @@
     
   <url>
     <loc>https://xiaodu114.github.io/</loc>
-    <lastmod>2024-04-18T03:40:00.453Z</lastmod>
+    <lastmod>2024-04-19T02:19:59.679Z</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
@@ -42,6 +42,11 @@
   <url>
     <loc>https://xiaodu114.github.io/p/db/redis/index.html</loc>
     <lastmod>2024-04-18T00:55:20.540Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/p/db/weaviate/index.html</loc>
+    <lastmod>2024-04-19T02:19:30.471Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -126,7 +131,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/linux/ubuntu/index.html</loc>
-    <lastmod>2024-04-10T02:29:15.768Z</lastmod>
+    <lastmod>2024-04-19T02:12:00.160Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
