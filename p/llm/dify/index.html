@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Dify - xiaodu114.github.io</title>
+        <meta name="keywords" content="Dify" />
+        <meta name="description" content="【博客描述】" />
+
+        <script src="/p/_/js/main.js"></script>
+        <script src="../_common/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/llm/dify/index.html -->
+        <div class="blog-page">
+            <h1>Dify</h1>
+            <p>官网：<a href="https://dify.ai/" target="_blank">Dify.AI · The Innovation Engine for Generative AI Applications</a></p>
+            <p>Github官网：<a href="https://github.com/langgenius/dify" target="_blank">GitHub - langgenius/dify</a></p>
+            <p>官网介绍：Dify 是一个开源的LLM应用开发平台。其直观的界面结合了AI工作流程、RAG管道、代理功能、模型管理、可观察性功能等，让您可以快速从原型到生产。</p>
+            <p>官方文档：<a href="https://docs.dify.ai/v/zh-hans" target="_blank">欢迎使用 Dify | 中文 | Dify</a></p>
+            <mark-block>
+                <p>运行环境：Ubuntu 22.04 + Intel® Core™ i5-6600K CPU @ 3.50GHz × 4 + RAM（16GB）</p>
+                <p>依赖安装：PostgresSQL / Redis / Weaviate 均是本地安装</p>
+                <p>部署方式：本地源码启动</p>
+            </mark-block>
+            <h2>前期准备</h2>
+            <h3>自身依赖</h3>
+            <p>dify关系真够复杂的，为了弄他一个，还得额外搞三个……如何部署，您可以参考下面的链接</p>
+            <ul>
+                <li>
+                    <a href="/p/db/postgreSQL/index.html" target="_blank">PostgreSQL - xiaodu114.github.io</a>
+                </li>
+                <li>
+                    <a href="/p/db/redis/index.html" target="_blank">Redis - xiaodu114.github.io</a>
+                </li>
+                <li>
+                    <a href="/p/db/weaviate/index.html" target="_blank">Weaviate - xiaodu114.github.io</a>
+                </li>
+            </ul>
+            <h3>Xorbits Inference</h3>
+            <p>dify支持很多模型提供商，这里选用<line-code>Xorbits Inference</line-code>，他支持多种类型的模型：大语言模型、Embedding 模型、Rerank 模型等。如何部署，您可以参考：<a href="/p/llm/xorbitsInference/index.html" target="_blank">Xorbits Inference - xiaodu114.github.io</a></p>
+            <p>
+                <img src="./image/0.png" alt="Xorbits Inference 项目之 Embedding 模型" />
+            </p>
+            <h2>部署进行中</h2>
+            <p>参考：<a href="https://docs.dify.ai/v/zh-hans/getting-started/install-self-hosted/local-source-code" target="_blank">本地源码启动 | 中文 | Dify</a></p>
+            <h3>下载项目</h3>
+            <p><strong>2024-04-19</strong>下载的版本是<line-code>dify-0.6.3.zip</line-code></p>
+            <p>
+                <img src="./image/1.png" alt="langgenius/dify 项目目录结构" />
+            </p>
+            <h3>api 目录</h3>
+            <p>这里包括准备环境变量、秘钥、创建并激活虚拟环境、安装依赖等</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   进入 api 目录
+cd api
+
+#   获取 .env 文件
+cp .env.example .env
+
+#   利用下面的命令获取 key，得到的字符串赋值给 .env 文件中的 SECRET_KEY
+openssl rand -base64 42
+
+#   创建虚拟环境并激活
+python3 -m venv venv
+source ./venv/bin/activate	
+
+#   安装依赖
+pip install -r requirements.txt
+pip install torch
+
+#   数据库迁移
+#       说明：api/migrations 这个目录应该就是和PostgreSQL数据库相关，会创建表等工作
+flask db upgrade
+            </pre>
+            <mark-block>
+                <p>得到<line-code>.env</line-code>文件之后，您需要根据自身安装<line-code>PostgreSQL</line-code>、<line-code>Redis</line-code>、<line-code>Weaviate</line-code>的实际情况修改对应的配置</p>
+            </mark-block>
+            <p>
+                <img src="./image/2.png" alt="langgenius/dify 项目部署过程 准备环境变量、秘钥、创建并激活虚拟环境、安装依赖" />
+            </p>
+            <p>
+                <img src="./image/3.png" alt="langgenius/dify 项目部署过程 安装 torch" />
+            </p>
+            <p>
+                <img src="./image/4.png" alt="langgenius/dify 项目部署过程 数据库迁移" />
+            </p>
+            <h3>web 目录</h3>
+            <p>这里是<line-code>npm</line-code>的主场</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   进入 web 目录
+cd web
+
+#   获取 .env 文件
+cp .env.example .env
+
+#   安装依赖包
+npm install
+
+#   构建代码
+npm run build
+            </pre>
+            <p>
+                <img src="./image/5.png" alt="langgenius/dify 项目部署过程 web 目录，环境变量、安装依赖" />
+            </p>
+            <p>
+                <img src="./image/6.png" alt="langgenius/dify 项目部署过程 web 目录，构建代码" />
+            </p>
+            <h2>启动项目</h2>
+            <p>启动项目，这里介绍两种方式：<line-code>localhost</line-code>、IP地址</p>
+            <h3>localhost</h3>
+            <p>他的优势就是需要修改的地方不多，api和web两个目录的<line-code>.env</line-code>中基本上都是<line-code>localhost</line-code>或者<line-code>127.0.0.1</line-code></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   进入 api 目录，并激活虚拟环境
+flask run --host 0.0.0.0 --port=5001 --debug
+
+#   再打开一个新的终端，进入 api 目录，并激活虚拟环境
+celery -A app.celery worker -P gevent -c 1 -Q dataset,generation,mail --loglevel INFO
+
+#   再打开一个新的终端，进入 web 目录
+npm run start --host=0.0.0.0 --port=3000
+            </pre>
+            <p>
+                <img src="./image/7.png" alt="langgenius/dify 项目启动 api 目录，flask" />
+            </p>
+            <p>
+                <img src="./image/8.png" alt="langgenius/dify 项目启动 api 目录，celery" />
+            </p>
+            <p>
+                <img src="./image/9.png" alt="langgenius/dify 项目启动 web 目录，npm run start" />
+            </p>
+            <h4>初次访问</h4>
+            <p>终于弄完了，赶紧试试吧！初次进入和再次进入界面有所不同，初次会强制要求设置管理员账户，如下图：</p>
+            <p>
+                <img src="./image/10.png" alt="langgenius/dify 项目部署成功，浏览器初次访问" />
+            </p>
+            <h4>登录成功</h4>
+            <p>设置管理员账户之后便会跳转到登录页面，登录之后如下图：</p>
+            <p>
+                <img src="./image/11.png" alt="langgenius/dify 项目部署成功，登录成功之后截图" />
+            </p>
+            <h4>模型供应商</h4>
+            <p>页面右上角点击“头像用户名称”-》下拉菜单中点击“设置”-》弹窗中点击“模型供应商”-》选择并添加你的“模型供应商”</p>
+            <p>
+                <img src="./image/12.png" alt="langgenius/dify 项目部署成功，添加 Xorbits Inference" />
+            </p>
+            <p>
+                <img src="./image/13.png" alt="langgenius/dify 项目部署成功，设置 Jina" />
+            </p>
+            <p>添加模型供应商之后，你就可以设置系统模型了，例如，Embedding 模型和Rerank 模型这里选择的是<line-code>Xorbits Inference</line-code>提供的</p>
+            <p>
+                <img src="./image/14.png" alt="langgenius/dify 项目部署成功，已添加模型供应商列表，设置系统模型" />
+            </p>
+            <h4>知识库</h4>
+            <p>在测试知识库的时候，“文本分段与清洗”环节发现一个问题：针对同一个文档，在分别使用 Xorbits Inference 或者 Jina 的 相同 Embedding 模型时（选用的是 jina-embeddings-v2-base-zh），得到的结果不一样，看一下截图：</p>
+            <p>下图是 Xorbits Inference 的 Embedding 模型</p>
+            <p>
+                <img src="./image/15-1.png" alt="langgenius/dify 项目部署成功，知识库，Xorbits Inference 的 Embedding 模型，文档拆分" />
+            </p>
+            <p>下图是 Jina 的 Embedding 模型</p>
+            <p>
+                <img src="./image/15-2.png" alt="langgenius/dify 项目部署成功，知识库，Jina 的 Embedding 模型，文档拆分" />
+            </p>
+            <p>下面在看一下文档的截图：</p>
+            <p>
+                <img src="./image/15-3.png" alt="langgenius/dify 项目部署成功，知识库，被拆分的文档" />
+            </p>
+            <p>查了一下出现这种现象的原因，这里记录一下。先梳理一下API（前端请求地址：<line-code>http://192.168.xxx.xxx:5001/console/api/datasets/indexing-estimate</line-code>）的调用逻辑</p>
+            <ol style="line-height: 2">
+                <li><line-code>api\controllers\console\datasets\datasets.py > api: /datasets/indexing-estimate > class DatasetIndexingEstimateApi(Resource) > def post(self) > response = indexing_runner.indexing_estimate</line-code> -></li>
+                <li>
+                    <line-code>api\core\indexing_runner.py > class IndexingRunner > def indexing_estimate</line-code> ->
+                    <ul>
+                        <li>获取 Embedding 模型实例：<line-code>embedding_model_instance = self.model_manager.get_default_model_instance(tenant_id=tenant_id,model_type=ModelType.TEXT_EMBEDDING,)</line-code></li>
+                        <li>根据文档类型处理文档：<line-code>text_docs = index_processor.extract(extract_setting, process_rule_mode=tmp_processing_rule["mode"])</line-code></li>
+                        <li>获取拆分器：<line-code>splitter = self._get_splitter(processing_rule, embedding_model_instance)</line-code>，这里获取的拆分器是<line-code>class EnhanceRecursiveCharacterTextSplitter(RecursiveCharacterTextSplitter)</line-code></li>
+                        <li>对文档进行拆分：<line-code>documents = self._split_to_documents_for_estimate(text_docs=text_docs,splitter=splitter, processing_rule=processing_rule) > documents = splitter.split_documents([text_doc])</line-code></li>
+                    </ul>
+                </li>
+                <li><line-code>api\core\splitter\text_splitter.py > def split_documents(self, documents: Iterable[Document] ) > def create_documents(self, texts: list[str], metadatas: Optional[list[dict]] = None) > self.split_text(text)</line-code>（这里便会调用拆分器的 split_text 方法） -></li>
+                <li>
+                    <line-code>api\core\splitter\text_splitter.py > class RecursiveCharacterTextSplitter(TextSplitter) > def split_text(self, text: str) > def _split_text(self, text: str, separators: list[str])</line-code>
+                    <p>问题就出在该方法中的<line-code>if self._length_function(s) &lt; self._chunk_size:</line-code>处，这里会利用<line-code>_length_function</line-code>方法来计算文本块的token数，之后和<line-code>self._chunk_size</line-code>比较，上面采用的两个供应商的模型计算token的方式不同</p>
+                </li>
+            </ol>
+            <p>
+                <img src="./image/15-4.png" alt="langgenius/dify 项目代码，文本拆分" />
+            </p>
+            <p>再看一下获取拆分器截图，下图中可以看到模型实例调用<line-code>get_num_tokens</line-code>方法来计算token数</p>
+            <p>
+                <img src="./image/15-5.png" alt="langgenius/dify 项目代码，拆分器" />
+            </p>
+            <p>下图是 Xorbits Inference 中 Embedding 模型的计算方法</p>
+            <p>
+                <img src="./image/15-6.png" alt="langgenius/dify 项目代码，Xorbits Inference 中 Embedding 模型的计算方法" />
+            </p>
+            <p>下图是 Jina 中 Embedding 模型的计算方法</p>
+            <p>
+                <img src="./image/15-7.png" alt="langgenius/dify 项目代码，Jina 中 Embedding 模型的计算方法" />
+            </p>
+            <p>最后在模拟一下他们是如何计算的</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+import sys
+sys.path.append(".")
+
+texts = ["","",""]
+print("---------------------------------- 下面是 Jina/jina-embeddings-v2-base-zh 的计算结果")
+from transformers import AutoTokenizer
+gpt2_tokenizer_path = "E:\\llm\\dify-0.x.x\\api\\core\\model_runtime\\model_providers\\jina\\text_embedding\\tokenizer"
+tokenizer = AutoTokenizer.from_pretrained(gpt2_tokenizer_path)
+for text in texts:
+    tokens = tokenizer.encode(text)
+    num_tokens = len(tokens)
+    print(num_tokens)
+
+print("---------------------------------- 下面是 Xorbits Inference/jina-embeddings-v2-base-zh 的计算结果")
+from core.model_runtime.model_providers.__base.tokenizers.gpt2_tokenzier import GPT2Tokenizer
+for text in texts:
+    print(GPT2Tokenizer.get_num_tokens(text))
+            </pre>
+            <h3>IP地址</h3>
+            <p>正常情况下应该都需要其他电脑访问，这里才是重点</p>
+            <details>
+                <summary>踩坑经历</summary>
+                <p>开始只是修改了<line-code>web/.env</line-code>该文件，修改之后，在重新<line-code>npm run build</line-code>一下，如下图：</p>
+                <p>
+                    <img src="./image/16.png" alt="langgenius/dify 项目，IP地址访问，修改 web/.env 文件" />
+                </p>
+                <p>构建结束之后，就可以启动了，命令是<line-code>npm run start --host=192.168.13.175 --port=3000</line-code>，如下图：</p>
+                <p>
+                    <img src="./image/17.png" alt="langgenius/dify 项目，IP地址访问，IP地址启动" />
+                </p>
+                <p>换另外一台电脑访问试试，可以访问没有问题，但是还是发现了点小问题，改的不够彻底啊，如下图：</p>
+                <p>
+                    <img src="./image/18.png" alt="langgenius/dify 项目，IP地址访问，浏览器IP地址访问，图片地址异常" />
+                </p>
+            </details>
+            <p>要想IP地址访问，需要修改<line-code>api/.env</line-code>和<line-code>web/.env</line-code>这两个环境变量文件，之后在重新编译启动</p>
+            <h4>api/.env</h4>
+            <p>
+                <img src="./image/19.png" alt="langgenius/dify 项目，IP地址访问，修改 api/.env 文件" />
+            </p>
+            <p>修改完之后重新启动一下，如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   为了方便使用
+source ./venv/bin/activate	
+
+#   进入 api 目录，并激活虚拟环境
+flask run --host 0.0.0.0 --port=5001 --debug
+
+#   【视情况而定】再打开一个新的终端，进入 api 目录，并激活虚拟环境
+celery -A app.celery worker -P gevent -c 1 -Q dataset,generation,mail --loglevel INFO
+            </pre>
+            <h4>web/.env</h4>
+            <p>
+                <img src="./image/20.png" alt="langgenius/dify 项目，IP地址访问，修改 web/.env 文件" />
+            </p>
+            <p>修改完之后</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   进入 web 目录
+#   构建代码
+npm run build
+
+#   IP地址启动
+npm run start --host=192.168.13.175 --port=3000
+            </pre>
+            <p>之后在访问就没有问题了，如下图：</p>
+            <p>
+                <img src="./image/21.png" alt="langgenius/dify 项目，IP地址访问，浏览器IP地址访问，图片异常" />
+            </p>
+        </div>
+    </body>
+</html>
