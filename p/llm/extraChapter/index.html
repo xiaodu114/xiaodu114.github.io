@@ -237,6 +237,9 @@ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.o
             </pre>
             <h5>检测 torch</h5>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   你可以这样
+python -c "import torch; print('CUDA 是否可用：',torch.cuda.is_available()); print('PyTorch 版本：',torch.__version__)"
+
 #	命令行输入 python 进入 python 交互模式
 python 
 
