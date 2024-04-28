@@ -6,7 +6,7 @@
     
   <url>
     <loc>https://xiaodu114.github.io/</loc>
-    <lastmod>2024-04-24T08:54:25.571Z</lastmod>
+    <lastmod>2024-04-26T09:28:46.817Z</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
@@ -47,6 +47,11 @@
   <url>
     <loc>https://xiaodu114.github.io/p/db/weaviate/index.html</loc>
     <lastmod>2024-04-19T02:59:39.344Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/p/docker/index.html</loc>
+    <lastmod>2024-04-26T09:27:33.341Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -161,7 +166,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/extraChapter/index.html</loc>
-    <lastmod>2024-03-26T06:42:16.595Z</lastmod>
+    <lastmod>2024-04-25T00:42:10.812Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -231,7 +236,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/online/index.html</loc>
-    <lastmod>2024-04-01T01:59:56.138Z</lastmod>
+    <lastmod>2024-04-25T02:21:50.853Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
