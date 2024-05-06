@@ -81,7 +81,25 @@ OLLAMA_HOST=192.168.x.x ollama serve
                 <dl>
                     <dt><strong>2024-03-21</strong></dt>
                     <dd>&nbsp;</dd>
-                    <dd style="line-height: 1.8">再次回味时（要测试 Continue - Claude, CodeLlama, GPT-4, and more 插件），首先启动了<line-code>OLLAMA_HOST=192.168.x.x ollama serve</line-code>，之后运行一个模型<line-code>ollama run deepseek-coder:6.7b</line-code>，没想到提示服务没启动……后来换成<line-code>ollama serve</line-code>就好了，也就是<line-code>ollama run</line-code>只能<line-code>127.0.0.1</line-code>，他只是进入命令行交互模式，也就是说<strong>在已经拉取了某个模型之后，移动服务没有必要执行这个命令</strong></dd>
+                    <dd style="line-height: 1.8">
+                        再次回味时（要测试 Continue - Claude, CodeLlama, GPT-4, and more 插件），首先启动了<line-code>OLLAMA_HOST=192.168.x.x ollama serve</line-code>，之后运行一个模型<line-code>ollama run deepseek-coder:6.7b</line-code>，没想到提示服务没启动……后来换成<line-code>ollama serve</line-code>就好了。说明<line-code>ollama run</line-code>只能在<line-code>127.0.0.1</line-code>使用，这个命令做了两件事：如果模型没有拉取，则先拉取；之后进入命令行交互模式。也就是说<strong>已经拉取了某些模型之后，如果你只是想调用他的API，只需要<line-code>ollama serve</line-code>即可。</strong>后面测试发现，<line-code>ollama pull</line-code>也只能在<line-code>127.0.0.1</line-code>使用。
+                    </dd>
+                    <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   只能本地使用
+ollama serve
+ollama run llava:13b
+ollama pull llava:13b
+
+#   指定监听的IP地址
+OLLAMA_HOST=192.168.x.x ollama serve
+OLLAMA_HOST=192.168.x.x ollama run llava:13b
+OLLAMA_HOST=192.168.x.x ollama pull llava:13b
+
+#   总之，OLLAMA_HOST 这个要使用就都使用，要不都不使用
+                    </pre>
+                    <p>
+                        <img src="./image/5-1.png" alt="OLLAMA_HOST=192.168.x.x ollama serve 指定IP地址并启动服务，ollama pull llava:13b 拉取模型同样指定IP地址" />
+                    </p>
                 </dl>
             </mark-block>
             <h3>拉取模型</h3>
@@ -98,6 +116,17 @@ ollama run deepseek-coder:6.7b
             <p>
                 <img src="./image/7.png" alt="ollama run deepseek-coder:6.7b  命令行交互部分" />
             </p>
+            <mark-block>
+                <dl>
+                    <dt><strong>2024-04-08</strong></dt>
+                    <dd style="line-height: 2">ollama 拉取的模型放到哪里了？</dd>
+                    <dd>ubuntu 22.04 为例，路径为：<line-code>/home/xxx/.ollama/models/blobs</line-code></dd>
+                    <dd>
+                        <img src="./image/7-1.png" alt="ollama 缓存模型的位置" />
+                    </dd>
+                    <dd style="line-height: 2">上面是默认的缓存位置，你也可以动态设置缓存位置：<line-code>OLLAMA_MODELS=/home/xxx/llm/0-model/ollama/models OLLAMA_HOST=192.168.xxx.xxx ollama serve</line-code></dd>
+                </dl>
+            </mark-block>
             <h3>客户端</h3>
             <h4>curl</h4>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
