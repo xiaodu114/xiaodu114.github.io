@@ -1,29 +1,233 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>MySQL - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,MySQL,Ubuntu,Ubuntu 22.04,MySQL 批量插入数据脚本" />
+        <meta name="description" content="Ubuntu 22.04 安装 MySQL，创建用户并分配数据库，设置允许远程连接等。整理记录 MySQL 相关的知识点，例如：批量插入数据脚本" />
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>MySQL - xiaodu114.github.io</title>
-    <meta name="keywords" content="MySQL,MySQL 批量插入数据脚本,xiaodu114">
-    <meta name="description" content="整理记录 MySQL 相关的知识点，例如：批量插入数据脚本">
+        <script src="/p/_/js/main.js"></script>
+    </head>
 
-    <script src="/p/_/js/main.js"></script>
-</head>
+    <body>
+        <!-- github访问地址：/p/db/mysql/index.html -->
+        <div class="blog-page">
+            <h1>MySQL</h1>
+            <p>整理记录 MySQL 相关的知识点，赶紧看看吧！</p>
+            <h2>图形客户端</h2>
+            <ul>
+                <li>
+                    <a href="https://dev.mysql.com/downloads/workbench/" target="_blank">MySQL :: Download MySQL Workbench</a>
+                </li>
+                <li>
+                    <a href="https://dbeaver.io/" target="_blank">DBeaver Community | Free Universal Database Tool</a>
+                </li>
+                <li>
+                    <a href="https://www.heidisql.com/" target="_blank">HeidiSQL - MariaDB, MySQL, MSSQL, PostgreSQL and SQLite made easy</a>
+                </li>
+                <li>
+                    <a href="https://www.navicat.com.cn/" target="_blank">Navicat 中国 | 支持 MySQL、Redis、MariaDB、MongoDB、SQL Server、SQLite、Oracle 和 PostgreSQL 的数据库管理</a>
+                </li>
+            </ul>
+            <h2>Windows 安装</h2>
+            <p>好想吐槽一下啊！比重装系统还麻烦……</p>
+            <h2>Ubuntu 22.04 安装</h2>
+            <h3>卸载</h3>
+            <p>安装之前，先弄一下卸载</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#	停止MySQL服务
+sudo systemctl stop mysql
 
-<body>
-    <!-- github访问地址：/p/db/mysql/index.html -->
-    <div class="blog-page">
+#	卸载MySQL软件包（开始用的是这个）
+sudo apt remove --purge mysql-server mysql-client mysql-common mysql-client-core-8.0 mysql-server-core-8.0
+#   通配符匹配卸载（后来发现这个更好用）
+sudo apt purge mysql-*
 
-        <h1>MySQL</h1>
-        <p>整理记录 MySQL 相关的知识点，赶紧看看吧！</p>
-        <h2>安装</h2>
-        <p>好想吐槽一下啊！比重装系统还麻烦……</p>
-        <h2>新增</h2>
-        <h3>批量插入数据</h3>
-        <p>同事想让帮忙写个语句，可以批量插入数据，于是便网上查了一下并结合需求，写了下面的语句：</p>
-        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="sql">
+#	清理残留的配置文
+sudo rm -rf /etc/mysql
+sudo rm -rf /var/lib/mysql
+sudo rm -rf /var/lib/mysql-files
+sudo rm -rf /var/lib/mysql-keyring
+sudo rm -rf /var/log/mysql
+
+sudo apt autoremove
+sudo apt autoclean
+
+#	重新加载系统服务
+sudo systemctl daemon-reload
+
+#	更新本地包数据库
+sudo apt update
+
+#	检查是否卸载干净
+dpkg -l | grep mysql
+            </pre>
+            <h3>安装</h3>
+            <p>官网下载地址：<a href="https://dev.mysql.com/downloads/mysql/" target="_blank">MySQL :: Download MySQL Community Server</a> 本来是想着到官网弄个软件包已安装就完事儿了，结果这一拉流，直接懵逼了……也没有查每一个都是干什么的，一个个安装吧，又太多了，算了，还是老老实实用<line-code>apt</line-code>安装吧</p>
+            <p>
+                <img src="./image/0.png" alt="MySQL 官网下载页面" />
+            </p>
+            <h4>安装并检查版本</h4>
+            <p><strong>说明</strong> 这里安装的版本是：<line-code>8.0.35-0ubuntu0.22.04.1</line-code></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#	1、安装
+sudo apt update
+sudo apt install mysql-server
+
+#	2、查看服务状态
+sudo systemctl status mysql
+#       备用
+sudo systemctl start mysql
+sudo systemctl stop mysql
+sudo systemctl restart mysql
+sudo systemctl enable mysql
+
+#   3、版本检测
+mysql --version
+            </pre>
+            <p>
+                <img src="./image/1.png" alt="MySQL 安装过程，安装之后，查看服务状态、检查版本" />
+            </p>
+            <h4>安全配置 MySQL</h4>
+            <p>运行<line-code>mysql_secure_installation</line-code>脚本来进行安全设置，如设置root用户的密码，移除匿名用户，禁止root用户远程登录等。这里没有设置root用户的密码（后面会设置一个简单的），如果你需要严格的密码规则，则可以设置验证密码插件，其中会让你选择密码验证策略，大概分成了三个等级……</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo mysql_secure_installation
+            </pre>
+            <p>
+                <img src="./image/2.png" alt="MySQL 安装过程，运行 mysql_secure_installation 脚本来进行安全设置，设置验证密码插件、删除匿名用户" />
+            </p>
+            <p>
+                <img src="./image/3.png" alt="MySQL 安装过程，运行 mysql_secure_installation 脚本来进行安全设置，禁止 root 用户远程登录" />
+            </p>
+            <p>
+                <img src="./image/4.png" alt="MySQL 安装过程，运行 mysql_secure_installation 脚本来进行安全设置，删除 test 数据库" />
+            </p>
+            <p>
+                <img src="./image/5.png" alt="MySQL 安装过程，运行 mysql_secure_installation 脚本来进行安全设置，重新载入权限表" />
+            </p>
+            <h3>MySQL Shell</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   进入 MySQL Shell
+sudo mysql
+
+#   列出所有的用户
+select user, host, plugin from mysql.user;
+
+#   列出所有的数据库
+SHOW DATABASES;
+            </pre>
+            <p>
+                <img src="./image/6.png" alt="MySQL 安装成功，进入 MySQL Shell，列出所有的用户" />
+            </p>
+            <h4>切换root用户进入方式</h4>
+            <p>你可以使用<line-code>sudo mysql</line-code>或者<line-code>mysql -u root -p</line-code>的方式进入Shell模式，你更喜欢哪一种呢？</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   默认的 sudo mysql 进入修改为 mysql -u root -p 进入
+#   \q 退出 shell
+alter user 'root'@'localhost' identified with mysql_native_password by 'xxx';
+flush privileges;
+\q
+
+#   mysql -u root -p 进入修改为 sudo mysql 进入
+alter user 'root'@'localhost' identified with auth_socket;
+flush privileges;
+\q
+            </pre>
+            <p>
+                <img src="./image/7.png" alt="MySQL 安装成功，默认的 sudo mysql 进入shell修改为 mysql -u root -p 进入" />
+            </p>
+            <h4>新建数据库</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   列出所有的数据库
+SHOW DATABASES;
+
+CREATE DATABASE db001;
+CREATE DATABASE db002;
+CREATE DATABASE db003;
+            </pre>
+            <p>
+                <img src="./image/8.png" alt="MySQL 安装成功，新建数据库" />
+            </p>
+            <h4>创建用户并分配数据库</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   创建本地账户并给与所有库的权限
+CREATE USER 'local0'@'localhost' IDENTIFIED BY 'local0';
+GRANT ALL PRIVILEGES ON *.* TO 'local0'@'localhost';
+#   撤销用户权限并删除用户
+REVOKE ALL PRIVILEGES ON *.* FROM 'local0'@'localhost';
+DROP USER 'local0'@'localhost';
+
+#   创建本地账户并给与指定数据库的权限
+CREATE USER 'local8'@'localhost' IDENTIFIED BY 'local8';
+GRANT ALL PRIVILEGES ON db001.* TO 'local8'@'localhost';
+#   撤销用户权限并删除用户
+REVOKE ALL PRIVILEGES ON db001.* FROM 'local8'@'localhost';
+DROP USER 'local8'@'localhost';
+
+FLUSH PRIVILEGES;
+\q
+            </pre>
+            <p>
+                <img src="./image/9.png" alt="MySQL 安装成功，创建用户并分配数据库" />
+            </p>
+            <p>新建用户并分配数据库之后测试一下</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+mysql -u local0 -p
+SHOW DATABASES;
+
+mysql -u local8 -p
+SHOW DATABASES;
+            </pre>
+            <p>
+                <img src="./image/10.png" alt="MySQL 安装成功，新建用户登录并查看所管辖的数据库" />
+            </p>
+            <p>
+                <img src="./image/11.png" alt="MySQL 安装成功，新建用户登录并查看所管辖的数据库" />
+            </p>
+            <p>下面在看一下撤销用户权限并删除用户的截图</p>
+            <p>
+                <img src="./image/12.png" alt="MySQL 安装成功，撤销用户权限并删除用户" />
+            </p>
+            <h3>远程连接</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#	修改文件权限
+sudo chmod 777 /etc/mysql/mysql.conf.d/mysqld.cnf
+#	mysqld.cnf 文件中你可以搜索 bind-address；如果没有，添加
+bind-address = 0.0.0.0
+
+#	对所有用户移除写权限
+sudo chmod a-w /etc/mysql/mysql.conf.d/mysqld.cnf
+
+#   重启服务
+sudo systemctl restart mysql
+            </pre>
+            <p>
+                <img src="./image/13.png" alt="MySQL 安装成功，设置远程连接，修改文件 /etc/mysql/mysql.conf.d/mysqld.cnf" />
+            </p>
+            <h4>创建远程账户并分配数据库</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   '%' 表示允许来自任何IP地址的连接
+CREATE USER 'admin'@'%' IDENTIFIED WITH mysql_native_password BY 'xxx';
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%';
+FLUSH PRIVILEGES;
+
+#   如果不想要了，干掉他
+REVOKE ALL PRIVILEGES ON *.* FROM 'admin'@'%';
+DROP USER 'admin'@'%';
+FLUSH PRIVILEGES;
+            </pre>
+            <p>
+                <img src="./image/14.png" alt="MySQL 安装成功，设置远程连接，创建远程账户并分配数据库" />
+            </p>
+            <p>
+                <img src="./image/15.png" alt="MySQL 安装成功，远程连接测试" />
+            </p>
+            <h2>新增</h2>
+            <h3>批量插入数据</h3>
+            <p>同事想让帮忙写个语句，可以批量插入数据，于是便网上查了一下并结合需求，写了下面的语句：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="sql">
 --  https://www.sjkjc.com/mysql/install-on-windows/
 --	https://zhuanlan.zhihu.com/p/37152572
 --  https://www.runoob.com/w3cnote/windows10-mysql-installer.html
@@ -51,9 +255,7 @@ end $$
 
 -- 2、调用存储过程
 CALL `test001`.`ddz_batchinsert_data`(500000);
-        </pre>
-
-    </div>
-</body>
-
+            </pre>
+        </div>
+    </body>
 </html>
