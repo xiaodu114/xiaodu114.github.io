@@ -169,6 +169,35 @@
             <h4>选择软件源</h4>
             <p>你可以参考：<a href="/p/linux/ubuntu/index.html" target="_blank">Ubuntu - xiaodu114.github.io</a></p>
             <h3>配置远程连接</h3>
+            <h4>防火墙</h4>
+            <p>弄了几台机器之后，发现了两种防火墙：ufw 和 firewalld。当然你如果觉得麻烦，可以禁用这些防火墙。</p>
+            <h5>ufw</h5>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo ufw allow from any to any port 3389 proto tcp
+            </pre>
+            <h5>firewalld</h5>
+            <p>请稍后</p>
+            <h4>xrdp</h4>
+            <p>这种方式比较省事儿，强烈推荐</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   开机启动
+sudo systemctl enable xrdp
+#   禁止开机启动
+sudo systemctl disable xrdp
+#   查看状态
+sudo systemctl status xrdp
+#   启动服务
+sudo systemctl start xrdp
+#   停止服务
+sudo systemctl stop xrdp
+#   停止服务
+sudo systemctl restart xrdp
+            </pre>
+            <p>xrdp 和 设置-》共享 应该不是一套体系。在设置中禁用共享，使用 xrdp 也可以远程</p>
+            <p>
+                <img src="./image/4-0.png" alt="设置-》共享" />
+            </p>
+            <h5>xrdp-installer 脚本安装</h5>
             <p>这里用到的是：<a href="http://www.c-nergy.be/products.html" target="_blank">Products | c-nergy.be</a>。当时下载的版本是 1.4.8，例如：xrdp-installer-1.4.8.zip。之后解压，得到：<line-code>xrdp-installer-1.4.8.sh</line-code>。安装之后可以解决复制粘贴、ubuntu不能全屏（分辨率）的问题。</p>
             <details>
                 <summary>点击查看详细步骤</summary>
@@ -202,6 +231,58 @@
                 </p>
                 <p>因为这个问题，才会有上面安装时额外说明：不要勾中“自动登录”。当然，还得看你的个人需求，是吧。</p>
             </details>
+            <h5>apt 安装</h5>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo apt update
+sudo apt install xrdp -y
+
+#   如何卸载
+sudo systemctl stop xrdp
+sudo systemctl disable xrdp
+sudo apt purge xrdp xserver-xorg-core xserver-xorg-input-all xorgxrdp
+sudo apt autoremove
+sudo apt autoclean   
+sudo apt update
+            </pre>
+            <h4>GNOME 设置-》共享</h4>
+            <p>这应该是 GNOME 内置的远程功能，用起来是真不方便啊。这玩意重启一次换一次密码，你受的了吗？不知道能不能固定……</p>
+            <p>
+                <img src="./image/5-1.png" alt="设置-》共享 远程桌面和远程登录开启时，端口 3389 的占用情况" />
+            </p>
+            <details>
+                <summary>参考链接</summary>
+                <ul>
+                    <li>
+                        <a href="https://blog.csdn.net/lida2003/article/details/129726252" target="_blank">ubuntu22.04@配置支持远程Windows桌面访问_ubuntu22远程桌面-CSDN博客</a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/pipci/p/16377032.html" target="_blank">Ubuntu22.04远程桌面配置（RDP，VNC） - pipci - 博客园</a>
+                    </li>
+                    <li>
+                        <a href="https://cn.linux-console.net/?p=14897" target="_blank">如何在 Ubuntu Desktop 22.04 LTS 上启用远程桌面并从 Windows 访问它</a>
+                    </li>
+                </ul>
+            </details>
+            <h5>共享设置</h5>
+            <p>
+                <img src="./image/5-2.png" alt="设置-》共享 启动共享、打开远程桌面和远程登录" />
+            </p>
+            <p>
+                <img src="./image/5-3.png" alt="设置-》共享 远程桌面详情" />
+            </p>
+            <h5>电源设置</h5>
+            <p>这里主要是息屏设置</p>
+            <p>
+                <img src="./image/5-4.png" alt="设置-》电源 息屏设置" />
+            </p>
+            <h5>屏幕设置</h5>
+            <p>
+                <img src="./image/5-5.png" alt="设置-》屏幕 锁屏设置" />
+            </p>
+            <h5>用户设置</h5>
+            <p>
+                <img src="./image/5-6.png" alt="设置-》用户 自动登录设置" />
+            </p>
         </div>
     </body>
 </html>
