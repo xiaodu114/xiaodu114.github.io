@@ -45,14 +45,43 @@ sudo shutdown now
 mkdir demo1
 
 #   删除文件或者文件夹
-rm -rf demo1
+sudo rm -rf demo1
 
 #   端口占用
 sudo lsof -i :8888
+
+#   密码和密钥（密钥环）
+seahorse
             </pre>
             <h2>安装系统</h2>
+            <mark-block>
+                <ul>
+                    <li>您可以考虑一下是否需要最小化安装</li>
+                    <li>安装时有设置简单密码（例如：6）的机会，安装之后在修改用户密码就比较费劲了，至少6位</li>
+                </ul>
+            </mark-block>
             <h3>Hyper-V</h3>
             <p>你可以参考：<a href="/p/windows/hyper-v/index.html" target="_blank">Hyper-V - xiaodu114.github.io</a></p>
+            <h2>用户</h2>
+            <h3>密码策略</h3>
+            <p>如果你想修改一个比较简单的密码，你需要修改密码策略</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   1、修改文件权限
+sudo chmod 777 /etc/security/pwquality.conf
+
+#	用完之后，对所有用户移除写权限
+sudo chmod a-w /etc/security/pwquality.conf
+
+#   2、修改文件
+#       密码的最小长度（最小6位。你就算设置为 1 ，也不起作用）
+minlen = 1
+#       至少包含几种不同的字符类型（0表示不需要）
+minclass = 0  
+            </pre>
+            <h3>修改用户密码</h3>
+            <p>
+                <img src="./image/0-1.png" alt="修改用户密码" />
+            </p>
             <h2>选择软件源</h2>
             <details>
                 <summary>点击查看详细步骤</summary>
@@ -105,6 +134,33 @@ nmcli -p device show
                     </li>
                 </ul>
             </details>
+            <h2>防火墙</h2>
+            <p>这玩意也是够让人郁闷的……</p>
+            <h3>ufw</h3>
+            <p><line-code>ufw</line-code>的全称是 Uncomplicated Firewall</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   查看帮助
+sudo ufw -h
+
+sudo ufw status
+sudo ufw enable
+sudo ufw disable
+            </pre>
+            <p>他还有一个图形化的客户端：gufw，你可以这样安装<line-code>sudo apt install gufw</line-code></p>
+            <h3>firewalld</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   开机启动
+sudo systemctl enable firewalld
+#   查看状态
+sudo systemctl status firewalld
+#   启动服务
+sudo systemctl start firewalld
+#   停止服务
+sudo systemctl stop firewalld
+#   停止服务
+sudo systemctl restart firewalld
+            </pre>
+            <p>他还有一个图形化的客户端：firewall-config，你可以这样安装<line-code>sudo apt install firewall-config</line-code>。这个软件在启动时会检测<line-code>firewalld</line-code>服务是否启动，如果没有启动，用不了</p>
             <h2>安装软件</h2>
             <h3>安装<line-code>deb</line-code></h3>
             <p><line-code>deb</line-code>应该就类似<line-code>windows</line-code>中的<line-code>exe</line-code>了吧</p>
@@ -123,6 +179,16 @@ sudo dpkg -i microsoft-edge-stable_120.0.2210.61-1_amd64.deb
 sudo dpkg -i code_1.85.0-1701902998_amd64.deb    
             </pre>
             <h3>apt 安装</h3>
+            <p>先说一下如何卸载软件包</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo apt remove --purge xxx
+sudo apt purge xxx
+
+sudo apt autoremove
+sudo apt autoclean   
+
+sudo apt update
+            </pre>
             <h4>Git | LFS</h4>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 #   检查 Git 版本：git --version
@@ -220,12 +286,33 @@ sudo apt-mark unhold nvidia-driver-535
                 </pre>
             </mark-block>
             <h2>GNOME</h2>
-            <p>一些GNOME相关的东东</p>
-            <h3>GNOME 扩展</h3>
+            <p>一些GNOME相关的东东……弄得多了，也发现了一些问题：“设置”中没有“外观”配置；桌面没有显示 Dock；窗口没有最大化、最小化按钮等等</p>
+            <h3>设置-》外观</h3>
+            <p>为啥有的安装之后“设置”中没有“外观”这个菜单……</p>
+            <p>
+                <img src="./image/3-0.png" alt="GNOME 设置-》外观" />
+            </p>
+            <h3>扩展管理器</h3>
+            <p>扩展管理器感觉和下面的“扩展”类似，只不过扩展管理器有搜索扩展的功能，感觉像个市场</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo apt install gnome-shell-extension-manager
+            </pre>
+            <p>
+                <img src="./image/3-1.png" alt="GNOME 扩展管理器 和 扩展" />
+            </p>
+            <h3>扩展</h3>
             <p>参考：<a href="https://linux.cn/article-12414-1.html" target="_blank">桌面应用|如何在 Ubuntu 20.04 上禁用坞站（dock）</a></p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 sudo apt install gnome-shell-extensions
             </pre>
+            <h3>GNOME Tweaks</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo apt install gnome-tweaks
+            </pre>
+            <p>
+                <img src="./image/3-2.png" alt="GNOME Tweaks 优化" />
+            </p>
+            <!-- https://zhuanlan.zhihu.com/p/409493039 -->
             <h3>Desktop Icons NG(DING)</h3>
             <p>扩展介绍：Adds icons to the desktop. Fork of the original Desktop Icons extension, with several enhancements .</p>
             <h4>主目录</h4>
