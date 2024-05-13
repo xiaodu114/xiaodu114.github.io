@@ -300,6 +300,15 @@ sudo apt install gnome-shell-extension-manager
             <p>
                 <img src="./image/3-1.png" alt="GNOME 扩展管理器 和 扩展" />
             </p>
+            <mark-block>
+                <p>通用上面的插件，我们可以控制“Ubuntu Dock”的开启和关闭。之后你可以通过下面的命令控制“Ubuntu Dock”的位置和高度等</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#	Dock 的位置，BOTTOM 屏幕底部 ； LEFT 屏幕左边
+gsettings set org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM
+#	Dock 的高度（位于左边）或者宽度（位于底部），true 撑满屏幕的宽度或者高度 ； false 不撑满（居中显示）
+gsettings set org.gnome.shell.extensions.dash-to-dock extend-height false
+                </pre>
+            </mark-block>
             <h3>扩展</h3>
             <p>参考：<a href="https://linux.cn/article-12414-1.html" target="_blank">桌面应用|如何在 Ubuntu 20.04 上禁用坞站（dock）</a></p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
