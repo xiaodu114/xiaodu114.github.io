@@ -26,8 +26,12 @@
             </ul>
             <h2>常用命令</h2>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
-#显示 CPU 的详细信息
+#   显示 CPU 的详细信息（这里也会包括CPU架构信息）
 lscpu
+
+#   CPU架构（是 amd 还是 arm）
+#       更多请参考：https://zh.wikipedia.org/zh-cn/指令集架构
+dpkg --print-architecture
 
 #   系统监视器
 gnome-system-monitor
