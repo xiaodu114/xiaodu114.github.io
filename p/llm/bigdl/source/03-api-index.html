@@ -147,8 +147,24 @@
                                         let currentText = "";
                                         let decodedLines = decodedStr.split("\n").filter((x) => x.startsWith("data:") && x !== "data: [DONE]");
                                         decodedLines.forEach((lineStr) => {
-                                            let data = JSON.parse(lineStr.slice("data:".length).trim());
-                                            currentText += data.text;
+                                            // let data = JSON.parse(lineStr.slice("data:".length).trim());
+                                            // currentText += data.text;
+                                            let subLines = lineStr.split("data:").filter((x) => x.trim().length > 0);
+                                            subLines.forEach((subLineStr) => {
+                                                let data = JSON.parse(subLineStr.trim());
+                                                if (!data) return;
+                                                if (data.hasOwnProperty("choices")) {
+                                                    if (Array.isArray(data.choices) && data.choices.length) {
+                                                        data.choices.forEach((choice) => {
+                                                            currentText += choice?.delta?.content || "";
+                                                        });
+                                                    }
+                                                } else if (data.hasOwnProperty("result")) {
+                                                    currentText += data.result || "";
+                                                } else if (data.hasOwnProperty("text")) {
+                                                    currentText += data.text || "";
+                                                }
+                                            });
                                         });
                                         answer += currentText;
                                         callback({ done: false, text: currentText });
