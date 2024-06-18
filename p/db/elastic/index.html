@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>ELK Stack - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,ELK Stack,Elasticsearch,Ubuntu,Ubuntu 22.04,Kibana" />
+        <meta name="description" content="整理收集 ELK Stack 相关的东东： Ubuntu 22.04 安装 Elasticsearch ……" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/db/elastic/index.html -->
+        <div class="blog-page">
+            <h1>ELK Stack</h1>
+            <p>整理收集 ELK Stack 相关的东东</p>
+            <ul>
+                <li>
+                    <a href="https://www.elastic.co/" target="_blank">Elastic — The Search AI Company | Elastic</a>
+                </li>
+                <li><a href="https://www.elastic.co/elasticsearch" target="_blank">Elasticsearch: The Official Distributed Search & Analytics Engine | Elastic</a> | <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html" target="_blank">Elasticsearch Guide | Elastic</a></li>
+                <li>
+                    <a href="https://www.elastic.co/kibana" target="_blank">Kibana: Explore, Visualize, Discover Data | Elastic</a>
+                </li>
+                <li>
+                    <a href="https://www.elastic.co/elastic-stack" target="_blank">ELK Stack: Elasticsearch, Kibana, Beats & Logstash | Elastic</a>
+                </li>
+            </ul>
+            <h2>Ubuntu 22.04 部署</h2>
+            <h3>Elasticsearch</h3>
+            <h4>卸载</h4>
+            <p>安装之前，先弄一下卸载</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   停止服务
+sudo systemctl stop elasticsearch
+
+#   卸载 Elasticsearch 包
+#       -r (--remove)，它将删除软件包，但保留配置文件。
+sudo dpkg -r elasticsearch
+#       -P (--purge)，选项用于彻底删除软件包，包括它的配置文件。使用时，软件包的所有痕迹将被清除，包括配置文件和日志文件等。
+sudo dpkg -P elasticsearch
+
+#   删除 elasticsearch 用户和用户组
+#       查看用户组
+cat /etc/group
+#       删除用户组
+sudo groupdel elasticsearch
+#       查看用户
+cat /etc/passwd | cut -f 1 -d:
+#       删除用户
+sudo userdel -r elasticsearch
+
+#   删除文件夹或者文件
+sudo rm -rf /etc/elasticsearch /usr/share/elasticsearch /var/lib/elasticsearch /var/log/elasticsearch /etc/apt/sources.list.d/elasticsearch.list
+
+sudo apt autoremove
+sudo apt autoclean   
+sudo apt update
+
+#   看看是否还有漏网之鱼
+dpkg -l | grep elasticsearch
+            </pre>
+            <h4>安装</h4>
+            <p>官网下载地址：<a href="https://www.elastic.co/cn/downloads/elasticsearch" target="_blank">Download Elasticsearch | Elastic</a>。这里使用的版本是：<line-code>elasticsearch-8.13.4-amd64.deb</line-code></p>
+            <h5>vm.max_map_count</h5>
+            <p>官方关于<line-code>vm.max_map_count</line-code>的介绍：<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html" target="_blank">Virtual memory | Elasticsearch Guide [8.13] | Elastic</a>、<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/_maximum_map_count_check.html" target="_blank">Maximum map count check | Elasticsearch Guide [8.13] | Elastic</a>。官方建议最小<line-code>262144</line-code></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   查看 vm.max_map_count 的大小
+sysctl vm.max_map_count
+
+#   修改 vm.max_map_count 的值
+#       修改文件权限
+#           -R (--recursive)，它的作用是递归地改变指定目录及其所有子目录和文件的权限。
+sudo chmod 777 /etc/sysctl.conf
+#       文件末尾写入
+vm.max_map_count=262144
+
+#   刷新
+sudo sysctl -p /etc/sysctl.conf
+
+#   再次查看
+sysctl vm.max_map_count
+
+#   撤回文件权限
+#       a 是一个特殊的选项，代表“所有”（all），它指定了对所有用户（用户、组和其他）的权限。
+#       -w 表示移除写权限。
+#       -r 表示移除读权限。
+sudo chmod a-w /etc/sysctl.conf
+            </pre>
+            <p>
+                <img src="./image/1.png" alt="修改 vm.max_map_count 之查看其值" />
+            </p>
+            <p>
+                <img src="./image/2.png" alt="修改 vm.max_map_count 之修改其值" />
+            </p>
+            <h5>正式安装</h5>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo dpkg -i elasticsearch-8.13.4-amd64.deb
+
+sudo systemctl daemon-reload
+            </pre>
+            <details>
+                <summary>点击查看安装日志</summary>
+                <pre>
+u1@u1-pc:~/0-soft$ sudo dpkg -i elasticsearch-8.13.4-amd64.deb
+正在选中未选择的软件包 elasticsearch。
+(正在读取数据库 ... 系统当前共安装有 180463 个文件和目录。)
+准备解压 elasticsearch-8.13.4-amd64.deb  ...
+Creating elasticsearch group... OK
+Creating elasticsearch user... OK
+正在解压 elasticsearch (8.13.4) ...
+正在设置 elasticsearch (8.13.4) ...
+--------------------------- Security autoconfiguration information ------------------------------
+
+Authentication and authorization are enabled.
+TLS for the transport and HTTP layers is enabled and configured.
+
+The generated password for the elastic built-in superuser is : 2-kXQ8MHV9-hdqKvWEtW
+
+If this node should join an existing cluster, you can reconfigure this with
+'/usr/share/elasticsearch/bin/elasticsearch-reconfigure-node --enrollment-token &lt;token-here>'
+after creating an enrollment token on your existing cluster.
+
+You can complete the following actions at any time:
+
+Reset the password of the elastic built-in superuser with 
+'/usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic'.
+
+Generate an enrollment token for Kibana instances with 
+ '/usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s kibana'.
+
+Generate an enrollment token for Elasticsearch nodes with 
+'/usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s node'.
+
+-------------------------------------------------------------------------------------------------
+### NOT starting on installation, please execute the following statements to configure elasticsearch service to start automatically using systemd
+ sudo systemctl daemon-reload
+ sudo systemctl enable elasticsearch.service
+### You can start elasticsearch service by executing
+ sudo systemctl start elasticsearch.service
+u1@u1-pc:~/0-soft$ 
+                </pre>
+            </details>
+            <p>
+                <img src="./image/3.png" alt="安装 elasticsearch" />
+            </p>
+            <h4>启动服务</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo systemctl start elasticsearch
+
+#   备用
+sudo systemctl status elasticsearch
+sudo systemctl stop elasticsearch
+sudo systemctl restart elasticsearch
+sudo systemctl enable elasticsearch
+sudo systemctl disable elasticsearch
+            </pre>
+            <p>
+                <img src="./image/4.png" alt="启动 elasticsearch 服务和浏览器测试" />
+            </p>
+            <mark-block>
+                <p>默认开启了 https 和用户名密码验证，本地和外部IP地址均可访问。注意：防火墙是否开放 9200 端口</p>
+            </mark-block>
+            <h4>禁用 https</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   修改文件权限
+sudo chmod -R 777 /etc/elasticsearch
+#   撤回文件权限
+sudo chmod -R a-r /etc/elasticsearch
+
+#   编辑文件 /etc/elasticsearch/elasticsearch.yml
+#       下面即是文件中的内容，将 enabled 设置为 false ，即可停用 https
+
+# Enable encryption for HTTP API client connections, such as Kibana, Logstash, and Agents
+xpack.security.http.ssl:
+  enabled: false
+  keystore.path: certs/http.p12
+            </pre>
+            <p>
+                <img src="./image/5.png" alt="修改文件夹 /etc/elasticsearch 的权限" />
+            </p>
+            <p>
+                <img src="./image/6.png" alt="修改文件：/etc/elasticsearch/elasticsearch.yml 和禁用 https 测试" />
+            </p>
+            <mark-block>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+# Enable security features
+xpack.security.enabled: false
+                </pre>
+                <p>如果这里设置为 false，不仅可以禁用 https，还禁用了用户名和密码验证</p>
+            </mark-block>
+            <h4>重置 elastic 用户密码</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic
+            </pre>
+            <mark-block>
+                <p>在禁用 https 之后重置密码会有问题，如下图。重置之前还得启用 https</p>
+            </mark-block>
+            <p>
+                <img src="./image/7.png" alt="启用 https 和重置 elastic 用户密码" />
+            </p>
+            <h4>用户和角色</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#	查看帮助
+sudo /usr/share/elasticsearch/bin/elasticsearch-users -h
+
+#   列出所有用户
+sudo /usr/share/elasticsearch/bin/elasticsearch-users list
+#	列出所有用户 （Elasticsearch 7.x 及以上版本）
+https://elastic:密码@localhost:9200/_security/user?pretty
+#	列出所有角色 （Elasticsearch 7.x 及以上版本）
+https://elastic:密码@localhost:9200/_security/role?pretty
+
+#   添加用户 帮助
+sudo /usr/share/elasticsearch/bin/elasticsearch-users useradd -h
+
+#   添加用户 用户名：admin 密码：admin666 角色：superuser 
+sudo /usr/share/elasticsearch/bin/elasticsearch-users useradd admin -p admin666 -r superuser
+            </pre>
+            <h3>Kibana</h3>
+            <p>敬请期待</p>
+        </div>
+    </body>
+</html>
