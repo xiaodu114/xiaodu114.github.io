@@ -6,7 +6,7 @@
     
   <url>
     <loc>https://xiaodu114.github.io/</loc>
-    <lastmod>2024-04-26T09:28:46.817Z</lastmod>
+    <lastmod>2024-06-18T07:48:22.524Z</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
@@ -25,18 +25,23 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://xiaodu114.github.io/p/db/elastic/index.html</loc>
+    <lastmod>2024-06-18T07:34:10.304Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://xiaodu114.github.io/p/db/mongodb/index.html</loc>
     <lastmod>2024-02-22T00:45:58.000Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/db/mysql/index.html</loc>
-    <lastmod>2024-02-22T00:45:58.000Z</lastmod>
+    <lastmod>2024-05-08T01:49:17.350Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/db/postgreSQL/index.html</loc>
-    <lastmod>2024-04-17T00:52:47.745Z</lastmod>
+    <lastmod>2024-05-23T07:30:34.052Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -81,7 +86,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/edu/index.html</loc>
-    <lastmod>2024-02-22T00:45:58.000Z</lastmod>
+    <lastmod>2024-05-08T02:24:44.048Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -101,7 +106,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/fav/search/index.html</loc>
-    <lastmod>2024-04-01T01:43:53.652Z</lastmod>
+    <lastmod>2024-05-17T09:06:28.285Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -136,7 +141,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/linux/ubuntu/index.html</loc>
-    <lastmod>2024-04-19T02:12:00.160Z</lastmod>
+    <lastmod>2024-05-17T09:03:35.125Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -161,7 +166,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/dify/index.html</loc>
-    <lastmod>2024-04-24T08:09:49.798Z</lastmod>
+    <lastmod>2024-06-07T00:50:54.259Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -181,7 +186,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/index.html</loc>
-    <lastmod>2024-04-03T06:48:16.321Z</lastmod>
+    <lastmod>2024-05-11T08:08:56.877Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -201,7 +206,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/ollama/index.html</loc>
-    <lastmod>2024-04-08T01:23:43.195Z</lastmod>
+    <lastmod>2024-05-06T01:28:31.991Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -221,7 +226,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/xorbitsInference/index.html</loc>
-    <lastmod>2024-04-12T03:09:49.038Z</lastmod>
+    <lastmod>2024-05-30T07:40:45.245Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -236,7 +241,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/online/index.html</loc>
-    <lastmod>2024-04-25T02:21:50.853Z</lastmod>
+    <lastmod>2024-05-16T06:47:58.434Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -331,7 +336,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/windows/hyper-v/index.html</loc>
-    <lastmod>2024-02-22T00:45:58.000Z</lastmod>
+    <lastmod>2024-05-13T09:03:00.099Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
