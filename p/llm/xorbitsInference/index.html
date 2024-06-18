@@ -67,6 +67,20 @@ xinference-local --host 192.168.xxx.xxx --port 9997
             <p>
                 <img src="./image/4.png" alt="xorbitsai/inference 项目，接口文档页面" />
             </p>
+            <h2>一键脚本启动</h2>
+            <p>创建一个sh脚本，这里命名为<line-code>Xorbits Inference.sh</line-code>，并修改为可执行。脚本内容如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#!/bin/bash
+
+# 打开一个新的终端，并指定终端窗口标题
+gnome-terminal --title 'Xorbits Inference' --working-directory=/home/xxx/llm/2-code/inference-0.10.1 -- /bin/bash -c 'source ./venv/bin/activate; 
+HF_ENDPOINT=https://hf-mirror.com \
+XINFERENCE_MODEL_SRC=modelscope \
+XINFERENCE_HOME=/home/xxx/llm/0-model \
+xinference-local --host 192.168.xxx.xxx --port 9997'
+
+exit
+            </pre>
             <h2>Windows 环境</h2>
             <p>插一脚。不纯粹了，大环境是<line-code>ubuntu 22.04</line-code>，这里插一脚<line-code>windows</line-code></p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
