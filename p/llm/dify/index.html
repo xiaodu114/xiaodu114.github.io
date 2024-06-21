@@ -87,6 +87,16 @@ flask db upgrade
             <p>
                 <img src="./image/4.png" alt="langgenius/dify 项目部署过程 数据库迁移" />
             </p>
+            <mark-block>
+                <p><strong>2024-06-21</strong></p>
+                <p>记得之前某个版本中安装依赖之后，程序启动时会出错。<line-code>jieba</line-code>版本的问题，后续的版本没有发现这个问题，今天又重新部署了一下，用的版本是<line-code>v0.6.11</line-code>，又出现了这个问题，这里记录一下</p>
+                <p>
+                    <img src="./image/4-1.png" alt="pip 安装依赖之后，flask db upgrade 启动时报错" />
+                </p>
+                <p>
+                    <img src="./image/4-2.png" alt="pip 卸载 jieba，并重新安装" />
+                </p>
+            </mark-block>
             <h3>web 目录</h3>
             <p>这里是<line-code>npm</line-code>的主场</p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
@@ -243,6 +253,15 @@ for text in texts:
             <p>
                 <img src="./image/19.png" alt="langgenius/dify 项目，IP地址访问，修改 api/.env 文件" />
             </p>
+            <mark-block>
+                <p>上图中的<line-code>SERVICE_API_URL</line-code>和<line-code>APP_WEB_URL</line-code>这两个也要修改成IP地址，否则工作室中的应用在概览菜单下会有两个地方显示不正确，这两个地方分别对应上面的两个变量。</p>
+                <p>
+                    <img src="./image/19-1.png" alt="SERVICE_API_URL和APP_WEB_URL未修改示例" />
+                </p>
+                <p>
+                    <img src="./image/19-2.png" alt="SERVICE_API_URL和APP_WEB_URL修改为IP地址之后的示例" />
+                </p>
+            </mark-block>
             <p>修改完之后重新启动一下，如下：</p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 #   为了方便使用
