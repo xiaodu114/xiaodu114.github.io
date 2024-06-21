@@ -246,6 +246,29 @@ curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 #   之后安装即可
 sudo apt install nodejs -y
             </pre>
+            <mark-block type="info">
+                <p>顺带记一下，如何设置镜像源：</p>
+                <dl>
+                    <dt>查看npm源地址(默认为： https://registry.npmjs.org)</dt>
+                    <dd>
+                        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+                        npm config get registry
+                    </pre
+                        >
+                    </dd>
+                    <dt>修改源地址</dt>
+                    <dd>
+                        <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#	registry.npm.taobao.org 的 HTTPS 证书到期
+npm config set registry https://registry.npm.taobao.org
+
+#	2024-02-22 更新
+#	请使用最新（下方）的 npmjs.com 镜像，官网：https://npmmirror.com/
+npm config set registry https://registry.npmmirror.com
+                        </pre>
+                    </dd>
+                </dl>
+            </mark-block>
             <h3>压缩包安装</h3>
             <h4>Node.js</h4>
             <p>官网：<a href="https://nodejs.org/" target="_blank">Node.js</a> | <a href="https://nodejs.org/en/download" target="_blank">Node.js — Download</a></p>
