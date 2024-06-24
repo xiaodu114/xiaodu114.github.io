@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>SVN（Subversion、TortoiseSVN） - xiaodu114.github.io</title>
+        <meta name="keywords" content="SVN,Subversion,TortoiseSVN" />
+        <meta name="description" content="整理收集 SVN 相关的东东：Subversion、TortoiseSVN" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/version/svn/index.html -->
+        <div class="blog-page">
+            <h1>SVN</h1>
+            <p>整理收集<line-code>SVN</line-code>相关的东东……</p>
+            <ul>
+                <li>
+                    <a href="https://www.runoob.com/svn/svn-tutorial.html" target="_blank">SVN 教程 | 菜鸟教程</a>
+                </li>
+            </ul>
+            <h2>服务器端</h2>
+            <p>该章节介绍一下<line-code>SVN</line-code>的服务器端</p>
+            <h3>ubuntu 22.04</h3>
+            <p>这里使用的是：<line-code>subversion</line-code></p>
+            <h4>安装和检测</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+svn
+sudo apt update
+sudo apt install subversion
+#   安装完成，检测一下
+svn
+svn help
+svnadmin help
+            </pre>
+            <p>
+                <img src="./image/server-1.png" alt="ubuntu 22.04 安装 subversion" />
+            </p>
+            <p>
+                <img src="./image/server-2.png" alt="ubuntu 22.04 安装 subversion 之后，svn help" />
+            </p>
+            <p>
+                <img src="./image/server-3.png" alt="ubuntu 22.04 安装 subversion 之后，svnadmin help" />
+            </p>
+            <h4>创建仓储</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   新建一个空文件夹，这里是：/home/ddz/1-code/svn/repository
+#   如果文件非空，会报错
+#	不用 sudo 也可以
+sudo svnadmin create /home/ddz/1-code/svn/repository
+sudo chmod 777 -R /home/ddz/1-code/svn/repository
+            </pre>
+            <p>
+                <img src="./image/server-4.png" alt="svnadmin create 创建仓储之新建文件夹" />
+            </p>
+            <p>
+                <img src="./image/server-5.png" alt="svnadmin create 创建仓储" />
+            </p>
+            <p>
+                <img src="./image/server-6.png" alt="svnadmin create 创建仓储之后修改访问权限" />
+            </p>
+            <h4>配置仓储</h4>
+            <p>配置文件在仓储目录中的<line-code>conf</line-code>目录下，主要是<line-code>svnserve.conf</line-code>、<line-code>passwd</line-code>、<line-code>authz</line-code>这三个文件</p>
+            <h5>passwd</h5>
+            <p>在这里配置用户民和密码</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+[users]
+# harry = harryssecret
+# sally = sallyssecret
+all1 = all1666
+all2 = all2666
+f1 = f1666
+f2 = f2666
+b1 = b1666
+b2 = b2666
+            </pre>
+            <h5>authz</h5>
+            <p>在这里配置哪些用户可以可读、可写哪些目录，支持根据角色授权</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+	
+[groups]
+all = all1,all2
+f = f1,f2
+b = b1,b2
+
+[/]
+@all = rw
+* = r
+
+[/python]
+@b = rw
+@f = r
+* = r
+
+[/web]
+@f = rw
+@b = r
+* = r
+            </pre>
+            <p>
+                <img src="./image/server-7.png" alt="svnadmin create 创建仓储之后 passwd 和 authz 文件配置" />
+            </p>
+            <h5>svnserve.conf</h5>
+            <p>这里应该算是仓储的入口配置文件，其中 password-db 指向上面的 passwd 文件，authz-db 指向上面的 authz 文件</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+[general]
+anon-access = none
+auth-access = write
+password-db = passwd
+authz-db = authz
+            </pre>
+            <mark-block>
+                <p><line-code>svnserve.conf</line-code>文件中已经包括了上面的四个配置，只不过是注释掉的，你只需放开注释即可</p>
+                <p>如果你也有这样的习惯：原来的配置文件不动，将这些添加到最后。你一定要注意，这四个配置属于<line-code>[general]</line-code>；如果你添加到了文件的末尾，那就找错组织了，<line-code>[sasl]</line-code>并不知道他们</p>
+            </mark-block>
+            <p>
+                <img src="./image/server-8.png" alt="svnadmin create 创建仓储之后 svnserve.conf 文件配置" />
+            </p>
+            <details>
+                <summary>踩坑记录</summary>
+                <p>这里是错误的示范，<line-code>svnserve.conf</line-code>文件的配置如下图：</p>
+                <p>
+                    <img src="./image/server-8-0.png" alt="svnserve.conf 错误配置示例" />
+                </p>
+                <p>在这种配置之下，用户获取代码时，不用输入用户名和密码，直接可以获取代码。当然，想要修改之后签入代码也是不可能的</p>
+                <p>
+                    <img src="./image/server-8-1.png" alt="svnserve.conf 错误配置下，客户端拉取代码1" />
+                </p>
+                <p>
+                    <img src="./image/server-8-2.png" alt="svnserve.conf 错误配置下，客户端拉取代码2" />
+                </p>
+                <p>
+                    <img src="./image/server-8-3.png" alt="svn import 的项目的结构" />
+                </p>
+            </details>
+            <h4>导入项目</h4>
+            <p>导入两个示例项目：基于 fastapi 的 python 项目和前端类库 a2bei4 项目</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+svn import /home/ddz/桌面/fastapi-demo file:///home/ddz/1-code/svn/repository/python/fastapi-demo -m "添加一个 Python 项目"
+
+svn import /home/ddz/桌面/a2bei4 file:///home/ddz/1-code/svn/repository/web/a2bei4 -m "添加前端项目 a2bei4"
+            </pre>
+            <p>
+                <img src="./image/server-9.png" alt="svn import 导入一下初始项目" />
+            </p>
+            <h4>启动</h4>
+            <p>参考：<a href="https://www.runoob.com/svn/svn-start-mode.html" target="_blank">SVN 启动模式 | 菜鸟教程</a></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+svnserve -d -r /home/ddz/1-code/svn/repository --listen-port 3690
+
+#   查看服务
+ps -ef | grep svnserve
+#   干掉他
+killall svnserve
+            </pre>
+            <p>
+                <img src="./image/server-10.png" alt="单库 svnserve 方式启动" />
+            </p>
+            <p>到这里，客户端再次尝试拉取代码就能弹出认证的弹窗了</p>
+            <p>
+                <img src="./image/server-11.png" alt="客户端拉取代码，可以弹出认证弹窗" />
+            </p>
+        </div>
+    </body>
+</html>
