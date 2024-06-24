@@ -6,7 +6,7 @@
     
   <url>
     <loc>https://xiaodu114.github.io/</loc>
-    <lastmod>2024-06-18T07:48:22.524Z</lastmod>
+    <lastmod>2024-06-24T07:24:00.265Z</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
@@ -41,7 +41,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/db/postgreSQL/index.html</loc>
-    <lastmod>2024-05-23T07:30:34.052Z</lastmod>
+    <lastmod>2024-06-18T09:13:09.310Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -141,7 +141,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/linux/ubuntu/index.html</loc>
-    <lastmod>2024-05-17T09:03:35.125Z</lastmod>
+    <lastmod>2024-06-21T08:31:47.962Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -166,7 +166,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/dify/index.html</loc>
-    <lastmod>2024-06-07T00:50:54.259Z</lastmod>
+    <lastmod>2024-06-21T02:52:14.218Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -282,6 +282,11 @@
   <url>
     <loc>https://xiaodu114.github.io/p/tool/webtorrent/index.html</loc>
     <lastmod>2024-02-22T00:45:58.000Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/p/version/svn/index.html</loc>
+    <lastmod>2024-06-24T06:17:13.783Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
