@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>linux 相关 - xiaodu114.github.io</title>
-        <meta name="keywords" content="linux" />
-        <meta name="description" content="linux 相关整理" />
+        <meta name="keywords" content="linux,fdisk,mkdir,mount,cp,umount,mkfs.vfat,dd" />
+        <meta name="description" content="linux 相关整理：无图形界面拷贝U盘文件至系统、dd 命令制作启动U盘" />
 
         <script src="/p/_/js/main.js"></script>
     </head>
@@ -62,6 +62,130 @@
                     <a href="https://www.zhihu.com/question/22076616/answer/755553800" target="_blank">有哪些好的Linux学习资源？ - 知乎</a>
                 </li>
             </ul>
+            <h2>命令</h2>
+            <h3>拷贝U盘文件至Linux系统</h3>
+            <p>这两天遇到一个尴尬的问题：上学时的旧电脑（戴尔 Vostro 1088），想让他发挥一下余热，于是找了一个硬件要求比较低的 Linux 发行版，选中的是<line-code>antiX</line-code>，结果安装之后，图形桌面进不去，憋了半天，最终进入了无图模式……像咱这半吊子，没有桌面环境直接抓虾啊，并且手头上没有其他的电脑，只有这一台电脑，还有两个U盘，一个是存储着很多 Linux 发行版的镜像，另一个是启动U盘。</p>
+            <p>在上面的场景下，查了一下，查到的解决办法是：无图模式下拷贝U盘中的镜像文件到电脑的某个位置，之后用<line-code>dd</line-code>命令制作启动U盘。这种办法已经验证，确实可行。安装的是<line-code>Q4OS</line-code>，但是具体的操作过程没有拍照或者录像，下面用<line-code>Q4OS</line-code>的桌面环境模拟一下上述过程。</p>
+            <h4>fdisk 查找U盘</h4>
+            <p>这里用的是存储着Linux镜像的U盘</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   主文件夹打开终端
+#   查看主文件夹的内容。
+ls
+#   查看硬盘及分区信息，找到目标U盘
+sudo fdisk -l
+            </pre>
+            <p>
+                <img src="./image/mount-1.png" alt="查看硬盘及分区信息： sudo fdisk -l" />
+            </p>
+            <h4>挂载U盘</h4>
+            <p>在根目录创建<line-code>usb</line-code>文件夹，挂载U盘使用</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   进入根目录
+cd /
+
+#   和下面创建 usb 之后的 ls 对比
+ls
+sudo mkdir usb
+ls
+
+#   挂载U盘
+sudo mount /dev/sdb1 /usb
+
+#   查看U盘内容
+cd usb
+ls
+cd software
+ls
+cd linux
+ls
+cd os
+ls
+            </pre>
+            <p>
+                <img src="./image/mount-2.png" alt="挂载U盘到 /usb ： sudo mount /dev/sdb1 /usb" />
+            </p>
+            <details>
+                <summary>第一次挂载U盘</summary>
+                <p>上面的挂载U盘并不是第一次操作，之前还进行过一次。下面是第一次操作时的截图，稍微有点不同：</p>
+                <p>
+                    <img src="./image/mount-2-0.png" alt="第一次挂载U盘： sudo mount /dev/sdb1 /usb" />
+                </p>
+            </details>
+            <h4>cp 拷贝文件</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   拷贝文件到主文件夹
+cp 'Debian, Ubuntu_bodhi-7.0.0-64.iso' /home/u1/bodhi-7.0.0-64.iso
+            </pre>
+            <p>
+                <img src="./image/mount-3.png" alt="拷贝文件到主文件夹： cp 'Debian, Ubuntu_bodhi-7.0.0-64.iso' /home/u1/bodhi-7.0.0-64.iso" />
+            </p>
+            <p>下面是拷贝成功的截图，如下：</p>
+            <p>
+                <img src="./image/mount-4.png" alt="拷贝文件到主文件夹，拷贝成功" />
+            </p>
+            <h4>umount 卸载U盘</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+cd /
+
+#   卸载U盘
+sudo umount /dev/sdb1
+
+#   再次进入 /usb 看一下
+cd /usb
+ls
+            </pre>
+            <p>
+                <img src="./image/mount-5.png" alt="卸载U盘： sudo umount /dev/sdb1" />
+            </p>
+            <h3>制作启动U盘</h3>
+            <p>接着上面拷贝的 Linux 镜像文件，这里利用<line-code>dd</line-code>来制作启动U盘</p>
+            <h4>fdisk 查找U盘</h4>
+            <p><strong>注意：</strong>这里的U盘已经换了，不是上面的那个了，是另一个</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+cd /
+#   查看硬盘及分区信息，找到目标U盘
+sudo fdisk -l
+            </pre>
+            <p>
+                <img src="./image/dd-1.png" alt="查看硬盘及分区信息： sudo fdisk -l" />
+            </p>
+            <h4>卸载U盘</h4>
+            <p>格式化U盘需要卸载U盘。如果没有挂载，可以跳过这一步</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   卸载U盘
+sudo umount /dev/sdb*
+            </pre>
+            <h4>格式化U盘</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+cd /usb
+ls
+
+#   格式化U盘
+sudo mkfs.vfat /dev/sdb -I
+            </pre>
+            <p>
+                <img src="./image/dd-2.png" alt="格式化U盘： sudo mkfs.vfat /dev/sdb -I" />
+            </p>
+            <h4>开始制作</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+cd /home/u1
+ls
+
+#   制作启动U盘
+sudo dd if=/home/u1/bodhi-7.0.0-64.iso of=/dev/sdb status=progress
+            </pre>
+            <p>
+                <img src="./image/dd-3.png" alt="制作启动U盘： sudo dd if=/home/u1/bodhi-7.0.0-64.iso of=/dev/sdb status=progress" />
+            </p>
+            <p>下面是制作完成的截图，如下：</p>
+            <p>
+                <img src="./image/dd-4.png" alt="制作启动U盘，成功" />
+            </p>
+            <p>再来一个U盘启动，安装<line-code>bodhi</line-code>的照片，如下：</p>
+            <p>
+                <img src="./image/dd-5.png" alt="U盘启动，安装 bodhi" />
+            </p>
         </div>
     </body>
 </html>
