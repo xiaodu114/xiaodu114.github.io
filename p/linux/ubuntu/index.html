@@ -239,12 +239,12 @@ python3 -m venv venv2
 source ./venv2/bin/activate
             </pre>
             <h4>Node.js</h4>
-            <p>直接使用 apt 安装，默认安装的版本太老了，需要先设置一下安装源。</p>
+            <p>直接使用 apt 安装，默认安装的版本太老了，需要先设置一下安装源。更多请看：<a href="https://deb.nodesource.com/" target="_blank">Nodesource Node.js DEB</a></p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 #   20.x 是你想要安装的版本
-curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -
 #   之后安装即可
-sudo apt install nodejs -y
+sudo apt install -y nodejs
             </pre>
             <mark-block type="info">
                 <p>顺带记一下，如何设置镜像源：</p>
