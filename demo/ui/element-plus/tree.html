@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Tree 树形控件 | element-plus vue3</title>
+        <meta name="keywords" content="vue,vue3,vue 3,element-plus,Tree,Tree 树形控件" />
+        <meta name="description" content="element-plus Tree 树形控件 示例。会伪造一些数据模拟从数据库读取的数据，之后根据 id 和 pid 属性组装成树形结构。" />
+
+        <!-- 引入样式 -->
+        <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css" />
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+            }
+
+            /* 代码来源：https://cloud.tencent.com/developer/article/1144484 */
+            /* 例外：https://www.jianshu.com/p/04127d74d88c */
+            pre {
+                box-sizing: border-box;
+                /*以下样式是自动换行代码*/
+                white-space: pre-wrap;
+                /* css-3 */
+                white-space: -moz-pre-wrap;
+                /* Mozilla, since 1999 */
+                white-space: -pre-wrap;
+                /* Opera 4-6 */
+                white-space: -o-pre-wrap;
+                /* Opera 7 */
+                word-wrap: break-word;
+                /* Internet Explorer 5.5+ */
+                /*以上样式是自动换行代码，需要的加上，不需要的删除*/
+                height: 100%;
+                overflow: auto;
+                font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+                font-size: 13px;
+                padding: 9.5px;
+                margin-top: 0px;
+                margin-bottom: 10px;
+                line-height: 1.42857;
+                color: #333333;
+                word-break: break-all;
+                word-wrap: break-word;
+                border: 1px solid #cccccc;
+                border-radius: 4px;
+                background-color: #f5f5f5;
+            }
+
+            html,
+            body {
+                height: 100%;
+                width: 100%;
+                margin: 0;
+                overflow: hidden;
+            }
+
+            .demo-box {
+                height: 100%;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+
+                > .header {
+                    flex-shrink: 0;
+                    position: relative;
+
+                    &::after {
+                        position: absolute;
+                        bottom: 0;
+                        right: 0;
+                        left: 0;
+                        height: 1px;
+                        content: "";
+                        -webkit-transform: scaleY(0.5);
+                        transform: scaleY(0.5);
+                        background-color: #ccc;
+                    }
+                }
+
+                > .main {
+                    flex: 1;
+                    overflow: hidden;
+                    display: flex;
+
+                    > .main-left {
+                        width: 345px;
+                        flex-shrink: 0;
+                        position: relative;
+                        padding-left: 10px;
+                        padding-right: 10px;
+                        display: flex;
+                        flex-direction: column;
+
+                        &::after {
+                            position: absolute;
+                            top: 0;
+                            bottom: 0;
+                            right: 0;
+                            width: 1px;
+                            content: "";
+                            -webkit-transform: scaleX(0.5);
+                            transform: scaleX(0.5);
+                            background-color: #ccc;
+                        }
+                    }
+
+                    > .main-middle {
+                        flex: 3;
+                    }
+
+                    > .main-right {
+                        flex: 2;
+                        flex-shrink: 0;
+                        position: relative;
+                        overflow-y: auto;
+
+                        ::after {
+                            position: absolute;
+                            top: 0;
+                            bottom: 0;
+                            left: 0;
+                            width: 1px;
+                            content: "";
+                            -webkit-transform: scaleX(0.5);
+                            transform: scaleX(0.5);
+                            background-color: #ccc;
+                        }
+                    }
+                }
+            }
+        </style>
+        <script src="https://unpkg.com/a2bei4"></script>
+        <!-- 引入 Vue 3 -->
+        <script src="https://unpkg.com/vue"></script>
+        <!-- 引入组件库 -->
+        <script src="https://unpkg.com/element-plus"></script>
+    </head>
+    <body>
+        <div id="vue3App" class="demo-box">
+            <div class="header">
+                <h1>Tree 树形控件 - element-plus</h1>
+                <p>官网：<a href="https://element-plus.org/zh-CN/component/tree.html" target="_blank">Tree 树形控件 | Element Plus</a>。这里会伪造一些数据模拟从数据库读取的数据，之后根据 id 和 pid 属性组装成树形结构。</p>
+            </div>
+            <div class="main">
+                <div class="main-left">
+                    <el-form :label-position="'top'" label-width="auto">
+                        <el-form-item label="请输入条数">
+                            <el-input type="number" v-model="generateArrLen" placeholder="请输入条数" />
+                        </el-form-item>
+                        <el-button @click="generateArr">生成数据</el-button>
+                        <el-button type="primary" @click="convert2TreeData">转为树形</el-button>
+                        <el-button @click="retSetArr">重置</el-button>
+                    </el-form>
+                </div>
+                <div class="main-middle">
+                    <pre v-html="JSON.stringify(arr, null, 4)"></pre>
+                </div>
+                <div class="main-right">
+                    <el-tree :data="treeData" :props="treeDefaultProps" />
+                </div>
+            </div>
+        </div>
+        <script>
+            (() => {
+                if (!(window.du && window.Vue && window.ElementPlus)) {
+                    alert(`'unpkg.com/a2bei4'或者'unpkg.com/vue@next'或者'unpkg.com/element-plus' 加载异常`);
+                    return;
+                }
+
+                if (!Date.prototype.format) {
+                    Date.prototype.format = function (format) {
+                        return du.date.format(this, format);
+                    };
+                }
+
+                let myId = new du.MyId();
+                function getArr(len) {
+                    let arr = [],
+                        ids = [null];
+                    for (let i = 0; i < len; i++) {
+                        let item = {
+                            id: myId.nextId(),
+                            pid: ids[du.utils.getInRangeInteger(1, ids.length) - 1],
+                            text: du.utils.getRandomZhOrEnStr(du.utils.getInRangeInteger(3, 20))
+                        };
+                        ids.push(item.id);
+                        arr.push(item);
+                    }
+                    return arr;
+                }
+
+                function convert2Tree(sourceArr) {
+                    let arr = JSON.parse(JSON.stringify(sourceArr));
+
+                    function fn(pid) {
+                        let nodes = [];
+                        for (let index = 0; index < arr.length; ) {
+                            let item = arr[index];
+                            if (item.pid === pid) {
+                                nodes.push({
+                                    id: item.id,
+                                    pid: pid,
+                                    text: item.text,
+                                    children: []
+                                });
+                                arr.splice(index, 1);
+                            } else {
+                                index++;
+                            }
+                        }
+                        nodes.forEach((node) => {
+                            node.children = fn(node.id);
+                        });
+                        return nodes;
+                    }
+
+                    return fn(null);
+                }
+
+                let vue3App = Vue.createApp({
+                    data() {
+                        return {
+                            generateArrLen: 100,
+                            arr: [],
+                            treeDefaultProps: {
+                                children: "children",
+                                label: "text"
+                            },
+                            treeData: []
+                        };
+                    },
+                    methods: {
+                        generateArr() {
+                            this.arr.push(...getArr(this.generateArrLen));
+                        },
+                        convert2TreeData() {
+                            this.treeData.push(...convert2Tree(this.arr));
+                        },
+                        retSetArr() {
+                            this.arr.length = 0;
+                            this.treeData.length = 0;
+                            this.generateArrLen = 100;
+                        }
+                    },
+                    created() {}
+                });
+                vue3App.use(ElementPlus);
+                vue3App.mount("#vue3App");
+            })();
+        </script>
+    </body>
+</html>
