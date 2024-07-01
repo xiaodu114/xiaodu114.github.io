@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>返回值是 Promise 的函数的包装器 - xiaodu114.github.io</title>
+        <meta name="keywords" content="Promise,闭包,包装器" />
+        <meta name="description" content="介绍一个 JavaScript 包装器方法，该方法接收一个方法参数，调用传入的方法时需要返回 Promise" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/web/js/utils/promiseFnWrapper.html -->
+        <div class="blog-page">
+            <h1>函数包装器</h1>
+            <p>这里介绍一个包装器方法：该方法接收一个参数，这个参数是一个返回值为<line-code>Promise</line-code>的方法。</p>
+            <p>说一下背景：不说是什么原因了，至少现状是这样的，项目中会出现多个位置几乎同时调用同一个方法的场景，这个方法会发<line-code>HTTP</line-code>请求。这样做实在有点浪费资源啊！首先想到的一种办法是：同时调用发送请求的方法时，只有第一次真正的发送请求，在请求没有响应之前，后续的调用直接跳过，所有对该方法的调用都共享第一次请求的返回结果，至此这一轮的调用结束。</p>
+            <h2>类方式</h2>
+            <p>针对上面的情况，首先想到的就是创建一个类，其中有一个方法用来包装目标方法，在弄个变量存储Promise的状态……</p>
+            <h3>原型方式</h3>
+            <p>项目中使用的是<line-code>AngularJS</line-code>，并且代码还没有转码处理……因此采用构造函数的方式实现。</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+function PromiseFnWrapper(fn) {
+    this.isEnd = true;
+    this.list = [];
+	this.fn = fn;
+}
+PromiseFnWrapper.prototype.resolveHandler = function (data) {
+    if (this.list.length) {
+        this.list.forEach(function (deferred) {
+            deferred.resolve(data);
+        });
+    }
+    this.list.length = 0;
+    this.isEnd = true;
+}
+PromiseFnWrapper.prototype.rejectHandler = function (errorData) {
+    if (this.list.length) {
+        this.list.forEach(function (deferred) {
+            deferred.reject(errorData);
+        });
+    }
+    this.list.length = 0;
+    this.isEnd = true;
+}
+PromiseFnWrapper.prototype.exec = function () {
+    var deferred = $q.defer();
+    this.list.push(deferred);
+    if (this.isEnd) {
+        this.isEnd = false;
+        this.fn.apply(null, arguments).then(this.resolveHandler.bind(this), this.rejectHandler.bind(this));
+    }
+    return deferred.promise;
+}
+            </pre>
+            <h3>class 方式</h3>
+            <p>上一版中没有将<line-code>this</line-code>弄上，这里给安排上</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+class PromiseFnWrapper {
+
+    isEnd = true;
+    list = [];
+
+    constructor(fn, thisArg) {
+        this.fn = fn;
+        this.thisArg = thisArg;
+    }
+
+    exec() {
+        let arg = arguments;
+        return new Promise((resolve, reject) => {
+            this.list.push({
+                resolve,
+                reject
+            });
+            if (this.isEnd) {
+                this.isEnd = false;
+                this.fn.apply(this.thisArg, arg).then((data) => {
+                    if (!this.list.length)
+                        return;
+                    this.list.forEach((deferred) => {
+                        deferred.resolve(data);
+                    });
+                }, (errordata) => {
+                    if (!this.list.length)
+                        return;
+                    this.list.forEach((deferred) => {
+                        deferred.reject(errordata);
+                    });
+                }).finally(() => {
+                    this.list.length = 0;
+                    this.isEnd = true;
+                });
+            }
+        });
+    }
+}
+            </pre>
+            <h2>闭包方式</h2>
+            <p>采用类的方式确实解决了所说的问题，但是未免有点太富态了，下面就精简一下</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+function createPromiseFnWrapper(fn, thisArg) {
+    let promise = null;
+    return function () {
+        let args = arguments;
+        if (promise == null) {
+            promise = new Promise((resolve, reject) => {
+                fn.apply(thisArg, args).then((data) => {
+                    resolve(data);
+                }).catch((errorData) => {
+                    reject(errorData);
+                }).finally(() => {
+                    promise = null;
+                });
+            });
+        }
+        return promise;
+    };
+}
+            </pre>
+            <h2>代理方式</h2>
+            <p>这种方式和上面闭包方式的代码量差不多。</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+function createPromiseFnWrapper(fn) {
+    let promise = null;
+    return new Proxy(fn, {
+        apply(target, thisArg, args) {
+            if (promise == null) {
+                promise = new Promise((resolve, reject) => {
+                    target.apply(thisArg, args).then((data) => {
+                        resolve(data);
+                    }).catch((errorData) => {
+                        reject(errorData);
+                    }).finally(() => {
+                        promise = null;
+                    });
+                });
+            }
+            return promise;
+        }
+    });
+}
+            </pre>
+            <p>代码量差不多，是真的差不多……你有什么优势，为什么选择你……我开始不知道，不过在这里发现了一个点眉目，请看移步：<a href="https://zh.javascript.info/proxy" target="_blank">Proxy 和 Reflect</a>。说一点：这种方式包装之后，<line-code>fn.length</line-code>将会给你保留……不说了，说多了就露馅了</p>
+        </div>
+    </body>
+</html>
