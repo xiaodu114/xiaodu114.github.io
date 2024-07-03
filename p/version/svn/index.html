@@ -241,10 +241,10 @@ svn update . > "%timestamp%.txt"
 set "PACKAGE_JSON_CHANGED=false"
 for /f "delims=" %%a in ('type "%timestamp%.txt"') do (
     if /i "%%a" neq "" (
-		echo %%a | findstr /i "package.json" >nul && (
-			set PACKAGE_JSON_CHANGED=true
-			goto :check_done
-		)
+        echo %%a | findstr /i "package.json" >nul && (
+            set PACKAGE_JSON_CHANGED=true
+            goto :check_done
+        )
     )
 )
 :check_done
@@ -256,24 +256,24 @@ del /q "%timestamp%.txt"
 
 :: 4、根据 package.json 是否被修改执行相应操作
 if "%PACKAGE_JSON_CHANGED%" == "true" (
-	echo 》》》》》》 package.json has changed. Cleaning up...
+    echo 》》》》》》 package.json has changed. Cleaning up...
 	
-	if exist node_modules (
+    if exist node_modules (
         echo 》》》》》》 node_modules exists. delete node_modules...
         rd /s /q node_modules
     )
 	
     echo 》》》》》》 Installing dependencies...
     call npm install
-	echo 》》》》》》 build project...
-	call npm run c
+    echo 》》》》》》 build project...
+    call npm run c
 ) else (
-	echo package.json has not changed.
+    echo package.json has not changed.
     if not exist node_modules (
         echo 》》》》》》 node_modules does not exist. Installing dependencies...
         call npm install
-		echo 》》》》》》 build project...
-		call npm run c
+        echo 》》》》》》 build project...
+        call npm run c
     ) else (
         echo 》》》》》》 node_modules exists. build project...
         call npm run c
