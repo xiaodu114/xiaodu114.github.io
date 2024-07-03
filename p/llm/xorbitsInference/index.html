@@ -16,9 +16,9 @@
         <!-- github访问地址：/p/llm/xorbitsInference/index.html -->
         <div class="blog-page">
             <h1>Xorbits Inference</h1>
-            <p>官网：<a href="https://github.com/xorbitsai/inference" target="_blank">GitHub - xorbitsai/inference</a></p>
+            <p>官网：<a href="https://github.com/xorbitsai/inference" target="_blank" rel="noopener noreferrer">GitHub - xorbitsai/inference</a></p>
             <p>官方介绍：Xorbits Inference（Xinference）是一个性能强大且功能全面的分布式推理框架。可用于大语言模型（LLM），语音识别模型，多模态模型等各种模型的推理。通过 Xorbits Inference，你可以轻松地一键部署你自己的模型或内置的前沿开源模型。无论你是研究者，开发者，或是数据科学家，都可以通过 Xorbits Inference 与最前沿的 AI 模型，发掘更多可能。</p>
-            <p>官方文档：<a href="https://inference.readthedocs.io/zh-cn/latest/index.html" target="_blank">欢迎来到 Xinference！ — Xinference</a></p>
+            <p>官方文档：<a href="https://inference.readthedocs.io/zh-cn/latest/index.html" target="_blank" rel="noopener noreferrer">欢迎来到 Xinference！ — Xinference</a></p>
             <mark-block explain="说明">
                 <p>运行环境：Ubuntu 22.04 + Intel(R)Xeon(R) CPU E5-2699 v4 2.20GHZ + RAM（512GB）</p>
             </mark-block>
@@ -49,10 +49,10 @@ xinference-local --host 192.168.xxx.xxx --port 9997
                 <p>环境变量或者更多参数请参考官方文档</p>
                 <ul>
                     <li>
-                        <a href="https://inference.readthedocs.io/zh-cn/latest/getting_started/environments.html" target="_blank">环境变量 — Xinference</a>
+                        <a href="https://inference.readthedocs.io/zh-cn/latest/getting_started/environments.html" target="_blank" rel="noopener noreferrer">环境变量 — Xinference</a>
                     </li>
                     <li>
-                        <a href="https://inference.readthedocs.io/zh-cn/latest/models/sources/sources.html" target="_blank">模型来源 — Xinference</a>
+                        <a href="https://inference.readthedocs.io/zh-cn/latest/models/sources/sources.html" target="_blank" rel="noopener noreferrer">模型来源 — Xinference</a>
                     </li>
                 </ul>
             </mark-block>
@@ -107,7 +107,7 @@ xinference-local
             </p>
             <h3>xinference.client</h3>
             <mark-block>
-                <p>下面的代码来自：<a href="https://inference.readthedocs.io/zh-cn/latest/user_guide/client_api.html" target="_blank">客户端 API — Xinference</a></p>
+                <p>下面的代码来自：<a href="https://inference.readthedocs.io/zh-cn/latest/user_guide/client_api.html" target="_blank" rel="noopener noreferrer">客户端 API — Xinference</a></p>
             </mark-block>
             <p>这里采用<line-code>xinference.client</line-code>方式测试。在根目录下创建文件<line-code>1.py</line-code>，代码如下：</p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
@@ -132,14 +132,24 @@ print(output)
                 <img src="./image/7.png" alt="Postman 方式调用Embedding 模型" />
             </p>
             <h2>Rerank 模型</h2>
-            <p>已经下载<line-code>Rerank</line-code>模型，如下图：</p>
+            <p>已经下载并运行的<line-code>Rerank</line-code>模型，如下图：</p>
             <p>
-                <img src="./image/win-002.png" alt="xorbitsai/inference 项目，已下载Rerank 模型截图" />
+                <img src="./image/win-002.png" alt="xorbitsai/inference 项目，已经下载并运行的 Rerank 模型截图" />
             </p>
             <h3>Postman</h3>
             <p><line-code>Postman</line-code>直接调用API测试一下，如图：</p>
             <p>
                 <img src="./image/8.png" alt="Postman 方式调用Rerank 模型" />
+            </p>
+            <h2>LLM 模型</h2>
+            <p>已经下载并运行的大语言模型，如下图：</p>
+            <p>
+                <img src="./image/9.png" alt="xorbitsai/inference 项目，已经下载并运行的大语言模型" />
+            </p>
+            <h3>Postman</h3>
+            <p><line-code>Postman</line-code>直接调用API测试一下，如图：</p>
+            <p>
+                <img src="./image/10.png" alt="Postman 方式调用大语言模型" />
             </p>
         </div>
     </body>
