@@ -18,7 +18,7 @@
             <p>整理收集<line-code>SVN</line-code>相关的东东……</p>
             <ul>
                 <li>
-                    <a href="https://www.runoob.com/svn/svn-tutorial.html" target="_blank">SVN 教程 | 菜鸟教程</a>
+                    <a href="https://www.runoob.com/svn/svn-tutorial.html" target="_blank" rel="noopener noreferrer">SVN 教程 | 菜鸟教程</a>
                 </li>
             </ul>
             <h2>服务器端</h2>
@@ -146,7 +146,7 @@ svn import /home/ddz/桌面/a2bei4 file:///home/ddz/1-code/svn/repository/web/a2
                 <img src="./image/server-9.png" alt="svn import 导入一下初始项目" />
             </p>
             <h4>启动</h4>
-            <p>参考：<a href="https://www.runoob.com/svn/svn-start-mode.html" target="_blank">SVN 启动模式 | 菜鸟教程</a></p>
+            <p>参考：<a href="https://www.runoob.com/svn/svn-start-mode.html" target="_blank" rel="noopener noreferrer">SVN 启动模式 | 菜鸟教程</a></p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 svnserve -d -r /home/ddz/1-code/svn/repository --listen-port 3690
 
@@ -162,6 +162,130 @@ killall svnserve
             <p>
                 <img src="./image/server-11.png" alt="客户端拉取代码，可以弹出认证弹窗" />
             </p>
+            <h2>客户端</h2>
+            <h3>windows</h3>
+            <p>这里选择的是<line-code>TortoiseSVN</line-code>，对就是那个可爱的小乌龟……</p>
+            <ul>
+                <li>
+                    <a href="https://tortoisesvn.subversion.org.cn/" target="_blank" rel="noopener noreferrer">首页 · TortoiseSVN - TortoiseSVN 中文</a>
+                </li>
+            </ul>
+            <h4>首次安装</h4>
+            <p>敬请期待……</p>
+            <h4>更改已安装</h4>
+            <p>之所以出现这种情况是：在命令行使用 svn 或者写一些 *.bat 批处理时（例如：<line-code>svn update</line-code>）并且在安装小乌龟时没有选择安装<line-code>command line client tools</line-code>，此时需要修改安装一下。</p>
+            <mark-block>
+                <p>如果安装时没有选择<line-code>command line client tools</line-code>，在 cmd 命令行无法使用 svn ,会提示“'svn' 不是内部或外部命令，也不是可运行的程序或批处理文件。”</p>
+            </mark-block>
+            <details>
+                <summary>点击查看详细的安装步骤</summary>
+                <p>
+                    <img src="./image/client-m-001.png" alt="修改程序 TortoiseSVN 之点击更改" />
+                </p>
+                <p>
+                    <img src="./image/client-m-002.png" alt="修改程序 TortoiseSVN 之首页" />
+                </p>
+                <p>
+                    <img src="./image/client-m-003.png" alt="修改程序 TortoiseSVN 之选择更改类型" />
+                </p>
+                <p>
+                    <img src="./image/client-m-004.png" alt="修改程序 TortoiseSVN 之选择安装 command line client tools" />
+                </p>
+                <p>
+                    <img src="./image/client-m-005.png" alt="修改程序 TortoiseSVN 之选择安装 command line client tools 完成" />
+                </p>
+                <p>
+                    <img src="./image/client-m-006.png" alt="修改程序 TortoiseSVN 之 Ready to Install" />
+                </p>
+                <p>
+                    <img src="./image/client-m-007.png" alt="修改程序 TortoiseSVN 之选择已安装 TortoiseSVN 版本的 exe 文件" />
+                </p>
+                <p>
+                    <img src="./image/client-m-008.png" alt="修改程序 TortoiseSVN 之选择已安装 TortoiseSVN 版本的 exe 文件，管理员权限确认" />
+                </p>
+                <p>
+                    <img src="./image/client-m-009.png" alt="修改程序 TortoiseSVN 之更改完成，cmd 命令行 检查 svn" />
+                </p>
+            </details>
+            <h2>实战</h2>
+            <h3>.bat 获取更新、安装依赖、构建</h3>
+            <p>测试的项目是：前端类库 a2bei4 。上面已经提到。这里分别在两个文件夹都拉去了上文中初始化的基于 fastapi 的 python 项目和前端类库 a2bei4 项目，来模拟两个用户，一个用户修改 a2bei4 项目，另一个用户执行 .bat 文件（拉取更新、安装依赖和构建）</p>
+            <p>
+                <img src="./image/demo-001.png" alt="在两个文件夹用两个用户获取同一个SVN仓储" />
+            </p>
+            <details>
+                <summary>点击查看 .bat 文件内容</summary>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+@echo off
+setlocal
+
+
+:: 1、进入项目目录
+
+cd /d E:\DDZ\svn\user2\web\a2bei4
+
+
+:: 2、拉取更新
+
+:: 		时间戳
+set "timestamp=%date:~0,4%%date:~5,2%%date:~8,2%%time:~0,2%%time:~3,2%%time:~6,2%%time:~9,2%"
+set "timestamp=%timestamp: =0%"
+
+:: 		开始拉取更新并将输出信息写入到 *.txt 临时文件 
+svn update . > "%timestamp%.txt"
+
+
+:: 3、更新中是否包含 package.json 文件
+
+:: 		读取文件并逐行判断，如果存在，直接跳出循环
+set "PACKAGE_JSON_CHANGED=false"
+for /f "delims=" %%a in ('type "%timestamp%.txt"') do (
+    if /i "%%a" neq "" (
+		echo %%a | findstr /i "package.json" >nul && (
+			set PACKAGE_JSON_CHANGED=true
+			goto :check_done
+		)
+    )
+)
+:check_done
+
+
+:: 		删除 *.txt 临时文件 
+del /q "%timestamp%.txt"
+
+
+:: 4、根据 package.json 是否被修改执行相应操作
+if "%PACKAGE_JSON_CHANGED%" == "true" (
+	echo 》》》》》》 package.json has changed. Cleaning up...
+	
+	if exist node_modules (
+        echo 》》》》》》 node_modules exists. delete node_modules...
+        rd /s /q node_modules
+    )
+	
+    echo 》》》》》》 Installing dependencies...
+    call npm install
+	echo 》》》》》》 build project...
+	call npm run c
+) else (
+	echo package.json has not changed.
+    if not exist node_modules (
+        echo 》》》》》》 node_modules does not exist. Installing dependencies...
+        call npm install
+		echo 》》》》》》 build project...
+		call npm run c
+    ) else (
+        echo 》》》》》》 node_modules exists. build project...
+        call npm run c
+    )
+)
+
+
+echo.
+pause
+endlocal
+                </pre>
+            </details>
         </div>
     </body>
 </html>
