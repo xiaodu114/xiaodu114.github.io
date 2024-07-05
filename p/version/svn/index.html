@@ -79,7 +79,7 @@ b2 = b2666
             <h5>authz</h5>
             <p>在这里配置哪些用户可以可读、可写哪些目录，支持根据角色授权</p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
-	
+
 [groups]
 all = all1,all2
 f = f1,f2
@@ -90,18 +90,17 @@ b = b1,b2
 * = r
 
 [/python]
+@all = rw
 @b = rw
 @f = r
 * = r
 
 [/web]
+@all = rw
 @f = rw
 @b = r
 * = r
             </pre>
-            <p>
-                <img src="./image/server-7.png" alt="svnadmin create 创建仓储之后 passwd 和 authz 文件配置" />
-            </p>
             <h5>svnserve.conf</h5>
             <p>这里应该算是仓储的入口配置文件，其中 password-db 指向上面的 passwd 文件，authz-db 指向上面的 authz 文件</p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
@@ -111,6 +110,9 @@ auth-access = write
 password-db = passwd
 authz-db = authz
             </pre>
+            <p>
+                <img src="./image/server-7.png" alt="svnadmin create 创建仓储之后 passwd、authz 和 svnserve.conf 文件配置" />
+            </p>
             <mark-block>
                 <p><line-code>svnserve.conf</line-code>文件中已经包括了上面的四个配置，只不过是注释掉的，你只需放开注释即可</p>
                 <p>如果你也有这样的习惯：原来的配置文件不动，将这些添加到最后。你一定要注意，这四个配置属于<line-code>[general]</line-code>；如果你添加到了文件的末尾，那就找错组织了，<line-code>[sasl]</line-code>并不知道他们</p>
