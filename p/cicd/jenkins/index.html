@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Jenkins - xiaodu114.github.io</title>
+        <meta name="keywords" content="Jenkins,CI,CD,CI/CD,,,,,,,," />
+        <meta name="description" content="【博客描述】" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/ci/jenkins/index.html -->
+        <div class="blog-page">
+            <h1>Jenkins</h1>
+            <p>Jenkins 中文站点介绍：Jenkins是开源CI&CD软件领导者， 提供超过1000个插件来支持构建、部署、自动化， 满足任何项目的需要。</p>
+            <ul>
+                <li>
+                    <a href="https://www.jenkins.io/" target="_blank" rel="noopener noreferrer">Jenkins</a> | <a href="https://www.jenkins.io/zh" target="_blank" rel="noopener noreferrer">Jenkins（中文）</a> |
+                    <a href="https://www.jenkins.io/zh/doc/" target="_blank" rel="noopener noreferrer"> Jenkins 用户手册</a>
+                </li>
+            </ul>
+            <h2>安装</h2>
+            <h3>win 10</h3>
+            <p>该章节说一下 win 10 下的安装</p>
+            <h4>下载</h4>
+            <p>下载地址：<a href="https://www.jenkins.io/download/" target="_blank" rel="noopener noreferrer">Download and deploy</a>。这里选择<line-code>Windows</line-code></p>
+            <p>
+                <img src="./image/download-001.png" alt="下载 Windows 版本的安装包" />
+            </p>
+            <h4>安装步骤</h4>
+            <p>Windows 环境安装一般都没有什么难度，不过有几点需要注意一下</p>
+            <h5>Service Logon Credentials</h5>
+            <p>如下图所示，这个环节有两个选项，查看其它的教程时，基本上都是选择第二个，咱也随大流了，选择的是：Run service as local or domain user 。选择之后会让你输入用户名和密码（电脑登录账号），之后需要测试用户的有效性（是否作为服务登录）。</p>
+            <p>
+                <img src="./image/install-001.png" alt="Windows 环境 Jenkins 安装步骤：Service Logon Credentials" />
+            </p>
+            <details>
+                <summary>用户如何作为服务登录</summary>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+#   Win + R 打开 运行
+#   进入本地安全策略
+secpol.msc
+                </pre>
+                <p>
+                    <img src="./image/install-001-001.png" alt="设置用户作为服务登录 001" />
+                </p>
+                <p>
+                    <img src="./image/install-001-002.png" alt="设置用户作为服务登录 002" />
+                </p>
+            </details>
+            <h5>Port Selection</h5>
+            <p>
+                <img src="./image/install-002.png" alt="Windows 环境 Jenkins 安装步骤：Port Selection" />
+            </p>
+            <h5>Select Java home directory (JDK or JRE)</h5>
+            <p>这个挺不错，因为之前安装过JDK，这里就直接弄过来了</p>
+            <p>
+                <img src="./image/install-003.png" alt="Windows 环境 Jenkins 安装步骤：Select Java home directory (JDK or JRE)" />
+            </p>
+            <h5>后续</h5>
+            <p>
+                <img src="./image/install-004.png" alt="Windows 环境 Jenkins 安装步骤：Custom Setup" />
+            </p>
+            <p>
+                <img src="./image/install-005.png" alt="Windows 环境 Jenkins 安装步骤：开始安装" />
+            </p>
+            <p>
+                <img src="./image/install-006.png" alt="Windows 环境 Jenkins 安装步骤：安装完成" />
+            </p>
+            <p>
+                <img src="./image/install-007.png" alt="Windows 环境 Jenkins 安装步骤：windows 服务信息" />
+            </p>
+            <h2>新手入门</h2>
+            <p>安装结束之后，初次访问会有一些初始化配置</p>
+            <h3>解锁 Jenkins</h3>
+            <p>
+                <img src="./image/init-001.png" alt="解锁 Jenkins" />
+            </p>
+            <h3>安装插件</h3>
+            <p>小白一个，这里安装推荐的插件</p>
+            <p>
+                <img src="./image/init-002.png" alt="安装推荐的插件" />
+            </p>
+            <p>
+                <img src="./image/init-003.png" alt="安装推荐的插件，安装进度" />
+            </p>
+            <h3>创建管理员</h3>
+            <p>
+                <img src="./image/init-004.png" alt="创建第一个管理员用户" />
+            </p>
+            <h3>实例配置</h3>
+            <p>这里还是有点懵逼的，查了一下，基本上都说：直接下一步吧！</p>
+            <p>
+                <img src="./image/init-005.png" alt="实例配置" />
+            </p>
+            <p>
+                <img src="./image/init-006.png" alt="初始化结束" />
+            </p>
+            <h2>其他配置</h2>
+            <h3>进入首页</h3>
+            <p>配置完成之后，就进入了首页>控制台了</p>
+            <p>
+                <img src="./image/init-007.png" alt="进入首页" />
+            </p>
+            <p>看到上面的图片你可能也有和我一样的问题：这中英文混杂，真别扭啊！</p>
+            <h3>解决汉化不完整</h3>
+            <p>作为一个地地道道的中国人，汉化不完整看着真费劲啊，必须得搞一下。参考 <a href="https://blog.csdn.net/u013571586/article/details/126976005" target="_blank" rel="noopener noreferrer">解决Jenkins部分汉化、汉化不全有效办法_jenkins汉化不完全-CSDN博客</a></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+-Duser.language=C.UTF-8
+            </pre>
+            <p>
+                <img src="./image/init-008.png" alt="汉化不完整，界面展示" />
+            </p>
+            <p>
+                <img src="./image/init-009.png" alt="汉化不完整，解决办法，修改配置文件" />
+            </p>
+            <p>
+                <img src="./image/init-010.png" alt="汉化不完整，修改配置文件之后效果展示" />
+            </p>
+            <h3>插件国内镜像</h3>
+            <p>当时网上查看<line-code>Jenkins</line-code>的教程时，看到有的文章说需要配置插件国内镜像，这里安装时感觉速度还行，还是先记录一下吧，万一哪天用到了……<a href="https://blog.csdn.net/fIsh1220Fish/article/details/111573448" target="_blank" rel="noopener noreferrer">[完整版]Windows下搭建及配置jenkins（上）_jenkins不同版国内源--windows-CSDN博客</a></p>
+            <h3>安装插件</h3>
+            <h3>SVN 插件</h3>
+            <p>后面需要配合<line-code>SVN</line-code>使用，所以先提前安装一下<line-code>SVN</line-code>插件</p>
+            <p>
+                <img src="./image/plugin-001.png" alt="安装 SVN 插件：搜索 svn 并安装" />
+            </p>
+            <p>
+                <img src="./image/plugin-002.png" alt="安装 SVN 插件：安装 Subversion 结束" />
+            </p>
+            <h3>PowerShell 插件</h3>
+            <p>
+                <img src="./image/plugin-003.png" alt="安装 PowerShell 插件：搜索 PowerShell 并安装" />
+            </p>
+            <h2>任务</h2>
+            <h3>SVN + 前端 a2bei4 项目</h3>
+            <p>因为工作的原因，一直在用 SVN ，所以先拿他下手。<line-code>a2bei4</line-code>是自己没事弄的一个类库，这里正好用他做个测试，好不容易用到他了，必须得给个链接啊，请看：<a href="https://www.npmjs.com/package/a2bei4" target="_blank" rel="noopener noreferrer">a2bei4 - npm</a> | <a href="https://github.com/xiaodu114/a2bei4" target="_blank" rel="noopener noreferrer">GitHub - xiaodu114/a2bei4: 整理收集一些基础JavaScript方法</a></p>
+            <h4>SVN 仓储</h4>
+            <p>SVN 仓储已经准备好，你可以查看这里：<a href="/p/version/svn/index.html" target="_blank" rel="noopener noreferrer">SVN（Subversion、TortoiseSVN） - xiaodu114.github.io</a>。用的就是最初导入的两个示例项目：基于 fastapi 的 python 项目和前端类库 a2bei4 项目</p>
+            <p>
+                <img src="./image/task1-svn-001.png" alt="svn import 导入的两个初始项目：基于 fastapi 的 python 项目和前端类库 a2bei4 项目" />
+            </p>
+            <h5>post-commit</h5>
+            <p>这，这，这很重要。<line-code>Jenkins</line-code>能帮你无感的获取更新、构建项目等，全靠他了，他不触发，一切白搭……</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+REPOS="$1"
+REV="$2"
+TXN_NAME="$3"
+
+LOG_FILE="/home/ddz/1-code/svn/repository/log/post-commit.log" # 定义日志文件路径
+
+# 记录提交信息到日志文件
+echo "》》》》》》监听到提交，信息如下：" >> $LOG_FILE
+echo "REPOS： $REPOS" >> $LOG_FILE
+echo "REV： $REV" >> $LOG_FILE
+echo "TXN_NAME： $TXN_NAME" >> $LOG_FILE
+echo " " >> $LOG_FILE
+
+# 遍历提交的文件列表并记录到日志文件
+echo "变化的文件如下：" >> $LOG_FILE
+svnlook changed -r $REV $REPOS >> $LOG_FILE
+echo " " >> $LOG_FILE
+
+# 检查本次提交中是否包含 vue 项目的变更
+if svnlook changed -r $REV $REPOS | grep 'web/a2bei4'; then
+# 使用 cURL 发送 GET 请求通知 Jenkins 构建 a2bei4 项目
+echo "Calling Jenkins to build a2bei4..." >> $LOG_FILE
+curl -u admin:admin666 -X GET http://192.168.xxx.xxx:9966/job/task-001/build?token=user2-a2bei4 >> $LOG_FILE
+fi
+echo " " >> $LOG_FILE
+echo " " >> $LOG_FILE
+echo " " >> $LOG_FILE
+            </pre>
+            <mark-block>
+                <p>你应该已经发现，这里通知<line-code>Jenkins</line-code>用的是发送API的方式。如果仅仅是通知一台机器还好，就直接弄在这里了；如果有很多都需要监听怎么办？就算在这里能一一列出，那如果整个仓储很大，有几个分支，每个分支又有N多不能的项目……还是得有一个集中管理的地方，暂且叫做中枢，<line-code>post-commit</line-code>通知中枢，之后由中枢去通知需要通知的机器</p>
+            </mark-block>
+            <h4>SVN 客户端</h4>
+            <p>如下图中的注释，这里分别在两个文件夹都拉去了上面的仓储，来模拟两个用户，一个用户修改并签入，另一个用户则通过 SVN 的 post-commit 通知<line-code>Jenkins</line-code>自动获取更新、构建项目</p>
+            <p>
+                <img src="./image/task1-svn-002.png" alt="svn import 导入的两个初始项目：基于 fastapi 的 python 项目和前端类库 a2bei4 项目" />
+            </p>
+            <h4>Jenkins 新建任务</h4>
+            <h5>开始</h5>
+            <p>
+                <img src="./image/task1-jenkins-001.png" alt="Jenkins 新建任务：点击 新建任务" />
+            </p>
+            <h5>任务名称和任务类型</h5>
+            <p>
+                <img src="./image/task1-jenkins-002.png" alt="Jenkins 新建任务：任务名称和任务类型" />
+            </p>
+            <h5>General</h5>
+            <p>任务的相关配置从<line-code>General</line-code>开始，这里其他地方都没动，仅设置了“使用自定义工作空间”和“显示名称”：<line-code>E:\DDZ\svn\user2\web</line-code>、<line-code>user2-a2bei4</line-code></p>
+            <p>
+                <img src="./image/task1-jenkins-003.png" alt="Jenkins 新建任务：使用自定义工作空间" />
+            </p>
+            <h5>源码管理</h5>
+            <p>这里选用的是<line-code>SVN</line-code>，设置 Repository URL 和 Local module directory ：<line-code>svn://192.168.13.175/web/a2bei4</line-code>、<line-code>a2bei4</line-code>。</p>
+            <p>
+                <img src="./image/task1-jenkins-004.png" alt="Jenkins 新建任务：源码管理，设置 Repository URL 和 Local module directory" />
+            </p>
+            <p>还需要提供<line-code>SVN</line-code>的账号和密码</p>
+            <p>
+                <img src="./image/task1-jenkins-005.png" alt="Jenkins 新建任务：源码管理，添加凭据" />
+            </p>
+            <p>
+                <img src="./image/task1-jenkins-006.png" alt="Jenkins 新建任务：源码管理，选择添加的用户" />
+            </p>
+            <h5>构建触发器</h5>
+            <p>这里选择的是触发远程构建，需要设置一个身份验证令牌，这里是<line-code>user2-a2bei4</line-code>。这样你仅需发一个API就可以通知<line-code>Jenkins</line-code>构建了</p>
+            <p>
+                <img src="./image/task1-jenkins-007.png" alt="Jenkins 新建任务：构建触发器，触发远程构建" />
+            </p>
+            <h5>构建环境</h5>
+            <p>该环节这里直接跳过了</p>
+            <h5>构建步骤（Build Steps）</h5>
+            <p>这里选择的是<line-code>PowerShell</line-code>，感觉他更加强大</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+
+
+# 1、进入项目目录
+
+cd a2bei4
+
+
+# 2、判断 package.json 是否修改
+#	SVN 版本号
+$revision = $ENV:SVN_REVISION
+
+#	时间戳
+$xmlFileName = (([DateTime]::Now.ToUniversalTime().Ticks - 621355968000000000)/10000).tostring().Substring(0,13) + ".xml"
+
+#	将最新版本的详细日志信息写入到 *.xml 文件
+# svn log -r $revision --verbose --xml >> $xmlFileName
+#   添加 -q 参数，会在上面的基础上排除提交信息。提交信息如果包含中文时，写入 xml 时可能会出现乱码
+svn log -r $revision --verbose --xml -q >> $xmlFileName
+
+#	读取 *.xml 文件内容
+$xmlContent = Get-Content -Path $xmlFileName -Raw
+
+$PACKAGE_JSON_CHANGED = $false
+if(![String]::IsNullOrEmpty($xmlContent)){
+	#	使用[xml]类型转换来将字符串转换为XML对象
+	$xml = [xml]$xmlContent
+
+	# 	使用Select-Xml来选择所有的&lt;path>元素
+	$paths = $xml.SelectNodes('//log/logentry/paths/path')
+	
+	# 	遍历所有&lt;path>元素并输出它们的值
+	foreach ($path in $paths) {
+		if ($path.InnerText.ToLower().EndsWith("/a2bei4/package.json")) {
+			$PACKAGE_JSON_CHANGED = $true
+			break
+		} 
+	}
+}
+
+# 	删除 *.xml 文件
+Remove-Item -Path $xmlFileName -Force
+
+
+# 3、根据 package.json 是否被修改执行相应操作
+if ($PACKAGE_JSON_CHANGED) {
+	Write-Host  '》》》》》》 package.json has changed. Cleaning up...'
+	
+	if (Test-Path -Path 'node_modules') {
+		Write-Host '》》》》》》 node_modules exists. delete node_modules...'
+		Remove-Item -Path node_modules -Recurse -Force
+	}
+	
+    Write-Host '》》》》》》 Installing dependencies...'
+    npm install
+    Write-Host '》》》》》》 build project...'
+    npm run c
+} else {
+    Write-Host '》》》》》》 package.json has not changed.'
+    if (Test-Path -Path 'node_modules') {
+        Write-Host '》》》》》》 node_modules exists. build project...'
+        npm run c
+    } else {
+		Write-Host '》》》》》》 node_modules does not exist. Installing dependencies...'
+        npm install
+        Write-Host '》》》》》》 build project...'
+        npm run c
+    }
+}
+
+
+Write-Host  'Successfully ...'
+            </pre>
+            <p>
+                <img src="./image/task1-jenkins-008.png" alt="Jenkins 新建任务：构建步骤，PowerShell" />
+            </p>
+            <h5>构建后操作</h5>
+            <p>该环节这里直接跳过了</p>
+            <h5>结束</h5>
+            <p>
+                <img src="./image/task1-jenkins-009.png" alt="Jenkins 新建任务：创建结束" />
+            </p>
+            <h4>测试一下</h4>
+            <h5>浏览器 HTTP 请求</h5>
+            <p>“触发远程构建”配置可知，就是发个 HTTP 请求就搞定了，还是个 GET 请求，直接用浏览器试一下</p>
+            <p>
+                <img src="./image/task1-build-001.png" alt="Jenkins 任务1：浏览器 HTTP 请求触发构建" />
+            </p>
+            <p>下面是构建成功的截图</p>
+            <p>
+                <img src="./image/task1-build-002.png" alt="Jenkins 任务1：第一次构建结束" />
+            </p>
+            <p>下面是构建日志的截图</p>
+            <p>
+                <img src="./image/task1-build-003.png" alt="Jenkins 任务1：构建过程，控制台输出" />
+            </p>
+            <h5>非 a2bei 项目更新</h5>
+            <p>如果不是<line-code>Jenkins</line-code>中该任务对应的源码目录（这里指的是 a2bei ）的文件更新时，例如：fastapi-demo 下的文件更新，不会触发<line-code>Jenkins</line-code>的构建。这种场景主要测试的是 SVN 的 post-commit 钩子，请看上文。</p>
+            <p>
+                <img src="./image/task1-build-004.png" alt="Jenkins 任务1：非 a2bei 项目更新测试" />
+            </p>
+            <h5>a2bei 项目更新</h5>
+            <h6>包含 package.json</h6>
+            <p>这里更新一下<line-code>a2bei</line-code>下的文件，并且修改了<line-code>package.json</line-code>文件。构建步骤中的<line-code>PowerShell</line-code>脚本中会判断更新中是否包含<line-code>package.json</line-code>文件，如果包含则删除依赖并重新安装之后构建，如果不包含则直接（安装依赖）构建</p>
+            <p>
+                <img src="./image/task1-build-005.png" alt="Jenkins 任务1：a2bei 项目更新测试，包含 package.json 文件" />
+            </p>
+            <p>
+                <img src="./image/task1-build-006.png" alt="Jenkins 任务1：a2bei 项目更新测试，包含 package.json 文件时，控制台输出" />
+            </p>
+            <h6>不包含 package.json</h6>
+            <p>如果更新文件中不包含 package.json，此时不需要重新安装。这次签入测试懵逼了，提交信息中写了中文注释，<line-code>svn log -r 6 --verbose --xml</line-code>写入xml文件时乱码了……</p>
+            <p>
+                <img src="./image/task1-build-007.png" alt="Jenkins 任务1：a2bei 项目更新测试，不包含 package.json 文件时，提交信息中包含中文，写入xml时，乱码" />
+            </p>
+            <p>乱码和<line-code>Jenkins</line-code>没有任何关系。完全是<line-code>svn log -r 6 --verbose --xml</line-code>的问题，并且这段命令在 Ubuntu 下没有问题，如下：</p>
+            <p>
+                <img src="./image/task1-build-008.png" alt="svn log -r 6 --verbose --xml win10 和 ubuntu 22.04 对比" />
+            </p>
+            <p>查了一下，没有找到写入xml文件时乱码的有效解决办法。如果有哪位朋友知道，请不吝赐教，谢谢。于是想曲线救国，两种解决办法：一是提交信息不包含中文；二是写入日志的时候不包含提交信息。第一个就算了，英文有点不好意思说，难道用拼音，哈哈，不错的主意。你还真别说，第二种真的有参数可以控制：<line-code>svn log -r 6 --verbose --xml -q</line-code></p>
+            <p>
+                <img src="./image/task1-build-009.png" alt="Jenkins 任务1：a2bei 项目更新测试，svn log -r 6 --verbose --xml 和  svn log -r 6 --verbose --xml -q  对比" />
+            </p>
+            <mark-block>
+                <p>上面的问题解决了，但是又想到了一种情况：如果文件路径中包含中文，那岂不是还是不行……是的，我验证了一下，确实是乱码。真的凌乱了，曲线救国还是不行啊！还得是正途啊！在哪里呢？</p>
+            </mark-block>
+        </div>
+    </body>
+</html>
