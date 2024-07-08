@@ -6,7 +6,7 @@
     
   <url>
     <loc>https://xiaodu114.github.io/</loc>
-    <lastmod>2024-07-01T00:32:48.213Z</lastmod>
+    <lastmod>2024-07-08T08:56:02.589Z</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
@@ -15,8 +15,18 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://xiaodu114.github.io/p/bun/index.html</loc>
+    <lastmod>2024-07-01T02:34:17.820Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://xiaodu114.github.io/p/chrome/crx/problem.html</loc>
     <lastmod>2024-02-22T00:45:58.000Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/p/cicd/jenkins/index.html</loc>
+    <lastmod>2024-07-08T06:00:45.284Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -226,7 +236,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/llm/xorbitsInference/index.html</loc>
-    <lastmod>2024-05-30T07:40:45.245Z</lastmod>
+    <lastmod>2024-07-03T06:43:02.326Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -286,7 +296,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/version/svn/index.html</loc>
-    <lastmod>2024-06-24T06:17:13.783Z</lastmod>
+    <lastmod>2024-07-08T08:25:52.653Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
