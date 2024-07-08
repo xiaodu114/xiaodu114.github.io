@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>SVN（Subversion、TortoiseSVN） - xiaodu114.github.io</title>
-        <meta name="keywords" content="SVN,Subversion,TortoiseSVN" />
+        <meta name="keywords" content="SVN,Subversion,TortoiseSVN,post-commit,svn post-commit" />
         <meta name="description" content="整理收集 SVN 相关的东东：Subversion、TortoiseSVN" />
 
         <script src="/p/_/js/main.js"></script>
@@ -17,6 +17,15 @@
             <h1>SVN</h1>
             <p>整理收集<line-code>SVN</line-code>相关的东东……</p>
             <ul>
+                <li>
+                    <a href="https://svnbook.subversion.org.cn/" target="_blank" rel="noopener noreferrer">使用 Subversion 进行版本控制 - 《使用 Subversion 进行版本控制》 - SVN 中文</a>
+                </li>
+                <li>
+                    <a href="https://svnbook.subversion.org.cn/en/1.7/index.html" target="_blank" rel="noopener noreferrer">《使用 Subversion 进行版本控制》 - SVN 中文 1.7</a>
+                </li>
+                <li>
+                    <a href="https://svnbook.red-bean.com/en/1.8/index.html" target="_blank" rel="noopener noreferrer">Version Control with Subversion [DRAFT]</a>
+                </li>
                 <li>
                     <a href="https://www.runoob.com/svn/svn-tutorial.html" target="_blank" rel="noopener noreferrer">SVN 教程 | 菜鸟教程</a>
                 </li>
@@ -288,6 +297,84 @@ pause
 endlocal
                 </pre>
             </details>
+            <h3>post-commit</h3>
+            <p>这个钩子还是挺重要的，好多都是从他这里触发的</p>
+            <h4>HTTP 请求</h4>
+            <p>用户提交更新之后，这里稍作判断，发送 HTTP 请求通知<line-code>Jenkins</line-code>构建</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+REPOS="$1"
+REV="$2"
+TXN_NAME="$3"
+
+LOG_FILE="/home/ddz/1-code/svn/repository/log/post-commit.log" # 定义日志文件路径
+
+# 记录提交信息到日志文件
+echo "》》》》》》监听到提交，信息如下：" >> $LOG_FILE
+echo "REPOS： $REPOS" >> $LOG_FILE
+echo "REV： $REV" >> $LOG_FILE
+echo "TXN_NAME： $TXN_NAME" >> $LOG_FILE
+echo " " >> $LOG_FILE
+
+# 遍历提交的文件列表并记录到日志文件
+echo "变化的文件如下：" >> $LOG_FILE
+svnlook changed -r $REV $REPOS >> $LOG_FILE
+echo " " >> $LOG_FILE
+
+# 检查本次提交中是否包含 vue 项目的变更
+if svnlook changed -r $REV $REPOS | grep 'web/a2bei4'; then
+# 使用 cURL 发送 GET 请求通知 Jenkins 构建 a2bei4 项目
+echo "Calling Jenkins to build a2bei4..." >> $LOG_FILE
+curl -u admin:admin666 -X GET http://192.168.xxx.xxx:9966/job/task-001/build?token=user2-a2bei4 >> $LOG_FILE
+fi
+echo " " >> $LOG_FILE
+echo " " >> $LOG_FILE
+echo " " >> $LOG_FILE
+            </pre>
+            <h4>执行 python 脚本</h4>
+            <p>一些简单的逻辑放在<line-code>post-commit</line-code>还行，如果逻辑比较复杂，至少咱写着就有些吃力了。可以中转一下，暂且叫做中枢，可能是一个 python 脚本，也可能是一个 HTTP 请求（这里的不是指的 Jenkins 的构建API哦）……<line-code>post-commit</line-code>将已知的所有数据作为参数传给中枢，之后由中枢去做复杂的逻辑判断</p>
+            <p>下面是<line-code>post-commit</line-code>中的主要内容</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+REPOS="$1"
+REV="$2"
+TXN_NAME="$3"
+SVN_CHANGED=$(svnlook changed -r $REV $REPOS)
+
+# 执行 Python 脚本并传递参数
+python3 /home/ddz/1-code/svn-post-commit/main.py "$REPOS" "$REV" "$TXN_NAME" "$SVN_CHANGED"
+            </pre>
+            <p>需要注意一下：<line-code>python3</line-code>能不能找到</p>
+            <p>在看一下 python 脚本的内容</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+import os
+import sys
+import time
+import datetime
+
+# 接收参数
+REPOS = sys.argv[1]
+REV = sys.argv[2]
+TXN_NAME = sys.argv[3]
+SVN_CHANGED = sys.argv[4]
+
+log_list = [
+    f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')} 》》》》》》监听到提交，信息如下：\n",
+    f"REPOS ：{REPOS}\n",
+    f"REV ：{REV}\n",
+    f"TXN_NAME ：{TXN_NAME}\n",
+    "变更的文件列表：\n",
+    str(SVN_CHANGED)
+]
+
+timestamp = time.time()
+file_name = str(int(timestamp)) + ".txt"
+file_path = os.path.dirname(os.path.abspath(__file__)) + "/" + file_name
+with open(file_path,"w",encoding='utf-8') as f:
+    f.writelines(log_list)
+            </pre>
+            <p>这里为了方便测试，直接将 *.txt 文件放在同一目录了，需要注意一下，该目录是否有写入权限</p>
+            <p>
+                <img src="./image/demo-002.png" alt="在两个文件夹用两个用户获取同一个SVN仓储" />
+            </p>
         </div>
     </body>
 </html>
