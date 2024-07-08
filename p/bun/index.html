@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Bun - xiaodu114.github.io</title>
+        <meta name="keywords" content="Bun,bun,bunjs" />
+        <meta name="description" content="Develop, test, run, and bundle JavaScript & TypeScript projects—all with Bun. Bun is an all-in-one JavaScript runtime & toolkit designed for speed, complete with a bundler, test runner, and Node.js-compatible package manager." />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/bun/index.html -->
+        <div class="blog-page">
+            <h1>Bun</h1>
+            <p><line-code>Bun</line-code>是一个快速的……</p>
+            <ul>
+                <li>
+                    <a href="https://bun.sh/" target="_blank" rel="noopener noreferrer">Bun — A fast all-in-one JavaScript runtime</a>
+                </li>
+                <li>
+                    <a href="https://github.com/oven-sh/bun" target="_blank" rel="noopener noreferrer">GitHub - oven-sh/bun: Incredibly fast JavaScript runtime, bundler, test runner, and package manager – all in one</a>
+                </li>
+            </ul>
+            <h2>安装</h2>
+            <h3>ubuntu 22.04</h3>
+            <h4>官方推荐</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+curl -fsSL https://bun.sh/install | bash
+            </pre>
+            <p><line-code>install.sh</line-code>会从<line-code>Github</line-code>上拉取文件……访问不了啊</p>
+            <p>
+                <img src="./image/0.png" alt="ubuntu 22.04 执行 install.sh 报错" />
+            </p>
+            <h4>自己搞</h4>
+            <p>在可以访问<line-code>Github</line-code>的机器上，进入 <a href="https://github.com/oven-sh/bun/releases" target="_blank" rel="noopener noreferrer">Releases · oven-sh/bun</a>页面，之后自己下载安装包，这里下载的是<line-code>bun-linux-x64.zip</line-code>，解压之后就一个<line-code>bun</line-code>文件，最后修改权限</p>
+            <p>
+                <img src="./image/1.png" alt="需修改 bun 文件权限，允许执行" />
+            </p>
+            <p>修改权限之后将<line-code>bun</line-code>移动到<line-code>/usr/local/bin</line-code></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+ls
+
+sudo mv bun /usr/local/bin
+
+bun -v
+            </pre>
+            <p>
+                <img src="./image/2.png" alt="移动 bun 文件至 /usr/local/bin" />
+            </p>
+            <p>
+                <img src="./image/3.png" alt="bun 安装完成，检查版本" />
+            </p>
+        </div>
+    </body>
+</html>
