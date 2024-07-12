@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <title>drag and drop demo 8</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                height: 100%;
+                width: 100%;
+                margin: 0;
+                overflow: hidden;
+            }
+
+            body {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .dnd-container {
+                flex: 1;
+                overflow-y: auto;
+                display: grid;
+                justify-items: center;
+                grid-row-gap: 20px;
+            }
+
+            .dnd-item {
+                height: 60px;
+                width: 60px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #ccc;
+                border: 10px solid #666666;
+                border-radius: 10px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div>
+            <button type="button" id="btnAddOneNote">添加一个节点</button>
+            <span>在移动过程中交换位置。交换位置之后拖拽的元素没有在鼠标下。</span>
+        </div>
+
+        <div id="dnd-container" class="dnd-container"></div>
+        <script>
+            /**
+             * 数值扩展方法：根据数组索引交换位置；引用的方式，无返回值
+             * 应用场景：
+             * 示例： let arr1=[0,1,2,3,4,5]; array_MoveTo(arr1,1,4); => [0, 2, 3, 4, 1, 5]
+             * @param {Array} arr    目标数组
+             * @param {Number} from  原始位置
+             * @param {Number} to    目标位置
+             */
+            function array_MoveTo(arr, from, to) {
+                arr.splice(to, 0, arr.splice(from, 1)[0]);
+            }
+
+            class DndSortable {
+                container = null;
+                containerRect = null;
+                draggingItems = null;
+                draggingObj = null;
+                constructor(el, option) {
+                    this.container = el;
+                    this.container.addEventListener("touchstart", this._handleTouchStart, false);
+                }
+
+                _refresh = () => {
+                    this.container.innerHTML = "";
+                    [].forEach.call(this.draggingItems, (draggingItem, index) => {
+                        draggingItem.style.gridArea = getGridItemGridAreaValue(index, 4);
+                        draggingItem.dataset.index = index;
+                        this.container.appendChild(draggingItem);
+                    });
+                };
+
+                _handleTouchStart = (event) => {
+                    if (event.target.parentNode === this.container) {
+                        this.container.addEventListener("touchmove", this._handleTouchMove, false);
+                        this.container.addEventListener("touchend", this._handleTouchEnd, false);
+
+                        this.draggingItems = Array.from(this.container.children);
+                        this.containerRect = this.container.getBoundingClientRect();
+                        this.draggingObj = {
+                            item: event.target,
+                            clientX: event.touches[0].clientX,
+                            clientY: event.touches[0].clientY
+                        };
+                    }
+                };
+                _handleTouchMove = (event) => {
+                    if (this.draggingObj) {
+                        var currentEvent = event.touches[0];
+                        var tempSliderMoveX = currentEvent.clientX - this.draggingObj.clientX;
+                        var tempSliderMoveY = currentEvent.clientY - this.draggingObj.clientY;
+                        //  实时修改被拖动元素的位置
+                        this.draggingObj.item.style.transform = `translate(${tempSliderMoveX}px, ${tempSliderMoveY}px)`;
+
+                        //  滚动条自动滚动
+                        const draggingEleRect = this.draggingObj.item.getBoundingClientRect();
+                        if (draggingEleRect.bottom >= this.containerRect.bottom) {
+                            requestAnimationFrame(() => {
+                                this.container.scrollTop += 10;
+                            });
+                        } else if (draggingEleRect.top <= this.containerRect.top) {
+                            requestAnimationFrame(() => {
+                                this.container.scrollTop -= 10;
+                            });
+                        }
+
+                        //  查找与拖拽元素“相交”的元素，这里的相交更加严格，需要鼠标位置进入目标元素
+                        var dragEnterItem = null,
+                            elementsFromXY = document.elementsFromPoint(currentEvent.clientX, currentEvent.clientY);
+                        for (var i = 0; i < elementsFromXY.length; i++) {
+                            if (elementsFromXY[i] !== this.draggingObj.item && elementsFromXY[i].parentNode === this.container) {
+                                dragEnterItem = elementsFromXY[i];
+                                break;
+                            }
+                        }
+
+                        if (dragEnterItem) {
+                            array_MoveTo(this.draggingItems, parseInt(this.draggingObj.item.dataset.index), parseInt(dragEnterItem.dataset.index));
+
+                            var draggingItemRect = this.draggingObj.item.getBoundingClientRect();
+                            var draggingItemTop = currentEvent.pageY - (currentEvent.pageY - draggingItemRect.top);
+                            var draggingItemLeft = currentEvent.pageX - (currentEvent.pageX - draggingItemRect.left);
+                            draggingItemTop -= tempSliderMoveY;
+                            draggingItemLeft -= tempSliderMoveX;
+                            this.draggingObj.item.style.position = "fixed";
+                            this.draggingObj.item.style.top = draggingItemTop + "px";
+                            this.draggingObj.item.style.left = draggingItemLeft + "px";
+                            this._refresh();
+                        }
+                    }
+                    event.preventDefault();
+                    event.stopPropagation();
+                };
+                _handleTouchEnd = (event) => {
+                    this.container.removeEventListener("touchmove", this._handleTouchMove, false);
+                    this.container.removeEventListener("touchend", this._handleTouchEnd, false);
+                    this.containerRect = null;
+                    this.draggingItems = null;
+                    if (this.draggingObj) {
+                        this.draggingObj.item.style.transform = "";
+                        this.draggingObj.item.style.position = "";
+                        this.draggingObj.item.style.top = "";
+                        this.draggingObj.item.style.left = "";
+                    }
+                    this.draggingObj = null;
+                };
+            }
+
+            var getGridItemPosObj = (index, columnCounter) => {
+                var rowIndex = Math.floor(index / columnCounter) + 1;
+                var colIndex = (index % columnCounter) + 1;
+                return {
+                    rowStart: rowIndex,
+                    rowEnd: rowIndex + 1,
+                    columnStart: colIndex,
+                    columnEnd: colIndex + 1
+                };
+            };
+            var getGridItemGridAreaValue = (index, columnCounter) => {
+                var pos = getGridItemPosObj(index, columnCounter);
+                //return `grid-row-start: ${pos.rowStart}; grid-row-end: ${pos.rowEnd}; grid-column-start: ${pos.columnStart}; grid-column-end: ${pos.columnEnd};`;
+                return `${pos.rowStart} / ${pos.columnStart} / ${pos.rowEnd} / ${pos.columnEnd}`;
+            };
+            var getGridItemPosInlineStyle = (index, columnCounter) => {
+                return `grid-area: ${getGridItemGridAreaValue(index, columnCounter)};`;
+            };
+
+            var addOneDragItem = (dom) => {
+                var tempIndex = dom.children.length;
+                var tempInlineStyle = getGridItemPosInlineStyle(tempIndex, 4);
+                dom.appendChild(document.createRange().createContextualFragment(`<div class="dnd-item" data-index="${tempIndex}" style="${tempInlineStyle}">${tempIndex + 1}</div>`));
+            };
+            var dragContainerDom = document.getElementById("dnd-container");
+            for (var index = 1; index <= 40; index++) {
+                addOneDragItem(dragContainerDom);
+            }
+
+            document.getElementById("btnAddOneNote").addEventListener("click", function () {
+                addOneDragItem(dragContainerDom);
+            });
+            var tempDndSortableInstance = new DndSortable(dragContainerDom);
+        </script>
+    </body>
+</html>
