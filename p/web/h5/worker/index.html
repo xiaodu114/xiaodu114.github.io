@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Web Worker - xiaodu114.github.io</title>
+        <meta name="keywords" content="Web Worker" />
+        <meta name="description" content="我和 Web Worker 有个约会……" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/web/h5/worker/index.html -->
+        <div class="blog-page">
+            <h1>Web Worker</h1>
+            <p><line-code>Web Worker</line-code>是个啥呢？请看下面的链接</p>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Workers_API" target="_blank" rel="noopener noreferrer">Web Worker API - Web API | MDN</a>
+                </li>
+            </ul>
+            <h2>引入</h2>
+            <p>为什么需要<line-code>Web Worker</line-code>呢？</p>
+            <h3>问题</h3>
+            <p>复杂的运算导致页面卡死</p>
+            <fieldset id="demo1">
+                <legend>计算斐波那契数列的第 n 个数</legend>
+                <div>
+                    <p><strong style="color: green">说明：</strong>你可以输入一个数值之后点击确定（之后他就开始计算了），在他计算的过程中（不要等到计算出结果），你可以试试还可以和页面交互吗？例如：修改输入框的值</p>
+                    <p><strong style="color: red">注意：</strong>请不要输入太大的数值，我这里测试，输入 50 就挂了</p>
+                    <p>
+                        <label>输入一个正整数：<input type="number" id="demo1_number" /></label>
+                        <button type="button" id="demo1_btn">确定</button>
+                    </p>
+                    <p>
+                        <label id="demo1_result">》》》这里输出计算结果</label>
+                    </p>
+                </div>
+            </fieldset>
+            <script>
+                function fibonacci(num) {
+                    return num <= 2 ? 1 : fibonacci(num - 1) + fibonacci(num - 2);
+                }
+                let demo1InputEle = document.getElementById("demo1_number");
+                let demo1BtnEle = document.getElementById("demo1_btn");
+                let demo1ResultEle = document.getElementById("demo1_result");
+                demo1BtnEle.addEventListener("click", () => {
+                    let num = ~~demo1InputEle.value;
+                    let startTime = Date.now();
+                    //  想着给你提示，说明“正在计算中”，结果……
+                    demo1ResultEle.innerHTML = "正在计算中，请等待……";
+                    let result = fibonacci(num);
+                    demo1ResultEle.innerHTML = `第 ${num} 个数是：${result}  耗时：${(Date.now() - startTime) / 1000}秒`;
+                });
+            </script>
+            <h3>解决</h3>
+            <p>这时就轮到<line-code>Web Worker</line-code>上场了</p>
+            <fieldset id="demo2">
+                <legend>计算斐波那契数列的第 n 个数，采用 Worker</legend>
+                <div>
+                    <p><strong style="color: green">说明：</strong>你再试试，在 Worker 计算的过程中是否可以和页面交互</p>
+                    <p>
+                        <label>输入一个正整数：<input type="number" id="demo2_number" /></label>
+                        <button type="button" id="demo2_btn">确定</button>
+                    </p>
+                    <p>
+                        <label id="demo2_result">》》》这里输出计算结果</label>
+                    </p>
+                </div>
+            </fieldset>
+            <script>
+                let demo2InputEle = document.getElementById("demo2_number");
+                let demo2BtnEle = document.getElementById("demo2_btn");
+                let demo2ResultEle = document.getElementById("demo2_result");
+                let demo2Worker = new Worker("./js/demo2-worker.js");
+                let demo2StartTime = null;
+                let demo2InputNum = 0;
+                demo2Worker.onmessage = (evt) => {
+                    demo2ResultEle.innerHTML = `第 ${demo2InputNum} 个数是：${evt.data}  耗时：${(Date.now() - demo2StartTime) / 1000}秒`;
+                };
+                demo2BtnEle.addEventListener("click", () => {
+                    demo2InputNum = ~~demo2InputEle.value;
+                    demo2StartTime = Date.now();
+                    //  想着给你提示，说明“正在计算中”，结果……
+                    demo2ResultEle.innerHTML = "已经分给 Worker 处理，请等待……";
+                    let result = demo2Worker.postMessage(demo2InputNum);
+                });
+            </script>
+        </div>
+    </body>
+</html>
