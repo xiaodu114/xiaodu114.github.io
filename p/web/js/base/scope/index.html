@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>作用域、作用域链、执行上下文 - xiaodu114.github.io</title>
+        <meta name="keywords" content="作用域,Scope,作用域链,Scope Chain,执行上下文,Execution Context" />
+        <meta name="description" content="作用域、作用域链、执行上下文，整理最权威的解释；之后在来点小例子，让你身临其境的感受一下" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/_/index.html -->
+        <div class="blog-page">
+            <h1>作用域、作用域链、执行上下文</h1>
+            <p>作用域、作用域链、执行上下文，整理最权威的解释；之后在来点小例子，让你身临其境的感受一下</p>
+            <h2>解释</h2>
+            <p>这些专业术语真是……你还是看看他们是怎么说的吧。</p>
+            <h3>权威</h3>
+            <p>觉得下面的链接还是比较权威的，你说呢。</p>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Scope" target="_blank" rel="noopener noreferrer">作用域 - MDN Web 文档术语表：Web 相关术语的定义 | MDN</a>
+                </li>
+                <li>
+                    <a href="https://zh.wikipedia.org/wiki/%E4%BD%9C%E7%94%A8%E5%9F%9F" target="_blank" rel="noopener noreferrer">作用域 - 维基百科，自由的百科全书</a>
+                </li>
+                <li>
+                    <a href="https://tc39.es/ecma262/#sec-execution-contexts" target="_blank" rel="noopener noreferrer">Execution Contexts</a>
+                </li>
+            </ul>
+            <h3>Kimi</h3>
+            <p>下面是大名鼎鼎的<line-code>Kimi</line-code>给出的回答</p>
+            <p>问：javascript 针对 作用域,作用域链,执行上下文 给出权威的解释</p>
+            <p>
+                <img src="./image/1.png" alt="问：javascript 针对 作用域,作用域链,执行上下文 给出权威的解释。Kimi 的回答" />
+            </p>
+            <p>问：javascript 针对 作用域,作用域链,执行上下文 给出权威的解释,并给出出处</p>
+            <p>
+                <img src="./image/2.png" alt="问：javascript 针对 作用域,作用域链,执行上下文 给出权威的解释,并给出出处。Kimi 的回答" />
+            </p>
+            <h2>理解</h2>
+            <h3>查找父作用域</h3>
+            <mark-block>
+                <p>摘自维基百科：静态作用域又叫做词法作用域，采用词法作用域的变量叫词法变量。词法变量有一个在编译时静态确定的作用域。词法变量的作用域可以是一个函数或一段代码，该变量在这段代码区域内可见（visibility）；在这段区域以外该变量不可见（或无法访问）。<strong>词法作用域里，取变量的值时，会检查函数定义时的文本环境，捕捉函数定义时对该变量的绑定。</strong></p>
+                <p>这段不是：<strong>要看函数声明的位置，不要看他被调用的位置</strong></p>
+            </mark-block>
+            <h2>实战</h2>
+            <p>下面就弄点小例子，让你身临其境的感受一下</p>
+            <h3>示例 1</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+console.log(a, b);
+var a = b = 2;
+            </pre>
+            <details>
+                <summary>点击查看答案</summary>
+                <p><img src="./image/demo-1.png" alt="示例 1 答案" /></p>
+            </details>
+            <h3>示例 2</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+var m = 1;
+n = 2;
+console.log(window.m);
+console.log(window.n);
+            </pre>
+            <details>
+                <summary>点击查看答案</summary>
+                <p><img src="./image/demo-2.png" alt="示例 2 答案" /></p>
+            </details>
+            <h3>示例 3</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+var a = 1;
+var b = 1;
+function gn() {
+    console.log(a, b);
+    var a = b = 2;
+    console.log(a, b);
+}
+gn();
+console.log(a, b);
+            </pre>
+            <details>
+                <summary>点击查看答案</summary>
+                <p><img src="./image/demo-3.png" alt="示例 3 答案" /></p>
+            </details>
+            <h3>示例 4</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+var a = 1;
+var obj = { name: "张三" };
+function fn() {
+    var a2 = a;
+    obj2 = obj; //  意外的全局变量
+    a2 = a;
+    obj.name = "李四";
+    console.log(a2);
+    console.log(obj2);
+}
+fn();
+console.log(a);
+console.log(obj);
+            </pre>
+            <details>
+                <summary>点击查看答案</summary>
+                <p><img src="./image/demo-4.png" alt="示例 4 答案" /></p>
+            </details>
+            <h3>示例 5</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+console.log(a, b);
+if (true) {
+    var a = 1;
+} else {
+    var b = 2;
+}
+console.log(a, b);
+            </pre>
+            <details>
+                <summary>点击查看答案</summary>
+                <p><img src="./image/demo-5.png" alt="示例 5 答案" /></p>
+            </details>
+            <h3>示例 6</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+var a;
+console.log(a);
+if ("a" in window) {
+    a = 110;
+}
+console.log(a);
+            </pre>
+            <details>
+                <summary>点击查看答案</summary>
+                <p><img src="./image/demo-6.png" alt="示例 6 答案" /></p>
+            </details>
+            <h3>示例 7</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+console.log(a);
+if ("a" in window) {
+    var a = 110;
+}
+console.log(a);
+            </pre>
+            <details>
+                <summary>点击查看答案</summary>
+                <p><img src="./image/demo-7.png" alt="示例 7 答案" /></p>
+            </details>
+            <h3>示例 8</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+var a = 100;
+function fn() {
+    console.log(a);
+    return;
+    var a = 114;
+}
+fn();
+            </pre>
+            <details>
+                <summary>点击查看答案</summary>
+                <p><img src="./image/demo-8.png" alt="示例 8 答案" /></p>
+            </details>
+            <h3>示例 9</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+function fn() {
+    var a = b = 114;
+}
+fn();
+console.log(a);
+console.log(b);
+            </pre>
+            <details>
+                <summary>点击查看答案</summary>
+                <p><img src="./image/demo-9.png" alt="示例 9 答案" /></p>
+            </details>
+            <h3>示例 10</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+var n = 114;
+function fn() {
+    console.log(n);
+}
+function gn() {
+    var n = 119;
+    console.log(n);
+    fn();
+}
+gn();
+console.log(n);
+            </pre>
+            <details>
+                <summary>点击查看答案</summary>
+                <p><img src="./image/demo-10.png" alt="示例 10 答案" /></p>
+            </details>
+        </div>
+    </body>
+</html>
