@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>this - xiaodu114.github.io</title>
+        <meta name="keywords" content="this,apply,call,bind,手写 apply ,手写 call ,手写 bind" />
+        <meta name="description" content="this ,一个绕不开的话题，看看能不能说明白" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/web/js/base/this/index.html -->
+        <div class="blog-page">
+            <h1>this</h1>
+            <p><line-code>this</line-code>一个绕不开的话题。看看能不能说明白……还是先看看权威的解释吧</p>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="noopener noreferrer">this - JavaScript | MDN</a>
+                </li>
+            </ul>
+            <h2>哪里会有 this</h2>
+            <p>敬请期待</p>
+            <h2>实战</h2>
+            <h3>手写 apply call bind</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+Function.prototype.myApply = function (context, args) {
+    context = context || window;
+    args = Array.prototype.slice.call(args || []);
+    const key = Symbol("---myApply---");
+    context[key] = this;
+    let res = context[key](...args);
+    delete context[key];
+    return res;
+};
+Function.prototype.myBind = function (context, ...args1) {
+    let fun = this;
+    return function (...args2) {
+        return fun.myApply(context, [...args1, ...args2]);
+    };
+};
+Function.prototype.myCall = function (context, ...args) {
+    return this.myApply(context, ...args);
+};
+            </pre>
+        </div>
+    </body>
+</html>
