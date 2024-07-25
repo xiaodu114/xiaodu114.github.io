@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>var let const - xiaodu114.github.io</title>
+        <meta name="keywords" content="var,let,const,变量提升,块级作用域" />
+        <meta name="description" content="介绍一下 var 、let 、const 三者的不用" />
+
+        <script src="/p/_/js/main.js"></script>
+        <style>
+            .span-class-001 {
+                font-weight: bold;
+                color: red;
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/web/js/base/var/index.html -->
+        <div class="blog-page">
+            <h1>var let const</h1>
+            <p>声明变量的三巨头：<line-code>var</line-code>、<line-code>let</line-code>、<line-code>const</line-code></p>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/var" target="_blank" rel="noopener noreferrer">var - JavaScript | MDN</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/let" target="_blank" rel="noopener noreferrer">let - JavaScript | MDN</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/const" target="_blank" rel="noopener noreferrer">const - JavaScript | MDN</a>
+                </li>
+            </ul>
+            <h2>特性</h2>
+            <p>这个章节不知道起什么名字了，该章节主要分析三者的不同</p>
+            <h3>var</h3>
+            <h4>选择性初始化</h4>
+            <p>用<line-code>var</line-code>声明一个变量时，你可以给他一个值，当然也可以不给</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+var a2bei4;
+var xiaodu114 = "https://xiaodu114.github.io/";
+            </pre>
+            <h4>重复声明</h4>
+            <p>同一个变量，你可以声明多次，但只认最后一次</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+var xiaodu114 = "https://blog.csdn.net/duyelang";
+var xiaodu114 = "https://www.cnblogs.com/du-blog";
+var xiaodu114 = "https://xiaodu114.github.io/";
+console.log(xiaodu114);
+            </pre>
+            <h4>可以修改</h4>
+            <p>这个还用说吗？声明了变量，不能修改，那算啥。<line-code>var</line-code>声明的是可以修改的。你别说，还真有不能修改的</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+var xiaodu114 = "https://blog.csdn.net/duyelang";
+xiaodu114 = "https://www.cnblogs.com/du-blog";
+xiaodu114 = "https://xiaodu114.github.io/";
+console.log(xiaodu114);
+            </pre>
+            <h4>全局声明的，给了 window</h4>
+            <p>用<line-code>var</line-code>声明的全局变量，变量名会变成<line-code>window</line-code>的属性</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+var xiaodu114 = "https://xiaodu114.github.io/";
+console.log(xiaodu114);
+console.log(window.hasOwnProperty("xiaodu114"));
+console.log(window.xiaodu114);
+            </pre>
+            <h4>提升</h4>
+            <p>变量提升或者说是变量声明提升，这算是最牛逼的了。<strong>注意：声明会被提升，但是赋值不会。</strong></p>
+            <mark-block explain="摘自 MDN">
+                <p><line-code>var</line-code>声明，<span class="span-class-001">无论它们出现在脚本中的什么位置，都会在执行脚本中的任何代码之前进行处理。在代码中的任何位置声明变量都相当于在顶部声明它。</span>这也意味着变量可以在其声明之前被使用。这种行为被称为提升，因为变量声明似乎被移动到发生该行为的函数、静态初始化块或脚本源代码的顶部。</p>
+            </mark-block>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  全局变量提升
+console.log(xiaodu114);
+var xiaodu114 = "https://xiaodu114.github.io/";
+
+//  另一种写法
+ddz = "666";
+console.log(ddz);
+var ddz;
+
+//  局部变量提升
+;(function(){
+    console.log(a2bei4);
+    var a2bei4 = "https://www.npmjs.com/package/a2bei4";
+})()
+            </pre>
+            <h4>没有块级作用域</h4>
+            <p>其实上节的提升也说明了这个问题，任何位置声明的变量都相当于在顶部声明它。这还怎么玩。小小的<line-code>{}</line-code>根本困不住它</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+console.log(xiaodu114);            
+if(true){
+    console.log("这里一定会执行。");
+    var xiaodu114 = "https://xiaodu114.github.io/";
+}
+console.log(xiaodu114); 
+            </pre>
+            <h3>let</h3>
+            <h4>选择性初始化</h4>
+            <p>在这一点上，<line-code>let</line-code>和<line-code>var</line-code>是一致的：声明的同时，既可以赋值，也可以不赋值</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+let a2bei4;
+let xiaodu114 = "https://xiaodu114.github.io/";
+            </pre>
+            <h4>重复声明</h4>
+            <p>不行，不行，绝对不行。这里和<line-code>var</line-code>不同：不能用 let 多次声明同一个变量</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+let xiaodu114 = "https://blog.csdn.net/duyelang";
+let xiaodu114 = "https://www.cnblogs.com/du-blog";
+let xiaodu114 = "https://xiaodu114.github.io/";
+console.log(xiaodu114);
+
+//  异常，提示如下：
+//  SyntaxError: Identifier 'xiaodu114' has already been declared
+            </pre>
+            <h4>可以修改</h4>
+            <p>在这一点上，<line-code>let</line-code>和<line-code>var</line-code>是一致的：声明之后，都可以修改</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+let xiaodu114 = "https://blog.csdn.net/duyelang";
+xiaodu114 = "https://www.cnblogs.com/du-blog";
+xiaodu114 = "https://xiaodu114.github.io/";
+console.log(xiaodu114);
+            </pre>
+            <h4>全局声明的，不会给 window</h4>
+            <p>在这一点上，<line-code>let</line-code>和<line-code>var</line-code>不同：let 声明的变量并不会添加到 window 上</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+let xiaodu114 = "https://xiaodu114.github.io/";
+console.log(xiaodu114);
+console.log(window.hasOwnProperty("xiaodu114"));
+console.log(window.xiaodu114);
+            </pre>
+            <h4>提升</h4>
+            <p>在这一点上，<line-code>let</line-code>和<line-code>var</line-code>不同：let 声明的变量并不会提升。在声明之前访问，会报错，他有一个霸气的名字：暂时性死区</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+console.log(xiaodu114);
+let xiaodu114 = "https://xiaodu114.github.io/";
+
+//  异常，提示如下：  
+//  ReferenceError: xiaodu114 is not defined
+            </pre>
+            <h4>块级作用域</h4>
+            <p>在这一点上，<line-code>let</line-code>和<line-code>var</line-code>不同：let 声明的变量具有块级作用域。逃不出<line-code>{}</line-code>的手掌心</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+if(true){
+    console.log("这里一定会执行。");
+    let xiaodu114 = "https://xiaodu114.github.io/";
+}
+console.log(xiaodu114); 
+
+//  最后一行报错，如下：
+//  ReferenceError: xiaodu114 is not defined
+            </pre>
+
+            <h3>const</h3>
+            <h4>必须初始化</h4>
+            <p>在这一点上，<line-code>const</line-code>和<line-code>var</line-code>、<line-code>let</line-code>不同：声明的同时必须赋值</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+const xiaodu114 = "https://xiaodu114.github.io/";
+const a2bei4;
+
+//  最后一行报错，如下：
+//  SyntaxError: Missing initializer in const declaration
+            </pre>
+            <h4>重复声明</h4>
+            <p>不行，不行，绝对不行。这里和<line-code>let</line-code>是一致的：不可以重复声明</p>
+            <h4>不可以修改</h4>
+            <p>在这一点上，<line-code>const</line-code>和<line-code>let</line-code>、<line-code>var</line-code>不同：声明之后，不可以修改。但<line-code>const</line-code>声明的对象或数组的属性可以被修改</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+const arr = ["https://blog.csdn.net/duyelang"];
+arr[0] = "https://xiaodu114.github.io/";
+
+const xiaodu114 = "https://xiaodu114.github.io/";
+xiaodu114 = "https://www.cnblogs.com/du-blog";
+console.log(xiaodu114);
+
+//  倒数第二行报错，如下：
+//  TypeError: Assignment to constant variable.
+            </pre>
+            <h4>全局声明的，不会给 window</h4>
+            <p>没有，没有，绝对没有。这里和<line-code>let</line-code>是一致的：不会添加到 window 上</p>
+            <h4>提升</h4>
+            <p>在这一点上，<line-code>const</line-code>和<line-code>let</line-code>是一致的：不会提升</p>
+            <h4>块级作用域</h4>
+            <p>在这一点上，<line-code>const</line-code>和<line-code>let</line-code>是一致的：声明的变量都具有块级作用域。</p>
+        </div>
+    </body>
+</html>
