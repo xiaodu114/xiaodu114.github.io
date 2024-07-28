@@ -21,7 +21,7 @@
                 </li>
             </ul>
             <h2>哪里会有 this</h2>
-            <p>你在哪里用到过<line-code>this</line-code>？除了下面的这些，你还知道哪些？</p>
+            <p></p>
             <h3>独立函数调用</h3>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //"use strict";
@@ -212,7 +212,92 @@ export function test() {
                 <p>严格模式和非严格模式相同，都是 undefined</p>
             </mark-block>
             <h2>优先级</h2>
-            <p>对比以下独立函数调用、对象中方法调用、显示绑定、new 操作符的优先级</p>
+            <p>对比一下独立函数调用、对象中方法调用、显示绑定、new 操作符的优先级。咱也不知道这叫不叫优先级，如果找到权威的说法再修改</p>
+            <h3>bind VS apply</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+function fn() {
+    console.log(this === newObj);
+    console.log(this === obj);
+    console.log("this 是：", this);
+}
+var obj = {
+    xiaodu114: "https://www.cnblogs.com/du-blog"
+};
+var newObj = {
+    xiaodu114: "https://xiaodu114.github.io/"
+};
+var bingFn = fn.bind(newObj);
+bingFn.apply(obj);
+            </pre>
+            <mark-block>
+                <p>从输出结果来看，函数 bind 之后，如果在使用 apply 调用，apply 指定的不起作用，bind 胜出</p>
+            </mark-block>
+            <h3>对象中方法调用 VS 显示绑定</h3>
+            <p>示例一</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+function fn() {
+    console.log(this === newObj);
+    console.log(this === obj);
+    console.log("this 是：", this);
+}
+var obj = {
+    xiaodu114: "https://www.cnblogs.com/du-blog",
+    fn: fn
+};
+var newObj = {
+    xiaodu114: "https://xiaodu114.github.io/"
+};
+obj.fn.apply(newObj);
+            </pre>
+            <p>示例二</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+function fn() {
+    console.log(this === newObj);
+    console.log(this === obj);
+    console.log("this 是：", this);
+}
+var newObj = {
+    xiaodu114: "https://xiaodu114.github.io/"
+};
+var obj = {
+    xiaodu114: "https://www.cnblogs.com/du-blog",
+    fn: fn.bind(newObj)
+};
+obj.fn();
+            </pre>
+            <mark-block>
+                <p>从输出结果来看，apply 、bind 更厉害，显示绑定胜出</p>
+            </mark-block>
+            <h3>对象中方法调用 VS new 操作符</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+var obj = {
+    xiaodu114: "https://www.cnblogs.com/du-blog",
+    fn: function () {
+        console.log(this === obj);
+        console.log("this 是：", this);
+    }
+};
+new obj.fn();
+            </pre>
+            <mark-block>
+                <p>从输出结果来看，this 并不等于 obj，而是构造函数的实例，new 操作符胜出</p>
+            </mark-block>
+            <h3>显示绑定 VS new 操作符</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+function fn() {
+    console.log(this === obj);
+    console.log("this 是：", this);
+}
+var obj = {
+    xiaodu114: "https://xiaodu114.github.io/"
+};
+var bindFn = fn.bind(obj);
+bindFn();
+new bindFn();
+            </pre>
+            <mark-block>
+                <p>从输出结果来看，还是 new 更厉害，new 操作符胜出</p>
+            </mark-block>
             <h2>实战</h2>
             <h3>手写 apply call bind</h3>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
