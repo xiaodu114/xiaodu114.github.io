@@ -21,7 +21,198 @@
                 </li>
             </ul>
             <h2>哪里会有 this</h2>
-            <p>敬请期待</p>
+            <p>你在哪里用到过<line-code>this</line-code>？除了下面的这些，你还知道哪些？</p>
+            <h3>独立函数调用</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//"use strict";
+var xiaodu114 = "https://xiaodu114.github.io/";
+console.log("window 中是否包含 xiaodu114：", window.hasOwnProperty("xiaodu114"));
+function fn() {
+    console.log("xiaodu114：", this.xiaodu114);
+}
+fn();
+            </pre>
+            <mark-block>
+                <p>非严格模式下是<line-code>window</line-code>；严格模式下是<line-code>undefined</line-code>，代码报错：TypeError: Cannot read properties of undefined (reading 'xiaodu114')</p>
+            </mark-block>
+            <h3>对象中方法调用</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//"use strict";
+var obj = {
+    xiaodu114: "https://xiaodu114.github.io/",
+    fn: function () {
+        console.log("对象中方法调用，this 是：", this);
+    },
+};
+obj.fn();
+            </pre>
+            <mark-block>
+                <p>严格模式和非严格模式相同</p>
+            </mark-block>
+            <h3>显示绑定</h3>
+            <p>使用<line-code>call</line-code>、<line-code>apply</line-code>或<line-code>bind</line-code>方法可以显式地设置this的值。</p>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/apply" target="_blank" rel="noopener noreferrer">Function.prototype.apply() - JavaScript | MDN</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/call" target="_blank" rel="noopener noreferrer">Function.prototype.call() - JavaScript | MDN</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="noopener noreferrer">Function.prototype.bind() - JavaScript | MDN</a>
+                </li>
+            </ul>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//"use strict";
+var obj = {
+    name: "https://xiaodu114.github.io/",
+};
+function fn() {
+    console.log("this.name：" + this.name);
+}
+fn.call(obj);
+            </pre>
+            <mark-block>
+                <p>严格模式和非严格模式相同</p>
+            </mark-block>
+            <h3>new 操作符</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//"use strict";
+function Person(name) {
+    this.name = name;
+}
+var p1 = new Person("https://xiaodu114.github.io/");
+console.log(p1.name);
+            </pre>
+            <mark-block>
+                <p>严格模式和非严格模式相同</p>
+            </mark-block>
+            <h3>其他</h3>
+            <h4>全局</h4>
+            <h5>script 代码段</h5>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html" ddz-html-text>
+&lt;script>
+    "use strict";
+    console.log("this 是：", this);
+    console.log("this 的原型是：", Object.getPrototypeOf(this));
+&lt;/script>
+            </pre>
+            <h5>js 文件</h5>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+"use strict";
+//  一个独立的 js 文件
+console.log("一个独立的 js 文件，this 是：",this);
+            </pre>
+            <mark-block>
+                <p>在<line-code>script</line-code>代码段或者 js 文件中，表现是一样的：无论是否在严格模式下，<line-code>this</line-code>的值都是一样的</p>
+            </mark-block>
+            <h4>立即执行函数</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+(function () {
+    //  "use strict";
+    console.log("立即执行函数，this 是：", this);
+})();
+            </pre>
+            <mark-block>
+                <p>立即执行函数放在全局或者某一个函数内部执行效果相同：非严格模式下是<line-code>window</line-code>；严格模式下是<line-code>undefined</line-code></p>
+            </mark-block>
+            <h4>内置函数</h4>
+            <h5>setTimeout</h5>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//"use strict";
+setTimeout(function () {
+    console.log("setTimeout 回调函数，this 是：", this);
+});
+            </pre>
+            <mark-block>
+                <p>严格模式和非严格模式相同</p>
+            </mark-block>
+            <h5>forEach</h5>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//"use strict";
+["666", "888"].forEach(function (item, index, arr) {
+    console.log("forEach 回调函数，this 是：", this);
+});
+            </pre>
+            <mark-block>
+                <p>非严格模式下是<line-code>window</line-code>；严格模式下是<line-code>undefined</line-code></p>
+                <p><line-code>forEach</line-code>还可以传入第二个参数 this：<line-code>thisArg</line-code></p>
+            </mark-block>
+            <h4>事件</h4>
+            <p>这里以点击事件为例</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//"use strict";
+var button = document.createElement("button");
+button.innerHTML = "点击";
+button.onclick = function () {
+    console.log(this);
+    console.log(this === button);
+    console.log("点击事件的回调函数，onclick，this 是：" + this);
+};
+button.addEventListener("click", function () {
+    console.log(this);
+    console.log(this === button);
+    console.log("点击事件的回调函数，addEventListener，this 是：" + this);
+});
+document.body.appendChild(button);
+            </pre>
+            <mark-block>
+                <p>严格模式和非严格模式相同，都是按钮本身。</p>
+                <p>如果将上面的回调函数改为箭头函数的形式，那就不一样了。严格模式和非严格模式相同，都是 window</p>
+            </mark-block>
+            <h4>箭头函数</h4>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/Arrow_functions" target="_blank" rel="noopener noreferrer">箭头函数表达式 - JavaScript | MDN</a>
+                </li>
+                <li>
+                    <a href="https://zh.javascript.info/arrow-functions" target="_blank" rel="noopener noreferrer">深入理解箭头函数</a>
+                </li>
+            </ul>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//"use strict";
+var obj = {
+    xiaodu114: "https://www.cnblogs.com/du-blog",
+    fn: () => {
+        console.log(this.xiaodu114);
+        console.log("箭头函数，this 是：" + this);
+    },
+};
+var xiaodu114 = "https://xiaodu114.github.io/";
+obj.fn();
+            </pre>
+            <mark-block>
+                <p>严格模式和非严格模式相同</p>
+                <p>在箭头函数中如何查找<line-code>this</line-code>?</p>
+            </mark-block>
+
+            <h4>ES6 模块</h4>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Modules" target="_blank" rel="noopener noreferrer">JavaScript 模块 - JavaScript | MDN</a>
+                </li>
+                <li>
+                    <a href="https://zh.javascript.info/modules" target="_blank" rel="noopener noreferrer">模块（zh.javascript.info）</a>
+                </li>
+            </ul>
+            <p>新建一个 js 文件，命名为 module.js，内容如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+export function test() {
+    console.log("ES6 模块导出的函数，this 是：" + this);
+}
+            </pre>
+            <p>在一个<line-code>script</line-code>代码段中导入上面准备好的模块</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html" ddz-html-text>
+&lt;script type="module">
+    import { test } from "./module.js";
+    test();
+&lt;/script>
+            </pre>
+            <mark-block>
+                <p>严格模式和非严格模式相同，都是 undefined</p>
+            </mark-block>
+            <h2>优先级</h2>
+            <p>对比以下独立函数调用、对象中方法调用、显示绑定、new 操作符的优先级</p>
             <h2>实战</h2>
             <h3>手写 apply call bind</h3>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
