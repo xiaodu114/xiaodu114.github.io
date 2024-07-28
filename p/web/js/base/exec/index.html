@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>JavaScript 执行过程 - xiaodu114.github.io</title>
+        <meta name="keywords" content="JavaScript 执行过程,执行上下文,Execution Context,全局执行上下文,函数执行上下文,执行上下文栈,Execution Context Stack,作用域,Scope,作用域链,Scope Chain,词法环境,Lexical Environment,变量环境,Variable Environment,全局对象,Global Object,变量对象,Variable Object,活动对象,Activation Object" />
+        <meta name="description" content="整理收集一些 JavaScript 执行过程的东东，希望可以理解他的前世今生…… JavaScript 执行过程,执行上下文,Execution Context,全局执行上下文,函数执行上下文,执行上下文栈,Execution Context Stack,作用域,Scope,作用域链,Scope Chain,词法环境,Lexical Environment,变量环境,Variable Environment,全局对象,Global Object,变量对象,Variable Object,活动对象,Activation Object …… 怎么这么多专有名字，还能添加自己的理解吗？" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/web/js/base/exec/index.html -->
+        <div class="blog-page">
+            <h1>JavaScript 执行过程</h1>
+            <p>整理收集一些 JavaScript 执行过程相关的东东，剖析 JavaScript 的执行过程，了解他的运行原理……</p>
+            <h2>权威</h2>
+            <p>慢慢收集过程中……</p>
+            <p>看一下 MDN 、维基百科还行，这要是看<line-code>tc39.es/ecma262</line-code>真费劲啊</p>
+            <ul>
+                <li>
+                    <dl>
+                        <dt>执行上下文</dt>
+                        <dd>
+                            <a href="https://tc39.es/ecma262/#sec-execution-contexts" target="_blank" rel="noopener noreferrer">Execution Contexts</a>
+                        </dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>作用域</dt>
+                        <dd>
+                            <a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Scope" target="_blank" rel="noopener noreferrer">作用域 - MDN Web 文档术语表：Web 相关术语的定义 | MDN</a>
+                        </dd>
+                        <dd>
+                            <a href="https://zh.wikipedia.org/wiki/%E4%BD%9C%E7%94%A8%E5%9F%9F" target="_blank" rel="noopener noreferrer">作用域 - 维基百科，自由的百科全书</a>
+                        </dd>
+                    </dl>
+                </li>
+            </ul>
+            <h2>大神</h2>
+            <p>站在巨人的肩膀上……这里收集一些大神的文章</p>
+            <ul>
+                <li>
+                    <a href="https://www.cnblogs.com/MomentYY/p/15785719.html" target="_blank" rel="noopener noreferrer">JavaScript的执行过程（深入执行上下文、GO、AO、VO和VE等概念） - MomentYY - 博客园</a>
+                </li>
+                <li>
+                    <a href="https://blog.csdn.net/weixin_44995391/article/details/131164820" target="_blank" rel="noopener noreferrer">手把手带你彻底搞懂GO，AO，VO，VE，GEC，FEC，ECS，变量提升，作用域（链），闭包_go ao vo-CSDN博客</a>
+                </li>
+                <li>
+                    <a href="https://segmentfault.com/a/1190000042625485" target="_blank" rel="noopener noreferrer">深入理解JavaScript——执行上下文与调用栈 - 个人文章 - SegmentFault 思否</a>
+                </li>
+                <li>
+                    <a href="https://finget.github.io/views/frontEnd/base/20210310.html" target="_blank" rel="noopener noreferrer">JS执行过程详解 | 前端进化论</a>
+                </li>
+                <li>
+                    <a href="https://segmentfault.com/a/1190000039380905" target="_blank" rel="noopener noreferrer">javascript - JS执行过程详解 - 个人文章 - SegmentFault 思否</a>
+                </li>
+                <li>
+                    <a href="https://juejin.cn/post/6954966248233009182" target="_blank" rel="noopener noreferrer">理解 JavaScript 的执行上下文这篇就够了！ - 掘金</a>
+                </li>
+                <li>
+                    <a href="https://www.freecodecamp.org/news/execution-context-how-javascript-works-behind-the-scenes/" target="_blank" rel="noopener noreferrer">JavaScript Execution Context – How JS Works Behind The Scenes</a>
+                </li>
+                <li>
+                    <a href="https://www.freecodecamp.org/chinese/news/execution-context-how-javascript-works-behind-the-scenes/" target="_blank" rel="noopener noreferrer">JavaScript 执行上下文——JS 的幕后工作原理</a>
+                </li>
+                <li>
+                    <a href="https://dev.to/jahid6597/javascript-execution-context-a-deep-dive-4kno" target="_blank" rel="noopener noreferrer">JavaScript Execution Context: A Deep Dive - DEV Community</a>
+                </li>
+                <li>
+                    <a href="https://www.alaminshaikh.com/blog/javascript-code-execution-process" target="_blank" rel="noopener noreferrer">A deep dive into the JavaScript code execution process | Alamin Shaikh</a>
+                </li>
+            </ul>
+            <h2>敬请期待</h2>
+        </div>
+    </body>
+</html>
