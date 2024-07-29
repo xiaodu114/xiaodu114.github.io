@@ -215,7 +215,8 @@
 
         document.querySelectorAll("pre[ddz-class='here-need-to-handle-by-highlight']").forEach((block) => {
             let lang = block.getAttribute("ddz-lang").toLowerCase();
-            let preEle = getHightLightPreEle(lang, lang === "html" ? block.innerHTML.trim() : block.innerText.trim() || block.textContent.trim());
+            let isHtmlText = block.hasAttribute("ddz-html-text");
+            let preEle = getHightLightPreEle(lang, lang === "html" && !isHtmlText ? block.innerHTML.trim() : block.innerText.trim() || block.textContent.trim());
             block.replaceWith(preEle);
             addCopyIcon(preEle);
         });
