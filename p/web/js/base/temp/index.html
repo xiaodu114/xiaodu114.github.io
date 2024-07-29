@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>javascript 临时 - xiaodu114.github.io</title>
+        <meta name="keywords" content="javascript 基础,Generator,new,手写 new" />
+        <meta name="description" content="临时记录一些东西" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/web/js/base/temp/index.html -->
+        <div class="blog-page">
+            <h1>JavaScript</h1>
+            <p>临时记录一些东西</p>
+            <h2>手写 new</h2>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+function myNew(fn, ...args) {
+    //  判断 fn 是一个构造器
+    //      1、箭头函数 类型是 function，但是没有 prototype 属性
+    //      2、生成器函数 类型是 function，有 prototype 属性，但是 fn.prototype.constructor 并不等于他自身
+    if (!(typeof fn === "function" && fn.hasOwnProperty("prototype") && fn.prototype.constructor === fn)) throw new TypeError("fn is not a constructor");
+    let obj = Object.create(fn.prototype);
+    let ret = fn.apply(obj, args);
+    //  new 一个构造函数时，如果构造函数有返回值，那么支持哪些类型？？？
+    if (ret !== null && (typeof ret === "object" || typeof ret === "function")) return ret;
+    return obj;
+}
+            </pre>
+            <h2>执行一个生成器函数</h2>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+function* fn() {
+    let res1 = yield Promise.resolve(1);
+    console.log(res1);
+    let res2 = yield Promise.resolve(2);
+    console.log(res2);
+    let res3 = yield Promise.resolve(3);
+    console.log(res3);
+    let res4 = yield Promise.reject(4);
+    console.log(res4);
+    let res5 = yield Promise.resolve(5);
+    console.log(res5);
+}
+
+function runGenerator(generator) {
+    let gen = generator();
+    function next(data) {
+        let { done, value } = gen.next(data);
+        if (done) return;
+        //  简写
+        //  value.then(next).catch(next);
+        value
+            .then((data2) => {
+                next(data2);
+            })
+            .catch((error) => {
+                next(error);
+            });
+    }
+    next();
+}
+
+runGenerator(fn);                
+            </pre>
+        </div>
+    </body>
+</html>
