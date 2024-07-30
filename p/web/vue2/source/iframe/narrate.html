@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>我和 Vue.js - xiaodu114.github.io</title>
+        <meta name="keywords" content="Vue.js,Vue,Vue 2,解说 Vue,Observer,Dep,Watcher,defineReactive,Object.defineProperty" />
+        <meta name="description" content="介绍一下 Vue.js 2.x 版本中主要的方法和类，或者说我关注的方法和类" />
+        <style>
+            li {
+                line-height: 1.8;
+            }
+
+            dl,
+            dt,
+            dd {
+                line-height: 1.8;
+            }
+        </style>
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>解说</h1>
+            <p>介绍一下<line-code>Vue 2</line-code>中主要的方法和类，更准确说是，我关注的方法和类</p>
+            <h2>Vue.prototype._init 方法</h2>
+            <p>在<line-code>new Vue()</line-code>时就会调用这个方法。</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+function Vue(options) {
+    if (!(this instanceof Vue)) {
+        warn$2("Vue is a constructor and should be called with the `new` keyword");
+    }
+    //  ddz 添加的注释：调用原型上的 _init 方法
+    this._init(options);
+}
+            </pre>
+            <p>下面的代码摘自<line-code>Vue.prototype._init</line-code>，如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  ddz 添加的注释：this 赋值给了 vm ，后面你会经常看到他，知道他是啥了吧
+var vm = this;
+
+//  ddz 添加的注释：会在 vm 上添加 _renderProxy 属性，他的值为 vm 或者 new Proxy(vm, {})。这里的 Proxy 是原生的。
+initProxy(vm);
+
+//  ddz 添加的注释：用到时在说
+initLifecycle(vm);
+
+//  ddz 添加的注释：用到时在说
+initEvents(vm);
+
+//  ddz 添加的注释：用到时在说
+initRender(vm);
+
+//  ddz 添加的注释：调用 beforeCreate 钩子函数
+callHook$1(vm, "beforeCreate", undefined, false /* setContext */);
+
+//  ddz 添加的注释：
+initInjections(vm); // resolve injections before data/props
+
+//  ddz 添加的注释：该方法中会调用 initData 方法
+initState(vm);
+
+//  ddz 添加的注释：用到时在说
+initProvide(vm); // resolve provide after data/props
+
+//  ddz 添加的注释：调用 created 钩子函数
+callHook$1(vm, "created");
+
+//  ……
+
+//  ddz 添加的注释：开始挂载。这里边会调用到 mountComponent 方法，该方法会调用 beforeMount、mounted 钩子函数，还会 new Watcher
+if (vm.$options.el) {
+    vm.$mount(vm.$options.el);
+}
+            </pre>
+            <h2>initProxy 方法</h2>
+            <details>
+                <summary>点击查看 initProxy 方法</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../vue/initProxy.js" ddz-lang="javascript"></div>
+            </details>
+            <p></p>
+            <mark-block explain="解说">
+                <p>调用该方法，会在传入的参数（这里是 vm，也就是 Vue 的实例）vm 上添加 _renderProxy 属性。为啥要说他呢？后面调用渲染函数时要用到他</p>
+                <dl>
+                    <dt>判断是否支持原生 Proxy</dt>
+                    <dd>如果支持：<line-code>vm._renderProxy = new Proxy(vm, handlers);</line-code></dd>
+                    <dd>如果不支持：<line-code>vm._renderProxy = vm;</line-code></dd>
+                </dl>
+            </mark-block>
+            <h2>initData 方法</h2>
+            <details>
+                <summary>点击查看 initData 方法</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../vue/initData.js" ddz-lang="javascript"></div>
+            </details>
+            <p></p>
+            <mark-block explain="解说">
+                <p>关注的地方</p>
+                <dl>
+                    <dt>将 data (对象或者函数返回值)挂到 Vue 实例的 _data 属性上</dt>
+                    <dd>
+                        <line-code>data = vm._data = isFunction(data) ? getData(data, vm) : data || {};</line-code>
+                    </dd>
+                    <dt>将 data (对象或者函数返回值)中的属性挂到 Vue 实例上，这也是 data 中的属性可以直接在 this 中使用的原因</dt>
+                    <dd>
+                        <line-code>proxy(vm, "_data", key);</line-code>
+                    </dd>
+                    <dt>观察 data（创建 Observer，调用 defineReactive 等）</dt>
+                    <dd><line-code>var ob = observe(data);</line-code></dd>
+                </dl>
+            </mark-block>
+            <h2>proxy 方法</h2>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+var sharedPropertyDefinition = {
+    enumerable: true,
+    configurable: true,
+    get: noop,
+    set: noop
+};
+function proxy(target, sourceKey, key) {
+    sharedPropertyDefinition.get = function proxyGetter() {
+        return this[sourceKey][key];
+    };
+    sharedPropertyDefinition.set = function proxySetter(val) {
+        this[sourceKey][key] = val;
+    };
+    Object.defineProperty(target, key, sharedPropertyDefinition);
+}
+            </pre>
+            <p></p>
+            <mark-block explain="解说">
+                <p>将 data (对象或者函数返回值)中的属性以及 props 挂到 Vue 实例上，这样 data 、 props 中的属性可以直接在 this 中使用了</p>
+                <ul>
+                    <li>
+                        <line-code>proxy(vm, "_data", key);</line-code>
+                    </li>
+                    <li>
+                        <line-code>proxy(vm, "_props", key);</line-code>
+                    </li>
+                    <li><line-code>proxy(Comp.prototype, "_props", key);</line-code>，用到时再说</li>
+                </ul>
+            </mark-block>
+            <h2>Observer 类</h2>
+            <details>
+                <summary>点击查看 Observer 类</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../vue/Observer.js" ddz-lang="javascript"></div>
+            </details>
+            <p></p>
+            <mark-block explain="解说">
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  0、initData 方法会调用 observe 方法，如下：
+var ob = observe(data);
+
+//  1、observe 方法返回 new Observer，这里的 value 就是你 new Vue 时的 data (对象或者函数返回值) 
+return new Observer(value, shallow, ssrMockReactivity);
+
+//  2、Observer 构造函数中，遍历 data 并调用 defineReactive （暂时只考虑第一层）
+var keys = Object.keys(value);
+for (var i = 0; i &lt; keys.length; i++) {
+    var key = keys[i];
+    defineReactive(value, key, NO_INITIAL_VALUE, undefined, shallow, mock);
+}
+                </pre>
+            </mark-block>
+            <h2>defineReactive 方法</h2>
+            <details>
+                <summary>点击查看 defineReactive 方法</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../vue/defineReactive.js" ddz-lang="javascript"></div>
+            </details>
+            <p></p>
+            <mark-block explain="解说">
+                <p>铺垫了这么多，你想要的数据拦截终于来了。请 <line-code>Object.defineProperty</line-code> 登场，👏👏👏</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  defineReactive 方法最外层的代码
+var dep = new Dep();
+
+//  get 中的部分代码
+if (Dep.target) {
+    {
+        dep.depend({
+            target: obj,
+            type: "get" /* TrackOpTypes.GET */,
+            key: key
+        });
+    }
+    // ……
+}
+                </pre>
+                <dl>
+                    <dt>1、Dep.target 是啥？</dt>
+                    <dd>他是 Watcher 的实例</dd>
+                    <dt>2、为什么判断他？</dt>
+                    <dd>从调用栈上可以看出，就是从他一路“追”到了这里，咱们收集的就是他。</dd>
+                    <dd>例如：页面中使用了 data 中的数据（形如：<line-code>{{msg}}</line-code>），之后在页面第一次渲染时，咱肯定得读取 msg 的值啊，读取不就是 get 嘛。于是就知道了，哦！原来是你这个 watcher 使用了 msg 啊！我记下了，后面如果他变了，我告诉你啊</dd>
+                    <dt>3、调用 dep.depend 方法时也没有传入 Dep.target 啊，dep 是如何收集的？</dt>
+                    <dd>
+                        这个过程是挺绕的，你听我给你慢慢讲来：
+                        <ol>
+                            <li>get 中调用 dep.depend</li>
+                            <li>Dep.prototype.depend 方法中调用 Dep.target.addDep(this);（注意：Dep.target 是 watcher 啊，调用时将 dep 弄了进去，这里的 this 是 dep ）</li>
+                            <li>Watcher.prototype.addDep 方法中调用 dep.addSub(this);（注意：这里的 this 是 watcher ）</li>
+                            <li>Dep.prototype.addSub 方法中调用 this.subs.push(sub);（注意：这里的 sub 就是 watcher ）</li>
+                            <li>至此，dep 终于收集了 watcher</li>
+                        </ol>
+                    </dd>
+                </dl>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  defineReactive 方法最外层的代码
+var dep = new Dep();
+
+//  set 中的部分代码
+dep.notify({
+    type: "set" /* TriggerOpTypes.SET */,
+    target: obj,
+    key: key,
+    newValue: newVal,
+    oldValue: value
+});
+                </pre>
+                <ol>
+                    <li>set 中调用 dep.notify</li>
+                    <li>Dep.prototype.notify 方法中遍历 this.subs ，遍历中调用其中每一项的 update 方法，也就是 sub.update();（注意：这里的 sub 便是 get 中收集的 watcher）</li>
+                    <li>
+                        <span>Watcher.prototype.update 方法中</span>
+                        <dl>
+                            <dt><line-code>this.sync</line-code>（如果同步）</dt>
+                            <dd>
+                                <ol>
+                                    <li>调用 <line-code>this.run</line-code>（ Watcher.prototype.run ），其中会调用<line-code>this.get</line-code>方法</li>
+                                    <li>调用<line-code>this.get</line-code>（ Watcher.prototype.get ），其中会调用<line-code>this.getter.call(vm, vm);</line-code>，这个 this.getter 就是 new Watcher 时的第二个参数</li>
+                                </ol>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt><line-code>!this.sync</line-code>（如果异步）</dt>
+                            <dd>
+                                <ol>
+                                    <li>调用<line-code>queueWatcher(this);</line-code>，this 肯定就是 watcher 了，调用该方法将 watcher 添加到<line-code>queue</line-code>数组中</li>
+                                    <li><line-code>!config.async</line-code>直接调用或者<line-code>nextTick</line-code>之后调用<line-code>flushSchedulerQueue</line-code>方法刷新队列</li>
+                                    <li><line-code>flushSchedulerQueue</line-code>方法中会遍历<line-code>queue</line-code>数组，遍历中调用<line-code>watcher.run();</line-code>方法</li>
+                                    <li>到了 watcher.run 方法就和上面的步骤一样了</li>
+                                </ol>
+                            </dd>
+                        </dl>
+                    </li>
+                </ol>
+            </mark-block>
+            <h2>Dep 类</h2>
+            <details>
+                <summary>点击查看 Dep 类</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../vue/Dep.js" ddz-lang="javascript"></div>
+            </details>
+            <p></p>
+            <mark-block explain="解说">
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  ddz 添加的注释：真正把 watcher 放在兜里
+Dep.prototype.addSub = function (sub) {
+    this.subs.push(sub);
+};
+
+//  ddz 添加的注释：收集 watcher 的入口
+Dep.prototype.depend = function (info) {
+    Dep.target.addDep(this);
+};
+
+//  ddz 添加的注释：通知所有的 watcher ：嗨， msg 更新了，你赶紧处理一下 
+Dep.prototype.notify = function (info) {
+    // stabilize the subscriber list first
+    var subs = this.subs.filter(function (s) {
+        return s;
+    });
+    for (var i = 0, l = subs.length; i &lt; l; i++) {
+        var sub = subs[i];
+        sub.update();
+    }
+};
+                </pre>
+            </mark-block>
+            <h2>Vue.prototype.$mount</h2>
+            <details>
+                <summary>点击查看 $mount 方法</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../vue/prototype$mount.js" ddz-lang="javascript"></div>
+            </details>
+            <p></p>
+            <mark-block explain="解说">
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//   先弄了一个
+Vue.prototype.$mount = function (el, hydrating) {
+    el = el && inBrowser ? query(el) : undefined;
+    return mountComponent(this, el, hydrating);
+};
+
+//   保留一个原来的
+var mount = Vue.prototype.$mount;
+
+//   又弄了一个新的
+Vue.prototype.$mount = function (el, hydrating) {
+    //……
+    //  调用之前的那个
+    return mount.call(this, el, hydrating);
+};
+                </pre>
+                <p>在重写的 $mount 方法中：有 render（options.render，new Vue 时你传了） 用 render，如果没有 render，则根据 template 创建一个渲染函数并赋值给 options.render</p>
+                <p><strong>重点关注：</strong>调用 compileToFunctions 方法将 template 转为 render</p>
+            </mark-block>
+            <h2>mountComponent 方法</h2>
+            <details>
+                <summary>点击查看 mountComponent 方法</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../vue/mountComponent.js" ddz-lang="javascript"></div>
+            </details>
+            <p></p>
+            <mark-block explain="解说">
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  ……
+
+//   调用 beforeMount 钩子函数
+callHook$1(vm, "beforeMount");
+var updateComponent;
+
+//  后面会将这个方法作为 new Watcher 的第二个参数（也就是 expOrFn），之后将他赋值给了 watcher 中的 this.getter
+//      也就是在 watcher 中调用 this.getter 就是调用这个方法 
+updateComponent = function () {
+    vm._update(vm._render(), hydrating);
+};
+
+//  ……
+//  在 Watcher 构造函数中，我们将 vm._watcher 设置为这个 Watcher 实例。代码：vm._watcher = this;
+//  还有一段英文注释，现在看着有点懵……
+new Watcher(vm, updateComponent, noop, watcherOptions, true /* isRenderWatcher */);
+
+//  ……
+//   调用 mounted 钩子函数
+callHook$1(vm, "mounted");
+                </pre>
+            </mark-block>
+            <h2>Watcher 类</h2>
+            <details>
+                <summary>点击查看 Watcher 类</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../vue/Watcher.js" ddz-lang="javascript"></div>
+            </details>
+            <h3>挂载过程中调用</h3>
+            <p>也就是<line-code>new Vue -> _init -> vm.$mount -> mountComponent -> new Watcher</line-code>这个过程</p>
+            <mark-block explain="解说">
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  1、这里是 Watcher 构造函数中的代码
+if (isFunction(expOrFn)) {
+    this.getter = expOrFn;
+}
+//  末尾调用 this.get 方法，该方法中会调用 this.getter 方法
+this.value = this.lazy ? undefined : this.get();
+
+//  2、这里是 Watcher.prototype.get 中的代码
+//      这一步挺重要，会将 this（ Watcher 的实例）添加到 targetStack 中，并且将他赋值给 Dep.target
+//      为啥这里要说一下 Dep.target ，因为在调用拦截器 get 时会判断 Dep.target 是否存在。如果存在，才会收集依赖
+pushTarget(this);
+//      调用 this.getter ，也就是执行 expOrFn 方法，new Watcher 时的第二个参数
+value = this.getter.call(vm, vm);
+
+//  3、注意：下面的代码并不是 Watcher 中的，放在这里只是想告诉你 expOrFn 是啥。他就是：
+updateComponent = function () {
+    vm._update(vm._render(), hydrating);
+};
+                </pre>
+                <p>通过上文可知：在 new Watcher 中调用了 updateComponent 方法，进而调用 vm._render 和 vm._update</p>
+            </mark-block>
+            <h3>更新之后调用</h3>
+            <p>例如，双向绑定的input输入框修改之后。</p>
+            <mark-block explain="解说">
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  0、下面的代码来自，根据模板生成的渲染函数
+//      触发输入框的 input 事件，给 msg 赋值，也就会调用 defineReactive 中的 set
+//      上面解读 defineReactive 中的 set 时，已经讲述了如何一步步追到 watcher 的 run 方法的
+{
+    on: {
+        input: function ($event) {
+            if ($event.target.composing) return;
+            msg = $event.target.value;
+        }
+    }
+}
+
+//  1、这里是 Watcher.prototype.run 中的代码
+var value = this.get(); 
+                </pre>
+                <p>到了 this.get 和上面的逻辑就一样了，只不过上面是在构造函数中调用的，而这里是在 run 中调用的。</p>
+            </mark-block>
+            <h2>_render 方法</h2>
+            <details>
+                <summary>点击查看 _render 方法</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../vue/_render.js" ddz-lang="javascript"></div>
+            </details>
+            <p></p>
+            <mark-block explain="解说">
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  1、拿到 render 方法，new Vue 时你传进来的或者根据 template 生成的
+var _a = vm.$options,
+    render = _a.render,
+    _parentVnode = _a._parentVnode;
+
+// ……
+
+//  2、调用 render
+var vnode;
+vnode = render.call(vm._renderProxy, vm.$createElement);
+                </pre>
+            </mark-block>
+        </div>
+    </body>
+</html>

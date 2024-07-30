@@ -1,0 +1,20 @@
+ @import url(./app.css);
+ @import url(./app-nav.css);
+
+:root {
+    --main-color: #3cb878;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+ html,
+ body {
+     height: 100%;
+     width: 100%;
+     margin: 0;
+     overflow: hidden;
+ }

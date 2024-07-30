@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <meta name="keywords" content="" />
+        <meta name="description" content="" />
+        <link rel="stylesheet" href="./css/index.css" />
+        <script src="https://registry.npmmirror.com/vue/2.7.16/files/dist/vue.js"></script>
+        <script src="https://registry.npmmirror.com/vue-router/3.6.5/files/dist/vue-router.js"></script>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <!-- 这里放置一些模板 -->
+        <template id="appTemplate">
+            <div class="app">
+                <div class="header">
+                    <div class="left">
+                        <h1>我和&nbsp;<line-code>Vue 2</line-code>&nbsp;有个约会</h1>
+                    </div>
+                    <div class="right">
+                        <a href="https://v2.cn.vuejs.org/" target="_blank" rel="noopener noreferrer">Vue.js - v2</a>
+                        &nbsp;&nbsp;
+                        <a href="https://v3.router.vuejs.org/zh/" target="_blank" rel="noopener noreferrer">Vue Router - v3</a>
+                    </div>
+                </div>
+                <div class="main">
+                    <div class="nav">
+                        <ul>
+                            <li v-for="item in natItems" :key="item.name" :class="{active:activeNav && activeNav.routerName === item.routerName}" @click="goTo(item)">{{item.text}}</li>
+                        </ul>
+                    </div>
+                    <div class="content">
+                        <router-view></router-view>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template id="iframeWrapperTemplate">
+            <iframe :src="src" frameborder="0" height="100%" width="100%"></iframe>
+        </template>
+        <template id="introductionTemplate">
+            <h2>介绍</h2>
+        </template>
+        <template id="narrateTemplate">
+            <iframe-wrapper :src="src"></iframe-wrapper>
+        </template>
+        <template id="twoBindTemplate">
+            <iframe-wrapper :src="src"></iframe-wrapper>
+        </template>
+        <script type="module">
+            import App from "./js/index.js";
+            import router from "./router/router.js";
+            import IframeWrapper from "./components/iframeWrapper.js";
+            //  须使 Vue 忽略在 Vue 之外的自定义元素 (e.g. 使用了 Web Components APIs)。
+            Vue.config.ignoredElements = ["line-code"];
+            Vue.component("iframe-wrapper", IframeWrapper);
+            new Vue({
+                el: "#app",
+                router,
+                render(h) {
+                    return h(App);
+                }
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,18 @@
+<div id="app">
+    <h2>{{msg}}</h2>
+    <p>这里再重复一遍：{{msg}}</p>
+    <p>
+        <label>修改msg：<input type="text" v-model="msg" /></label>
+    </p>
+</div>
+<script>
+    new Vue({
+        el: "#app",
+        data() {
+            return {
+                msg: "双向绑定调试"
+            };
+        },
+        beforeCreate() {}
+    });
+</script>

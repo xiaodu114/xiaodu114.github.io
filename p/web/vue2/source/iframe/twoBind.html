@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>我和 Vue.js - xiaodu114.github.io</title>
+        <meta name="keywords" content="Vue.js,Vue,Vue 2,解说 Vue,双向绑定" />
+        <meta name="description" content="介绍一下 Vue.js 2.x 版本中双向绑定" />
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>双向绑定</h1>
+            <p>在上一篇中，尝试着介绍了一下： initProxy,Observer,defineReactive,Dep,Watcher,_render 等方法和类。这一篇主要说一下双向绑定</p>
+            <h2>示例代码</h2>
+            <p>用一个小小的例子，看一下他们是如何运作的</p>
+            <h3>源码</h3>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../code/twoBind-source.txt" ddz-lang="html"></div>
+            <h3>渲染函数</h3>
+            <p>下面是<line-code>Vue</line-code>根据上面的<line-code>template</line-code>生成的渲染函数</p>
+            <details>
+                <summary>点击查看 生成的渲染函数</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../code/twoBind-render.js" ddz-lang="javascript"></div>
+            </details>
+            <h4>with (this) 中的 this 是啥</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  Vue.prototype._render 方法中，使用下面的语句调用渲染函数
+//      vm._renderProxy 在 initProxy(vm); 时就已经得到，是： vm 或者 new Proxy(vm, {})
+vnode = render.call(vm._renderProxy, vm.$createElement);
+            </pre>
+            <h4>_c 是啥</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  搜索 vm._c 就可以找到下面的代码
+
+vm._c = function (a, b, c, d) {
+    return createElement$1(vm, a, b, c, d, false);
+};
+            </pre>
+            <h4>其他</h4>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../vue/installRenderHelpers.js" ddz-lang="javascript"></div>
+            <h2>数据到视图</h2>
+            <p>敬请期待</p>
+            <!-- <ol>
+                <li>new Vue</li>
+                <li>_init</li>
+                <li>initProxy 得到 vm._renderProxy</li>
+                <li>initState -> initData -> observe -> Observer -> defineReactive</li>
+                <li>vm.$mount -> Vue.prototype.$mount （重写的） -> Vue.prototype.$mount （重写之前的） -> mountComponent -> Watcher -> Watcher.prototype.get -> updateComponent</li>
+                <li>
+                    updateComponent
+                    <ol>
+                        <li>vm._render -> Vue.prototype._render -> render.call(vm._renderProxy, vm.$createElement) -> get</li>
+                        <li>vm._update -> Vue.prototype._update -> vm.__patch__</li>
+                    </ol>
+                </li>
+            </ol> -->
+        </div>
+    </body>
+</html>
