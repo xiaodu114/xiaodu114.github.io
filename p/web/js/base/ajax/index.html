@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Ajax,XMLHttpRequest,Fetch,Axios - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,Ajax,XMLHttpRequest,Fetch" />
+        <meta name="description" content="异步发送 HTTP 请求，介绍一下 Ajax,XMLHttpRequest,Fetch,Axios 等" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/web/js/base/ajax/index.html -->
+        <div class="blog-page">
+            <h1>Ajax</h1>
+            <mark-block>
+                <p>先占个位置，后面慢慢更新</p>
+            </mark-block>
+            <p><line-code>Ajax</line-code>，离不开，真的离不开……那他有何魅力，还是先看看权威的解释吧！</p>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Glossary/AJAX" target="_blank" rel="noopener noreferrer">AJAX - MDN Web 文档术语表：Web 相关术语的定义 | MDN</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Learn/JavaScript/Client-side_web_APIs/Fetching_data" target="_blank" rel="noopener noreferrer">从服务器获取数据 - 学习 Web 开发 | MDN</a>
+                </li>
+            </ul>
+            <h2>XMLHttpRequest</h2>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest" target="_blank" rel="noopener noreferrer">XMLHttpRequest - Web API | MDN</a>
+                </li>
+                <li>
+                    <a href="https://zh.javascript.info/xmlhttprequest" target="_blank" rel="noopener noreferrer">XMLHttpRequest - 现代 JavaScript 教程</a>
+                </li>
+            </ul>
+            <!-- <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  get 请求
+let url = "http://iwenwiki.com/api/blueberrypai/getChengpinInfo.php";
+//  http://iwenwiki.com/api/blueberrypai/getListeningInfo.php
+let xhr = new XMLHttpRequest();
+xhr.responseType = "json";
+xhr.open("GET", url);
+xhr.onreadystatechange = function (a, b, c) {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status >= 200 && xhr.status &lt; 300) {
+            debugger;
+            console.log(xhr.response);
+        } else {
+            console.error(`HTTP 响应状态码：${xhr.status}，HTTP 响应文本信息：${xhr.statusText}。${url}加载失败！`);
+        }
+    }
+};
+//  4、发送请求
+xhr.send(null);
+            </pre> -->
+            <h2>Fetch</h2>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API" target="_blank" rel="noopener noreferrer">Fetch API - Web API | MDN</a>
+                </li>
+                <li>
+                    <a href="https://zh.javascript.info/fetch" target="_blank" rel="noopener noreferrer">Fetch - 现代 JavaScript 教程</a>
+                </li>
+            </ul>
+            <h2>第三方库</h2>
+            <h3>Axios</h3>
+            <ul>
+                <li>
+                    <a href="https://axios-http.com/" target="_blank" rel="noopener noreferrer">Axios</a>
+                </li>
+                <li><a href="https://axios-http.com/zh/" target="_blank" rel="noopener noreferrer">Axios 中文</a></li>
+                <li>
+                    <a href="https://axios-http.com/zh/docs/intro" target="_blank" rel="noopener noreferrer">Axios Docs</a>
+                </li>
+            </ul>
+        </div>
+    </body>
+</html>
