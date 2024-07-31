@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-cmn-Hans">
+<html lang="zh-Hans-CN">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>Visual Studio Code - xiaodu114.github.io</title>
         <meta name="keywords" content="Visual Studio Code,Prettier" />
         <meta name="description" content="整理收集一下 Visual Studio Code 相关的东东。VSCode自身相关，一些常用的插件：Prettier" />
@@ -12,16 +11,61 @@
     </head>
 
     <body>
-        <!-- github访问地址：p/ide/vscode/index.html -->
+        <!-- github访问地址：/p/ide/vscode/index.html -->
         <div class="blog-page">
             <h1>Visual Studio Code</h1>
             <p>这里整理收集一些<line-code>Visual Studio Code</line-code>相关的东东，包括：其自身、常用插件……由于<line-code>Visual Studio Code</line-code>有点长，后面使用<line-code>VSCode</line-code>代替。</p>
             <h2>官网</h2>
-            <p>官网地址：<a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code - Code Editing. Redefined</a></p>
+            <p>官网地址：<a href="https://code.visualstudio.com/" target="_blank" rel="noopener noreferrer">Visual Studio Code - Code Editing. Redefined</a></p>
+            <h2>设置</h2>
+            <h3>视区宽度自动换行</h3>
+            <p>
+                <img src="./image/1.png" alt="Visual Studio Code 设置：视区宽度自动换行" />
+            </p>
+            <h3>html 代码片段的语言</h3>
+            <p>
+                <img src="./image/2.png" alt="Visual Studio Code 设置：html 代码片段的变量，lang" />
+            </p>
+            <h2>快捷键</h2>
+            <ul>
+                <li>
+                    <dl>
+                        <dt>注释</dt>
+                        <dd>下面的三种方式相同：光标所在的某一行；选中的多行（不用选中全部，所覆盖的行都会被注释）</dd>
+                        <dd><line-code>Ctrl + /</line-code></dd>
+                        <dd><line-code>Ctrl + K + U</line-code></dd>
+                        <dd><line-code>Ctrl + K + C</line-code></dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>删除行</dt>
+                        <dd><line-code>Ctrl + Shift + K</line-code>：光标所在的某一行；选中的多行（不用选中全部，所覆盖的行都会删除）</dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>多行输入</dt>
+                        <dd><line-code>Shift + Alt</line-code>：同时按下这两个键，鼠标选择即可</dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>进入新的一行输入</dt>
+                        <dd><line-code>Ctrl + Enter</line-code>：在光标所在行的下方插入以新行，并且光标进入创建的新行</dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>向上或者向下复制当前行</dt>
+                        <dd><line-code>Shift + Alt + 上键/下键</line-code>：在光标所在行的下方插入以新行，并且光标进入创建的新行</dd>
+                    </dl>
+                </li>
+            </ul>
             <h2>插件</h2>
-            <p>这里整理介绍一下常用的插件……插件官网：<a href="https://marketplace.visualstudio.com/VSCode" target="_blank">Extensions for Visual Studio family of products | Visual Studio Marketplace</a></p>
+            <p>这里整理介绍一下常用的插件……插件官网：<a href="https://marketplace.visualstudio.com/VSCode" target="_blank" rel="noopener noreferrer">Extensions for Visual Studio family of products | Visual Studio Marketplace</a></p>
             <h3>Prettier - Code formatter</h3>
-            <p>格式化代码必备插件。官网地址：<a href="https://prettier.io/" target="_blank">Prettier · Opinionated Code Formatter</a>、在线预览效果：<a href="https://prettier.io/playground/" target="_blank">Prettier Online</a> 。其实<line-code>VSCode</line-code>自带也不错，但是支持文件类型有限（尤其是.vue文件），所以选择了她。<line-code>Prettier</line-code>有很多配置项，详细的可以看一下官网：<a href="https://prettier.io/docs/en/options.html" target="_blank">Options · Prettier</a>，有些配置项是有代码示例的。</p>
+            <p>格式化代码必备插件。官网地址：<a href="https://prettier.io/" target="_blank" rel="noopener noreferrer">Prettier · Opinionated Code Formatter</a>、在线预览效果：<a href="https://prettier.io/playground/" target="_blank" rel="noopener noreferrer">Prettier Online</a> 。其实<line-code>VSCode</line-code>自带也不错，但是支持文件类型有限（尤其是.vue文件），所以选择了她。<line-code>Prettier</line-code>有很多配置项，详细的可以看一下官网：<a href="https://prettier.io/docs/en/options.html" target="_blank" rel="noopener noreferrer">Options · Prettier</a>，有些配置项是有代码示例的。</p>
             <p>下面是我们的配置项：</p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="json">
 {
