@@ -103,7 +103,7 @@ console.log(xiaodu114);
 let a2bei4;
 let xiaodu114 = "https://xiaodu114.github.io/";
             </pre>
-            <h4>重复声明</h4>
+            <h4>不能重复声明</h4>
             <p>不行，不行，绝对不行。这里和<line-code>var</line-code>不同：不能用 let 多次声明同一个变量</p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 //  示例一
@@ -141,7 +141,7 @@ console.log(xiaodu114);
 console.log(window.hasOwnProperty("xiaodu114"));
 console.log(window.xiaodu114);
             </pre>
-            <h4>提升</h4>
+            <h4>不会提升</h4>
             <p>在这一点上，<line-code>let</line-code>和<line-code>var</line-code>不同：let 声明的变量并不会提升。在声明之前访问，会报错，他有一个霸气的名字：暂时性死区</p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 console.log(xiaodu114);
@@ -173,7 +173,7 @@ const a2bei4;
 //  最后一行报错，如下：
 //  SyntaxError: Missing initializer in const declaration
             </pre>
-            <h4>重复声明</h4>
+            <h4>不能重复声明</h4>
             <p>不行，不行，绝对不行。这里和<line-code>let</line-code>是一致的：不可以重复声明</p>
             <h4>不可以修改</h4>
             <p>在这一点上，<line-code>const</line-code>和<line-code>let</line-code>、<line-code>var</line-code>不同：声明之后，不可以修改。但<line-code>const</line-code>声明的对象或数组的属性可以被修改</p>
@@ -190,7 +190,7 @@ console.log(xiaodu114);
             </pre>
             <h4>全局声明的，不会给 window</h4>
             <p>没有，没有，绝对没有。这里和<line-code>let</line-code>是一致的：不会添加到 window 上</p>
-            <h4>提升</h4>
+            <h4>不会提升</h4>
             <p>在这一点上，<line-code>const</line-code>和<line-code>let</line-code>是一致的：不会提升</p>
             <h4>块级作用域</h4>
             <p>在这一点上，<line-code>const</line-code>和<line-code>let</line-code>是一致的：声明的变量都具有块级作用域。</p>
