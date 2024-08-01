@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>var let const - xiaodu114.github.io</title>
         <meta name="keywords" content="var,let,const,变量提升,块级作用域" />
-        <meta name="description" content="介绍一下 var 、let 、const 三者的不用" />
+        <meta name="description" content="介绍一下 var 、let 、const 三者的不同" />
 
         <script src="/p/_/js/main.js"></script>
         <style>
@@ -106,12 +106,23 @@ let xiaodu114 = "https://xiaodu114.github.io/";
             <h4>重复声明</h4>
             <p>不行，不行，绝对不行。这里和<line-code>var</line-code>不同：不能用 let 多次声明同一个变量</p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  示例一
 let xiaodu114 = "https://blog.csdn.net/duyelang";
 let xiaodu114 = "https://www.cnblogs.com/du-blog";
 let xiaodu114 = "https://xiaodu114.github.io/";
 console.log(xiaodu114);
 
-//  异常，提示如下：
+//  示例二
+var xiaodu114 = "https://xiaodu114.github.io/";
+let xiaodu114 = "https://www.cnblogs.com/du-blog";
+
+//  示例三
+function fn(xiaodu114){
+    let xiaodu114 = "https://www.cnblogs.com/du-blog";
+}
+fn();
+
+//  以上三个示例都会提示如下异常：
 //  SyntaxError: Identifier 'xiaodu114' has already been declared
             </pre>
             <h4>可以修改</h4>
