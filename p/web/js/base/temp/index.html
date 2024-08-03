@@ -15,6 +15,43 @@
         <div class="blog-page">
             <h1>JavaScript</h1>
             <p>临时记录一些东西</p>
+            <h2>原型链查找属性</h2>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  方式一
+function getPropertyValue1(target, propertyKey) {
+    if (Object.hasOwnProperty.call(target, propertyKey)) return target[propertyKey];
+    let proto = Object.getPrototypeOf(target);
+    return proto === null ? undefined : getPropertyValue1(proto, propertyKey);
+}
+//  方式二
+function getPropertyValue2(target, propertyKey) {
+    if (Object.hasOwnProperty.call(target, propertyKey)) return target[propertyKey];
+    let proto = Object.getPrototypeOf(target);
+    while (proto !== null) {
+        if (Object.hasOwnProperty.call(proto, propertyKey)) return proto[propertyKey];
+        proto = Object.getPrototypeOf(proto);
+    }
+    return undefined;
+}
+
+//  测试
+let obj = { name: "6666" };
+let symbolKey = Symbol("a2bei4");
+obj[symbolKey] = "Symbol属性测试";
+console.dir(getPropertyValue1(obj, "name"));
+console.dir(getPropertyValue1(obj, "qwe"));
+console.dir(getPropertyValue1(obj, "toString"));
+console.dir(getPropertyValue1(obj, "obj1"));
+console.dir(getPropertyValue1(obj, symbolKey));
+console.dir(getPropertyValue1(obj, Symbol("a2bei4")));
+console.log("-----------------------------------------------");
+console.dir(getPropertyValue2(obj, "name"));
+console.dir(getPropertyValue2(obj, "qwe"));
+console.dir(getPropertyValue2(obj, "toString"));
+console.dir(getPropertyValue2(obj, "obj1"));
+console.dir(getPropertyValue2(obj, symbolKey));
+console.dir(getPropertyValue2(obj, Symbol("a2bei4")));
+            </pre>
             <h2>手写 new</h2>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 function myNew(fn, ...args) {
