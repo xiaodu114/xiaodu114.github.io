@@ -52,6 +52,47 @@
             </mark-block>
             <h3>ES5 写法</h3>
             <p>让<line-code>ES5</line-code>再次焕发生机，毕竟咱还是念旧的是吧</p>
+            <h4>发现的问题</h4>
+            <p>这里记录一些尚未实现的原生<line-code>Promise</line-code>的一些特性。放在这里比较显眼，提醒别忘记。</p>
+            <h5>场景一</h5>
+            <p>如果调用<line-code>resolve / reject</line-code>方法时传入一个<line-code>Promise</line-code>实例，你该如何应对</p>
+            <details>
+                <summary>点击查看原生 Promise 的行为</summary>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  示例一
+let p1 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve("xiaodu114");
+    }, 1000);
+});
+new Promise((resolve, reject) => {
+    resolve(p1);
+}).then(
+    (data) => {
+        console.log("成功：", data);
+    },
+    (data) => {
+        console.log("失败：", data);
+    }
+);
+//  示例二
+let p2 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        reject("a2bei4");
+    }, 1000);
+});
+new Promise((resolve, reject) => {
+    reject(p2);
+}).then(
+    (data) => {
+        console.log("成功：", data);
+    },
+    (data) => {
+        console.log("失败：", data);
+    }
+);
+                </pre>
+            </details>
             <h4>初始形态</h4>
             <p><line-code>Promise</line-code>肯定是一个构造函数，我们使用的时候都是<line-code>new</line-code>的。好的，那我们创建一个</p>
             <ul>
@@ -320,6 +361,22 @@ console.log("啥时候调用这个……");
             <p></p>
             <p>咱们的是这样的</p>
             <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/myPromise-then-007.js" ddz-lang="javascript"></div>
+            <h2>经典题目</h2>
+            <h3>题目一</h3>
+            <details>
+                <summary>点击查看题目一</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/demo-001.js" ddz-lang="javascript"></div>
+            </details>
+            <h3>题目二</h3>
+            <details>
+                <summary>点击查看题目二</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/demo-002.js" ddz-lang="javascript"></div>
+            </details>
+            <h3>题目三</h3>
+            <details>
+                <summary>点击查看题目三</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/demo-003.js" ddz-lang="javascript"></div>
+            </details>
         </div>
     </body>
 </html>
