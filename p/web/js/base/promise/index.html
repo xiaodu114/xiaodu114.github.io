@@ -38,50 +38,18 @@
                     <a href="https://github.com/zloirock/core-js#ecmascript-promise" target="_blank" rel="noopener noreferrer">core-js 中 Promise 的 Polyfill</a>
                 </li>
             </ul>
-            <h2>拆解 Promise</h2>
-            <p>手写 <line-code>Promise</line-code>之后，感觉这块儿就没啥用了……先放这儿吧，后面删掉</p>
-            <h3>状态</h3>
-            <ul>
-                <li><line-code>pending</line-code>，初始状态</li>
-                <li><line-code>fulfilled</line-code>，成功状态</li>
-                <li><line-code>rejected</line-code>，失败状态</li>
-            </ul>
-            <mark-block>
-                <p>状态的改变只能是下面的两种情况：</p>
-                <p>由<line-code>pending</line-code>到<line-code>fulfilled</line-code></p>
-                <p>由<line-code>pending</line-code>到<line-code>rejected</line-code></p>
-            </mark-block>
-            <h3>构造函数</h3>
-            <mark-block>
-                <ul>
-                    <li>参数只有一个，并且是个方法。之后使用<line-code>executor</line-code>代替</li>
-                    <li>在<line-code>Promise</line-code>的<line-code>constructor</line-code>中<strong>立即同步调用</strong> <line-code>executor</line-code>这个方法。</li>
-                    <li>
-                        <span>调用<line-code>executor</line-code>方法时传入两个方法</span>
-                        <ul>
-                            <li>方法一：可以回传成功的数据，之后状态由<line-code>pending</line-code>修改为<line-code>fulfilled</line-code></li>
-                            <li>方法二：可以回传失败的数据，之后状态由<line-code>pending</line-code>修改为<line-code>rejected</line-code></li>
-                        </ul>
-                    </li>
-                </ul>
-            </mark-block>
-            <h3>实例方法</h3>
-            <h4>then</h4>
-            <mark-block>
-                <ul>
-                    <li>
-                        <span>两个参数，都是函数，一个是成功的回调，另一个是失败的回调</span>
-                        <ul>
-                            <li>都是可选的</li>
-                            <li>都是如果传入的不是方法，内部会被替换为一个恒等（抛出异常）函数</li>
-                        </ul>
-                    </li>
-                    <li>返回值是一个新的 Promise 对象，来实现链式调用</li>
-                    <li>一个 Promise 可以多次调用 then 方法</li>
-                </ul>
-            </mark-block>
             <h2>手写 Promise</h2>
             <p>尝试手写<line-code>Promise</line-code></p>
+            <mark-block explain="说明">
+                <ul>
+                    <li>在你<line-code>new Promise()</line-code>时传入的方法，这是咱给<line-code>Promise</line-code>的，后面统一称为<line-code>executor</line-code></li>
+                    <li><line-code>executor</line-code>方法有两个参数，这是<line-code>Promise</line-code>给咱的，后面统一称为<line-code>resolve</line-code>和<line-code>reject</line-code></li>
+                    <li><line-code>Promise</line-code>实例的[[PromiseState]]和[[PromiseResult]]，后面统一简称为<line-code>State</line-code>和<line-code>Result</line-code></li>
+                    <li><line-code>then</line-code>方法有两个参数，后面统一称为<line-code>onFulfilled</line-code>和<line-code>onRejected</line-code></li>
+                </ul>
+                <p><line-code>Promise</line-code>说：“你用了我给你的 resolve ，我就在 then 中用你给我的 onFulfilled ”。</p>
+                <p><line-code>Promise</line-code>又说：“你用了我给你的 reject ，我就在 then 中用你给我的 onRejected ”。</p>
+            </mark-block>
             <h3>ES5 写法</h3>
             <p>让<line-code>ES5</line-code>再次焕发生机，毕竟咱还是念旧的是吧</p>
             <h4>初始形态</h4>
@@ -95,10 +63,7 @@
                 </li>
             </ul>
             <p></p>
-            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
-//  第一个版本
-function MyPromise() {}
-            </pre>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/myPromise-001.js" ddz-lang="javascript"></div>
             <h4>构造函数</h4>
             <h5>参数</h5>
             <p>当你<line-code>new Promise</line-code>的时候是否传递参数了呢？肯定传了，要是不传，会报错的。并且还必须是个<line-code>function</line-code>，不然也会报错</p>
@@ -113,28 +78,11 @@ function MyPromise() {}
             <p>知己知彼，方能百战百胜。还是先看看人家是怎么弄的，原生的<line-code>Promise</line-code>是这样的</p>
             <details>
                 <summary>点击查看原生 Promise 的行为</summary>
-                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
-//  TypeError: Promise resolver undefined is not a function
-var p1 = new Promise();
-
-//  TypeError: Promise resolver 666 is not a function
-var p2 = new Promise(666);
-
-//  TypeError: Promise resolver #&lt;Object> is not a function
-var p2 = new Promise({name:"666"});
-                </pre>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/promise-002.js" ddz-lang="javascript"></div>
             </details>
             <p>咱们的是这样的</p>
-            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
-//  如果传入的是 {name:"666"} ，错误信息不一样。毕竟是仿造的，先这样吧！
-function MyPromise(executor) {
-    if (typeof executor !== "function") throw new TypeError("Promise resolver " + executor + " is not a function");
-}
-            </pre>
-            <mark-block>
-                <p>后面的<line-code>Promise</line-code>参数就用<line-code>executor</line-code>代替了！只要提到<line-code>executor</line-code>，就要想到他就是你<line-code>new Promise</line-code>时传进来的实参，他的类型是<line-code>function</line-code></p>
-            </mark-block>
-            <h5>添加[[PromiseState]]和[[PromiseResult]]</h5>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/myPromise-002.js" ddz-lang="javascript"></div>
+            <h5>添加 State 和 Result</h5>
             <p>既然可以<line-code>new</line-code>成功了，那我们就看一下，他的实例到底是个啥！</p>
             <ul>
                 <li>
@@ -156,16 +104,10 @@ new Promise(()=>{})
                 </p>
             </details>
             <p>咱们的是这样的，您放心绝对不影响你使用，并且终身质保</p>
-            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
-function MyPromise(executor) {
-    if (typeof executor !== "function") throw new TypeError("Promise resolver " + executor + " is not a function");
-
-    this.PromiseState = "pending";
-    this.PromiseResult = undefined;
-}
-            </pre>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/myPromise-003.js" ddz-lang="javascript"></div>
             <h5>立即同步执行 executor</h5>
-            <p>咱先对一下暗号，<line-code>executor</line-code>是啥？对，他就是你<line-code>new Promise</line-code>时传进来的实参，并且是个方法</p>
+            <p>咱先对一下暗号，<line-code>executor</line-code>是啥？对，他就是你<line-code>new Promise</line-code>时传进来的实参，并且是个方法。</p>
+            <p><strong>重点：</strong>executor（类型是 function）是你定义并传入的，由<line-code>Promise</line-code>内部调用</p>
             <ul>
                 <li>
                     <p>不行，还是不行，人家的只要一<line-code>new</line-code>，就会给我反馈，你这不行啊，我都试了好多次了</p>
@@ -187,19 +129,10 @@ console.log(2);
                 </pre>
             </details>
             <p>咱们的是这样的</p>
-            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
-//  咱也得安排上，既然你给了我一个方法，那我就马上调用，绝不迟疑
-function MyPromise(executor) {
-    if (typeof executor !== "function") throw new TypeError("Promise resolver " + executor + " is not a function");
-
-    this.PromiseState = "pending";
-    this.PromiseResult = undefined;
-
-    executor();
-}
-            </pre>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/myPromise-004.js" ddz-lang="javascript"></div>
             <h5>executor 的参数</h5>
-            <p>在<line-code>Promise</line-code>内部调用<line-code>executor</line-code>方法时传入了两个参数并且都是方法</p>
+            <p>在<line-code>Promise</line-code>内部调用<line-code>executor</line-code>方法时传入了两个参数并且都是方法。上面说了，他们两个分别是<line-code>resolve</line-code>和<line-code>reject</line-code></p>
+            <p><strong>重点：</strong>这两个方法由<line-code>Promise</line-code>内部提供，由你来调用</p>
             <ul>
                 <li>
                     <p>哎，哎，哎，不对呀！我记得人家的<line-code>Promise</line-code>调用<line-code>executor</line-code>时传给了我两个参数呢，你咋没有啊。能不能行了，快点啊，要不退货了啊</p>
@@ -222,22 +155,9 @@ new Promise(executor);
                 </pre>
             </details>
             <p>咱们的是这样的</p>
-            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
-//  咱也得安排上，你给了我一个方法，那我就给你两个
-function MyPromise(executor) {
-    if (typeof executor !== "function") throw new TypeError("Promise resolver " + executor + " is not a function");
-
-    this.PromiseState = "pending";
-    this.PromiseResult = undefined;
-
-    function resolve() {}
-    function reject() {}
-
-    executor(resolve, reject);
-}
-            </pre>
-            <h5>修改[[PromiseState]]和[[PromiseResult]]</h5>
-            <p>执行<line-code>executor</line-code>时传入的两个方法就是修改<line-code>[[PromiseState]]</line-code>和<line-code>[[PromiseResult]]</line-code>用的</p>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/myPromise-005.js" ddz-lang="javascript"></div>
+            <h5>修改 State 和 Result</h5>
+            <p><line-code>Promise</line-code>内部调用<line-code>executor</line-code>时传入的两个方法就是让你修改<line-code>State</line-code>和<line-code>Result</line-code>用的，并且这两个方法都会将你传入的第一个参数作为<line-code>Result</line-code>的值，不用多传，没用。至于你想调用哪一个、啥时候调用，你随意。</p>
             <ul>
                 <li>你不能这样啊，你给我的两个方法都是摆设啊，我试了好几次了，没反应啊，你在这儿糊弄鬼呢。你看看人家<line-code>Promise</line-code>，只要一按下<line-code>resolve</line-code>，<line-code>[[PromiseState]]</line-code>就变成了"fulfilled"，还有呢，<line-code>[[PromiseResult]]</line-code>还能显示我使了多大劲儿，多神奇啊</li>
                 <li>尊敬的用户，你千万别急，我马上为您修复（终于知道那俩方法是干啥的了）</li>
@@ -245,51 +165,12 @@ function MyPromise(executor) {
             <p>原生的<line-code>Promise</line-code>是这样的</p>
             <details>
                 <summary>点击查看原生 Promise 的行为</summary>
-                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
-//  成功示例 1
-function executor1(resolve, reject) {
-    resolve();
-}
-new Promise(executor1);
-//  成功示例 2
-function executor2(resolve, reject) {
-    resolve(666, true, { name: "xiaodu114" });
-}
-new Promise(executor2);
-//  失败示例 1
-function executor3(resolve, reject) {
-    reject();
-}
-new Promise(executor3);
-//  失败示例 2
-function executor4(resolve, reject) {
-    reject(777, false, { name: "a2bei4" });
-}
-new Promise(executor4);
-                </pre>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/promise-006.js" ddz-lang="javascript"></div>
             </details>
             <p>咱们的是这样的</p>
-            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
-function MyPromise(executor) {
-    if (typeof executor !== "function") throw new TypeError("Promise resolver " + executor + " is not a function");
-
-    this.PromiseState = "pending";
-    this.PromiseResult = undefined;
-
-    var resolve = function (data) {
-        this.PromiseResult = data;
-        this.PromiseState = "fulfilled";
-    }.bind(this);
-    var reject = function (error) {
-        this.PromiseResult = error;
-        this.PromiseState = "rejected";
-    }.bind(this);
-
-    executor(resolve, reject);
-}
-            </pre>
-            <h5>[[PromiseState]]和[[PromiseResult]]只能修改一次</h5>
-            <p><line-code>Promise</line-code>还是很专一的，只要确定了一个，就不会改变了。<line-code>[[PromiseState]]</line-code>只能由<line-code>pending</line-code>到<line-code>fulfilled</line-code>或者由<line-code>pending</line-code>到<line-code>rejected</line-code></p>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/myPromise-006.js" ddz-lang="javascript"></div>
+            <h5>State 和 Result 只能修改一次</h5>
+            <p><line-code>Promise</line-code>还是很专一的，只要确定了一个，就不会改变了。<line-code>State</line-code>只能由<line-code>pending</line-code>到<line-code>fulfilled</line-code>或者由<line-code>pending</line-code>到<line-code>rejected</line-code></p>
             <ul>
                 <li>
                     <p>哎，哎，哎，你看看人家<line-code>Promise</line-code>，只能是<line-code>pending</line-code>开始，要么<line-code>fulfilled</line-code>，要么<line-code>rejected</line-code>。你别总是那么松弛，咱不是应该先入为主，从一而终嘛！你不能乱来啊</p>
@@ -301,56 +182,10 @@ function MyPromise(executor) {
             <p>原生的<line-code>Promise</line-code>是这样的</p>
             <details>
                 <summary>点击查看原生 Promise 的行为</summary>
-                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
-//  示例 1
-function executor1(resolve, reject) {
-    resolve(666);
-    resolve(888);
-}
-new Promise(executor1);
-//  示例 2
-function executor2(resolve, reject) {
-    reject(555);
-    reject(777);
-}
-new Promise(executor2);
-//  示例 3
-function executor3(resolve, reject) {
-    resolve(666);
-    reject(555);
-}
-new Promise(executor3);
-//  示例 4
-function executor4(resolve, reject) {
-    reject(777);
-    resolve(888);
-}
-new Promise(executor4);
-                </pre>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/promise-007.js" ddz-lang="javascript"></div>
             </details>
             <p>咱们的是这样的</p>
-            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
-function MyPromise(executor) {
-    if (typeof executor !== "function") throw new TypeError("Promise resolver " + executor + " is not a function");
-
-    this.PromiseState = "pending";
-    this.PromiseResult = undefined;
-
-    var resolve = function (data) {
-        if (this.PromiseState !== "pending") return;
-        this.PromiseResult = data;
-        this.PromiseState = "fulfilled";
-    }.bind(this);
-
-    var reject = function (error) {
-        if (this.PromiseState !== "pending") return;
-        this.PromiseResult = error;
-        this.PromiseState = "rejected";
-    }.bind(this);
-
-    executor(resolve, reject);
-}
-            </pre>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/myPromise-007.js" ddz-lang="javascript"></div>
             <h5>executor 中出现异常</h5>
             <p>你别说<line-code>Promise</line-code>还是很严谨的，考虑的比较全面，比如：执行<line-code>executor</line-code>时报错了怎么办，人家<line-code>try catch</line-code>了</p>
             <ul>
@@ -366,40 +201,125 @@ function MyPromise(executor) {
                 <summary>点击查看原生 Promise 的行为</summary>
                 <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 function executor1(resolve, reject) {
-    console.log(a2bei4);
+    //  制造异常：访问未声明的变量
+    console.log(xiaodu114);
 }
-new Promise(executor1);
+console.log(new Promise(executor1));
                 </pre>
             </details>
             <p>咱们的是这样的</p>
-            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
-function MyPromise(executor) {
-    if (typeof executor !== "function") throw new TypeError("Promise resolver " + executor + " is not a function");
-
-    this.PromiseState = "pending";
-    this.PromiseResult = undefined;
-
-    var resolve = function (data) {
-        if (this.PromiseState !== "pending") return;
-        this.PromiseResult = data;
-        this.PromiseState = "fulfilled";
-    }.bind(this);
-
-    var reject = function (error) {
-        if (this.PromiseState !== "pending") return;
-        this.PromiseResult = error;
-        this.PromiseState = "rejected";
-    }.bind(this);
-
-    try {
-        executor(resolve, reject);
-    } catch (error) {
-        reject(error);
-    }
-}
-            </pre>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/myPromise-008.js" ddz-lang="javascript"></div>
+            <mark-block>
+                <p>这里咱们和原生的略有不同：原生的不但修改了<line-code>State</line-code>和<line-code>Result</line-code>，你还能看到控制台输出异常；咱们的没有在控制台输出异常</p>
+            </mark-block>
             <h4>then 方法</h4>
-            <p>敬请期待</p>
+            <p><line-code>then</line-code>是<line-code>Promise.prototype</line-code>对象中的一个属性方法，<line-code>Promise</line-code>实例可以通过<line-code>__proto__</line-code>调用该方法，下面就实现一下该方法</p>
+            <mark-block>
+                <p>故事编不下去了，就这样吧！老老实实写代码吧</p>
+            </mark-block>
+            <h5>then 方法的参数</h5>
+            <p>既然是一个方法，并且还是咱自己调用的，看看他需要什么参数。根据<line-code>MDN</line-code>的消息，<line-code>then</line-code>方法定义了两个形参：<line-code>onFulfilled</line-code>和<line-code>onRejected</line-code>并且都是方法。</p>
+            <p><strong>重点：</strong>这两个方法由你指定，<line-code>then</line-code>方法内部调用；并且将你<line-code>resolve / reject</line-code>的结果通过这两个方法返还给你</p>
+            <p>原生的<line-code>Promise</line-code>是这样的</p>
+            <details>
+                <summary>点击查看原生 Promise 的行为</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/promise-then-001.js" ddz-lang="javascript"></div>
+            </details>
+            <p></p>
+            <p>咱们的是这样的</p>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/myPromise-then-001.js" ddz-lang="javascript"></div>
+            <h5>then 方法的返回值</h5>
+            <p>既然是一个方法，那肯定有返回值啊，就算是<line-code>undefined</line-code>。赶紧看看<line-code>then</line-code>方法的返回值是啥</p>
+            <p>原生的<line-code>Promise</line-code>是这样的</p>
+            <details>
+                <summary>点击查看原生 Promise 的行为</summary>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+var p1 = new Promise(function (resolve, reject) {
+    resolve("xiaodu114");
+});
+var p1_1 = p1.then(
+    function (data) {
+        console.log("成功：", data);
+    },
+    function (error) {
+        console.log("失败：", error);
+    }
+);
+console.log("then 方法的返回值：", p1_1);
+                </pre>
+            </details>
+            <p></p>
+            <p>咱们的是这样的</p>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/myPromise-then-002.js" ddz-lang="javascript"></div>
+            <mark-block>
+                <p>这里出现了两个问题：</p>
+                <ul>
+                    <li>console.log 的输出顺序和原生的不一样</li>
+                    <li>目前咱们的返回值，就是摆设，先搭一下架子</li>
+                </ul>
+            </mark-block>
+            <h5>异步调用 resolve / reject</h5>
+            <p>上面的代码都是同步执行的：你 new ，promise 调用 executor，接着你调用 resolve / reject，promise 修改 State 和 Result，接着你调用 then 方法，promise 在 then 中调用你的 onFulfilled / onRejected，这一切似乎都这么美好。突然有一天，你没有立即调用 resolve / reject，而是看了会儿《熊出没》才想起了，结果 promise 就不鸟你了。人家 promise 是由原则的，只有在 State 改变之后才会调用 onFulfilled / onRejected。在咱这里当然是个 bug ，咱赶紧修复一下</p>
+            <p>原生的<line-code>Promise</line-code>是这样的</p>
+            <details>
+                <summary>点击查看原生 Promise 的行为</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/promise-then-003.js" ddz-lang="javascript"></div>
+            </details>
+            <p></p>
+            <p>咱们的是这样的</p>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/myPromise-then-003.js" ddz-lang="javascript"></div>
+            <h5>多次调用 then</h5>
+            <p>在你<line-code>new Promise(...)</line-code>了一个实例之后是可以多次调用<line-code>then</line-code>方法的。当然这很正常，你不能就让我调一次吧</p>
+            <p>原生的<line-code>Promise</line-code>是这样的</p>
+            <details>
+                <summary>点击查看原生 Promise 的行为</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/promise-then-004.js" ddz-lang="javascript"></div>
+            </details>
+            <p></p>
+            <p>咱们的是这样的</p>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/myPromise-then-004.js" ddz-lang="javascript"></div>
+            <h5>then 链式调用</h5>
+            <p>上面的<line-code>then</line-code>返回值，说到他的返回是一个<line-code>Promise</line-code>的实例。既然是<line-code>Promise</line-code>的实例，那肯定就可以接着<line-code>then</line-code>了。这个<line-code>Promise</line-code>实例的<line-code>State</line-code>和<line-code>Result</line-code>是啥？有谁来确定？咱们上面的那个还是个“悬儿未定”的状态</p>
+            <p>原生的<line-code>Promise</line-code>是这样的</p>
+            <details>
+                <summary>点击查看原生 Promise 的行为</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/promise-then-005.js" ddz-lang="javascript"></div>
+            </details>
+            <p></p>
+            <p>咱们的是这样的</p>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/myPromise-then-005.js" ddz-lang="javascript"></div>
+            <mark-block>
+                <p>这里在测试咱们自己的<line-code>Promise</line-code>时，第五个和第六个的结果和原生的<line-code>Promise</line-code>不一样。测试例子中都是在第五个的<line-code>onFulfilled / onRejected</line-code>中抛出了异常，这部分的代码中还没有处理他们的异常</p>
+            </mark-block>
+            <h5>onFulfilled / onRejected 中出现异常</h5>
+            <p>你别说<line-code>Promise</line-code>还是很严谨的，考虑的比较全面，重要的事情再说一遍。比如：执行 onFulfilled / onRejected 时报错了怎么办，人家还是<line-code>try catch</line-code>了。不行，咱也得加上</p>
+            <p>原生的<line-code>Promise</line-code>是这样的，用上一节的例子测试一下即可</p>
+            <p></p>
+            <p>咱们的是这样的</p>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/myPromise-then-006.js" ddz-lang="javascript"></div>
+            <h5>异步调用 onFulfilled / onRejected</h5>
+            <p>咱用<line-code>Promise</line-code>的时候都知道，<line-code>then</line-code>方法中的<line-code>onFulfilled / onRejected</line-code>会延迟调用，这是一个微任务，哪怕没有延迟调用<line-code>resolve / reject</line-code></p>
+            <p>原生的<line-code>Promise</line-code>是这样的</p>
+            <details>
+                <summary>点击查看原生 Promise 的行为</summary>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+var p = new Promise(function (resolve, reject) {
+    console.log("调用 resolve 之前");
+    resolve("xiaodu114");
+    console.log("调用 resolve 之后");
+});
+p.then(
+    function (data) {
+        console.log("成功回调：" + data);
+    },
+    function (error) {}
+);
+console.log("啥时候调用这个……");
+                </pre>
+            </details>
+            <p></p>
+            <p>咱们的是这样的</p>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/myPromise-then-007.js" ddz-lang="javascript"></div>
         </div>
     </body>
 </html>
