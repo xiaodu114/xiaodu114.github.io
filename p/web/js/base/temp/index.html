@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>javascript 临时 - xiaodu114.github.io</title>
-        <meta name="keywords" content="javascript 基础,Generator,new,手写 new" />
+        <meta name="keywords" content="javascript 基础,原型链属性查找,Generator,new,手写 new,深拷贝" />
         <meta name="description" content="临时记录一些东西" />
 
         <script src="/p/_/js/main.js"></script>
@@ -100,6 +100,52 @@ function runGenerator(generator) {
 }
 
 runGenerator(fn);                
+            </pre>
+            <h2>深拷贝</h2>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+function deepClone(target, weakMap = new WeakMap()) {
+    if (typeof target !== "object") return target;
+
+    //  处理一些特殊的对象类型，例如：null Date RegExp Map Set Symbol Function
+    if (target === null) return target;
+
+    //  处理正常对象和数组
+    if (weakMap.has(target)) {
+        return weakMap.get(target);
+    }
+    let cloneTarget = Array.isArray(target) ? [] : {};
+    weakMap.set(target, cloneTarget);
+    for (const key in target) {
+        if (Object.prototype.hasOwnProperty.call(target, key)) {
+            cloneTarget[key] = deepClone(target[key], weakMap);
+        }
+    }
+    return cloneTarget;
+}
+
+//  测试
+var objTest1 = {
+    name: "xiadu114",
+    age: 18,
+    langs: ["c#", "javascript", "html", "css"],
+    obj: {
+        a: 1,
+        b: {
+            b1: 1,
+            b2: 2
+        }
+    }
+};
+
+var objTest2 = {
+    name: "xiadu114"
+};
+objTest2.obj = objTest2;
+
+var objTest1_1 = deepClone(objTest1);
+console.log(objTest1_1);
+var objTest2_1 = deepClone(objTest2);
+console.log(objTest2_1);
             </pre>
         </div>
     </body>
