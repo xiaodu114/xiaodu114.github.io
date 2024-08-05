@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>闭包（ closure ） - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,JavaScript,闭包,闭包（ closure ）,closure" />
+        <meta name="description" content="介绍一下 JavaScript 中的神兽：闭包。再说一下他的应用场景" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/web/js/base/closure/index.html -->
+        <div class="blog-page">
+            <h1>闭包（ closure ）</h1>
+            <p>闭包：<line-code>JavaScript</line-code>中的神兽</p>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Closures" target="_blank" rel="noopener noreferrer">闭包 - JavaScript | MDN</a>
+                </li>
+                <li>
+                    <a href="https://zh.javascript.info/closure" target="_blank" rel="noopener noreferrer">变量作用域，闭包 - 现代 JavaScript 教程</a>
+                </li>
+            </ul>
+            <h2>举个栗子</h2>
+            <h3>栗子 1</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+function makePower(power) {
+    return function (num) {
+        //return Math.pow(num, power);
+        return num ** power;
+    };
+}
+
+let power2Fn = makePower(2);
+let power3Fn = makePower(3);
+
+console.log(power2Fn(4));
+console.log(power2Fn(5));
+console.log(power3Fn(2));
+console.log(power3Fn(3));
+            </pre>
+        </div>
+    </body>
+</html>
