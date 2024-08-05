@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>javascript 临时 - xiaodu114.github.io</title>
-        <meta name="keywords" content="javascript 基础,原型链属性查找,Generator,new,手写 new,深拷贝" />
+        <meta name="keywords" content="xiaodu114,javascript 基础,原型链属性查找,Generator,new,手写 new,深拷贝,柯里化,组合函数" />
         <meta name="description" content="临时记录一些东西" />
 
         <script src="/p/_/js/main.js"></script>
@@ -146,6 +146,58 @@ var objTest1_1 = deepClone(objTest1);
 console.log(objTest1_1);
 var objTest2_1 = deepClone(objTest2);
 console.log(objTest2_1);
+            </pre>
+            <h2>柯里化</h2>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+function curry(fn) {
+    return function inFn(...args1) {
+        if (args1.length >= fn.length) {
+            return fn(...args1);
+        } else {
+            return function (...args2) {
+                return inFn(...[...args1, ...args2]);
+            };
+        }
+    };
+}
+
+//  测试
+function getSum(a, b, c) {
+    return a + b + c;
+}
+let getSumCurry = curry(getSum);
+console.log(getSumCurry(3)(6)(9));
+console.log(getSumCurry(3)(6, 9));
+console.log(getSumCurry(3, 6)(9));
+console.log(getSumCurry(3, 6, 9));
+            </pre>
+            <h2>组合函数</h2>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+let reverse = (arr) => arr.reverse();
+let first = (arr) => arr[0];
+let toUpper = (str) => str.toUpperCase();
+
+//  函数组合时需满足结合律
+function compose(...args) {
+    return function (value) {
+        return args.reduce((accumulator, currentValue) => currentValue(accumulator), value);
+    };
+}
+
+let fn1 = compose(reverse, first, toUpper);
+let fn2 = compose(compose(reverse, first), toUpper);
+let fn3 = compose(reverse, compose(first, toUpper));
+console.log(fn1(["du-blog", "a2bei4", "xiaodu114"]));
+console.log(fn2(["du-blog", "a2bei4", "xiaodu114"]));
+console.log(fn3(["du-blog", "a2bei4", "xiaodu114"]));
+
+//  其他
+let arr1 = [1, 2, 3, 2, 3, 3, 5, 3, 2, 2, 3, 4, 5, 5];
+let arr2 = arr1.reduce((accumulator, currentValue) => {
+    if (!accumulator.includes(currentValue)) accumulator.push(currentValue);
+    return accumulator;
+}, []);
+console.log(arr2);
             </pre>
         </div>
     </body>
