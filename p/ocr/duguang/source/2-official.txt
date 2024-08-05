@@ -1,0 +1,48 @@
+from modelscope.pipelines import pipeline
+from modelscope.utils.constant import Tasks
+
+input_img = "./line-chinese-001.png"
+
+# 定义表格识别 pipeline
+table_recognition = pipeline(Tasks.table_recognition, model='/home/ddz/llm/0-model/iic/cv_dla34_table-structure-recognition_cycle-centernet')
+
+# 读取图片并进行表格识别
+result = table_recognition(input_img)
+polygons = result['polygons']
+
+from polygons2CellsHelper import convertPolygons2Cells,CustomEncoder
+
+cells = convertPolygons2Cells(polygons)
+
+#  省略上面的代码
+cells = convertPolygons2Cells(polygons)
+
+import json
+from PIL import Image
+from cnocr import CnOcr
+ocr=CnOcr(rec_model_backend="pytorch")
+#   cnocr 依赖  onnxruntime
+#   cnocr 用到的一些模型会下载到 /home/ddz/.cnocr 
+
+for index,cell_index in enumerate(cells):
+    #   取出四个坐标点
+    cell = cell_index.value
+    cell_index.value = "______OCR 的漏网之鱼______"
+    image = Image.open(input_img).convert("RGB")
+    xmin = min(cell.left_bottom.x,cell.left_top.x,cell.right_bottom.x,cell.right_top.x)
+    xmax = max(cell.left_bottom.x,cell.left_top.x,cell.right_bottom.x,cell.right_top.x)
+    ymin = min(cell.left_bottom.y,cell.left_top.y,cell.right_bottom.y,cell.right_top.y)
+    ymax = max(cell.left_bottom.y,cell.left_top.y,cell.right_bottom.y,cell.right_top.y)
+    #   扣取单元格图片
+    cropped_image = image.crop((xmin, ymin, xmax, ymax))
+    #   OCR识别
+    out = ocr.ocr(cropped_image)
+    if(out is not None and len(out)>0):
+        cell_text = ""
+        for item in out:
+            cell_text = cell_text + item["text"]
+        cell_index.value = cell_text
+        
+json_str = json.dumps(cells, cls=CustomEncoder)
+print(json_str)
+

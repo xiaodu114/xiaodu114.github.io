@@ -1,0 +1,13 @@
+from modelscope.pipelines import pipeline
+from modelscope.utils.constant import Tasks
+
+input_img = "./line-chinese-001.png"
+
+# 定义表格识别 pipeline
+table_recognition = pipeline(Tasks.table_recognition, model='/home/ddz/llm/0-model/iic/cv_dla34_table-structure-recognition_cycle-centernet')
+
+# 读取图片并进行表格识别
+result = table_recognition(input_img)
+
+print(result)
+

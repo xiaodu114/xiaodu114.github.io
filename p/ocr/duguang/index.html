@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>读光-表格结构识别 - xiaodu114.github.io</title>
+        <meta name="keywords" content="OCR,表格识别,表格结构识别,读光-表格结构识别" />
+        <meta name="description" content="OCR 的细分领域：表格识别。这里介绍一下读光-表格结构识别和对他的简单应用……" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/ocr/duguang/index.html -->
+        <div class="blog-page">
+            <h1>读光-表格结构识别</h1>
+            <p>OCR 的细分领域：表格识别。这里介绍一下“读光-表格结构识别”以及对他的简单使用……</p>
+            <ul>
+                <li>
+                    <a href="https://modelscope.cn/models/iic/cv_dla34_table-structure-recognition_cycle-centernet" target="_blank" rel="noopener noreferrer">读光-表格结构识别-有线表格</a>
+                </li>
+                <li>
+                    <a href="https://modelscope.cn/models/iic/cv_resnet-transformer_table-structure-recognition_lore" target="_blank" rel="noopener noreferrer">读光-表格结构识别-无线表格</a>
+                </li>
+            </ul>
+            <h2>有线表格</h2>
+            <p>你这还分有线的和无线的，你让咱们怎么搞？不行，必须把它拿下……</p>
+            <p>咱先准备一张测试图片：有线的包含中文的表格，如下图：</p>
+            <p>
+                <img src="./image/line-chinese-001.png" alt="有线的包含中文的表格" />
+            </p>
+            <h3>在线体验</h3>
+            <p>在“魔搭社区”的这个项目下是可以在线体验的（地址上面已经给出），看一下测试结果：</p>
+            <p>识别表格区域</p>
+            <p>
+                <img src="./image/1.png" alt="有线的包含中文的表格：在线识别结果" />
+            </p>
+            <p>JSON输出</p>
+            <p>
+                <img src="./image/2.png" alt="有线的包含中文的表格：JSON 输出" />
+            </p>
+            <details>
+                <summary>点击查看 JSON 输出</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/line-chinese-001-online-output.json" ddz-lang="JSON"></div>
+            </details>
+            <p></p>
+            <mark-block>
+                <p>你还真别说，识别的真精准，但是这个输出……咱要的也不是这个啊！</p>
+                <p>
+                    <img src="./image/3.png" alt="读光-表格结构识别，有线表格，官方介绍" />
+                </p>
+                <p>啊！啊！啊！真气人啊</p>
+            </mark-block>
+            <h3>自己搞</h3>
+            <p>既然人家暂不提供，咱能说啥呢，自己试试吧</p>
+            <p>首先创建一个<line-code>Python</line-code>项目，这里命名为：<line-code>ocr-demo</line-code>。结构如下：</p>
+            <ul>
+                <li><line-code>0-official.py</line-code>：官方示例</li>
+                <li><line-code>requirements.txt</line-code>：依赖</li>
+                <li><line-code>line-chinese-001.png</line-code>：测试图片</li>
+                <li><line-code>polygons2CellsHelper.py</line-code>：助手类</li>
+            </ul>
+            <h4>requirements.txt</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+#   官方示例也就是  0-official.py 依赖的包
+modelscope 
+numpy  
+packaging  
+addict 
+datasets 
+oss2 
+torch 
+pillow
+simplejson 
+sortedcontainers 
+opencv-python
+
+#   cnocr 依赖  
+onnxruntime
+
+#   生成 Excel
+openpyxl
+            </pre>
+            <h4>虚拟环境</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+#   创建
+python3 -m venv venv
+#   激活
+source ./venv/bin/activate
+#   退出虚拟环境
+deactivate
+#   安装依赖
+pip install -r requirements.txt 
+            </pre>
+            <h4>0-official.py</h4>
+            <p>官方示例代码稍加改动，如下：</p>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/0-official.txt" ddz-lang="python"></div>
+            <p>下面看一下成功运行的截图：</p>
+            <p>
+                <img src="./image/4.png" alt="读光-表格结构识别，有线表格，JSON 输出" />
+            </p>
+            <h4>封装助手类</h4>
+            <p>他不是返回的是一个数组嘛，其中的每一项又是一个数组（记作：sub）；每一个sub数组中有8个float32类型的数值，其中这8个数值两个一组构成了一个单元格的4个顶点。咱这个助手类的目的是：咱给这个每一个sub数组添加一个属性，记录着他是属于第几行和第几列</p>
+            <details>
+                <summary>点击查看详情</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/polygons2CellsHelper.txt" ddz-lang="python"></div>
+            </details>
+            <h4>官方代码接入助手类</h4>
+            <p>代码如下：</p>
+            <details>
+                <summary>点击查看代码详情</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/1-official.txt" ddz-lang="python"></div>
+            </details>
+            <p>输出的部分结果如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="json">
+[{
+        "row_start": 0,
+        "row_end": 2,
+        "col_start": 10,
+        "col_end": 11,
+        "value": {
+            "left_bottom": {
+                "x": 899.3440551757812,
+                "y": 22.367218017578125
+            },
+            "left_top": {
+                "x": 899.0746459960938,
+                "y": 66.04917907714844
+            },
+            "right_top": {
+                "x": 962.10693359375,
+                "y": 66.43878936767578
+            },
+            "right_bottom": {
+                "x": 962.048095703125,
+                "y": 22.41400909423828
+            }
+        }
+    }
+]
+            </pre>
+            <h4>OCR识别</h4>
+            <p>这一步咱根据单元格（8个数值，4个坐标）去抠图，也就是将原始图片切割成一个个的小单元格图片，之后利用OCR去识别这些小图片</p>
+            <details>
+                <summary>点击查看代码详情</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/2-official.txt" ddz-lang="python"></div>
+            </details>
+            <p>经过这一步咱就拿到了每一个单元格的值了，并且咱还知道这个值是第几行和第几列。得到的结果的结构如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="json">
+[{
+        "row_start": 0,
+        "row_end": 2,
+        "col_start": 10,
+        "col_end": 11,
+        "value": "OCR 识别的单元格的内容"
+    }
+]
+            </pre>
+            <p>真实数据截图如下：</p>
+            <p>
+                <img src="./image/5.png" alt="OCR识别，单元格坐标和内容集合" />
+            </p>
+            <h4>openpyxl 生成 Excel</h4>
+            <p>这一步咱将准备好的数据组装成 Excel，代码如下：</p>
+            <details>
+                <summary>点击查看代码详情</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/3-official.txt" ddz-lang="python"></div>
+            </details>
+            <p>下面看一下生成的 Excel 的截图：</p>
+            <p>
+                <img src="./image/6.png" alt="openpyxl 生成的 Excel" />
+            </p>
+            <h4>源码下载</h4>
+            <p>
+                <a href="./source/ocr-demo.zip" target="_blank" rel="noopener noreferrer">点击下载完成代码</a>
+            </p>
+            <h2>无线表格</h2>
+            <p>敬请期待</p>
+        </div>
+    </body>
+</html>

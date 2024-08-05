@@ -1,0 +1,93 @@
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+class CellByPoint:
+    def __init__(self, left_bottom, left_top, right_top, right_bottom):
+        self.left_bottom = left_bottom
+        self.left_top = left_top
+        self.right_top = right_top
+        self.right_bottom = right_bottom
+
+class CellByIndex:
+    def __init__(self, row_start=None, row_end=None, col_start=None, col_end=None):
+        self.row_start = row_start
+        self.row_end = row_end
+        self.col_start = col_start
+        self.col_end = col_end
+        self.value = None
+
+#   必须得吐槽一下：python 中的自定义类序列化真操蛋
+import json
+import numpy as np
+class CustomEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, Point) or isinstance(o, CellByPoint) or isinstance(o, CellByIndex):
+            # return { '__class__': 'Point', '__value__': o.__dict__ }
+            return o.__dict__
+        if isinstance(o, np.float32):
+            return float(o)
+        return json.JSONEncoder.default(self, o)
+
+def is_same_row(row_cells, cell):
+    if not (isinstance(row_cells, list) and len(row_cells)):
+        return False
+    return abs(row_cells[0].left_top.y - cell.left_top.y) < 1
+
+def is_same_col(col_cells, cell):
+    if not (isinstance(col_cells, list) and len(col_cells)):
+        return False
+    return abs(col_cells[0].left_top.x - cell.left_top.x) < 1
+
+def getMaxRowOrColumn(items):
+    max_index = 0
+    for index, item in enumerate(items):
+        if len(item) > len(items[max_index]):
+            max_index = index
+    return items[max_index]
+
+def findStartOrEndIndex(items, fn):
+    index = -1
+    distance = 1
+    while index == -1:
+        callback = fn(distance)
+        index = next((i for i, x in enumerate(items) if callback(x)), -1)
+        distance += 1
+    return index
+
+def convertPolygons2Cells(polygons):
+    cells:list[CellByPoint] = []
+    ret_cells:list[CellByIndex] = []
+    rows = []
+    columns = []
+    for p in polygons:
+        cell = CellByPoint(Point(p[0], p[1]), Point(p[2], p[3]), Point(p[4], p[5]), Point(p[6], p[7]))
+        current_row = next((row for row in rows if is_same_row(row, cell)), None)
+        if current_row:
+            current_row.append(cell)
+        else:
+            rows.append([cell])
+        current_col = next((col for col in columns if is_same_col(col, cell)), None)
+        if current_col:
+            current_col.append(cell)
+        else:
+            columns.append([cell])
+        cells.append(cell)
+    
+    maxColumnsRow = sorted(getMaxRowOrColumn(rows), key=lambda x: x.left_top.x)
+    maxRowsColumn = sorted(getMaxRowOrColumn(columns), key=lambda x: x.left_top.y)
+
+    for cell in cells:
+        ret_cell = CellByIndex()
+
+        ret_cell.col_start = findStartOrEndIndex(maxColumnsRow, lambda distance: lambda x: abs(x.left_top.x - cell.left_top.x) < distance)
+        ret_cell.col_end = findStartOrEndIndex(maxColumnsRow, lambda distance: lambda x: abs(x.right_top.x - cell.right_top.x) < distance) + 1
+
+        ret_cell.row_start = findStartOrEndIndex(maxRowsColumn, lambda distance: lambda x: abs(x.left_bottom.y - cell.left_bottom.y) < distance)
+        ret_cell.row_end = findStartOrEndIndex(maxRowsColumn, lambda distance: lambda x: abs(x.left_top.y - cell.left_top.y) < distance) + 1
+
+        ret_cell.value = cell
+        ret_cells.append(ret_cell)
+
+    return ret_cells
