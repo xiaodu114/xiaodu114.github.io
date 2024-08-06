@@ -1,0 +1,279 @@
+
+https://www.elastic.co/cn/downloads/elasticsearch		Download Elasticsearch | Elastic
+
+https://www.elastic.co/cn/downloads/kibana				Download Kibana Free | Get Started Now | Elastic
+
+【】
+查看 vm.max_map_count 的大小
+sysctl vm.max_map_count
+
+修改 
+sudo chmod -R 777 /etc/sysctl.conf
+文件中写入
+vm.max_map_count=262144
+
+刷新
+sudo sysctl -p /etc/sysctl.conf
+
+再次查看
+sysctl vm.max_map_count
+
+sudo chmod a-w /etc/sysctl.conf
+
+【卸载 elasticsearch】
+1、停止服务
+sudo systemctl stop elasticsearch
+
+2、卸载 Elasticsearch 包
+sudo dpkg -r elasticsearch
+
+3、删除 elasticsearch 用户和用户组
+#查看用户组
+cat /etc/group
+
+sudo groupdel elasticsearch
+
+#查看用户
+cat /etc/passwd | cut -f 1 -d:
+
+sudo userdel -r elasticsearch
+
+4、
+sudo rm -rf /etc/elasticsearch /usr/share/elasticsearch /var/lib/elasticsearch /var/log/elasticsearch 
+
+5、
+sudo dpkg --purge elasticsearch
+
+6、
+sudo apt update
+
+7、
+sudo rm -rf /etc/apt/sources.list.d/elasticsearch.list
+
+8、
+sudo apt autoremove
+sudo apt autoclean
+
+9、
+dpkg -l | grep elasticsearch
+
+【卸载 kibana】
+1、停止服务
+sudo systemctl stop kibana
+
+2、卸载 kibana 包
+sudo dpkg -r kibana
+
+3、删除 kibana 用户和用户组
+#查看用户组
+cat /etc/group
+
+sudo groupdel kibana
+
+#查看用户
+cat /etc/passwd | cut -f 1 -d:
+
+sudo userdel -r kibana
+
+4、
+sudo rm -rf /etc/kibana /var/log/kibana /var/lib/kibana
+
+5、
+sudo dpkg --purge kibana
+
+6、
+sudo apt update
+
+7、
+sudo rm -rf /etc/apt/sources.list.d/kibana.list
+
+8、
+sudo apt autoremove
+sudo apt autoclean
+
+9、
+dpkg -l | grep kibana
+
+
+【安装 elasticsearch】
+sudo dpkg -i elasticsearch-8.13.4-amd64.deb
+
+---------------------------------------------------------------------------------------------------------------------------->
+u1@u1-pc:~/0-soft$ sudo dpkg -i elasticsearch-8.13.4-amd64.deb
+正在选中未选择的软件包 elasticsearch。
+(正在读取数据库 ... 系统当前共安装有 180463 个文件和目录。)
+准备解压 elasticsearch-8.13.4-amd64.deb  ...
+Creating elasticsearch group... OK
+Creating elasticsearch user... OK
+正在解压 elasticsearch (8.13.4) ...
+正在设置 elasticsearch (8.13.4) ...
+--------------------------- Security autoconfiguration information ------------------------------
+
+Authentication and authorization are enabled.
+TLS for the transport and HTTP layers is enabled and configured.
+
+The generated password for the elastic built-in superuser is : 2-kXQ8MHV9-hdqKvWEtW
+
+If this node should join an existing cluster, you can reconfigure this with
+'/usr/share/elasticsearch/bin/elasticsearch-reconfigure-node --enrollment-token <token-here>'
+after creating an enrollment token on your existing cluster.
+
+You can complete the following actions at any time:
+
+Reset the password of the elastic built-in superuser with 
+'/usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic'.
+
+Generate an enrollment token for Kibana instances with 
+ '/usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s kibana'.
+
+Generate an enrollment token for Elasticsearch nodes with 
+'/usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s node'.
+
+-------------------------------------------------------------------------------------------------
+### NOT starting on installation, please execute the following statements to configure elasticsearch service to start automatically using systemd
+ sudo systemctl daemon-reload
+ sudo systemctl enable elasticsearch.service
+### You can start elasticsearch service by executing
+ sudo systemctl start elasticsearch.service
+u1@u1-pc:~/0-soft$ 
+---------------------------------------------------------------------------------------------------------------------------->
+
+
+sudo systemctl daemon-reload
+
+sudo systemctl status elasticsearch
+
+#   备用
+sudo systemctl start elasticsearch
+sudo systemctl stop elasticsearch
+sudo systemctl restart elasticsearch
+sudo systemctl enable elasticsearch
+
+
+#	查看帮助
+sudo /usr/share/elasticsearch/bin/elasticsearch-users -h
+#	重置内置超级用户 elastic 的密码，会自动给你生成一个，例如：nZK7AG*bN3IwIsfpD6-Z
+sudo /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic
+#	添加用户
+sudo /usr/share/elasticsearch/bin/elasticsearch-users useradd -h
+sudo /usr/share/elasticsearch/bin/elasticsearch-users useradd admin -p admin666 -r superuser
+sudo /usr/share/elasticsearch/bin/elasticsearch-users list
+sudo systemctl restart elasticsearch
+
+#
+https://elastic:nZK7AG*bN3IwIsfpD6-Z@localhost:9200
+https://elastic:nZK7AG*bN3IwIsfpD6-Z@192.168.13.175:9200
+
+#	列出所有用户（Elasticsearch 7.x 及以上版本）
+https://elastic:nZK7AG*bN3IwIsfpD6-Z@localhost:9200/_security/user?pretty
+#	列出所有角色（Elasticsearch 7.x 及以上版本）
+https://elastic:nZK7AG*bN3IwIsfpD6-Z@localhost:9200/_security/role?pretty
+mIHmqiAON*_V34TbzYNY
+
+
+# 
+sudo chmod -R 777 /etc/elasticsearch
+
+sudo chmod a-w /etc/elasticsearch
+
+sudo chmod -R a-r /etc/elasticsearch
+
+
+https://elastic:elastic@192.168.13.175:9200
+
+https://elastic:elastic@localhost:9200
+
+【安装 kibana】
+
+1、安装
+sudo dpkg -i kibana-8.13.3-amd64.deb
+
+2、查看状态
+sudo systemctl status kibana
+
+#   备用
+sudo systemctl start kibana
+sudo systemctl stop kibana
+sudo systemctl restart kibana
+sudo systemctl enable kibana
+
+3、修改配置文件	/etc/kibana/kibana.yml
+sudo chmod -R 777 /etc/kibana
+
+i18n.locale: "zh-CN"
+server.host: localhost
+server.publicBaseUrl: 'http://localhost'
+elasticsearch.hosts: ['https://192.168.13.175:9200']
+
+
+4、首次进入 http://localhost:5601
+sudo /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token --scope kibana
+sudo /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s kibana
+sudo /usr/share/kibana/bin/kibana-verification-code
+
+
+#	判断索引是否存在
+HEAD /ddz_index_001
+
+#	添加索引
+PUT /ddz_index_001
+{
+  "settings": {},
+  "mappings": {}
+}
+
+#	删除索引（如果不存在会报错）
+DELETE /ddz_index_001
+
+#	打开索引
+POST /ddz_index_001/_open
+#	关闭索引
+POST /ddz_index_001/_close
+
+#	查看索引状态(后面追加 *?v 可以返回列头)
+GET _cat/indices/ddz_index_001
+GET _cat/indices/ddz_index_001*?v
+
+
+#	https://download.elastic.co/demos/kibana/gettingstarted/accounts.zip
+#	可以通过添加 -k 或 --insecure 选项来跳过 SSL 证书验证
+curl -k -H "Content-Type: application/json" -X POST 'https://admin:admin666@192.168.13.175:9200/ddz_index_002/_bulk?pretty&refresh' --data-binary "@/home/ddz/桌面/accounts.json"
+
+curl -k -H "Content-Type: application/json" -u admin:admin666 -X POST "https://192.168.13.175:9200/ddz_index_001/_bulk?pretty&refresh" --data-binary "@/home/ddz/桌面/accounts.json"
+
+#	索引批量插入数据
+POST ddz_index_001/_bulk?pretty&refresh
+{"index":{"_id":"1"}}
+{"account_number":1,"balance":39225,"firstname":"Amber","lastname":"Duke","age":32,"gender":"M","address":"880 Holmes Lane","employer":"Pyrami","email":"amberduke@pyrami.com","city":"Brogan","state":"IL"}
+
+
+#	索引文档总数(后面追加 *?v 可以返回列头)
+GET _cat/count/ddz_index_001
+GET _cat/count/ddz_index_001*?v
+#	索引文档总数
+GET ddz_index_001/_count
+
+
+
+#	索引文档总数
+GET ddz_index_001/_search
+{
+  "track_total_hits": true,
+  "query": {
+    "match_all" : {
+    }
+  }
+}
+#查询所有
+POST ddz_index_001/_search
+{
+  "query": { "match_all": {} },
+  "sort": [
+    { "account_number": "asc" }
+  ],
+  "from": 10,
+  "size": 10
+}
+
+
+
