@@ -54,7 +54,7 @@
             <p>让<line-code>ES5</line-code>再次焕发生机，毕竟咱还是念旧的是吧</p>
             <h4>发现的问题</h4>
             <p>这里记录一些尚未实现的原生<line-code>Promise</line-code>的一些特性。放在这里比较显眼，提醒别忘记。</p>
-            <h5>场景一</h5>
+            <h5>resolve / reject 一个 Promise 实例</h5>
             <p>如果调用<line-code>resolve / reject</line-code>方法时传入一个<line-code>Promise</line-code>实例，你该如何应对</p>
             <details>
                 <summary>点击查看原生 Promise 的行为</summary>
@@ -91,6 +91,30 @@ new Promise((resolve, reject) => {
         console.log("失败：", data);
     }
 );
+                </pre>
+            </details>
+            <h5>链接循环</h5>
+            <p><line-code>onFulfilled / onRejected</line-code>返回的是当前<line-code>then</line-code>方法返回的<line-code>Promise</line-code>的实例。真绕啊，还是看例子吧</p>
+            <details>
+                <summary>点击查看原生 Promise 的行为</summary>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+let p1 = new Promise((resolve, reject) => {
+    resolve("xiaodu114");
+});
+let p1_1 = p1.then(
+    (data) => {
+        console.log("成功：", data);
+        return p1_1;
+    },
+    (error) => {}
+);
+p1_1.then(
+    (data) => {},
+    (error) => {
+        console.log("第一个 then 异常：", error);
+    }
+);
+//  TypeError: Chaining cycle detected for promise #&lt;Promise>
                 </pre>
             </details>
             <h4>初始形态</h4>
