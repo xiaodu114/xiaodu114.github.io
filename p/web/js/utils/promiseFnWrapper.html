@@ -3,7 +3,6 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>返回值是 Promise 的函数的包装器 - xiaodu114.github.io</title>
         <meta name="keywords" content="Promise,闭包,包装器" />
         <meta name="description" content="介绍一个 JavaScript 包装器方法，该方法接收一个方法参数，调用传入的方法时需要返回 Promise" />
@@ -143,7 +142,7 @@ function createPromiseFnWrapper(fn) {
     });
 }
             </pre>
-            <p>代码量差不多，是真的差不多……你有什么优势，为什么选择你……我开始不知道，不过在这里发现了一个点眉目，请看移步：<a href="https://zh.javascript.info/proxy" target="_blank">Proxy 和 Reflect</a>。说一点：这种方式包装之后，<line-code>fn.length</line-code>将会给你保留……不说了，说多了就露馅了</p>
+            <p>代码量差不多，是真的差不多……你有什么优势，为什么选择你……我开始不知道，不过在这里发现了一个点眉目，请看移步：<a href="https://zh.javascript.info/proxy" target="_blank" rel="noopener noreferrer">Proxy 和 Reflect</a>。说一点：这种方式包装之后，<line-code>fn.length</line-code>将会给你保留……不说了，说多了就露馅了</p>
         </div>
     </body>
 </html>
