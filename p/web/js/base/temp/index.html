@@ -67,6 +67,11 @@ function myNew(fn, ...args) {
 }
             </pre>
             <h2>执行一个生成器函数</h2>
+            <ul>
+                <li>
+                    <a href="https://github.com/tj/co" target="_blank" rel="noopener noreferrer">GitHub - tj/co: The ultimate generator based flow-control goodness for nodejs (supports thunks, promises, etc)</a>
+                </li>
+            </ul>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
 function* fn() {
     let res1 = yield Promise.resolve(1);
@@ -93,6 +98,8 @@ function runGenerator(generator) {
                 next(data2);
             })
             .catch((error) => {
+                //  你也可以在这里抛出异常，如下：
+                //      gen.throw(error);   //  你需要在上面的生成器函数中 try catch 一下
                 next(error);
             });
     }
