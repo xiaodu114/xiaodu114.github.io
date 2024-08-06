@@ -143,7 +143,22 @@
     let headEle = document.getElementsByTagName("head")[0];
 
     /**
-     * 1、在加载完样式之前， 将页面设置成透明
+     *  1、 同步加载依赖的js
+     */
+    if (!customElements.get("mark-block")) {
+        _SyncLoadJS("/lib/_/webComponents.js", (responseText) => {
+            let _fn = new Function(responseText);
+            _fn();
+        });
+    }
+
+    //  添加 作者信息
+    headEle.appendChild(document.createElement("mate-set"));
+    //  添加 icon
+    headEle.appendChild(document.createElement("link-icon"));
+
+    /**
+     * 2、 在加载完样式之前， 将页面设置成透明
      */
     let tempStyleEle = document.createElement("style");
     tempStyleEle.innerHTML = `
@@ -154,7 +169,7 @@
     headEle.appendChild(tempStyleEle);
 
     /**
-     *  2、添加依赖的css
+     *  3、添加依赖的css
      *      //https://cdn.jsdelivr.net/npm/normalize.css/normalize.min.css
      */
     ["/lib/highlight/github.css", "/lib/highlight/lang-label.css", "/p/_/css/typesetting.css"].forEach((cssPath) => {
@@ -167,19 +182,6 @@
         });
         headEle.appendChild(linkElement);
     });
-
-    /**
-     *  3、加载依赖的js
-     */
-    if (!customElements.get("mark-block")) {
-        _SyncLoadJS("/lib/_/webComponents.js", (responseText) => {
-            let _fn = new Function(responseText);
-            _fn();
-        });
-    }
-
-    //  添加 icon
-    document.documentElement.appendChild(document.createElement("link-icon"));
 
     Promise.all([loadHighlight(), loadUtilsJS(), checkCSSIsLoaded(), checkDOMContentLoaded()]).then(() => {
         //  添加    回到顶部和自动生成目录组件
