@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <title>drag and drop demo5</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                height: 100%;
+                width: 100%;
+                margin: 0;
+                overflow: hidden;
+            }
+
+            body {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .dnd-container {
+                flex: 1;
+                overflow-y: auto;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+                justify-items: center;
+                grid-column-gap: 20px;
+                grid-row-gap: 20px;
+                align-content: start;
+            }
+
+            .dnd-item {
+                height: 80px;
+                width: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #ccc;
+                border: 10px solid #666666;
+                border-radius: 10px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div>
+            <button type="button" id="btnAddOneNote">添加一个节点</button>
+            <span>在移动过程中交换位置。交换位置之后拖拽的元素没有在鼠标下。</span>
+        </div>
+
+        <div id="dnd-container" class="dnd-container"></div>
+        <script>
+            /**
+             * 数值扩展方法：根据数组索引交换位置；引用的方式，无返回值
+             * 应用场景：
+             * 示例： let arr1=[0,1,2,3,4,5]; array_MoveTo(arr1,1,4); => [0, 2, 3, 4, 1, 5]
+             * @param {Array} arr    目标数组
+             * @param {Number} from  原始位置
+             * @param {Number} to    目标位置
+             */
+            function array_MoveTo(arr, from, to) {
+                arr.splice(to, 0, arr.splice(from, 1)[0]);
+            }
+
+            class DndSortable {
+                container = null;
+                containerRect = null;
+                items = null;
+                draggingObj = null;
+                movingTrack = [];
+                scrollTotal = {
+                    x: 0,
+                    y: 0
+                };
+                constructor(el, option) {
+                    this.container = el;
+                    this.container.addEventListener("touchstart", this._handleTouchStart, false);
+                }
+
+                _refresh = () => {
+                    this.container.innerHTML = "";
+                    [].forEach.call(this.items, (draggingItem, index) => {
+                        draggingItem.dataset.index = index;
+                        this.container.appendChild(draggingItem);
+                    });
+                };
+
+                _handleTouchStart = (event) => {
+                    if (event.target.parentNode === this.container) {
+                        this.container.addEventListener("touchmove", this._handleTouchMove, false);
+                        this.container.addEventListener("touchend", this._handleTouchEnd, false);
+
+                        this.containerRect = this.container.getBoundingClientRect();
+                        const draggingItemRect = event.target.getBoundingClientRect();
+                        this.movingTrack.push({
+                            x: event.touches[0].clientX,
+                            y: event.touches[0].clientY
+                        });
+                        this.draggingObj = {
+                            item: event.target,
+                            clientX: event.touches[0].clientX,
+                            clientY: event.touches[0].clientY,
+                            //  鼠标点击拖拽元素时，点击位置距离元素左边、上边的距离
+                            deltaX: event.touches[0].clientX - draggingItemRect.left,
+                            deltaY: event.touches[0].clientY - draggingItemRect.top
+                        };
+                    }
+                };
+                _handleTouchMove = (event) => {
+                    if (this.draggingObj) {
+                        var currentEvent = event.touches[0];
+                        const firstPos = this.movingTrack[0];
+                        const prePos = this.movingTrack[this.movingTrack.length - 1];
+                        const nowPos = {
+                            x: currentEvent.clientX,
+                            y: currentEvent.clientY
+                        };
+                        this.movingTrack.push(nowPos);
+
+                        var tempSliderMoveX = currentEvent.clientX - this.draggingObj.clientX;
+                        var tempSliderMoveY = currentEvent.clientY - this.draggingObj.clientY;
+
+                        const draggingEleRect = this.draggingObj.item.getBoundingClientRect();
+                        let isScrollMove = false;
+                        // 判断是向下运动
+                        if (nowPos.y > prePos.y) {
+                            if (draggingEleRect.bottom >= this.containerRect.bottom) {
+                                isScrollMove = true;
+                                requestAnimationFrame(() => {
+                                    this.container.scrollTop += 10;
+                                    this.scrollTotal.y += 10;
+                                });
+                            }
+                            tempSliderMoveY += this.scrollTotal.y;
+                        }
+
+                        this.draggingObj.item.style.transform = `translate(${tempSliderMoveX}px, ${tempSliderMoveY}px)`;
+
+                        var dragEnterItem = null,
+                            elementsFromXY = document.elementsFromPoint(currentEvent.clientX, currentEvent.clientY);
+                        for (var i = 0; i < elementsFromXY.length; i++) {
+                            if (elementsFromXY[i] !== this.draggingObj.item && elementsFromXY[i].parentNode === this.container) {
+                                dragEnterItem = elementsFromXY[i];
+                                break;
+                            }
+                        }
+
+                        if (dragEnterItem) {
+                            const dragEnterEleRect = dragEnterItem.getBoundingClientRect();
+                            this.items = Array.from(this.container.children);
+                            array_MoveTo(this.items, parseInt(this.draggingObj.item.dataset.index), parseInt(dragEnterItem.dataset.index));
+
+                            //  更新位置后，重新计算点击位置（怎么能更好的描述呢）
+                            this.draggingObj.clientX = dragEnterEleRect.left + this.draggingObj.deltaX;
+                            this.draggingObj.clientY = dragEnterEleRect.top + this.draggingObj.deltaY;
+                            this.draggingObj.item.style.transform = `translate(${currentEvent.clientX - this.draggingObj.clientX}px, ${currentEvent.clientY - this.draggingObj.clientY}px)`;
+                            this._refresh();
+                        }
+                    }
+                    event.preventDefault();
+                    event.stopPropagation();
+                };
+                _handleTouchEnd = (event) => {
+                    this.container.removeEventListener("touchmove", this._handleTouchMove, false);
+                    this.container.removeEventListener("touchend", this._handleTouchEnd, false);
+                    this.containerRect = null;
+                    this.items = null;
+                    this.scrollTotal.x = 0;
+                    this.scrollTotal.y = 0;
+                    this.movingTrack.length = 0;
+                    if (this.draggingObj) {
+                        this.draggingObj.item.style.transform = "";
+                    }
+                    this.draggingObj = null;
+                };
+            }
+
+            var addOneDragItem = (dom) => {
+                var tempIndex = dom.children.length;
+                dom.appendChild(document.createRange().createContextualFragment(`<div class="dnd-item" data-index="${tempIndex}">${tempIndex + 1}</div>`));
+            };
+            var dragContainerDom = document.getElementById("dnd-container");
+            for (var index = 1; index <= 40; index++) {
+                addOneDragItem(dragContainerDom);
+            }
+
+            document.getElementById("btnAddOneNote").addEventListener("click", function () {
+                addOneDragItem(dragContainerDom);
+            });
+            var tempDndSortableInstance = new DndSortable(dragContainerDom);
+        </script>
+    </body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <title>drag and drop demo 8</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                height: 100%;
+                width: 100%;
+                margin: 0;
+                overflow: hidden;
+            }
+
+            body {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .dnd-container {
+                flex: 1;
+                overflow-y: auto;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+                justify-items: center;
+                grid-column-gap: 20px;
+                grid-row-gap: 20px;
+                align-content: start;
+            }
+
+            .dnd-item {
+                height: 80px;
+                width: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #ccc;
+                border: 10px solid #666666;
+                border-radius: 10px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div style="flex-shrink: 0">
+            <button type="button" id="btnAddOneNote">添加一个节点</button>
+            <span>在移动过程中交换位置。交换位置之后拖拽的元素没有在鼠标下。</span>
+        </div>
+
+        <div id="dnd-container" class="dnd-container"></div>
+        <footer>底部</footer>
+        <script>
+            function addDndItem(dom) {
+                // dom.appendChild(document.createRange().createContextualFragment(`<div class="dnd-item">${dom.children.length + 1}</div>`));
+                dom.insertAdjacentHTML("beforeend", `<div class="dnd-item">${dom.children.length + 1}</div>`);
+            }
+            const dndContainerDom = document.getElementById("dnd-container");
+            for (let index = 1; index <= 50; index++) {
+                addDndItem(dndContainerDom);
+            }
+
+            document.getElementById("btnAddOneNote").addEventListener("click", function () {
+                addDndItem(dndContainerDom);
+            });
+            let counter = 0;
+            class DndSortable {
+                container = null;
+                containerRect = null;
+                draggingObj = null;
+
+                constructor(el, option) {
+                    this.container = el;
+                    this.container.addEventListener("touchstart", this._handleTouchStart, false);
+                }
+
+                _handleTouchStart = (event) => {
+                    if (event.target.parentNode === this.container) {
+                        this.container.addEventListener("touchmove", this._handleTouchMove, false);
+                        this.container.addEventListener("touchend", this._handleTouchEnd, false);
+
+                        this.containerRect = this.container.getBoundingClientRect();
+                        const draggingItemRect = event.target.getBoundingClientRect();
+                        this.draggingObj = {
+                            item: event.target,
+                            clientX: event.touches[0].clientX,
+                            clientY: event.touches[0].clientY,
+                            //  鼠标点击拖拽元素时，点击位置距离元素左边、上边的距离
+                            deltaX: event.touches[0].clientX - draggingItemRect.left,
+                            deltaY: event.touches[0].clientY - draggingItemRect.top,
+                            //  鼠标点击拖拽元素时，点击位置距离元素右边、下边的距离
+                            deltaX2: draggingItemRect.right - event.touches[0].clientX,
+                            deltaY2: draggingItemRect.bottom - event.touches[0].clientY
+                        };
+                    }
+                };
+                _handleTouchMove = (event) => {
+                    if (this.draggingObj) {
+                        const currentEvent = event.touches[0];
+                        let tempSliderMoveX = currentEvent.clientX - this.draggingObj.clientX;
+                        let tempSliderMoveY = currentEvent.clientY - this.draggingObj.clientY;
+                        const draggingEleRect = this.draggingObj.item.getBoundingClientRect();
+                        if (draggingEleRect.bottom >= this.containerRect.bottom) {
+                            // requestAnimationFrame(() => {
+                            //     this.container.scrollTop += 10;
+                            // });
+                            this.container.scrollTop += 10;
+                        }
+                        //  边界检测
+                        if (currentEvent.clientX - this.draggingObj.deltaX < this.containerRect.left) {
+                            //  左边界检测
+                            tempSliderMoveX += this.containerRect.left - (currentEvent.clientX - this.draggingObj.deltaX);
+                        } else if (currentEvent.clientX + this.draggingObj.deltaX2 > this.containerRect.right) {
+                            //  右边界检测
+                            tempSliderMoveX -= currentEvent.clientX + this.draggingObj.deltaX2 - this.containerRect.right;
+                        }
+                        if (currentEvent.clientY - this.draggingObj.deltaY < this.containerRect.top) {
+                            //  上边界检测
+                            tempSliderMoveY += this.containerRect.top - (currentEvent.clientY - this.draggingObj.deltaY);
+                        } else {
+                            //  下边界检测
+                        }
+                        //  实时修改被拖动元素的位置
+                        this.draggingObj.item.style.transform = `translate(${tempSliderMoveX}px, ${tempSliderMoveY}px)`;
+
+                        //  查找与拖拽元素“相交”的元素，这里的相交更加严格，需要鼠标位置进入目标元素
+                        let dragEnterEle = null,
+                            elementsFromXY = document.elementsFromPoint(currentEvent.clientX, currentEvent.clientY);
+                        for (let i = 0; i < elementsFromXY.length; i++) {
+                            if (elementsFromXY[i] !== this.draggingObj.item && elementsFromXY[i].parentNode === this.container) {
+                                dragEnterEle = elementsFromXY[i];
+                                break;
+                            }
+                        }
+
+                        //  如果找到进入元素，则进行排序处理
+                        if (dragEnterEle) {
+                            //  用拖拽元素和进入元素的左上角顶点作为参照，计算是向前拖动还是向后拖动
+                            const dragEnterEleRect = dragEnterEle.getBoundingClientRect();
+                            const tempX = this.draggingObj.clientX - this.draggingObj.deltaX - dragEnterEleRect.left;
+                            const tempY = this.draggingObj.clientY - this.draggingObj.deltaY - dragEnterEleRect.top;
+                            if (tempX > 0 && tempY >= 0) {
+                                dragEnterEle.before(this.draggingObj.item);
+                            } else if (tempX >= 0 && tempY < 0) {
+                                dragEnterEle.after(this.draggingObj.item);
+                            } else if (tempX <= 0 && tempY > 0) {
+                                dragEnterEle.before(this.draggingObj.item);
+                            } else if (tempX < 0 && tempY <= 0) {
+                                dragEnterEle.after(this.draggingObj.item);
+                            } else {
+                                debugger;
+                            }
+
+                            //  更新位置后，重新计算点击位置（怎么能更好的描述呢）
+                            this.draggingObj.clientX = dragEnterEleRect.left + this.draggingObj.deltaX;
+                            this.draggingObj.clientY = dragEnterEleRect.top + this.draggingObj.deltaY;
+                            this.draggingObj.item.style.transform = `translate(${currentEvent.clientX - this.draggingObj.clientX}px, ${currentEvent.clientY - this.draggingObj.clientY}px)`;
+                        }
+                    }
+                    event.preventDefault();
+                    event.stopPropagation();
+                };
+                _handleTouchEnd = (event) => {
+                    this.container.removeEventListener("touchmove", this._handleTouchMove, false);
+                    this.container.removeEventListener("touchend", this._handleTouchEnd, false);
+                    this.containerRect = null;
+                    if (this.draggingObj) {
+                        this.draggingObj.item.style.transform = "";
+                    }
+                    this.draggingObj = null;
+                };
+            }
+
+            let tempDndSortableInstance = new DndSortable(dndContainerDom);
+        </script>
+    </body>
+</html>
