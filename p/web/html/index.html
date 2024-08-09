@@ -14,7 +14,7 @@
         <!-- github访问地址：/p/web/html/index.html -->
         <div class="blog-page">
             <h1>HTML</h1>
-            <p><line-code>HTML</line-code>：Web 开发的四剑客之一。</p>
+            <p id="test-anchor-002"><line-code>HTML</line-code>：Web 开发的四剑客之一。</p>
             <ul>
                 <li>
                     <a href="https://www.w3.org/html/" target="_blank" rel="noopener noreferrer">W3C HTML</a>
@@ -124,10 +124,156 @@
             <h3>块级元素和行内元素</h3>
             <p>块级元素和行内元素都有哪些</p>
             <h2>重点元素</h2>
+            <h3>form 元素</h3>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/form" target="_blank" rel="noopener noreferrer">form - HTML（超文本标记语言） | MDN</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/input" target="_blank" rel="noopener noreferrer">&lt;input>：输入（表单输入）元素</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/textarea" target="_blank" rel="noopener noreferrer">&lt;textarea>：文本区域元素</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/select" target="_blank" rel="noopener noreferrer">&lt;select> - HTML（超文本标记语言） | MDN</a>
+                </li>
+            </ul>
+            <h4>我的搜索</h4>
+            <form action="https://cn.bing.com/search" target="_blank" method="get">
+                <input type="text" name="q" placeholder="请输入" />
+                <button type="submit">Bing</button>
+            </form>
+            <p></p>
+            <form action="https://www.baidu.com/s" target="_blank" method="get">
+                <input type="text" name="wd" placeholder="请输入" />
+                <button type="submit">百度一下</button>
+            </form>
+            <h4>赶紧试试吧</h4>
+            <form action="https://search.jd.com/search" target="_blank" method="get">
+                <p>
+                    <label> 用户名：<input type="text" name="username" placeholder="请输入用户名" maxlength="12" /></label>
+                </p>
+                <p>
+                    <label> 密码：<input type="password" name="pwd" placeholder="请输入密码" maxlength="6" /></label>
+                </p>
+                <p>
+                    <label>
+                        性别：<label><input type="radio" name="gender" value="nan" checked />男</label><label><input type="radio" name="gender" value="nv" />女</label>
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        编程语言：
+                        <label><input type="checkbox" name="langs" value="html" />html</label>
+                        <label><input type="checkbox" name="langs" value="css" />css</label>
+                        <label><input type="checkbox" name="langs" value="javascript" checked />javascript</label>
+                        <label><input type="checkbox" name="langs" value="python" />python</label>
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        兵器：
+                        <select name="arms">
+                            <option value="dao">刀</option>
+                            <option value="qiang" selected>枪</option>
+                            <option value="jian">剑</option>
+                            <option value="ji">戟</option>
+                        </select>
+                    </label>
+                </p>
+                <p>
+                    <label>备注：<textarea name="remark" rows="3" placeholder="请输入备注"></textarea></label>
+                </p>
+                <input type="hidden" name="identifier" value="xiaodu114" />
+                <p>
+                    <button type="reset">重置</button>
+                    <button type="submit">确认</button>
+                    <button type="button">普通按钮</button>
+                </p>
+            </form>
             <h3>a 元素</h3>
             <ul>
                 <li>
                     <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/a" target="_blank" rel="noopener noreferrer">&lt;a>：锚元素 - HTML（超文本标记语言） | MDN</a>
+                </li>
+            </ul>
+            <h4>target</h4>
+            <ul>
+                <li><line-code>_blank</line-code>：</li>
+                <li><line-code>_parent</line-code>：</li>
+                <li><line-code>_self</line-code>：</li>
+                <li><line-code>_top</line-code>：</li>
+            </ul>
+            <h4>href</h4>
+            <h5>链接地址</h5>
+            <p>这个就比较好理解了，例如： <a href="https://xiaodu114.github.io/" target="_blank" rel="noopener noreferrer">主页 - xiaodu114.github.io</a></p>
+            <h5>常规文件</h5>
+            <p>这里面又分为两类：浏览器支持的格式，可以直接打开的；浏览器不支持的格式</p>
+            <dl>
+                <dt>支持的格式（*.js|*.png|*.pdf|*.mp4 等）</dt>
+                <dd><a href="/lib/_/webComponents.js" target="_blank" rel="noopener noreferrer">JS文件</a></dd>
+                <dd><a href="/lib/_/webComponents.js" target="_blank" rel="noopener noreferrer" download>JS文件（强制下载）</a></dd>
+                <dd><a href="/lib/_/webComponents.js" target="_blank" rel="noopener noreferrer" download="webComponents-alias">JS文件（强制下载，起个别名）</a></dd>
+                <dt>不支持的格式（*.js|*.png|*.pdf|*.mp4 等）</dt>
+                <dd><a href="/p/ocr/duguang/source/ocr-demo.zip" target="_blank" rel="noopener noreferrer">读光-表格结构识别-示例代码（压缩包）</a></dd>
+            </dl>
+            <h5>锚</h5>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html" ddz-html-text>
+&lt;!-- 定义一个锚点的两种方式（锚点区分大小写），推荐使用 id 方式 --&gt;
+&lt;a name="test-anchor-001">&lt;/a>
+&lt;p id="test-anchor-002">xxx&lt;/p>
+
+&lt;!-- 跳到锚点 --&gt;
+&lt;a href="#test-anchor-001">跳到第一个锚点&lt;/a>
+&lt;a href="#test-anchor-002">回到顶部&lt;/a>
+&lt;a href="#">这里是文档的末尾，点击回到顶部&lt;/a>
+&lt;!-- 也可以跳到其他页面的锚点 --&gt;
+&lt;a href="https://baike.baidu.com/item/%E7%A5%88%E7%A5%B7/2264993#1" target="_blank" rel="noopener noreferrer">点击跳转到百度百科，歌曲 祈祷 的歌曲歌词&lt;/a>
+            </pre>
+            <p>测试<line-code>id</line-code>锚点：<a href="#test-anchor-002">回到顶部</a></p>
+            <p>在文章的末尾还有一个“回到顶部”，您可以试试</p>
+            <p><a href="https://baike.baidu.com/item/%E7%A5%88%E7%A5%B7/2264993#1" target="_blank" rel="noopener noreferrer">点击跳转到百度百科，歌曲 祈祷 的歌曲歌词</a></p>
+            <h5>JavaScript 脚本</h5>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html" ddz-html-text>
+&lt;a href="javascript:var youInpit = prompt('请随便输入点东东','xiaodu114');alert('您输入的是：' + youInpit);" target="_blank" rel="noopener noreferrer">href中是一段脚本，点击试试吧，注意：高版本的Chrome或者Edge不支持&lt;/a>
+            </pre>
+            <p>
+                <a href="javascript:var youInpit = prompt('请随便输入点东东','xiaodu114');alert('您输入的是：' + youInpit);" target="_blank" rel="noopener noreferrer">href中是一段脚本，点击试试吧，注意：高版本的Chrome或者Edge不支持</a>
+            </p>
+            <h5>唤起其他应用</h5>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="html" ddz-html-text>
+&lt;a href="tel:10086" target="_blank" rel="noopener noreferrer">点击给 10086 打电话&lt;/a>
+&lt;a href="mailto:mine_job@126.com" target="_blank" rel="noopener noreferrer">点击给我发 Email&lt;/a>
+&lt;a href="sms:10086" target="_blank" rel="noopener noreferrer">点击给 10086 发短信&lt;/a>
+            </pre>
+            <ul>
+                <li>
+                    <a href="tel:10086" target="_blank" rel="noopener noreferrer">点击给 10086 打电话</a>
+                </li>
+                <li>
+                    <a href="mailto:mine_job@126.com" target="_blank" rel="noopener noreferrer">点击给我发 Email</a>
+                </li>
+                <li>
+                    <a href="sms:10086" target="_blank" rel="noopener noreferrer">点击给 10086 发短信</a>
+                </li>
+            </ul>
+            <h3>iframe 元素</h3>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/iframe" target="_blank" rel="noopener noreferrer">&lt;iframe> - HTML（超文本标记语言） | MDN</a>
+                </li>
+            </ul>
+            <h3>ul ol dl</h3>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/ul" target="_blank" rel="noopener noreferrer">&lt;ul>：无序列表元素 - HTML（超文本标记语言） | MDN</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/ol" target="_blank" rel="noopener noreferrer">&lt;ol> - HTML（超文本标记语言） | MDN</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/dl" target="_blank" rel="noopener noreferrer">&lt;dl> - HTML（超文本标记语言） | MDN</a>
                 </li>
             </ul>
             <h3>img 元素</h3>
@@ -194,6 +340,15 @@
                     <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/video" target="_blank" rel="noopener noreferrer">&lt;video>：视频嵌入元素 - HTML（超文本标记语言） | MDN</a>
                 </li>
             </ul>
+            <h3>table 元素</h3>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/table" target="_blank" rel="noopener noreferrer">&lt;table>：表格元素 - HTML（超文本标记语言） | MDN</a>
+                </li>
+            </ul>
+            <p>
+                <a href="#">这里是文档的末尾，点击回到顶部</a>
+            </p>
         </div>
     </body>
 </html>
