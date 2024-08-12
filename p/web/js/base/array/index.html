@@ -29,7 +29,23 @@
             <h2>静态方法</h2>
             <p>敬请期待</p>
             <h2>实例方法</h2>
-            <p>敬请期待</p>
+            <h3>reduce</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+let result1 = [].reduce((acc, cur, curIndex, arr) => {}, "xiaodu114");
+let result2 = ["xiaodu114"].reduce((acc, cur, curIndex, arr) => {});
+let result3 = [].reduce((acc, cur, curIndex, arr) => {}); //  TypeError: Reduce of empty array with no initial value
+
+let result4 = ["", null, undefined, "xiaodu114", "a2bei4", "du-blog", "duyelang", , "", null, undefined, "xiaodu114"].reduce((acc, cur, curIndex, arr) => {
+    console.log("acc:", acc, "cur:", cur, "curIndex:", curIndex, "arr:", arr);
+    return `${acc}-${cur}`;
+});
+
+let result5 = ["", null, undefined, "xiaodu114", "a2bei4", "du-blog", "duyelang", , "", null, undefined, "xiaodu114"].reduce((acc, cur, curIndex, arr) => {
+    console.log("acc:", acc, "cur:", cur, "curIndex:", curIndex, "arr:", arr);
+    if (!acc.includes(cur)) acc.push(cur);
+    return acc;
+}, []);
+            </pre>
         </div>
     </body>
 </html>
