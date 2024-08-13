@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>智能文档比对 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,百度AI开放平台,智能文档比对,文档对比" />
+        <meta name="description" content="百度AI开放平台中智能文档比对项目示例" />
+        <style>
+            :root {
+                --main-color: #3cb878;
+            }
+
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+            }
+
+            /* 代码来源：https://cloud.tencent.com/developer/article/1144484 */
+            /* 例外：https://www.jianshu.com/p/04127d74d88c */
+            pre {
+                box-sizing: border-box;
+                /*以下样式是自动换行代码*/
+                /* css-3 */
+                white-space: -moz-pre-wrap;
+                /* Mozilla, since 1999 */
+                white-space: -pre-wrap;
+                /* Opera 4-6 */
+                white-space: -o-pre-wrap;
+                white-space: pre-wrap;
+                /* Opera 7 */
+                word-wrap: break-word;
+                /* Internet Explorer 5.5+ */
+                /*以上样式是自动换行代码，需要的加上，不需要的删除*/
+                height: 100%;
+                overflow: auto;
+                font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+                font-size: 13px;
+                padding: 9.5px;
+                margin-top: 0px;
+                margin-bottom: 10px;
+                line-height: 1.42857;
+                color: #333333;
+                word-break: break-all;
+                word-wrap: break-word;
+                border: 1px solid #cccccc;
+                border-radius: 4px;
+                background-color: #f5f5f5;
+            }
+
+            html,
+            body {
+                height: 100%;
+                width: 100%;
+                margin: 0;
+                overflow: hidden;
+            }
+
+            .app {
+                height: 100%;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+
+                > .header {
+                    flex-shrink: 0;
+                    position: relative;
+                    display: flex;
+                    align-items: baseline;
+                    padding-left: 25px;
+                    padding-right: 25px;
+
+                    &::after {
+                        position: absolute;
+                        bottom: 0;
+                        right: 0;
+                        left: 0;
+                        height: 1px;
+                        content: "";
+                        -webkit-transform: scaleY(0.5);
+                        transform: scaleY(0.5);
+                        background-color: var(--main-color);
+                    }
+                }
+
+                > .main {
+                    flex: 1;
+                    overflow: hidden;
+                    display: flex;
+
+                    > .left {
+                        width: 300px;
+                        flex-shrink: 0;
+                        position: relative;
+                        padding: 10px;
+                        display: flex;
+                        flex-direction: column;
+                        overflow-y: auto;
+
+                        &::after {
+                            position: absolute;
+                            top: 0;
+                            bottom: 0;
+                            right: 0;
+                            width: 1px;
+                            content: "";
+                            -webkit-transform: scaleX(0.5);
+                            transform: scaleX(0.5);
+                            background-color: var(--main-color);
+                        }
+                    }
+
+                    > .content {
+                        flex: 1;
+                        margin: 15px;
+                        box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.2);
+                        overflow: hidden;
+                    }
+                }
+            }
+        </style>
+        <script src="https://registry.npmmirror.com/vue/3.4.21/files/dist/vue.global.js"></script>
+        <script src="https://registry.npmmirror.com/axios/1.7.3/files/dist/axios.min.js"></script>
+    </head>
+
+    <body>
+        <div id="vue3App" class="app">
+            <div class="header">
+                <h1>智能文档比对</h1>
+                <span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="https://ai.baidu.com/tech/nlp/Textanalysis" target="_blank" rel="noopener noreferrer">智能文档-百度AI开放平台</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="https://ai.baidu.com/ai-doc/OCR/Glqd7jgmf" target="_blank" rel="noopener noreferrer">文档比对-百度</a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span>注意：您需要下载代码并自己启动服务器端，实现了 nodejs 和 python 两个版本</span>
+                </span>
+            </div>
+            <div class="main">
+                <div class="left">
+                    <fieldset>
+                        <legend>获取 AccessToken</legend>
+                        <div>
+                            <p>
+                                <label>百度client_id：<input type="text" placeholder="请输入百度 client_id" required v-model="client_id" /> </label>
+                            </p>
+                            <p>
+                                <label>百度client_secret：<input type="text" placeholder="请输入百度 client_secret" required v-model="client_secret" /> </label>
+                            </p>
+                            <p>
+                                <button type="button" @click="getBaiduAccessToken">获取AccessToken</button>
+                            </p>
+                            <div v-if="baidu_AccessToken">
+                                <p>成功获取AccessToken：</p>
+                                <pre v-html="baidu_AccessToken"></pre>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>创建对比任务</legend>
+                        <div>
+                            <p>
+                                <label>文件一：<input type="file" placeholder="请选择第一个文件" @change="handleFileChange($event, 'leftFile')" /> </label>
+                            </p>
+                            <p>
+                                <label>文件二：<input type="file" placeholder="请选择第二个文件" @change="handleFileChange($event, 'rightFile')" /> </label>
+                            </p>
+                            <p>
+                                <button type="button" @click="createCompareTask">开始对比</button>
+                            </p>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>获取对比结果</legend>
+                        <p>任务ID：<span>{{compare_task_id}}</span></p>
+                        <p>
+                            <button type="button" @click="getCompareTaskResult">对比结果</button>
+                        </p>
+                    </fieldset>
+                </div>
+                <div class="content">
+                    <pre v-if="compare_task_result">{{JSON.stringify(compare_task_result, null, 4)}}</pre>
+                </div>
+            </div>
+        </div>
+        <script>
+            (() => {
+                if (!(window.Vue && window.axios)) {
+                    alert(`vue.global.js 或者 axios.min.js 加载异常`);
+                    return;
+                }
+
+                const { createApp, ref, reactive, onMounted, watch, watchEffect } = Vue;
+
+                const vue3App = Vue.createApp({
+                    setup() {
+                        // 生命周期钩子
+                        onMounted(() => {
+                            console.log("生命周期钩子：onMounted");
+                        });
+
+                        //  无需暴露的数据
+                        let leftFile = null;
+                        let rightFile = null;
+
+                        //  需要暴露的数据
+                        const client_id = ref(""); //
+                        const client_secret = ref(""); //
+                        let baidu_AccessToken = ref("");
+                        let compare_task_id = ref("");
+                        let compare_task_result = ref("");
+
+                        // 按钮点击事件：获取百度 AccessToken
+                        const getBaiduAccessToken = () => {
+                            const url = "http://localhost:13141/api/baidu/get_access_token";
+                            const params = new URLSearchParams();
+                            params.append("grant_type", "client_credentials");
+                            params.append("client_id", client_id.value);
+                            params.append("client_secret", client_secret.value);
+                            axios
+                                .get(url, {
+                                    method: "get",
+                                    params
+                                })
+                                .then((result) => {
+                                    baidu_AccessToken.value = result.data.access_token;
+                                })
+                                .catch((err) => {
+                                    console.error(err);
+                                });
+                        };
+
+                        //  选择文件
+                        const handleFileChange = (event, fileKey) => {
+                            const file = event.target.files[0];
+                            if (fileKey === "leftFile") {
+                                leftFile = file;
+                            } else if (fileKey === "rightFile") {
+                                rightFile = file;
+                            }
+                        };
+
+                        // const createCompareTask = () => {
+                        //     // 发送请求
+                        //     const url = "http://localhost:13141/api/baidu/text_diff/create_task_test";
+                        //     const access_token = baidu_AccessToken.value;
+                        //     axios
+                        //         .post(`${url}?access_token=${access_token}`)
+                        //         .then((response) => {
+                        //             compare_task_id.value = response.data?.result?.taskId;
+                        //         })
+                        //         .catch((error) => {
+                        //             console.error("请求失败:", error);
+                        //         });
+                        // };
+
+                        //  创建对比任务
+                        const createCompareTask = () => {
+                            //  组装请求数据
+                            const formData = new FormData();
+                            formData.append("data", JSON.stringify({ sealRecognition: false, handWritingRecognition: false }));
+                            formData.append("base_file", leftFile, leftFile.name);
+                            formData.append("compare_file", rightFile, rightFile.name);
+
+                            //  发送请求
+                            const url = "http://localhost:13141/api/baidu/text_diff/create_task";
+                            const access_token = baidu_AccessToken.value;
+                            axios
+                                .post(`${url}?access_token=${access_token}`, formData, {
+                                    headers: {
+                                        "Content-Type": `multipart/form-data`
+                                    }
+                                })
+                                .then((response) => {
+                                    compare_task_id.value = response.data?.result?.taskId;
+                                })
+                                .catch((error) => {
+                                    console.error("请求失败:", error);
+                                });
+                        };
+
+                        //  获取对比结果
+                        const getCompareTaskResult = () => {
+                            const url = `http://localhost:13141/api/baidu/text_diff/query_task_result/${compare_task_id.value}`;
+                            const access_token = baidu_AccessToken.value;
+                            axios
+                                .get(`${url}?access_token=${access_token}`)
+                                .then((response) => {
+                                    compare_task_result.value = response.data?.result;
+                                })
+                                .catch((error) => {
+                                    console.error("请求失败:", error);
+                                });
+                        };
+
+                        return {
+                            client_id,
+                            client_secret,
+                            baidu_AccessToken,
+                            compare_task_id,
+                            compare_task_result,
+                            getBaiduAccessToken,
+                            handleFileChange,
+                            createCompareTask,
+                            getCompareTaskResult
+                        };
+                    }
+                });
+                vue3App.mount("#vue3App");
+            })();
+        </script>
+    </body>
+</html>
