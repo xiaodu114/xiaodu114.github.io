@@ -30,21 +30,163 @@
             <p>敬请期待</p>
             <h2>实例方法</h2>
             <h3>reduce</h3>
+            <p>权威介绍：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce" target="_blank" rel="noopener noreferrer">Array.prototype.reduce() - JavaScript | MDN</a></p>
+            <p>下面是一些测试代码：</p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
-let result1 = [].reduce((acc, cur, curIndex, arr) => {}, "xiaodu114");
-let result2 = ["xiaodu114"].reduce((acc, cur, curIndex, arr) => {});
-let result3 = [].reduce((acc, cur, curIndex, arr) => {}); //  TypeError: Reduce of empty array with no initial value
+let result0 = [].reduce((acc, cur, curIndex, arr) => {}); //  TypeError: Reduce of empty array with no initial value
+let result1 = [].reduce((acc, cur, curIndex, arr) => {}, undefined);
+let result2 = [].reduce((acc, cur, curIndex, arr) => {}, "xiaodu114");
+let result3 = ["xiaodu114"].reduce((acc, cur, curIndex, arr) => {});
 
-let result4 = ["", null, undefined, "xiaodu114", "a2bei4", "du-blog", "duyelang", , "", null, undefined, "xiaodu114"].reduce((acc, cur, curIndex, arr) => {
+let arr = ["", null, undefined, "xiaodu114", "a2bei4", "du-blog", "duyelang", , "", null, undefined, "xiaodu114"];
+let result4 = arr.reduce((acc, cur, curIndex, arr) => {
     console.log("acc:", acc, "cur:", cur, "curIndex:", curIndex, "arr:", arr);
     return `${acc}-${cur}`;
 });
 
-let result5 = ["", null, undefined, "xiaodu114", "a2bei4", "du-blog", "duyelang", , "", null, undefined, "xiaodu114"].reduce((acc, cur, curIndex, arr) => {
+let result5 = arr.reduce((acc, cur, curIndex, arr) => {
     console.log("acc:", acc, "cur:", cur, "curIndex:", curIndex, "arr:", arr);
     if (!acc.includes(cur)) acc.push(cur);
     return acc;
 }, []);
+            </pre>
+            <h4>手写 reduce</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+Array.prototype.myReduce = function (fn, initValue) {
+    if (arguments.length === 1 && this.length === 0) throw TypeError("Reduce of empty array with no initial value");
+    let i = 0;
+    if (arguments.length === 1) {
+        initValue = this[0];
+        i = 1;
+    }
+    for (; i &lt; this.length; i++) {
+        if (!(i in this)) continue; //  稀疏数组，跳过 空 项
+        initValue = fn(initValue, this[i], i, this);
+    }
+    return initValue;
+};
+
+//  下面是测试代码
+let arr = ["", null, undefined, "xiaodu114", "a2bei4", "du-blog", "duyelang", , "", null, undefined, "xiaodu114"];
+
+let result1 = [].reduce((acc, cur, curIndex, arr) => {}, undefined);
+let result2 = [].reduce((acc, cur, curIndex, arr) => {}, "xiaodu114");
+let result3 = ["xiaodu114"].reduce((acc, cur, curIndex, arr) => {});
+let result4 = arr.reduce((acc, cur, curIndex, arr) => {
+    return `${acc}-${cur}`;
+});
+let result5 = arr.reduce((acc, cur, curIndex, arr) => {
+    if (!acc.includes(cur)) acc.push(cur);
+    return acc;
+}, []);
+
+let result1_1 = [].myReduce((acc, cur, curIndex, arr) => {}, undefined);
+let result2_1 = [].myReduce((acc, cur, curIndex, arr) => {}, "xiaodu114");
+let result3_1 = ["xiaodu114"].myReduce((acc, cur, curIndex, arr) => {});
+let result4_1 = arr.myReduce((acc, cur, curIndex, arr) => {
+    return `${acc}-${cur}`;
+});
+let result5_1 = arr.myReduce((acc, cur, curIndex, arr) => {
+    if (!acc.includes(cur)) acc.push(cur);
+    return acc;
+}, []);
+console.log(result1, result1_1, result1 === result1_1);
+console.log(result2, result2_1, result2 === result2_1);
+console.log(result3, result3_1, result3 === result3_1);
+console.log(result4, result4_1, result4 === result4_1);
+console.log(result5, result5_1, JSON.stringify(result5) === JSON.stringify(result5_1));
+
+//  异常测试
+let result0 = [].myReduce((acc, cur, curIndex, arr) => {});
+            </pre>
+            <h3>flat</h3>
+            <p>权威介绍：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/flat" target="_blank" rel="noopener noreferrer">Array.prototype.flat() - JavaScript | MDN</a></p>
+            <h4>制造多维数组</h4>
+            <p>弄了一个创建随机多维数组的方法，方便后面的测试：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+function getInRangeInteger(num1, num2) {
+    num1 = Number.isInteger(num1) ? num1 : 0;
+    num2 = Number.isInteger(num2) ? num2 : 0;
+    if (num1 > num2) [num1, num2] = [num2, num1];
+    return Math.round(Math.random() * (num2 - num1)) + num1;
+}
+function getArr(len) {
+    const arr = [];
+    const allArr = [arr];
+    for (let i = 0; i &lt; len; i++) {
+        const value = getInRangeInteger(0, 10);
+        const targetArr = allArr[getInRangeInteger(0, allArr.length - 1)];
+        if (Math.random() > 0.5) {
+            const child_arr = [value];
+            targetArr.push(child_arr);
+            allArr.push(child_arr);
+        } else {
+            targetArr.push(value);
+        }
+    }
+    return arr;
+}
+
+//  创造一个
+const arr = getArr(20);
+            </pre>
+            <h4>手写 flat</h4>
+            <p>下面是第一版（没有考虑深度，完全平铺）：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  第一版（不考虑深度，完全平铺）
+Array.prototype.myFlat = function () {
+    function fn(source) {
+        const arr = [];
+        source.forEach((item) => {
+            if (Array.isArray(item)) {
+                arr.push(...fn(item));
+            } else {
+                arr.push(item);
+            }
+        });
+        return arr;
+    }
+    return fn(this);
+};
+
+const arr1 = getArr(20);
+const arr1_1 = arr1.flat(Infinity);
+const arr1_2 = arr1.myFlat();
+console.log(arr1);
+console.log(arr1_1, arr1_2, JSON.stringify(arr1_1) === JSON.stringify(arr1_2));
+            </pre>
+            <p>下面是第二版（添加深度支持）：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  第二版（添加深度支持）
+Array.prototype.myFlat = function (deep = 1) {
+    function fn(source, deep2) {
+        const arr = [];
+        source.forEach((item) => {
+            if (Array.isArray(item) && deep2 !== 0) {
+                arr.push(...fn(item, deep2 === Infinity ? Infinity : deep2 - 1));
+            } else {
+                arr.push(item);
+            }
+        });
+        return arr;
+    }
+    return fn(this, deep);
+};
+
+const arr2 = getArr(20);
+console.log(arr2);
+const arr2_1_1 = arr2.flat();
+const arr2_2_1 = arr2.myFlat();
+console.log(arr2_1_1, arr2_2_1, JSON.stringify(arr2_1_1) === JSON.stringify(arr2_2_1));
+const arr2_1_2 = arr2.flat(2);
+const arr2_2_2 = arr2.myFlat(2);
+console.log(arr2_1_2, arr2_2_2, JSON.stringify(arr2_1_2) === JSON.stringify(arr2_2_2));
+const arr2_1_3 = arr2.flat(3);
+const arr2_2_3 = arr2.myFlat(3);
+console.log(arr2_1_3, arr2_2_3, JSON.stringify(arr2_1_3) === JSON.stringify(arr2_2_3));
+const arr2_1_4 = arr2.flat(4);
+const arr2_2_4 = arr2.myFlat(4);
+console.log(arr2_1_4, arr2_2_4, JSON.stringify(arr2_1_4) === JSON.stringify(arr2_2_4));
             </pre>
         </div>
     </body>
