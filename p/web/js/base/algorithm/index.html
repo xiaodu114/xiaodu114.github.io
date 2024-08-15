@@ -4,21 +4,41 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>算法 - xiaodu114.github.io</title>
-        <meta name="keywords" content="xiaodu114,javascript,算法,algorithm,冒泡排序" />
-        <meta name="description" content="收集整理一些算法相关的东东，算法实现、应用场景等。收集了冒泡排序等" />
+        <meta name="keywords" content="xiaodu114,javascript,算法,algorithm,冒泡排序,bubble sort,快速排序,quick sort" />
+        <meta name="description" content="收集整理一些算法相关的东东，算法实现、应用场景等。收集了冒泡排序、快速排序等" />
 
         <script src="/p/_/js/main.js"></script>
     </head>
 
     <body>
-        <!-- github访问地址：/p/web/js/base/algorithm\index.html -->
+        <!-- github访问地址：/p/web/js/base/algorithm/index.html -->
         <div class="blog-page">
             <h1>算法</h1>
             <p>收集整理一些算法相关的东东，算法实现、应用场景等</p>
             <h2>排序算法</h2>
-            <p>该章节介绍一系列排序算法，例如：排序算法</p>
+            <p>该章节介绍一系列排序算法，例如：冒泡排序、快速排序等。先弄点随机整数数据，方便后面的测试</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+function getInRangeInteger(num1, num2) {
+    num1 = Number.isInteger(num1) ? num1 : 0;
+    num2 = Number.isInteger(num2) ? num2 : 0;
+    if (num1 > num2) [num1, num2] = [num2, num1];
+    return Math.round(Math.random() * (num2 - num1)) + num1;
+}
+
+//  获取指定长度的随机整数数组
+function getRandomIntArr(len) {
+    const arr = [];
+    for (let i = 0; i &lt; len; i++) {
+        arr.push(getInRangeInteger(0, 10));
+    }
+    return arr;
+}
+
+console.log(getRandomIntArr(10));
+            </pre>
             <h3>冒泡排序</h3>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  注意：会修改原数组
 function bubbleSort(arr) {
     let len = arr.length;
     let isSwitch;
@@ -36,6 +56,41 @@ function bubbleSort(arr) {
     }
     return arr;
 }
+
+//  测试代码
+const arr = [8, 1, 9, 9, 2, 7, 3, 1, 4, 2];
+const arr1 = bubbleSort([...arr]);
+const arr2 = [...arr].sort((a, b) => a - b);
+console.log("原数组：", arr);
+console.log(arr1, arr2, JSON.stringify(arr1) === JSON.stringify(arr2));
+            </pre>
+            <h3>快速排序</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  注意：不会修改原数组
+function quickSort(arr) {
+    if (!Array.isArray(arr) || [0, 1].includes(arr.length)) return arr;
+    const pivot = arr[~~(arr.length / 2)],
+        left = [],
+        middle = [],
+        right = [];
+    arr.forEach((item) => {
+        if (item > pivot) {
+            right.push(item);
+        } else if (item &lt; pivot) {
+            left.push(item);
+        } else {
+            middle.push(item);
+        }
+    });
+    return [...quickSort(left), ...middle, ...quickSort(right)];
+}
+
+//  测试代码
+const arr = [8, 1, 9, 9, 2, 7, 3, 1, 4, 2];
+const arr1 = quickSort(arr);
+const arr2 = [...arr].sort((a, b) => a - b);
+console.log("原数组：", arr);
+console.log(arr1, arr2, JSON.stringify(arr1) === JSON.stringify(arr2));
             </pre>
         </div>
     </body>
