@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>继承 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,JavaScript,继承,extends" />
+        <meta name="description" content="整理介绍一下继承相关的东东……" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/web/js/base/extends/index.html -->
+        <div class="blog-page">
+            <h1>继承</h1>
+            <p>整理介绍一下继承相关的东东，还是老样子，先致敬一下权威：</p>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank" rel="noopener noreferrer">继承与原型链 - JavaScript | MDN</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Classes/extends" target="_blank" rel="noopener noreferrer">extends - JavaScript | MDN</a>
+                </li>
+                <li>
+                    <a href="https://zh.javascript.info/prototype-inheritance" target="_blank" rel="noopener noreferrer">原型继承 - 现代 JavaScript 教程</a>
+                </li>
+                <li>
+                    <a href="https://zh.javascript.info/class-inheritance" target="_blank" rel="noopener noreferrer">类继承 - 现代 JavaScript 教程</a>
+                </li>
+            </ul>
+            <h2>临时记录</h2>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  父类：Person
+function Person(name, age) {
+    this.name = name;
+    this.age = age;
+}
+Person.prototype.say = function () {
+    console.log(`父类方法：大家好，我叫${this.name}，今年${this.age}了……`);
+};
+var p1 = new Person("xiaodu114", 18);
+p1.say();
+
+
+//  子类：Student
+function Student(name, age, school) {
+    Person.call(this, name, age);
+    this.school = school;
+}
+//  设置子类的 prototype
+// //  方式一
+// Student.prototype = {
+//     constructor: Student,
+//     __proto__: Person.prototype
+// };
+// //  方式二
+// Student.prototype = Object.create(Person.prototype);
+// Student.prototype.constructor = Student;
+//  方式三
+Object.setPrototypeOf(Student.prototype, Person.prototype);
+//  重写父类方法;
+Student.prototype.say = function () {
+    console.log(`子类方法：大家好，我是来自${this.school}的${this.name}，今年${this.age}了……`);
+};
+console.log("Student.__proto__ 和 Function.prototype 是否相等：", Student.__proto__ === Function.prototype);
+console.log("Student.prototype.constructor 和 Student 是否相等：", Student.prototype.constructor === Student);
+var stu1 = new Student("小杜001", 20, "哈工大");
+stu1.say();
+console.log(stu1.__proto__, Student.prototype, stu1.__proto__ === Student.prototype);
+            </pre>
+        </div>
+    </body>
+</html>
