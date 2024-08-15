@@ -92,6 +92,73 @@ const arr2 = [...arr].sort((a, b) => a - b);
 console.log("原数组：", arr);
 console.log(arr1, arr2, JSON.stringify(arr1) === JSON.stringify(arr2));
             </pre>
+            <h2>其他</h2>
+            <h3>连续出现次数最多的字符</h3>
+            <p>查找字符串中连续出现次数最多的字符，并记录每个字符连续出现的最初位置和次数。</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  老样子，还是先弄一个获取随机字符串的方法
+function getInRangeInteger(num1, num2) {
+    num1 = Number.isInteger(num1) ? num1 : 0;
+    num2 = Number.isInteger(num2) ? num2 : 0;
+    if (num1 > num2) [num1, num2] = [num2, num1];
+    return Math.round(Math.random() * (num2 - num1)) + num1;
+}
+function getRandomStr(len, base) {
+    let str = "";
+    const baseLen = base.length - 1;
+    for (let j = 0; j &lt; len; j++) {
+        str += base[getInRangeInteger(0, baseLen)];
+    }
+    return str;
+}
+console.log(getRandomStr(30, "a2bei4"));
+
+//  下面是具体的方法实现
+function statisticsCharCounter(str) {
+    let maxChar;
+    let maxCounter = 0;
+    let curChar = str[0];
+    let curCounter = 1;
+
+    const obj = {};
+    const len = str.length;
+    for (let i = 1; i &lt; len; i++) {
+        let char = str[i];
+        if (char === curChar) {
+            // 如果是同一个字符，计数增加
+            curCounter++;
+        } else {
+            // 如果遇到新字符，保存当前字符的连续出现次数
+            if (curCounter > maxCounter) {
+                maxCounter = curCounter;
+                maxChar = curChar;
+            }
+            obj[i - curCounter] = {
+                char: curChar,
+                counter: curCounter
+            };
+            //  重新开始
+            curChar = char;
+            curCounter = 1;
+        }
+    }
+    // 循环结束后，需要再次检查最后一个字符的连续出现次数
+    if (curCounter > maxCounter) {
+        maxCounter = curCounter;
+        maxChar = curChar;
+    }
+    obj[len - curCounter] = {
+        char: curChar,
+        counter: curCounter
+    };
+
+    return [maxChar, maxCounter, obj];
+}
+
+const str = getRandomStr(30, "a2bei4");
+console.log("待分析的字符串：",str);
+console.log(statisticsCharCounter(str));
+            </pre>
         </div>
     </body>
 </html>
