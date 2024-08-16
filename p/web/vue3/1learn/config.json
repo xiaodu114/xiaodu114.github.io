@@ -1,0 +1,34 @@
+{
+    "pageTitle": "Vue.js 3.x - xiaodu114.github.io",
+    "head": {
+        "title": "我和 Vue 3 有个约会",
+        "links": [
+            {
+                "href": "https://vuejs.org/",
+                "text": "Vue.js - v3"
+            },
+            {
+                "href": "https://router.vuejs.org/",
+                "text": "Vue Router - v4"
+            },
+            {
+                "href": "https://pinia.vuejs.org/",
+                "text": "Pinia"
+            }
+        ]
+    },
+    "nodes": [
+        {
+            "id": 1,
+            "text": "介绍",
+            "code": "introduction",
+            "page": "/p/web/vue3/1learn/pages/introduction.html"
+        },
+        {
+            "id": 2,
+            "text": "ref 系列",
+            "code": "ref",
+            "page": "/p/web/vue3/1learn/pages/ref.html"
+        }
+    ]
+}
