@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>xiaodu114.github.io</title>
+        <link rel="stylesheet" href="./css/index.css" />
+        <script src="https://registry.npmmirror.com/vue/3.4.38/files/dist/vue.global.js"></script>
+        <script src="https://registry.npmmirror.com/vue-router/4.4.3/files/dist/vue-router.global.js"></script>
+    </head>
+    <body>
+        <div id="app"></div>
+        <!-- 这里放置一些模板 -->
+        <template id="appTemplate">
+            <div class="app">
+                <div class="header">
+                    <div class="left">
+                        <h1>{{head.title}}</h1>
+                    </div>
+                    <div class="right">
+                        <span v-for="(a,index) in head.links" :key="index"> <a target="_blank" rel="noopener noreferrer" :href="a.href">{{a.text}}</a>&nbsp;&nbsp; </span>
+                    </div>
+                </div>
+                <div class="main">
+                    <div class="nav">
+                        <ul>
+                            <li v-for="item in navItems" :key="item.name" :class="{active:(activeNav && activeNav.routerName === item.routerName)}" @click="goTo(item)">{{item.text}}</li>
+                        </ul>
+                    </div>
+                    <div class="content">
+                        <router-view></router-view>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template id="iframeWrapperTemplate">
+            <iframe frameborder="0" height="100%" width="100%"></iframe>
+        </template>
+        <script type="module">
+            //  1、引入公共基础方法等
+            import { fetchGetJSON } from "./lib/utils.js";
+
+            //  2、引入 Vue 组件
+            import App from "./js/index.js";
+            import IframeWrapper from "./components/iframeWrapper.js";
+
+            //  3、引入 Vue 全家桶
+            const { createApp, ref } = Vue;
+            const { createMemoryHistory, createRouter } = VueRouter;
+
+            //  4、获取配置数据
+            const searchParams = new URLSearchParams(location.search);
+            const configData = await fetchGetJSON(searchParams.get("config"));
+
+            //  5、根据配置数据组装路由和导航数据
+            let routerOptions = {
+                history: createMemoryHistory(),
+                routes: []
+            };
+            const navNodes = [];
+            if (Array.isArray(configData.nodes) && configData.nodes.length) {
+                configData.nodes.forEach((node) => {
+                    routerOptions.routes.push({
+                        name: node.code,
+                        path: "/" + node.code,
+                        component: {
+                            template: `<iframe-wrapper :src="src"></iframe-wrapper>`,
+                            setup() {
+                                const src = ref(node.page);
+                                return {
+                                    src
+                                };
+                            }
+                        }
+                    });
+                    navNodes.push({
+                        text: node.text,
+                        routerName: node.code
+                    });
+                });
+            }
+
+            //  6、开始创建APP
+            const vue3App = createApp(App, {
+                head: configData.head,
+                navItems: navNodes
+            });
+            //  忽略自定义元素
+            vue3App.config.compilerOptions.isCustomElement = (tag) => tag === "line-code";
+            //  注册全局组件
+            vue3App.component("iframe-wrapper", IframeWrapper);
+            //
+            vue3App.use(createRouter(routerOptions));
+            //  挂载到DOM
+            vue3App.mount("#app");
+        </script>
+    </body>
+</html>
