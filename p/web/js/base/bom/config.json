@@ -1,0 +1,45 @@
+{
+    "pageTitle": "浏览器对象模型（BOM） - xiaodu114.github.io",
+    "head": {
+        "title": "我和 BOM 有个约会",
+        "links": []
+    },
+    "nodes": [
+        {
+            "id": 0,
+            "text": "介绍",
+            "code": "introduction",
+            "page": "/p/web/js/base/bom/pages/introduction.html"
+        },
+        {
+            "id": 1,
+            "text": "window 对象",
+            "code": "window",
+            "page": "/p/web/js/base/bom/pages/window.html"
+        },
+        {
+            "id": 2,
+            "text": "location 对象",
+            "code": "location",
+            "page": "/p/web/js/base/bom/pages/location.html"
+        },
+        {
+            "id": 3,
+            "text": "navigator 对象",
+            "code": "navigator",
+            "page": "/p/web/js/base/bom/pages/navigator.html"
+        },
+        {
+            "id": 4,
+            "text": "screen 对象",
+            "code": "screen",
+            "page": "/p/web/js/base/bom/pages/screen.html"
+        },
+        {
+            "id": 5,
+            "text": "history 对象",
+            "code": "history",
+            "page": "/p/web/js/base/bom/pages/history.html"
+        }
+    ]
+}
