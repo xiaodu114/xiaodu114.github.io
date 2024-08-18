@@ -23,6 +23,45 @@
                     <a href="https://zh.javascript.info/modules" target="_blank" rel="noopener noreferrer">模块</a>
                 </li>
             </ul>
+            <mark-block explain="为什么需要模块化">
+                <p><line-code>kimi</line-code>是这样说的：</p>
+                <ul>
+                    <li>
+                        <dl>
+                            <dt><strong>全局命名空间污染</strong></dt>
+                            <dd>在没有模块化之前，所有的变量和函数都定义在全局作用域中，这导致了命名冲突的风险。不同的脚本可能会覆盖彼此的变量，造成不可预见的错误。</dd>
+                        </dl>
+                        <dl>
+                            <dt><strong>难以维护和扩展</strong></dt>
+                            <dd>随着项目的增长，代码量也会增加，没有模块化的项目会变得难以维护。代码的组织混乱，难以找到和修改特定的功能。</dd>
+                        </dl>
+                        <dl>
+                            <dt><strong>代码复用困难</strong></dt>
+                            <dd>没有模块化，代码的复用变得困难。开发者需要复制和粘贴代码，这不仅增加了工作量，也增加了出错的可能性。</dd>
+                        </dl>
+                        <dl>
+                            <dt><strong>依赖管理复杂</strong></dt>
+                            <dd>在没有模块化的情况下，管理代码之间的依赖关系变得复杂。开发者需要手动确保所有依赖都按正确的顺序加载，这在大型项目中尤其困难。</dd>
+                        </dl>
+                        <dl>
+                            <dt><strong>测试困难</strong></dt>
+                            <dd>由于全局作用域的使用和依赖管理的复杂性，编写单元测试变得更加困难。测试代码可能需要模拟全局状态，这增加了测试的复杂性和不稳定性。</dd>
+                        </dl>
+                        <dl>
+                            <dt><strong>性能问题</strong></dt>
+                            <dd>在没有模块化的情况下，加载整个脚本文件是常见的做法，即使其中只有一小部分代码是当前页面需要的。这会导致不必要的资源加载，影响页面加载速度。</dd>
+                        </dl>
+                        <dl>
+                            <dt><strong>缺乏封装性</strong></dt>
+                            <dd>模块化提供了一种封装代码的方式，使得实现细节可以隐藏在模块内部，只暴露必要的接口。在没有模块化之前，封装性较差，代码的内部实现容易被外部访问和修改。</dd>
+                        </dl>
+                        <dl>
+                            <dt><strong>不利于团队协作</strong></dt>
+                            <dd>在大型团队中，没有模块化的代码库很难进行多人协作。不同的开发者可能在不同的部分工作，但全局作用域的使用使得代码冲突和合并变得更加困难。</dd>
+                        </dl>
+                    </li>
+                </ul>
+            </mark-block>
             <h2>混沌</h2>
             <p>这是一个混沌的时期，JavaScript 刚刚诞生，没有明确的模块化规范。开发者们在编写代码时，将所有的代码都写在一个全局作用域中，这导致了命名冲突和代码组织混乱。</p>
             <h2>萌芽</h2>
@@ -59,6 +98,13 @@
             <h2>成长</h2>
             <p>到了这里，各路大神开始大显身手了。<line-code>CommonJS</line-code>、<line-code>AMD</line-code>和<line-code>UMD</line-code>等规范的出现，为<line-code>JavaScript</line-code>带来了一种新的组织代码的方式，模块化有了初步的形态，随着他们的不断改进，模块化的概念和技术开始得到更广泛的应用和认可。</p>
             <h3>CommonJS</h3>
+            <mark-block>
+                <p><line-code>kimi</line-code>是这样说的：</p>
+                <ul>
+                    <li>2009 年，CommonJS 规范被提出，它是一个模块系统，主要用于服务器端 JavaScript（Node.js）。CommonJS 规范定义了 require 函数来加载模块，以及 module.exports 对象来导出模块的接口。</li>
+                    <li>CommonJS 模块是同步加载的，这在服务器端没有问题，但在浏览器端会导致性能问题。</li>
+                </ul>
+            </mark-block>
             <h4>定义模块（无依赖）</h4>
             <details>
                 <summary>点击查看详情</summary>
@@ -129,6 +175,13 @@ console.log(sum); // 输出：1
             <p>GitHub：<a href="https://github.com/browserify/browserify" target="_blank" rel="noopener noreferrer">GitHub - browserify/browserify: browser-side require() the node.js way</a></p>
             <h5>Browserify</h5>
             <h3>AMD (Asynchronous Module Definition)</h3>
+            <mark-block>
+                <p><line-code>kimi</line-code>是这样说的：</p>
+                <ul>
+                    <li>为了解决浏览器端的模块加载问题，AMD 规范被提出。它允许异步加载模块，使用 define 函数来定义模块，并通过 require 函数异步加载依赖。</li>
+                    <li>AMD 规范的主要代表是 RequireJS。</li>
+                </ul>
+            </mark-block>
             <p>要说<line-code>AMD</line-code>，就不得不说一下<line-code>RequireJS</line-code>，他是AMD规范最著名的实现之一。下面的例子也是采用<line-code>RequireJS</line-code>。</p>
             <ul>
                 <li><line-code>RequireJS</line-code>官网：<a href="https://requirejs.org/" target="_blank" rel="noopener noreferrer">RequireJS</a>。</li>
@@ -184,9 +237,24 @@ define(["a2bei4Utils"], function (a2bei4Utils) {
                 <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="/p/web/js/base/modules/source/amd/test.js" ddz-lang="javascript"></div>
             </details>
             <h3>CMD (Common Module Definition)</h3>
-            <p></p>
+            <mark-block>
+                <p><line-code>kimi</line-code>是这样说的：</p>
+                <ul>
+                    <li>CMD 规范主要用于浏览器端，由 Sea.js 项目推广。</li>
+                    <li>CMD 规范定义了 define 函数来定义模块，使用 require 函数来异步加载依赖模块。</li>
+                    <li>CMD 规范的模块是异步加载的，可以在模块定义时指定依赖，这样有助于实现按需加载。</li>
+                    <li>CMD 规范支持依赖就近，即在定义模块时才确定依赖关系。</li>
+                </ul>
+            </mark-block>
             <h3>UMD (Universal Module Definition)</h3>
-            <p></p>
+            <mark-block>
+                <p><line-code>kimi</line-code>是这样说的：</p>
+                <ul>
+                    <li>UMD 是一种兼容多种模块定义方式的解决方案，可以在各种环境中无缝工作，包括 CommonJS、AMD 和全局变量。</li>
+                    <li>UMD 通过检测环境来决定使用哪种模块加载方式，如果没有检测到模块系统，就使用全局变量的方式暴露模块。</li>
+                    <li>UMD 规范使得一个库可以在 Node.js、浏览器的 AMD 环境和普通 script 标签中无缝使用。</li>
+                </ul>
+            </mark-block>
             <h2>成熟</h2>
             <p>随着 ES6 模块的引入，标志着模块化进入了成熟期。该阶段的模块系统得到了语言层面的支持，为模块化带来了清晰的规则和强大的功能，并且逐渐成为开发大型应用的标准做法。</p>
             <h3>ES6 Modules</h3>
