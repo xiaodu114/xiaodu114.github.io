@@ -14,7 +14,122 @@
         <!-- github访问地址：/p/web/js/base/bom/pages/window.html -->
         <div class="blog-page">
             <h1>window 对象</h1>
-            <p>敬请期待</p>
+            <h2>窗口关系</h2>
+            <ul>
+                <li>
+                    <dl>
+                        <dt>window.top</dt>
+                        <dd>返回窗口层级最顶层窗口的引用。- MDN</dd>
+                        <dd>window.parent 返回当前窗口的直接父对象，而 window.top 返回最顶层的窗口对象。- MDN</dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>window.parent</dt>
+                        <dd>返回当前窗口的父窗口对象。- MDN</dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>window.self / window / this / window.window</dt>
+                        <dd>返回一个指向当前 window 对象的引用。- MDN</dd>
+                        <dd>如果就是打开了一个窗口，这些都是<line-code>===</line-code>的，包括<line-code>window.top</line-code>和<line-code>window.parent</line-code></dd>
+                    </dl>
+                </li>
+            </ul>
+            <h2>窗口位置</h2>
+            <p>现代浏览器提供了 screenLeft 和 screenTop 属性，用于表示窗口相对于屏幕左侧和顶部的位置 ，返回值的单位是 CSS 像素。- JavaScript高级程序设计（第4版）</p>
+            <p>screenLeft 、 screenTop 只是 Window.screenX 、 window.screenY 属性的别名。- MDN</p>
+            <h3>像素比</h3>
+            <p><line-code>window.devicePixelRatio</line-code>这是啥？😵😵😵</p>
+            <p>
+                <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/devicePixelRatio" target="_blank" rel="noopener noreferrer">Window.devicePixelRatio - Web API | MDN</a>
+            </p>
+            <h2>窗口大小</h2>
+            <ul>
+                <li>
+                    <dl>
+                        <dt>window.outerWidth / window.outerHeight</dt>
+                        <dd>Window.outerWidth 获取浏览器窗口外部的宽度。表示整个浏览器窗口的宽度，包括侧边栏（如果存在）、窗口镶边（window chrome）和调正窗口大小的边框（window resizing borders/handles）。- MDN</dd>
+                        <dd>Window.outerHeight 只读属性返回整个浏览器窗口的高度（以像素为单位），包括侧边栏（如果存在）、窗口镶边（window chrome）和窗口调正边框（window resizing border/handle）。- MDN</dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>window.innerWidth / window.innerHeight</dt>
+                        <dd>只读的 Window 属性 innerWidth 返回以像素为单位的窗口的内部宽度。如果垂直滚动条存在，则这个属性将包括它的宽度。- MDN</dd>
+                        <dd>浏览器窗口的视口（viewport）高度（以像素为单位）；如果有水平滚动条，也包括滚动条高度。- MDN</dd>
+                    </dl>
+                </li>
+            </ul>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  来自：JavaScript高级程序设计（第4版）
+//  浏览器窗口自身的精确尺寸不好确定，但可以确定页面视口的大小，如下所示：
+let pageWidth = window.innerWidth,
+    pageHeight = window.innerHeight;
+if (typeof pageWidth != "number") {
+    if (document.compatMode == "CSS1Compat") {
+        pageWidth = document.documentElement.clientWidth;
+        pageHeight = document.documentElement.clientHeight;
+    } else {
+        pageWidth = document.body.clientWidth;
+        pageHeight = document.body.clientHeight;
+    }
+}
+            </pre>
+            <mark-block>
+                <p>摘自：JavaScript高级程序设计（第4版）</p>
+                <p>手机视口的概念比较复杂，有各种各样的问题。如果读者在做移动开发，推荐阅读Peter-Paul Koch 发表在 QuirksMode 网站上的文章“A Tale of Two Viewports— Part Two”。</p>
+                <p>
+                    <a href="https://www.quirksmode.org/mobile/viewports2.html" target="_blank" rel="noopener noreferrer">A tale of two viewports — part two</a>
+                </p>
+            </mark-block>
+            <h2>视口位置</h2>
+            <p>文档相对于视口滚动距离的属性有两对，返回相等的值： window.pageXoffset / window.scrollX 和 window.pageYoffset / window.scrollY - JavaScript高级程序设计（第4版）</p>
+            <p>可以使用 scroll()、scrollTo()和 scrollBy()方法滚动页面。 - JavaScript高级程序设计（第4版）</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  来自：JavaScript高级程序设计（第4版）
+//  调用时都可以 (x,y)
+//  这几个方法也都接收一个 ScrollToOptions 字典，除了提供偏移值，还可以通过 behavior 属性告诉浏览器是否平滑滚动
+window.scrollTo();
+
+// 正常滚动
+window.scrollTo({
+    left: 100,
+    top: 100,
+    behavior: "auto"
+});
+// 平滑滚动
+window.scrollTo({
+    left: 100,
+    top: 100,
+    behavior: "smooth"
+});
+            </pre>
+            <h2>定时器</h2>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/setTimeout" target="_blank" rel="noopener noreferrer">setTimeout() 全局函数 - Web API | MDN</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/setInterval" target="_blank" rel="noopener noreferrer">setInterval() - Web API | MDN</a>
+                </li>
+            </ul>
+            <mark-block>
+                <p>摘自：JavaScript高级程序设计（第4版）</p>
+                <p><strong>注意</strong>这里的关键点是，第二个参数，也就是间隔时间，指的是向队列添加新任务之前等待的时间。比如，调用 setInterval()的时间为 01:00:00，间隔时间为 3000 毫秒。这意味着 01:00:03 时，浏览器会把任务添加到执行队列。浏览器不关心这个任务什么时候执行或者执行要花多长时间。因此，到了 01:00:06，它会再向队列中添加一个任务。由此可看出，执行时间短、非阻塞的回调函数比较适合 setInterval()</p>
+            </mark-block>
+            <h2>系统对话框</h2>
+            <ul>
+                <li>alert()</li>
+                <li>confirm()</li>
+                <li>prompt()</li>
+                <li>print()</li>
+            </ul>
+            <h2>导航与打开新窗口</h2>
+            <ul>
+                <li>open()</li>
+            </ul>
         </div>
     </body>
 </html>
