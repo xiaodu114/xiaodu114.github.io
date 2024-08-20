@@ -1,0 +1,10 @@
+<link rel="stylesheet" href="/demo/angular1/ui-router-demo/module/module1/css/module1.css" />
+<div ng-controller="ddz_module1_controller" class="module1-box">
+    <h2>{{title}}</h2>
+    <div class="module1-nav">
+        <ul>
+            <li ng-repeat="item in module1NavView.items track by item.code" ng-class="{active:(module1NavView.activeItem.name === item.name)}" ng-click="module1NavView.itemClick(item)">{{item.name}}</li>
+        </ul>
+    </div>
+    <div class="module1-content" ui-view></div>
+</div>
