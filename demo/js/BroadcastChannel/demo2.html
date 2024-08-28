@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>BroadcastChannel 测试之页面二</title>
+    </head>
+    <body>
+        <h1>BroadcastChannel 测试之页面二</h1>
+        <p>
+            <label>
+                <input type="text" id="inputMsg" placeholder="随便写点吧" />
+            </label>
+        </p>
+        <p>
+            <button type="button" id="btnSend">发送</button>
+            <button type="button" id="btnStop">停止监听</button>
+        </p>
+        <fieldset>
+            <legend>展示收到的消息</legend>
+            <div id="msgBox"></div>
+        </fieldset>
+    </body>
+    <script>
+        const defaultMsg = "你好，我来自神秘的页面二！";
+        const btnSendEle = document.getElementById("btnSend");
+        const btnStopEle = document.getElementById("btnStop");
+        const inputMsgEle = document.getElementById("inputMsg");
+        const msgBoxEle = document.getElementById("msgBox");
+
+        const bc = new BroadcastChannel("xiaodu114");
+        bc.onmessage = (evt) => {
+            msgBoxEle.insertAdjacentHTML("beforeend", `<p>${evt.data}</p>`);
+        };
+        bc.onmessageerror = (error) => {
+            alert(JSON.stringify(error));
+        };
+        btnSendEle.addEventListener("click", function () {
+            const msg = inputMsgEle.value.trim() || defaultMsg;
+            inputMsgEle.value = "";
+            bc.postMessage(msg);
+        });
+        btnStopEle.addEventListener("click", function () {
+            //  通过调用 BroadcastChannel.close() 方法，可以马上断开其与对应频道的关联，并让其被垃圾回收。这是必要的步骤，因为浏览器没有其他方式知道频道不再被需要。
+            bc.close();
+            alert("已断开链接");
+        });
+    </script>
+</html>
