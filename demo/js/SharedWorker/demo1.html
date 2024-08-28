@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>SharedWorker 测试之页面一</title>
+    </head>
+    <body>
+        <h1>SharedWorker 测试之页面一</h1>
+        <p>
+            <label>
+                <input type="text" id="inputMsg" placeholder="随便写点吧" />
+            </label>
+        </p>
+        <p>
+            <button type="button" id="btnSend">发送</button>
+            <button type="button" id="btnStop">停止监听</button>
+        </p>
+        <fieldset>
+            <legend>展示收到的消息</legend>
+            <div id="msgBox"></div>
+        </fieldset>
+    </body>
+    <script>
+        (() => {
+            if (!("SharedWorker" in window)) {
+                alert("您的浏览器不支持 SharedWorker");
+                return;
+            }
+
+            const defaultMsg = "你好，我来自神秘的页面一！";
+            const btnSendEle = document.getElementById("btnSend");
+            const btnStopEle = document.getElementById("btnStop");
+            const inputMsgEle = document.getElementById("inputMsg");
+            const msgBoxEle = document.getElementById("msgBox");
+
+            // 创建 SharedWorker 实例
+            const myWorker = new SharedWorker("./sw.js");
+            // 监听 SharedWorker 的消息，采用 addEventListener 方式监听需要 myWorker.port.start() 一下
+            myWorker.port.addEventListener("message", function (evt) {
+                msgBoxEle.insertAdjacentHTML("beforeend", `<p>${evt.data}</p>`);
+            });
+            // 启动通信端口
+            myWorker.port.start();
+
+            btnSendEle.addEventListener("click", function () {
+                const msg = inputMsgEle.value.trim() || defaultMsg;
+                inputMsgEle.value = "";
+                myWorker.port.postMessage(msg);
+            });
+            btnStopEle.addEventListener("click", function () {
+                //  这里断开连接之前，最好通知 sw.js 一下
+                myWorker.port.close();
+                alert("已断开连接");
+            });
+        })();
+    </script>
+</html>
