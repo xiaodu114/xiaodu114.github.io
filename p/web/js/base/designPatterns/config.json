@@ -1,0 +1,33 @@
+{
+    "pageTitle": "设计模式 - xiaodu114.github.io",
+    "head": {
+        "title": "我和 设计模式 有个约会",
+        "links": []
+    },
+    "nodes": [
+        {
+            "id": 0,
+            "text": "介绍",
+            "code": "introduction",
+            "page": "/p/web/js/base/designPatterns/pages/introduction.html"
+        },
+        {
+            "id": 1,
+            "text": "单例模式",
+            "code": "singleton",
+            "page": "/p/web/js/base/designPatterns/pages/singleton.html"
+        },
+        {
+            "id": 2,
+            "text": "工厂方法模式",
+            "code": "factory-method",
+            "page": "/p/web/js/base/designPatterns/pages/factoryMethod.html"
+        },
+        {
+            "id": 3,
+            "text": "抽象工厂模式",
+            "code": "abstract-factory",
+            "page": "/p/web/js/base/designPatterns/pages/abstractFactory.html"
+        }
+    ]
+}

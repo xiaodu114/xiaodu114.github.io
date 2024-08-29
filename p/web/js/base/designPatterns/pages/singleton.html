@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>单例模式 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,JavaScript,设计模式,Design Patterns,单例模式,Singleton Method" />
+        <meta name="description" content="设计模式之单例模式" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/web/js/base/designPatterns/pages/singleton.html -->
+        <div class="blog-page">
+            <h1>单例模式</h1>
+            <p>这简直就是写不下去啊！前面的介绍章节中的参考部分，你瞅瞅，都那么经典……真是苦了我了，但又是那么幸运，有这么多资源让我们学习</p>
+            <h2>示例</h2>
+            <h3>全局唯一ID</h3>
+            <p>下面是之前写的一个获取全局唯一ID的类，在原来的基础上稍加改动，修改为单例模式，具体代码如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+class MyId {
+    #ts = Date.now();
+    #sn = 0;
+    #flag = "";
+    #len = 5;
+    static #instance = null;
+    static #newFlag = false;
+
+    constructor(option) {
+        if (!MyId.#newFlag) {
+            throw new Error("请使用静态方法：MyId.getInstance，获取实例");
+        }
+        this.setOptions(option);
+    }
+
+    setOptions(option) {
+        if (!(option !== null && typeof option === "object")) return;
+
+        if (typeof option.flag === "string") {
+            this.#flag = option.flag;
+        }
+        if (Number.isSafeInteger(option.len) && option.len >= 0) {
+            this.#len = option.len;
+        }
+    }
+
+    nextId() {
+        let ts = Date.now();
+        if (ts === this.#ts) {
+            this.#sn++;
+            if (this.#sn >= 10 ** this.#len) {
+                console.log("长度不够用了！！！");
+            }
+        } else {
+            this.#sn = 0;
+            this.#ts = ts;
+        }
+        return ts.toString() + this.#flag + this.#sn.toString().padStart(this.#len, "0");
+    }
+
+    static getInstance(option) {
+        if (this.#instance == null) {
+            this.#newFlag = true;
+            this.#instance = new MyId(option);
+            this.#newFlag = false;
+        }
+        return this.#instance;
+    }
+}
+            </pre>
+        </div>
+    </body>
+</html>
