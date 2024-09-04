@@ -14,6 +14,31 @@
         <!-- github访问地址：/p/web/js/base/bom/pages/window.html -->
         <div class="blog-page">
             <h1>window 对象</h1>
+            <h2>Global 作用域</h2>
+            <p>为window 对象被复用为ECMAScript的Global对象，所以通过var声明的所有全局变量和函数都会变成window对象的属性和方法。- JavaScript高级程序设计（第4版）</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  第一部分
+//      var 挂载到 window 上的删不掉
+var githubName = "xiaodu114";
+let cnblogsName = "du-blog";
+const csdnName = "duyelang";
+console.log("var-githubName：", window.githubName, window.hasOwnProperty("githubName"));
+console.log("let-cnblogsName", window.cnblogsName, window.hasOwnProperty("cnblogsName"));
+console.log("const-csdnName", window.csdnName, window.hasOwnProperty("csdnName"));
+console.log("delete window.githubName 是否成功：", delete window.githubName);
+console.log("delete window.githubName 之后 var-githubName：", window.githubName, window.hasOwnProperty("githubName"));
+
+//  第二部分
+//      意外的全局变量可以删掉
+console.log("执行函数之前 a2bei4：", window.a2bei4, window.hasOwnProperty("a2bei4"));
+function fn1() {
+    a2bei4 = "这个变量名真不错，必须赞一个";
+}
+fn1();
+console.log("执行函数之后 a2bei4：", window.a2bei4, window.hasOwnProperty("a2bei4"));
+console.log("delete window.a2bei4 是否成功：", delete window.a2bei4);
+console.log("delete window.a2bei4 执行之后：", window.a2bei4, window.hasOwnProperty("a2bei4"));
+            </pre>
             <h2>窗口关系</h2>
             <ul>
                 <li>
