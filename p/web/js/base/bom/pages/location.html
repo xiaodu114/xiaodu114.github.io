@@ -14,7 +14,161 @@
         <!-- github访问地址：/p/web/js/base/bom/pages/location.html -->
         <div class="blog-page">
             <h1>location 对象</h1>
-            <p>敬请期待</p>
+            <p><line-code>location</line-code>是最有用的BOM对象之一，提供了当前窗口中加载文档的信息，以及通常的导航功能。 这个对象独特的地方在于，它既是 <line-code>window</line-code>的属性，也是 <line-code>document</line-code>的属性。也就是说， <line-code>window.location</line-code>和<line-code>document.location</line-code>指向同一个对象。- JavaScript高级程序设计（第4版）</p>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Location" target="_blank" rel="noopener noreferrer">Location - Web API | MDN</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/URL" target="_blank" rel="noopener noreferrer">URL - Web API | MDN</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/URLSearchParams" target="_blank" rel="noopener noreferrer">URLSearchParams - Web API | MDN</a>
+                </li>
+            </ul>
+            <h2>离散片段</h2>
+            <p>以该地址为例：<line-code>http://xiaodu114:bugaosuni@www.ddz.com:1314/llm/index.html?q1=dify&q2=ragflow#contents</line-code></p>
+            <table>
+                <thead>
+                    <tr>
+                        <td>属性</td>
+                        <td>值</td>
+                        <td>说明</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>location.href</td>
+                        <td>同上</td>
+                        <td>当前加载页面的完整URL。location的 toString() 方法返回这个值</td>
+                    </tr>
+                    <tr>
+                        <td>location.origin</td>
+                        <td>http://www.ddz.com:1314</td>
+                        <td>URL的源地址。只读</td>
+                    </tr>
+                    <tr>
+                        <td>location.protocol</td>
+                        <td>http:</td>
+                        <td>页面使用的协议。通常是"http:"或"https:"</td>
+                    </tr>
+                    <tr>
+                        <td>location.username</td>
+                        <td>xiaodu114</td>
+                        <td>域名前指定的用户名</td>
+                    </tr>
+                    <tr>
+                        <td>location.password</td>
+                        <td>bugaosuni</td>
+                        <td>域名前指定的密码</td>
+                    </tr>
+                    <tr>
+                        <td>location.host</td>
+                        <td>www.ddz.com:1314</td>
+                        <td>服务器名及端口号</td>
+                    </tr>
+                    <tr>
+                        <td>location.hostname</td>
+                        <td>www.ddz.com</td>
+                        <td>服务器名</td>
+                    </tr>
+                    <tr>
+                        <td>location.port</td>
+                        <td>1314</td>
+                        <td>请求的端口。如果URL中没有端口，则返回空字符串</td>
+                    </tr>
+
+                    <tr>
+                        <td>location.pathname</td>
+                        <td>/llm/index.html</td>
+                        <td>URL中的路径和（或）文件名</td>
+                    </tr>
+                    <tr>
+                        <td>location.search</td>
+                        <td>?q1=dify&q2=ragflow</td>
+                        <td>URL的查询字符串。这个字符串以问号开头</td>
+                    </tr>
+                    <tr>
+                        <td>location.hash</td>
+                        <td>#contents</td>
+                        <td>URL散列值（井号后跟零或多个字符），如果没有则 为空字符串</td>
+                    </tr>
+                </tbody>
+            </table>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  大家可以在试试这个
+const url = new URL("http://xiaodu114:bugaosuni@www.ddz.com:1314/llm/index.html?q1=dify&q2=ragflow#contents");
+            </pre>
+            <h2>查询字符串</h2>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+const url = new URL("http://xiaodu114:bugaosuni@www.ddz.com:1314/llm/index.html?q1=dify&q2=ragflow#contents");
+
+//  方式一：- 摘自书籍 JavaScript高级程序设计（第4版）
+function getQueryStringArgs(strSearch) {
+    // 取得没有开头问号的查询字符串
+    let qs = strSearch.length > 0 ? strSearch.substring(1) : "",
+        // 保存数据的对象
+        args = {};
+    // 把每个参数添加到 args 对象
+    for (let item of qs.split("&").map((kv) => kv.split("="))) {
+        let name = decodeURIComponent(item[0]),
+            value = decodeURIComponent(item[1]);
+        if (name.length) {
+            args[name] = value;
+        }
+    }
+    return args;
+}
+console.log(getQueryStringArgs(url.search));
+
+//  方式二：URLSearchParams
+console.log(Object.fromEntries(url.searchParams.entries()));
+
+const urlSearchParams = new URLSearchParams(url.search);
+console.log(Object.fromEntries(urlSearchParams.entries()));
+            </pre>
+            <h2>操作地址</h2>
+            <h3>location.assign</h3>
+            <p>如果给<line-code>location.href</line-code>或<line-code>window.location</line-code>设置一个URL，也会以同一个URL值调用assign()方法。会立即启动导航到新 URL 的操作，同时在浏览器历史记录中增加一条记录。- JavaScript高级程序设计（第4版）</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  三者等效，都是会立即启动导航到新 URL 的操作，同时在浏览器历史记录中增加一条记录
+const githubHome = "https://xiaodu114.github.io/";
+location.assign(githubHome);
+window.location = githubHome;
+location.href = githubHome;
+
+//  location.assign 还可以这样，真不愧是 assign
+location.assign("p/llm/index.html");
+            </pre>
+            <h3>修改离散片段</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  假设当前 URL 为 https://xiaodu114.github.io/p/llm/index.html
+
+// 把 URL 修改为 https://xiaodu114.github.io/p/llm/index.html#a2bei4
+location.hash = "#a2bei4";
+
+// 把 URL 修改为 https://xiaodu114.github.io/p/llm/index.html?q=ragflow
+location.search = "?q=ragflow";
+
+// 把 URL 修改为 https://www.ddz.com/p/llm/index.html
+location.hostname = "www.ddz.com";
+
+// 把 URL 修改为 https://xiaodu114.github.io/p/windows/index.html
+location.pathname = "p/windows/index.html";
+
+// 把 URL 修改为 https://xiaodu114.github.io:1314/p/llm/index.html
+location.port = 1314;
+
+//  除了 hash 之外，只要修改 location 的一个属性，就会导致页面重新加载新 URL。
+            </pre>
+            <h3>location.replace 和 location.reload</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+//  如果不希望增加历史记录，可以使用 replace()方法。这个方法接收一个 URL 参数，但重新加载后不会增加历史记录。调用replace()之后，用户不能回到前一页。
+location.replace("https://xiaodu114.github.io/p/windows/index.html");
+
+location.reload(); // 重新加载，可能是从缓存加载
+location.reload(true); // 重新加载，从服务器加载
+            </pre>
         </div>
     </body>
 </html>
