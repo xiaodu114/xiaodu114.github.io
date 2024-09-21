@@ -82,6 +82,24 @@ source ./venv1/bin/activate
 python3 -m venv venv2
 source ./venv2/bin/activate
             </pre>
+            <h4>Windows</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   创建虚拟环境
+python -m venv venv
+#   激活虚拟环境
+.\venv\scripts\activate
+#   退出虚拟环境
+deactivate
+#   安装依赖（添加到这里，使用的时候方便一些）
+pip install -r requirements.txt 
+
+#   你可以创建多个虚拟环境
+python -m venv venv1
+.\venv1\scripts\activate
+
+python -m venv venv2
+.\venv2\scripts\activate
+            </pre>
             <h3>Poetry</h3>
             <ul>
                 <li>
