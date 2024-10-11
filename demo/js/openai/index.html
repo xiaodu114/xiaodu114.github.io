@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>OpenAI 示例 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,OpenAI,OpenAI API,流式响应,非流式响应" />
+        <meta name="description" content="OpenAI 示例项目，JavaScript 调用类 openai api 接口，支持流式响应和非流式响应" />
+        <link rel="stylesheet" href="./index.css" />
+    </head>
+
+    <body>
+        <div class="app">
+            <div class="header">
+                <h1>OpenAI API 示例</h1>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://platform.openai.com/" target="_blank" rel="noopener noreferrer">OpenAI Platform</a>&nbsp;&nbsp;<a href="https://www.openaidoc.com.cn/docs/introduction" target="_blank" rel="noopener noreferrer">OpenAI API 介绍 – OpenAI接口文档中文版</a></span>
+            </div>
+            <div class="main">
+                <div class="left">
+                    <form id="formUserSetting">
+                        <p>
+                            <label>
+                                接口地址：
+                                <input type="text" name="url" placeholder="请输入接口地址"/>
+                            </label>
+                        </p>
+                        <p>
+                            <label>
+                                模型名称：
+                                <input type="text" name="model" id="txtModelName" placeholder="请输入模型名称"/>
+                            </label>
+                        </p>
+                        <p>
+                            <label>
+                                流式响应：
+                                <label><input type="radio" name="radio-stream" value="1" checked/>是</label>
+                                <label><input type="radio" name="radio-stream" value="0" />否</label>
+                            </label>
+                        </p>
+                        <p>
+                            <label>
+                                系统角色设定：
+                                <textarea name="system-role" rows="10" placeholder="请输入系统角色设定（可以为空）"></textarea>
+                            </label>
+                        </p>
+                    </form>
+                </div>
+                <div class="content">
+                    <div class="chat-record-box"></div>
+                    <div class="user-operate-box">
+                        <input type="text" id="txtQuestion" placeholder="你想问点什么呢？" />
+                        <button type="button" id="btnSend">发送</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            //  system  assistant  user
+
+            //  历史对话记录
+            const chatMessages = [];
+
+            const formUserSettingEle = document.getElementById("formUserSetting");
+            const chatRecordBoxEle = document.querySelector(".chat-record-box");
+
+            const txtQuestionEle = document.getElementById("txtQuestion");
+            const btnSendEle = document.getElementById("btnSend");
+
+            function realTimeUpdateChatRecordBox() {
+                chatRecordBoxEle.scrollTop = chatRecordBoxEle.scrollHeight;
+            }
+
+            function realTimeUpdateLastAssistantItemText(content) {
+                chatRecordBoxEle.lastElementChild.innerHTML = content;
+            }
+
+            function updateLastAssistantItem(content) {
+                const lastAssistantItem = chatMessages[chatMessages.length - 1];
+                if (lastAssistantItem && lastAssistantItem.role === "assistant") {
+                    lastAssistantItem.content = content;
+                }
+            }
+
+            function createChatItem(role, content) {
+                const chatItemEle = document.createElement("div");
+                chatItemEle.className = `${role}-item`;
+                chatItemEle.innerHTML = content;
+                chatRecordBoxEle.appendChild(chatItemEle);
+            }
+
+            function randerChatMessages() {
+                chatRecordBoxEle.innerHTML = "";
+                chatMessages.forEach((item) => {
+                    createChatItem(item.role, item.content);
+                });
+            }
+
+            btnSendEle.addEventListener("click", () => {
+                const userSettingFormData = new FormData(formUserSettingEle);
+                const url = userSettingFormData.get("url");
+                const modelName = userSettingFormData.get("model");
+                const systemRoleContent = userSettingFormData.get("system-role");
+                const isStream = userSettingFormData.get("radio-stream") === "1";
+
+                const currentQuestion = txtQuestionEle.value;
+
+                if (!url) {
+                    alert("请输入接口地址");
+                    return;
+                }
+                if (!currentQuestion) {
+                    alert("请输入问题");
+                    return;
+                }
+
+                txtQuestionEle.value = "";
+
+                const myHeaders = new Headers();
+                myHeaders.append("Content-Type", "application/json");
+                myHeaders.append("Accept", "text/event-stream");
+
+                const postData = {
+                    stream: isStream,
+                    messages: []
+                };
+                if (modelName) {
+                    postData.model = modelName;
+                }
+                if (systemRoleContent) {
+                    postData.messages.push({
+                        role: "system",
+                        content: systemRoleContent
+                    });
+                }
+                if (chatMessages.length > 0) {
+                    postData.messages = postData.messages.concat(chatMessages);
+                }
+
+                const currentMessage = {
+                    role: "user",
+                    content: currentQuestion
+                };
+
+                postData.messages.push(currentMessage);
+
+                chatMessages.push(currentMessage);
+                chatMessages.push({
+                    role: "assistant",
+                    content: "正在思考中..."
+                });
+                randerChatMessages();
+
+                fetch(url, {
+                    method: "POST",
+                    headers: myHeaders,
+                    body: JSON.stringify(postData)
+                }).then(
+                    (response) => {
+                        if (!(response && response.ok)) {
+                            console.error("异常：" + response.status);
+                            return;
+                        }
+                        if (isStream) {
+                            let answer_text = "";
+                            let reader = response.body.getReader();
+                            const decoder = new TextDecoder();
+                            reader.read().then(function processResult(result) {
+                                if (result.done) {
+                                    console.log("Event stream ended.");
+                                    console.log(answer_text);
+                                    updateLastAssistantItem(answer_text);
+                                    return;
+                                }
+                                try {
+                                    let decodedString = decoder.decode(result.value).trim();
+                                    console.log(decodedString);
+                                    if (decodedString.length) {
+                                        const items = decodedString.split("data:").filter((item) => item.length > 0);
+                                        if (items.length > 0) {
+                                            items.forEach((item) => {
+                                                try {
+                                                    let data = JSON.parse(item.trim());
+                                                    if (data && Array.isArray(data.choices) && data.choices.length > 0) {
+                                                        data.choices.forEach((choice) => {
+                                                            if (choice?.delta?.content?.length > 0) {
+                                                                answer_text += choice.delta.content;
+                                                                realTimeUpdateLastAssistantItemText(answer_text);
+                                                            }
+                                                        });
+                                                    }
+                                                } catch (error) {}
+                                            });
+                                        }
+                                    }
+                                } catch (error) {}
+                                // 继续读取下一个事件流数据
+                                reader.read().then(processResult);
+                            });
+                        }
+                        else{
+                            response.json().then((data) => {
+                                // if (data && Array.isArray(data.choices) && data.choices.length > 0) {
+                                //     const answer_text = data.choices[0].delta.content;
+                                //     updateLastAssistantItem(answer_text);
+                                //     realTimeUpdateLastAssistantItemText(answer_text);
+                                // }
+                                if(data && data.code===0){
+                                    updateLastAssistantItem(data.data);
+                                    realTimeUpdateLastAssistantItemText(data.data);
+                                }
+                            });
+                        }
+                    },
+                    (error) => {
+                        console.error(`异常：${JSON.stringify(error)}`);
+                    }
+                );
+            });
+        </script>
+    </body>
+</html>
