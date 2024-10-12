@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>录音示例二</title>
+        <meta name="keywords" content="xiaodu114,JavaScript,MediaRecorder,录音,audio 元素" />
+        <meta name="description" content="录音示例二，开始、结束两个按钮，录音结束使用 audio 元素自动播放录音" />
+    </head>
+    <body>
+        <h1>录音示例二</h1>
+        <p>点击“开始录音”按钮开始录音，点击“停止录音”按钮停止录音。录音结束后，会自动播放录音。使用 audio 元素播放。</p>
+        <p>
+            <a href="https://mdn.org.cn/en-US/docs/Web/API/Web_Audio_API" target="_blank" rel="noopener noreferrer">Web Audio API - Web APIs | MDN 中文</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/MediaRecorder" target="_blank" rel="noopener noreferrer">MediaRecorder - Web API | MDN</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLAudioElement/Audio" target="_blank" rel="noopener noreferrer">Audio() - Web API | MDN</a>
+        </p>
+        <hr />
+        <p>
+            <button id="start">开始录音</button>
+            <button id="stop" disabled>停止录音</button>
+        </p>
+        <audio controls id="audioPlayer"></audio>
+        <script>
+            const startButton = document.getElementById("start");
+            const stopButton = document.getElementById("stop");
+            const audioEle = document.getElementById("audioPlayer");
+
+            let audioChunks = [];
+            let mediaRecorder;
+
+            function startRecording() {
+                navigator.mediaDevices
+                    .getUserMedia({ audio: true })
+                    .then((stream) => {
+                        mediaRecorder = new MediaRecorder(stream);
+                        mediaRecorder.ondataavailable = (event) => {
+                            audioChunks.push(event.data);
+                        };
+                        mediaRecorder.start();
+                    })
+                    .catch((error) => console.error("Error accessing media devices.", error));
+
+                stopButton.disabled = false;
+                startButton.disabled = true;
+            }
+
+            function stopRecording() {
+                mediaRecorder.stop();
+                stopButton.disabled = true;
+                startButton.disabled = false;
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: "audio/mpeg" });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    audioEle.src = audioUrl;
+                    audioEle.play();
+                };
+            }
+
+            startButton.addEventListener("click", startRecording);
+            stopButton.addEventListener("click", stopRecording);
+        </script>
+    </body>
+</html>
