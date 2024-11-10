@@ -16,7 +16,6 @@
         <div class="blog-page">
             <h1>android相关整理</h1>
             <p>本来这些是放在<a href="/p/flashPhone/n9109w/index.html" target="_blank">Samsung Galaxy Note 4(N9109W) - 救砖、ROOT、TWRP、刷机 - xiaodu114.github.io</a>中的，随着篇幅越来越长，想着把他弄出来，单独来一篇。</p>
-
             <h2>应用市场</h2>
             <ul>
                 <li>
@@ -221,6 +220,28 @@
                     <a href="https://mtmanager.co/" target="_blank">MT Manager App</a>
                 </li>
             </ul>
+            <h2>刷机</h2>
+            <h3>时间问题</h3>
+            <p>刷机之后，经常遇到时间在联网状态下无法自动更新的问题，这个问题困扰了好久……还好，终于知道了问题所在：有个叫<line-code>NTP</line-code>的东东</p>
+            <ul>
+                <li>
+                    <a href="http://www.ntp.org.cn/" target="_blank" rel="noopener noreferrer">全球可用的NTP服务器列表与解析服务 - ntp.org.cn & ntpdate.net</a>
+                </li>
+                <li>
+                    <a href="https://www.cnblogs.com/pipci/p/12790503.html" target="_blank" rel="noopener noreferrer">国内常用的NTP时间源同步服务器汇总 - pipci - 博客园</a>
+                </li>
+            </ul>
+            <p>具体操作如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   查看已连接的设备列表
+adb devices
+
+#   修改NTP服务器：由于刷机后默认的NTP服务器可能无法访问，你可以更换为国内可访问的NTP服务器。
+#       例如，使用阿里云提供的NTP服务器ntp1.aliyun.com。你可以通过ADB命令行工具来设置：
+adb shell settings put global ntp_server ntp.ntsc.ac.cn
+
+#   之后，建议重启设备，关闭并重新打开自动时间和日期设置，检查时间是否已经同步。（我的是 使用网络提供的时间、时区 开关）
+            </pre>
         </div>
     </body>
 </html>
