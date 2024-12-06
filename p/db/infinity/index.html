@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Infinity - xiaodu114.github.io</title>
+        <meta name="keywords" content="Infinity,Ubuntu,Ubuntu 22.04" />
+        <meta name="description" content="记录一下 Infinity 的安装过程……" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/db/infinity/index.html -->
+        <div class="blog-page">
+            <h1>Infinity</h1>
+            <p>官网：<a href="https://infiniflow.org/" target="_blank">AI-native database for LLM | Infinity</a></p>
+            <p>GitHub：<a href="https://github.com/infiniflow/infinity" target="_blank">AI-native database for LLM | Infinity</a></p>
+            <p>来自官方：The AI-native database built for LLM applications, providing incredibly fast hybrid search of dense vector, sparse vector, tensor (multi-vector), and full-text</p>
+            <p>翻译：为LLM应用程序构建的AI原生数据库，提供密集向量、稀疏向量、张量（多向量）和全文的快速混合搜索</p>
+            <h2>Ubuntu 22.04</h2>
+            <p>该章节记录一下<line-code>Ubuntu</line-code>和她的花火</p>
+            <h3>下载</h3>
+            <p>下载地址：<a href="https://github.com/infiniflow/infinity/releases" target="_blank">Releases · infiniflow/infinity</a>。<line-code>2024-12-06</line-code>，下载的是<line-code>v0.5.0-dev5</line-code>版本的<line-code>infinity-0.5.0.dev5-x86_64.deb</line-code>文件</p>
+            <h3>安装和检查</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo dpkg -i infinity-0.5.0.dev5-x86_64.deb
+            </pre>
+            <p>
+                <img src="./image/1.png" alt="infinity 安装过程截图" />
+            </p>
+            <p>
+                <img src="./image/2.png" alt="infinity 检查是否安装成功" />
+            </p>
+            <h3>启动</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#	查看服务状态
+sudo systemctl status infinity
+#   备用
+sudo systemctl start infinity
+sudo systemctl stop infinity
+sudo systemctl restart infinity
+sudo systemctl enable infinity
+            </pre>
+            <p>
+                <img src="./image/3.png" alt="infinity 查看、启动服务" />
+            </p>
+            <p>下面是启动的配置文件截图</p>
+            <p>
+                <img src="./image/4.png" alt="infinity 启动配置文件" />
+            </p>
+            <mark-block>
+                <p>如果你想修改配置文件，你需要先修改文件权限。修改之后记得重启一下服务</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   修改为可写
+sudo chmod 777 /usr/etc/infinity_conf.toml
+
+#   修改为只读
+sudo chmod a-w /usr/etc/infinity_conf.toml
+                </pre>
+            </mark-block>
+            <p>启动成功之后，看一下访问<line-code>HTTP server</line-code>的效果</p>
+            <p>
+                <img src="./image/5.png" alt="infinity 启动之后，浏览器访问效果" />
+            </p>
+        </div>
+    </body>
+</html>
