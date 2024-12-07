@@ -295,6 +295,21 @@ python3 -m venv venv2
 source ./venv2/bin/activate
             </pre>
             <h4>Node.js</h4>
+            <p>先弄一下应该如何卸载</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#	通过Ubuntu的包管理器安装的
+sudo apt remove nodejs npm
+#	彻底删除(包括配置文件)
+sudo apt purge nodejs npm
+#	清理残留文件
+sudo apt clean
+sudo apt autoremove
+#	删除npm缓存
+sudo rm -rf /usr/local/bin/node  /usr/local/bin/npm  /usr/local/lib/node_modules/  ~/.npm
+
+dpkg -l | grep node
+dpkg -l | grep npm
+            </pre>
             <p>直接使用 apt 安装，默认安装的版本太老了，需要先设置一下安装源。更多请看：<a href="https://deb.nodesource.com/" target="_blank">Nodesource Node.js DEB</a></p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 #   特别提示：
