@@ -183,6 +183,62 @@ sudo dpkg -i microsoft-edge-stable_120.0.2210.61-1_amd64.deb
 sudo dpkg -i code_1.85.0-1701902998_amd64.deb    
             </pre>
             <h3>apt 安装</h3>
+            <ul>
+                <li>
+                    <a href="https://www.commandinline.com/cheat-sheet/apt/" target="_blank" rel="noopener noreferrer">apt Cheat Sheet | apt Command Line Guide</a>
+                </li>
+                <li>
+                    <a href="https://www.runoob.com/linux/linux-comm-apt.html" target="_blank" rel="noopener noreferrer">Linux apt 命令 | 菜鸟教程</a>
+                </li>
+            </ul>
+            <mark-block>
+                <ol>
+                    <li>
+                        sudo apt update
+                        <ul>
+                            <li>这个命令用于更新本地软件包索引。它不会安装或升级任何软件包，而是从Ubuntu的软件仓库中获取最新的软件包列表。这包括软件包的新版本信息，但不会自动安装这些新版本。</li>
+                            <li>这个命令通常在安装新软件或升级现有软件之前运行，以确保你拥有最新的软件包信息。</li>
+                        </ul>
+                    </li>
+                    <li>
+                        sudo apt upgrade -y
+                        <ul>
+                            <li>这个命令用于升级所有已安装的软件包到最新版本。它会根据之前 sudo apt update 命令更新的软件包索引，实际安装软件包的最新版本。</li>
+                            <li>apt upgrade 会智能地处理依赖关系，并仅升级那些已经安装的软件包，不会安装新软件包。</li>
+                            <li>参数 -y 是一个选项，它告诉 apt 在需要确认时自动回答“是”，即自动同意安装或升级软件包，无需手动确认。</li>
+                            <li>这个命令通常在 sudo apt update 之后运行，以确保所有软件包都是最新的。</li>
+                        </ul>
+                    </li>
+                </ol>
+            </mark-block>
+            <mark-block>
+                <p><strong>sudo apt update</strong></p>
+                <p><strong>Ubuntu 24.04.1 LTS</strong>虽然在最开始已经设置了国内的 ubuntu 软件源，但是在执行<line-code>sudo apt update</line-code>时遇到了报错的问题，问题链接是：http://security.ubuntu.com/ubuntu/ 。在<line-code>/etc/apt/sources.list.d/ubuntu.sources</line-code>文件中找到了他，必须麻溜的把他替换掉：</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   修改文件权限
+sudo chmod 777 /etc/apt/sources.list.d/ubuntu.sources
+
+#   撤回修改权限，修改为只读
+sudo chmod a-w /etc/apt/sources.list.d/ubuntu.sources
+                </pre>
+                <p>文件内容如下：</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+Types: deb
+URIs: http://mirrors.aliyun.com/ubuntu/
+Suites: noble noble-updates noble-backports
+Components: main restricted universe multiverse
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+
+Types: deb
+#   修改之前
+#   URIs: http://security.ubuntu.com/ubuntu/  
+#   修改之后
+URIs: http://mirrors.aliyun.com/ubuntu/
+Suites: noble-security
+Components: main restricted universe multiverse
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+                </pre>
+            </mark-block>
             <p>先说一下如何卸载软件包</p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 sudo apt remove --purge xxx
@@ -241,8 +297,14 @@ source ./venv2/bin/activate
             <h4>Node.js</h4>
             <p>直接使用 apt 安装，默认安装的版本太老了，需要先设置一下安装源。更多请看：<a href="https://deb.nodesource.com/" target="_blank">Nodesource Node.js DEB</a></p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   特别提示：
+#       执行下面 curl ……  setup_22.x ……命令的时候，内部应该会执行 sudo apt update 命令，如果 apt 源是国外的，可能会导致 apt update 失败
+#       如果你忽略上面的错误，继续执行 sudo apt install -y nodejs 命令，那么安装的 nodejs 版本会很低，比如 18.x
+#       我这里遇到的就是 http://security.ubuntu.com/ubuntu 访问失败，导致 apt update 失败，然后安装的 nodejs 版本就低
 #   20.x 是你想要安装的版本
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -
+#   22.x 已经有22.x的LTS版本了
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo bash -
 #   之后安装即可
 sudo apt install -y nodejs
             </pre>
