@@ -112,6 +112,88 @@ python -m venv venv2
                     <a href="https://python-poetry.org/docs/" target="_blank" rel="noopener noreferrer"> Introduction | Documentation | Poetry - Python dependency management and packaging made easy</a>
                 </li>
             </ul>
+            <details>
+                <summary>一些常用的命令</summary>
+                <ol>
+                    <li>
+                        安装依赖
+                        <ul>
+                            <li>poetry install：安装项目依赖。</li>
+                            <li>poetry install -h：查看安装选项。</li>
+                        </ul>
+                    </li>
+                    <li>
+                        添加依赖
+                        <ul>
+                            <li>poetry add &lt;package>：添加一个依赖到你的项目。</li>
+                            <li>poetry add &lt;package> --dev：将依赖添加到开发依赖中。</li>
+                        </ul>
+                    </li>
+                    <li>
+                        移除依赖
+                        <ul>
+                            <li>poetry remove &lt;package>：从项目中移除一个依赖。</li>
+                        </ul>
+                    </li>
+                    <li>
+                        更新依赖
+                        <ul>
+                            <li>poetry update：更新所有依赖到最新版本。</li>
+                            <li>poetry update &lt;package>：更新指定的依赖。</li>
+                        </ul>
+                    </li>
+                    <li>
+                        查看依赖
+                        <ul>
+                            <li>poetry show：显示项目的所有依赖。</li>
+                            <li>poetry show --tree：以树状图形式显示依赖。</li>
+                        </ul>
+                    </li>
+                    <li>
+                        构建包
+                        <ul>
+                            <li>poetry build：构建你的包，可以生成源码包和wheel文件。</li>
+                        </ul>
+                    </li>
+                    <li>
+                        发布包
+                        <ul>
+                            <li>poetry publish：将你的包发布到PyPI。</li>
+                        </ul>
+                    </li>
+                    <li>
+                        检查依赖
+                        <ul>
+                            <li>poetry check：检查依赖是否有任何问题。</li>
+                        </ul>
+                    </li>
+                    <li>
+                        配置
+                        <ul>
+                            <li>poetry config：查看或修改 poetry 的配置。</li>
+                        </ul>
+                    </li>
+                    <li>
+                        新项目初始化
+                        <ul>
+                            <li>poetry new &lt;project-name>：创建一个新的Python项目。</li>
+                        </ul>
+                    </li>
+                    <li>
+                        环境管理
+                        <ul>
+                            <li>poetry env list：列出所有虚拟环境。</li>
+                            <li>poetry env use &lt;env>：切换到指定的虚拟环境。</li>
+                        </ul>
+                    </li>
+                    <li>
+                        运行脚本
+                        <ul>
+                            <li>poetry run &lt;command>：在项目环境中运行命令。</li>
+                        </ul>
+                    </li>
+                </ol>
+            </details>
             <p>官网介绍他有好几种安装方式：pipx、the official installer……</p>
             <h4>Ubuntu 22.04</h4>
             <p>这里选用的安装方式是：the official installer</p>
