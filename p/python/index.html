@@ -228,6 +228,33 @@ poetry source add --priority=primary mirrors https://pypi.tuna.tsinghua.edu.cn/s
                 <p>开始以为会像<line-code>pip</line-code>一样设置全局镜像，但是根据上面的截图可以看出，<line-code>poetry</line-code>不是，应该是项目级别的</p>
                 <p>那么有没有一种方式可以设置全局镜像？？？</p>
             </mark-block>
+            <h2>__pycache__</h2>
+            <details>
+                <summary>kimi 的解释</summary>
+                <p>__pycache__ 目录是Python解释器在运行Python代码时自动创建的，它包含了编译后的Python文件的字节码（bytecode）。这个目录的目的是为了提高程序的启动速度和运行效率。以下是__pycache__目录的一些具体用途和特点：</p>
+                <ul>
+                    <ol>
+                        <li>存储字节码：当Python解释器执行.py文件时，它会将源代码编译成中间形式的字节码，这些字节码被存储在__pycache__目录中，文件扩展名为.pyc。</li>
+                        <li>加快程序启动：如果.pyc文件存在，并且源代码自上次编译以来没有发生变化，那么Python解释器可以直接加载.pyc文件，而不需要重新编译源代码。这样可以减少程序的启动时间。</li>
+                        <li>优化运行效率：由于字节码的执行速度通常比直接解释源代码要快，所以使用.pyc文件可以提高程序的运行效率。</li>
+                        <li>跨平台兼容性：.pyc文件包含了平台无关的字节码，这意味着同一份字节码可以在不同的操作系统和架构上运行，只要它们有兼容的Python解释器。</li>
+                        <li>减少I/O操作：由于.pyc文件的存在，减少了对磁盘上源代码文件的读取次数，从而减少了I/O操作。</li>
+                        <li>调试信息：.pyc文件中包含了足够的信息，使得在调试时能够映射回原始的.py文件，这有助于开发者在调试时定位问题。</li>
+                        <li>版本控制：通常建议将__pycache__目录排除在版本控制系统之外，因为它包含了编译后的文件，这些文件在不同的开发环境中可能会有所不同，而且它们不是源代码的必需部分。</li>
+                    </ol>
+                </ul>
+                <p>总的来说，__pycache__目录是Python为了提高性能和效率而自动管理的一部分，它使得程序的加载和执行更加迅速，同时保持了跨平台的一致性。</p>
+            </details>
+            <p>如何删除所有的 __pycache__ 目录？你可以创建一个 py 文件，这里命名为<line-code>delete__pycache__.py</line-code>，内容如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+import os
+import shutil
+
+for root, dirs, files in os.walk("."):
+    for dir in dirs:
+        if dir == "__pycache__":
+            shutil.rmtree(os.path.join(root, dir))
+            </pre>
         </div>
     </body>
 </html>
