@@ -82,6 +82,9 @@ customElements.define(
                         <li>
                             <a href="/p/llm/dify/index.html" target="_blank">Dify</a>
                         </li>
+                        <li>
+                            <a href="/p/llm/litellm/index.html" target="_blank">LiteLLM</a>
+                        </li>
                     </ol>
                 </div>
             </details>
