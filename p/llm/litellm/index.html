@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>LiteLLM - xiaodu114.github.io</title>
+        <meta name="keywords" content="LiteLLM,大语言模型,llm,Python SDK,Proxy Server (LLM Gateway)" />
+        <meta name="description" content="我和 LiteLLM 有个约会。Python SDK, Proxy Server (LLM Gateway) to call 100+ LLM APIs in OpenAI format - [Bedrock, Azure, OpenAI, VertexAI, Cohere, Anthropic, Sagemaker, HuggingFace, Replicate, Groq]" />
+
+        <script src="/p/_/js/main.js"></script>
+        <script src="../_common/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/llm/litellm/index.html -->
+        <div class="blog-page">
+            <h1>LiteLLM</h1>
+            <p>GitHub：<a href="https://github.com/BerriAI/litellm" target="_blank" rel="noopener noreferrer">GitHub - BerriAI/litellm: Python SDK, Proxy Server (LLM Gateway) to call 100+ LLM APIs in OpenAI format - [Bedrock, Azure, OpenAI, VertexAI, Cohere, Anthropic, Sagemaker, HuggingFace, Replicate, Groq]</a></p>
+            <p>文档：<a href="https://docs.litellm.ai/docs/" target="_blank" rel="noopener noreferrer">docs.litellm.ai/docs/</a></p>
+            <p>不得不吹一把，这家伙适配的是真多啊！下面是代码中的截图（当然文档中也有支持的 providers 列表）：</p>
+            <p>
+                <img src="./image/0.png" alt="LiteLLM 支持的 providers" />
+            </p>
+            <h2>类库</h2>
+            <p>这种方式就比较简单了，他只是一个<line-code>Python</line-code>类库，安装一下就可以使用了，<line-code>pip install litellm</line-code></p>
+            <h3>创建虚拟环境</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   注意：windows 环境下
+#   创建虚拟环境
+python -m venv venv
+#   激活虚拟环境
+.\venv\scripts\activate
+#   退出虚拟环境
+deactivate
+#   安装依赖
+pip install litellm
+            </pre>
+            <h3>正常模式</h3>
+            <p>这里为了省事儿，用了<line-code>oneapi</line-code>来模拟<line-code>openai</line-code>。</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+from litellm import completion
+
+messages = [{"role": "user", "content": "中国的首都是哪里？"}]
+
+response = completion(base_url="http://oneapi（你自己的地址）:3000/v1/",
+                      api_key="sk-xxx",
+                      model="模型名称", 
+                      custom_llm_provider = "openai",
+                      messages=messages)
+
+print(response)
+            </pre>
+            <p>
+                <img src="./image/1.png" alt="litellm 调用 oneapi 示例" />
+            </p>
+            <h3>异步模式</h3>
+            <p>和上面一样，还是那个配方……</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+from litellm import acompletion
+import asyncio
+
+async def test_get_response():
+    messages = [{"role": "user", "content": "中国的首都是哪里？"}]
+    response = await acompletion(base_url="http://oneapi（你自己的地址）:3000/v1/",
+                                 api_key="sk-xxx",
+                                 model="模型名称", 
+                                 custom_llm_provider = "openai",
+                                 messages=messages)
+    return response
+
+response = asyncio.run(test_get_response())
+print(response)
+            </pre>
+            <p>
+                <img src="./image/2.png" alt="litellm 异步方式调用 oneapi 示例" />
+            </p>
+            <h3>流式模式</h3>
+            <p>和上面一样，还是那个配方……</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+from litellm import completion
+
+messages = [{"role": "user", "content": "中国的首都是哪里？"}]
+
+response = completion(base_url="http://oneapi（你自己的地址）:3000/v1/",
+                      api_key="sk-xxx",
+                      model="模型名称", 
+                      custom_llm_provider = "openai",
+                      messages=messages,
+                      stream=True)
+all_answer_text = ""
+for part in response:
+    all_answer_text += (part.choices[0].delta.content or "")
+    print(all_answer_text)
+            </pre>
+            <p>
+                <img src="./image/2.png" alt="litellm 流式方式调用 oneapi 示例" />
+            </p>
+            <h2>LiteLLM Proxy Server (LLM Gateway)</h2>
+            <p>敬请期待</p>
+        </div>
+    </body>
+</html>
