@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>RAGFlow - xiaodu114.github.io</title>
+        <meta name="keywords" content="LLM,大语言模型,RAGFlow" />
+        <meta name="description" content="我和 RAGFlow 迟来的邂逅……RAGFlow 是一个基于深度文档理解的开源RAG（检索增强生成）引擎。还在等什么赶紧体验一下吧！" />
+
+        <script src="/p/_/js/main.js"></script>
+        <script src="../_common/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/llm/ragflow/index.html -->
+        <div class="blog-page">
+            <h1>RAGFlow</h1>
+            <p>官网：<a href="https://ragflow.io/" target="_blank" rel="noopener noreferrer">RAGFlow | RAGFlow</a></p>
+            <p>GitHub：<a href="https://github.com/infiniflow/ragflow" target="_blank">GitHub - infiniflow/ragflow: RAGFlow is an open-source RAG (Retrieval-Augmented Generation) engine based on deep document understanding.</a></p>
+            <p>记得最初知道<line-code>RAGFlow</line-code>并在本地部署成功时用的版本是<line-code>0.2.0</line-code>，今天再看已经是<line-code>0.14.1</line-code>了。一直都使用非 docker 部署方式，这家伙的依赖项真够多的……</p>
+            <h2>前期准备</h2>
+            <p>这次是在自己电脑的虚拟机上部署的，系统是<line-code>Ubuntu 24.04.1 LTS</line-code>。因为新创建的虚拟机并且是最小化安装，所以让<line-code>RAGFlow</line-code>跑起来需要安装的东西有点多。下面一一道来：</p>
+            <h3>Python 套件</h3>
+            <p>系统安装之后已经自带了<line-code>Python</line-code>，所以只需安装一下 pip、venv 和 新版 ragflow 需要的 Poetry。可以参考：<a href="/p/python/index.html" target="_blank" rel="noopener noreferrer">Python - xiaodu114.github.io</a></p>
+            <h3>Node.js</h3>
+            <p>Ubuntu 下如何安装 Node.js 您可以参考：<a href="/p/linux/ubuntu/index.html" target="_blank" rel="noopener noreferrer">Ubuntu - xiaodu114.github.io</a></p>
+            <h3>MySQL</h3>
+            <p>Ubuntu 下如何安装 MySQL 您可以参考：<a href="/p/db/mysql/index.html" target="_blank" rel="noopener noreferrer">MySQL - xiaodu114.github.io</a></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo systemctl status mysql
+sudo systemctl start mysql
+            </pre>
+            <h3>Redis</h3>
+            <p>Ubuntu 下如何安装 Redis 您可以参考：<a href="/p/db/redis/index.html" target="_blank" rel="noopener noreferrer">Redis - xiaodu114.github.io</a></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo systemctl status redis-server
+sudo systemctl start redis-server
+            </pre>
+            <h3>Infinity</h3>
+            <p>Ubuntu 下如何安装 Infinity 您可以参考：<a href="/p/db/infinity/index.html" target="_blank" rel="noopener noreferrer">Infinity - xiaodu114.github.io</a></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo systemctl status infinity
+sudo systemctl start infinity
+            </pre>
+            <h3>Elasticsearch</h3>
+            <p>Ubuntu 下如何安装 Elasticsearch 您可以参考：<a href="/p/db/elastic/index.html" target="_blank" rel="noopener noreferrer">ELK Stack - xiaodu114.github.io</a></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo systemctl status elasticsearch
+sudo systemctl start elasticsearch
+            </pre>
+            <h3>MinIO</h3>
+            <p>不知道是不是没有找对啊，还是怎么滴，感觉这玩意儿就是个奇葩。<line-code>RAGFlow</line-code>，之前至少部署过三次了，分别是:0.2、0.6、0.8。现在按照之前下载并安装<line-code>MinIO</line-code>的方式失败了，真是无语啊！也不能怪人家，只怪自己的英文不好，没有认真看人家的官网……推测现在是拆分了，分社区版和企业版。不知道之前是不是就一个版本，没有截图啊！</p>
+            <p>官网：<a href="https://min.io/" target="_blank" rel="noopener noreferrer">MinIO | S3 Compatible Storage for AI</a></p>
+            <p>GitHub：<a href="https://github.com/minio/minio" target="_blank" rel="noopener noreferrer">GitHub - minio/minio: MinIO is a high-performance, S3 compatible object store, open sourced under GNU AGPLv3 license.</a></p>
+            <p>开源版本下载地址：<a href="https://min.io/open-source/download" target="_blank" rel="noopener noreferrer">MinIO | Code and downloads to create high performance object storage</a></p>
+            <details>
+                <summary>踩坑记</summary>
+                <p>从这里入坑：<a href="https://min.io/download" target="_blank" rel="noopener noreferrer">MinIO | Code and downloads to create high performance object storage</a></p>
+                <p>找到 deb 安装方式，下载并安装：</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+wget https://dl.min.io/aistor/minio/release/linux-amd64/minio_20241204030119.0.0_amd64.deb
+dpkg -i minio_20241204030119.0.0_amd64.deb
+MINIO_ROOT_USER=admin MINIO_ROOT_PASSWORD=password minio server /mnt/data --console-address ":9001"
+                </pre>
+                <p>启动即报错：<line-code>FATAL Unable to validate license, terminating process...: license: no license found</line-code></p>
+                <p>查了一下，这应该是企业版，不是给咱用的，咱还是乖乖的用社区版吧！先慢着，咱还得把他送走啊，请神容易，送神难：</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+sudo systemctl stop minio
+sudo systemctl disable minio
+sudo apt remove --purge minio
+sudo apt purge minio
+sudo rm -rf /var/minio /usr/local/bin/minio /etc/systemd/system/minio.service
+sudo apt autoremove
+sudo apt autoclean
+                </pre>
+            </details>
+            <p>经过上面的踩坑，在这里看到了希望：<a href="https://www.cnblogs.com/chq3272991/p/18498936" target="_blank" rel="noopener noreferrer">MinIO快速入门 - 集君 - 博客园</a>。这里提供了一个下载地址：<a href="https://dl.min.io/server/minio/release/linux-amd64/minio" target="_blank" rel="noopener noreferrer">https://dl.min.io/server/minio/release/linux-amd64/minio</a>，下载之后不用安装，给他添加可执行权限即可，之后扔到<line-code>PATH</line-code>，就可以在任意路径的终端浪了：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   添加可执行权限
+sudo chmod +x minio
+#   移动到系统路径
+sudo mv minio /usr/local/sbin
+#   查看帮助
+minio -h
+#   启动
+MINIO_ROOT_USER=admin MINIO_ROOT_PASSWORD=xxxxxx minio server /home/u1/.minio/data001 --console-address ":9001"
+            </pre>
+            <p>上面的这种方式没有任何问题。<line-code>RAGFlow</line-code>全部跑起来，开始写这篇笔记的时候，又去官网溜达一下，才真正找到了组织：<a href="https://min.io/open-source/download" target="_blank" rel="noopener noreferrer">MinIO | Code and downloads to create high performance object storage</a>。猜测在这里下载的 deb 文件，应该没有问题了……</p>
+            <h3>NLTK Data</h3>
+            <p>下载地址：<a href="https://www.nltk.org/nltk_data/" target="_blank" rel="noopener noreferrer">NLTK Data</a></p>
+            <p>后面运行<line-code>RAGFlow</line-code>的时候会报错，提示依赖<line-code>NLTK Data</line-code>相关数据，这里先提前准备好</p>
+            <details>
+                <summary>错误提示</summary>
+                <pre>
+LookupError: 
+**********************************************************************
+    Resource punkt_tab not found.
+    Please use the NLTK Downloader to obtain the resource:
+
+    >>> import nltk
+    >>> nltk.download('punkt_tab')
+    
+    For more information see: https://www.nltk.org/data.html
+
+    Attempted to load tokenizers/punkt_tab/english/
+
+    Searched in:
+    - '/home/u1/nltk_data'
+    - '/home/u1/1-code/ragflow-0.14.1/.venv/nltk_data'
+    - '/home/u1/1-code/ragflow-0.14.1/.venv/share/nltk_data'
+    - '/home/u1/1-code/ragflow-0.14.1/.venv/lib/nltk_data'
+    - '/usr/share/nltk_data'
+    - '/usr/local/share/nltk_data'
+    - '/usr/lib/nltk_data'
+    - '/usr/local/lib/nltk_data'
+**********************************************************************
+                </pre>
+                <pre>
+**********************************************************************
+Resource wordnet not found.
+Please use the NLTK Downloader to obtain the resource:
+
+>>> import nltk
+>>> nltk.download('wordnet')
+
+For more information see: https://www.nltk.org/data.html
+
+Attempted to load corpora/wordnet
+
+Searched in:
+    - '/home/u1/nltk_data'
+    - '/home/u1/1-code/ragflow-0.14.1/.venv/nltk_data'
+    - '/home/u1/1-code/ragflow-0.14.1/.venv/share/nltk_data'
+    - '/home/u1/1-code/ragflow-0.14.1/.venv/lib/nltk_data'
+    - '/usr/share/nltk_data'
+    - '/usr/local/share/nltk_data'
+    - '/usr/lib/nltk_data'
+    - '/usr/local/lib/nltk_data'
+**********************************************************************
+                </pre>
+            </details>
+            <p>之前遇到的，再加上现在提示的，全部给安排上，全部弄个到这里：<line-code>/home/u1/nltk_data</line-code>。这玩意儿有点让人郁闷，还不能直接解压到<line-code>nltk_data</line-code>文件夹下，还需要一个父文件夹，例如：<line-code>corpora</line-code>、<line-code>tokenizers</line-code>等</p>
+            <pre>
+wordnet：/home/u1/nltk_data/corpora/wordnet
+cmudict：/home/u1/nltk_data/corpora/cmudict
+punkt：/home/u1/nltk_data/tokenizers/punkt
+punkt_tab：/home/u1/nltk_data/tokenizers/punkt_tab
+averaged_perceptron_tagger：/home/u1/nltk_data/taggers/averaged_perceptron_tagger
+            </pre>
+            <p>
+                <img src="./image/nltk-001.png" alt="NLTK Data 下载地址" />
+            </p>
+            <p>
+                <img src="./image/nltk-002.png" alt="NLTK Data 目录结构" />
+            </p>
+            <h3>模型</h3>
+            <p>之前难道是没有设置<line-code>export HF_ENDPOINT=https://hf-mirror.com</line-code>，一些模型都是提示报错了，找不到对饮的模型，之后自己下载的，并且根据错误提示放到对应的路径下。这次设置了镜像之后，启动过程成自己下载一些，可以看到下载进度，但是没有截图。不管怎么说，还是记录一下吧</p>
+            <ul>
+                <li>
+                    <dl>
+                        <dt>BAAI/bge-large-zh-v1.5</dt>
+                        <dd>下载地址：<a href="https://hf-mirror.com/BAAI/bge-large-zh-v1.5" target="_blank" rel="noopener noreferrer">BAAI/bge-large-zh-v1.5</a></dd>
+                        <dd>放置路径：<line-code>/home/u1/.ragflow</line-code></dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>InfiniFlow/deepdoc</dt>
+                        <dd>下载地址：<a href="https://hf-mirror.com/InfiniFlow/deepdoc" target="_blank" rel="noopener noreferrer">InfiniFlow/deepdoc</a></dd>
+                        <dd>放置路径：项目内<line-code>rag/res</line-code></dd>
+                    </dl>
+                </li>
+                <li>
+                    <dl>
+                        <dt>InfiniFlow/text_concat_xgb_v1.0</dt>
+                        <dd>下载地址：<a href="https://hf-mirror.com/InfiniFlow/text_concat_xgb_v1.0" target="_blank" rel="noopener noreferrer">InfiniFlow/text_concat_xgb_v1.0</a></dd>
+                        <dd>放置路径：项目内<line-code>rag/res</line-code></dd>
+                    </dl>
+                </li>
+            </ul>
+            <h3>pkg-config / icu-config</h3>
+            <p>使用<line-code>poetry</line-code>安装依赖的时候，提示如下的错误：</p>
+            <pre>
+Please install pkg-config on your system or set the ICU_VERSION environment variable to the version of ICU you have installed.
+(running 'icu-config --version')
+(running 'pkg-config --modversion icu-i18n')
+            </pre>
+            <p>这个不是事儿，只要<line-code>apt</line-code>能解决的事儿都不是事儿。<line-code>sudo apt install pkg-config libicu-dev</line-code></p>
+            <h2>RAGFlow 正式上场</h2>
+            <p><a href="https://github.com/infiniflow/ragflow/blob/main/README_zh.md" target="_blank" rel="noopener noreferrer">ragflow/README_zh.md at main · infiniflow/ragflow · GitHub</a>这里对以源代码启动服务说的和详细了。排除<line-code>docker</line-code>的部分，上面已经单独弄好了。</p>
+            <h3>后端服务</h3>
+            <p>也正是因为没有使用<line-code>docker</line-code>，所以<line-code>conf/service_conf.yaml</line-code>这个配置文件需要修改一下，如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="yaml">
+ragflow:
+  host: 0.0.0.0
+  http_port: 9380
+mysql:
+  name: 'rag_flow'
+  user: 'admin'
+  password: 'admin666'
+  host: '127.0.0.1'
+  port: 3306
+  max_connections: 100
+  stale_timeout: 30
+minio:
+  user: 'admin'
+  password: 'admin666'
+  host: '127.0.0.1:9000'
+es:
+  hosts: 'http://127.0.0.1:9200'
+  username: 'elastic'
+  password: 'N9WOSrp--NAAOEcLtnf*'
+infinity:
+  uri: '127.0.0.1:23817'
+  db_name: 'default_db'
+redis:
+  db: 1
+  password:  
+  host: '127.0.0.1:6379'
+
+# 后面是屏蔽的内容就不要了
+            </pre>
+            <p>这里启动的命名和官网稍有不同，但是大差不差</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   设置镜像源
+poetry source add --priority=primary mirrors https://pypi.tuna.tsinghua.edu.cn/simple/
+#   安装依赖
+poetry install --sync --no-root
+#
+poetry lock --no-update
+
+#   把环境变量 HF_ENDPOINT 设成相应的镜像站点
+export HF_ENDPOINT=https://hf-mirror.com
+
+#   激活虚拟环境
+source .venv/bin/activate
+#   设置环境变量
+export PYTHONPATH=$(pwd)
+#   给与脚本执行权限
+sudo chmod +x docker/launch_backend_service.sh
+#   启动服务
+docker/launch_backend_service.sh
+            </pre>
+            <p>
+                <img src="./image/001.png" alt="RAGFlow 服务启动 截图1" />
+            </p>
+            <p>
+                <img src="./image/002.png" alt="RAGFlow 服务启动 截图2" />
+            </p>
+            <h3>前端服务</h3>
+            <p>前端相对简单一些</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+cd web
+npm i --force
+npm run build
+npm run dev 
+            </pre>
+            <p>
+                <img src="./image/003.png" alt="RAGFlow 前端服务 安装依赖" />
+            </p>
+            <p>
+                <img src="./image/004.png" alt="RAGFlow 前端服务 run build 构建" />
+            </p>
+            <p>
+                <img src="./image/005.png" alt="RAGFlow 前端服务 启动服务" />
+            </p>
+            <p>隆重介绍一下，下面是登录成功之后的截图：</p>
+            <p>
+                <img src="./image/006.png" alt="RAGFlow 登录成功之后的截图" />
+            </p>
+            <p>这就成功了？你高兴的太早了，果然还是除了问题，解析文档时报错如下：</p>
+            <p>
+                <img src="./image/007.png" alt="RAGFlow 上传文件之后 解析时报错，no module named FlagEmbedding" />
+            </p>
+            <p>如上图的提示，没有找到<line-code>FlagEmbedding</line-code>模块，利用<line-code>poetry show</line-code>来查看所有的依赖时确实没有找到<line-code>FlagEmbedding</line-code>。说先想到的是<line-code>poetry add FlagEmbedding</line-code>，但是没起作用（推测，应该是我弄错了）。最后是在<line-code>pyproject.toml</line-code>文件的<line-code>[tool.poetry.dependencies]</line-code>下添加<line-code>flagembedding = "1.2.10"</line-code>，并且删除了<line-code>poetry.lock</line-code>文件，之后重新安装就可以了。其中<line-code>pyproject.toml</line-code>文件中已经包含了<line-code>flagembedding = "1.2.10"</line-code>，只是在<line-code>[tool.poetry.group.full.dependencies]</line-code>下面。</p>
+            <p>
+                <img src="./image/008.png" alt="RAGFlow 解析文档成功" />
+            </p>
+        </div>
+    </body>
+</html>
