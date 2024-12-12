@@ -85,6 +85,9 @@ customElements.define(
                         <li>
                             <a href="/p/llm/litellm/index.html" target="_blank">LiteLLM</a>
                         </li>
+                        <li>
+                            <a href="/p/llm/ragflow/index.html" target="_blank">RAGFlow</a>
+                        </li>
                     </ol>
                 </div>
             </details>
