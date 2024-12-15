@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>eSpeak NG - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,eSpeak NG,Text-to-Speech,文本转语音,语音合成" />
+        <meta name="description" content="我和 eSpeak NG 的故事。eSpeak NG is an open source speech synthesizer that supports more than hundred languages and accents." />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/mllm/espeak-ng/index.html -->
+        <div class="blog-page">
+            <h1>eSpeak NG</h1>
+            <p>GitHub：<a href="https://github.com/espeak-ng/espeak-ng" target="_blank" rel="noopener noreferrer">espeak-ng/espeak-ng: eSpeak NG is an open source speech synthesizer that supports more than hundred languages and accents.</a></p>
+            <p>不得不说，这家伙支持的语言是真多啊！请看：<a href="https://github.com/espeak-ng/espeak-ng/blob/master/docs/languages.md" target="_blank" rel="noopener noreferrer">espeak-ng/docs/languages.md at master · espeak-ng/espeak-ng</a></p>
+            <dl>
+                <dt>eSpeak NG is available as:（摘自 GitHub）</dt>
+                <dd>
+                    <ul>
+                        <li>A command line program (Linux and Windows) to speak text from a file or from stdin.</li>
+                        <li>A shared library version for use by other programs. (On Windows this is a DLL).</li>
+                        <li>A SAPI5 version for Windows, so it can be used with screen-readers and other programs that support the Windows SAPI5 interface.</li>
+                        <li>eSpeak NG has been ported to other platforms, including Solaris and Mac OSX.</li>
+                    </ul>
+                </dd>
+            </dl>
+            <mark-block>
+                <p><line-code>1.52</line-code>2024-12-12 发布的，但是只有 apk ， 是啥意思？我的 exe 呢！</p>
+                <p><line-code>1.51</line-code>这个版本倒是有 exe，但是是 2022-04-03 发布的，好家伙……</p>
+                <p>
+                    <img src="./image/0.png" alt="eSpeak NG releases" />
+                </p>
+            </mark-block>
+            <h2>windows</h2>
+            <h3>安装</h3>
+            <p>这里下载的是<line-code>1.51</line-code>版本，因为他有 exe 啊！</p>
+            <details>
+                <summary>安装截图</summary>
+                <p>
+                    <img src="./image/1.png" alt="eSpeak NG 安装截图、安装位置" />
+                </p>
+            </details>
+            <p>还是比较贴心的，自动添加到环境变量了。请看：</p>
+            <p>
+                <img src="./image/2.png" alt="eSpeak NG 安装时自动添加到环境变量以及查看帮助" />
+            </p>
+            <h3>测试</h3>
+            <pre>
+espeak-ng "Hello, my name is Xiao Du."
+espeak-ng "你好，我的名字是小杜。"
+espeak-ng -vzh -f "D:\\1.txt"
+espeak-ng -vzh -f "D:\\2.txt"
+            </pre>
+            <p>
+                <img src="./image/3.png" alt="eSpeak NG 命令行测试" />
+            </p>
+            <p>还没有弄清楚应该怎么玩……我亲爱的汉语，弄得一团糟！！！</p>
+        </div>
+    </body>
+</html>

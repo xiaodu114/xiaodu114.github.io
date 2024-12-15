@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Phonemizer - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,Phonemizer,音素,文本到音素" />
+        <meta name="description" content="我和 Phonemizer 的故事。Simple text to phones converter for multiple languages" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/mllm/phonemizer/index.html -->
+        <div class="blog-page">
+            <h1>Phonemizer</h1>
+            <p>GitHub：<a href="https://github.com/bootphon/phonemizer" target="_blank" rel="noopener noreferrer">bootphon/phonemizer: Simple text to phones converter for multiple languages</a></p>
+            <p>文档：<a href="https://bootphon.github.io/phonemizer/index.html" target="_blank" rel="noopener noreferrer">Welcome to Phonemizer’s documentation! — Phonemizer documentation</a></p>
+            <mark-block>
+                <p>上面的文档写的很详细。例如：如何在各环境（ Windows 、MacOS 、 Debian/Unbuntu 等）下安装依赖；命令行如何使用；Python 如何使用等。</p>
+            </mark-block>
+            <h2>windows</h2>
+            <p>这是和<line-code>Phonemizer</line-code>约会的第一个地方</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   创建虚拟环境
+python -m venv venv
+#   激活虚拟环境
+.\venv\scripts\activate
+#   退出虚拟环境
+deactivate
+#   安装依赖
+pip install phonemizer
+            </pre>
+            <h3>命令行</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   检查版本（还会告诉你 backends 哪些可用）
+phonemize --version
+
+#   首先安装 espeak-ng ，设置环境变量 PHONEMIZER_ESPEAK_LIBRARY ，之后 espeak 就可用了
+$Env:PHONEMIZER_ESPEAK_LIBRARY="C:\\Program Files\\eSpeak NG\\libespeak-ng.dll"
+
+#   测试 1
+echo "hello world" | phonemize
+#   测试 2
+echo "hello world" | phonemize --prepend-text
+#   测试 3
+echo "hello world" | phonemize --prepend-text=';'
+            </pre>
+            <p>
+                <img src="./image/1.png" alt="pip 安装 phonemizer ，并检查版本" />
+            </p>
+            <p>
+                <img src="./image/2.png" alt="phonemizer 命令行测试" />
+            </p>
+            <mark-block>
+                <p>上面提到的<line-code>espeak-ng</line-code>，您可以参考：<a href="/p/mllm/espeak-ng/index.html" target="_blank" rel="noopener noreferrer">eSpeak NG - xiaodu114.github.io</a></p>
+            </mark-block>
+            <h3>Python</h3>
+            <p>直接上代码：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+from phonemizer import phonemize
+
+text = "Hello world"
+phonemes = phonemize(text, language='en-us')
+print(phonemes)
+            </pre>
+            <p>
+                <img src="./image/3.png" alt="phonemizer python 代码测试" />
+            </p>
+        </div>
+    </body>
+</html>
