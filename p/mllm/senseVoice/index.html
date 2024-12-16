@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>SenseVoice - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,SenseVoice,ASR,语音识别" />
+        <meta name="description" content="我和 SenseVoice 的故事。SenseVoice 是具有音频理解能力的音频基础模型，包括语音识别（ASR）、语种识别（LID）、语音情感识别（SER）和声学事件分类（AEC）或声学事件检测（AED）。本项目提供 SenseVoice 模型的介绍以及在多个任务测试集上的 benchmark，以及体验模型所需的环境安装的与推理方式。" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/mllm/senseVoice/index.html -->
+        <div class="blog-page">
+            <h1>SenseVoice</h1>
+            <p>GitHub：<a href="https://github.com/FunAudioLLM/SenseVoice" target="_blank" rel="noopener noreferrer">FunAudioLLM/SenseVoice: Multilingual Voice Understanding Model</a></p>
+            <p>官方介绍：SenseVoice 是具有音频理解能力的音频基础模型，包括语音识别（ASR）、语种识别（LID）、语音情感识别（SER）和声学事件分类（AEC）或声学事件检测（AED）。本项目提供 SenseVoice 模型的介绍以及在多个任务测试集上的 benchmark，以及体验模型所需的环境安装的与推理方式。</p>
+            <h2>windows</h2>
+            <p>这是和<line-code>SenseVoice</line-code>约会的第一个地方</p>
+            <h3>模型下载</h3>
+            <p>代码中用到了<line-code>iic/SenseVoiceSmall</line-code>、<line-code>iic/speech_fsmn_vad_zh-cn-16k-common-pytorch</line-code>这两个模型，咱先把他们弄下来</p>
+            <ul>
+                <li>
+                    <a href="https://www.modelscope.cn/models/iic/SenseVoiceSmall" target="_blank" rel="noopener noreferrer">SenseVoice多语言语音理解模型Small · 模型库</a>
+                </li>
+                <li>
+                    <a href="https://www.modelscope.cn/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch" target="_blank" rel="noopener noreferrer">FSMN语音端点检测-中文-通用-16k · 模型库</a>
+                </li>
+            </ul>
+            <p>这里的模型是<line-code>E:\llm</line-code>，如下图：</p>
+            <p>
+                <img src="./image/0.png" alt="SenseVoice 项目，下载依赖的模型：SenseVoiceSmall、speech_fsmn_vad_zh-cn-16k-common-pytorch" />
+            </p>
+            <h3>克隆项目</h3>
+            <p><line-code>git clone https://github.com/FunAudioLLM/SenseVoice.git</line-code>，这里将项目克隆到了<line-code>F:\mllm</line-code>目录</p>
+            <p>
+                <img src="./image/1.png" alt="SenseVoice 克隆项目" />
+            </p>
+            <h3>虚拟环境/安装依赖</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   创建虚拟环境
+python -m venv venv
+#   激活虚拟环境
+.\venv\scripts\activate
+#   退出虚拟环境
+deactivate
+#   安装依赖（添加到这里，使用的时候方便一些）
+pip install -r requirements.txt 
+            </pre>
+            <p>
+                <img src="./image/2.png" alt="SenseVoice 项目，虚拟环境/安装依赖" />
+            </p>
+            <h3>启动 webui.py</h3>
+            <p>启动之前先修改一下代码，修改模型的路径，具体代码如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+model_folder = "E:/llm/"
+model = AutoModel(model=model_folder + "iic/SenseVoiceSmall",
+                  vad_model=model_folder + "iic/speech_fsmn_vad_zh-cn-16k-common-pytorch",
+                  vad_kwargs={"max_single_segment_time": 30000},
+                  trust_remote_code=True,
+                  ) 
+            </pre>
+            <p>
+                <img src="./image/3.png" alt="SenseVoice 项目，webui.py 修改前后对比" />
+            </p>
+            <p>然后启动<line-code>webui.py</line-code>，不出意外，还是出意外了，少了两个库，如下图：</p>
+            <p>
+                <img src="./image/4.png" alt="SenseVoice 项目，运行 webui.py 失败，缺少 onnx" />
+            </p>
+            <p>
+                <img src="./image/5.png" alt="SenseVoice 项目，运行 webui.py 失败，缺少 onnxconverter_common" />
+            </p>
+            <p>你需要执行<line-code>pip install onnx onnxconverter_common</line-code>命令来安装一下。之后，再次运行<line-code>python webui.py</line-code>，哇塞，成功了，并附上测试转语音（这里是录音录的）的示例</p>
+            <p>
+                <img src="./image/6.png" alt="SenseVoice 项目，运行 webui.py 成功，测试录音转文本" />
+            </p>
+            <h4>客户端调用</h4>
+            <p>启动 webui.py 之后，还可以使用<line-code>Python</line-code>、<line-code>Javascript</line-code>、<line-code>Bash</line-code>这几个客户端去调用API。这里使用<line-code>Javascript</line-code>测试一下</p>
+            <p>
+                <img src="./image/7.png" alt="SenseVoice 项目，运行 webui.py 成功，API调用示例" />
+            </p>
+            <p><line-code>Javascript</line-code>调用代码如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+import { Client } from "@gradio/client";
+
+const response_0 = await fetch("http://localhost:8888/dmeo.wav");
+const exampleAudio = await response_0.blob();
+
+const client = await Client.connect("http://localhost:7860/");
+const result = await client.predict("/model_inference", {
+    input_wav: exampleAudio,
+    language: "auto"
+});
+
+console.log(result.data);
+            </pre>
+            <p>
+                <img src="./image/8.png" alt="SenseVoice 项目，运行 webui.py 成功，javascript 调用API示例" />
+            </p>
+            <h3>启动 api.py</h3>
+            <p>还是这个项目贴心啊，他还提供了纯API服务，基于<line-code>FastAPI</line-code>的，直接执行<line-code>python api.py</line-code>即可。当然执行之前还需要修改一下代码，如下：</p>
+            <p>
+                <img src="./image/9.png" alt="SenseVoice 项目，api.py 修改前后对比" />
+            </p>
+            <mark-block>
+                <p>注意：因为咱没有算力，所以这里<line-code>device</line-code>参数设置的是<line-code>cpu</line-code></p>
+            </mark-block>
+            <p>下面是运行成功的截图：</p>
+            <p>
+                <img src="./image/10.png" alt="SenseVoice 项目，api.py 运行成功" />
+            </p>
+            <h4>javascript 调用</h4>
+            <p>都有<line-code>Swagger UI</line-code>API 接口文档了，我们用<line-code>javascript</line-code>测试一下。</p>
+            <p>在测试之前，服务器端（ api.py ）还需要添加一下允许跨域的支持，如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+#   部分代码
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+            </pre>
+            <p>下面是<line-code>javascript</line-code>示例代码：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="javascript">
+#   html 代码
+&lt;p>&lt;input type="file" id="file" placeholder="请选择文件" accept="audio/*" /> &lt;button type="button" id="btn">确定&lt;/button>&lt;/p>
+#   javascript 代码
+document.getElementById("btn").addEventListener("click", async () => {
+    const fileEle = document.getElementById("file");
+    const arrFiles = Array.from(fileEle.files);
+    const keys = Array.from(arrFiles)
+        .map((file) => file.name)
+        .join(",");
+    const formData = new FormData();
+    Array.from(arrFiles).forEach((file, index) => {
+        formData.append(`files`, file);
+    });
+    formData.append("keys", keys);
+    formData.append("lang", "auto");
+
+    fetch("http://localhost:7860/api/v1/asr", {
+        method: "POST",
+        headers: {
+            Accept: "application/json"
+        },
+        body: formData
+    })
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+});
+            </pre>
+            <p>
+                <img src="./image/11.png" alt="SenseVoice 项目，api.py 运行成功。javascript 调用API示例" />
+            </p>
+        </div>
+    </body>
+</html>
