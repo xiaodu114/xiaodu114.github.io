@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Matcha-TTS - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,Matcha-TTS,Text-to-Speech,文本转语音,语音合成" />
+        <meta name="description" content="我和 Matcha-TTS 的故事。A fast TTS architecture with conditional flow matching" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/mllm/matcha-tts/index.html -->
+        <div class="blog-page">
+            <h1>Matcha-TTS</h1>
+            <p>GitHub：<a href="https://github.com/shivammehta25/Matcha-TTS" target="_blank" rel="noopener noreferrer">shivammehta25/Matcha-TTS: [ICASSP 2024] 🍵 Matcha-TTS: A fast TTS architecture with conditional flow matching</a></p>
+            <h2>windows</h2>
+            <h3>pip 方式</h3>
+            <p>这里新建了一个项目：<line-code>matcha-tts-demo</line-code>，之后创建虚拟环境，激活之后直接安装如下图：</p>
+            <p>
+                <img src="./image/1.png" alt="Matcha-TTS pip 方式安装" />
+            </p>
+            <h3>测试</h3>
+            <p>安装成功之后，就开始测试了</p>
+            <h4>matcha-tts -h</h4>
+            <p>以来就报错了，都习惯了，这是常态啊！错误如下：</p>
+            <p>
+                <img src="./image/2.png" alt="安装之后，matcha-tts -h 查看版本报错" />
+            </p>
+            <p>还好这个错误有点熟悉：<line-code>phonemizer</line-code>找不到<line-code>espeak</line-code>。咱在之前笔记<a href="/p/mllm/phonemizer/index.html" target="_blank" rel="noopener noreferrer">Phonemizer - xiaodu114.github.io</a>中已经给出了解决办法，设置一个环境便令即可（😅😅😅，我交代，其实是先弄的这个项目，出现了错误，才开始弄 Phonemizer 的）。</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   设置环境变量（根据你的 eSpeak NG 安装路径），注意：这里使用的是 powershell
+$Env:PHONEMIZER_ESPEAK_LIBRARY="C:\\Program Files\\eSpeak NG\\libespeak-ng.dll"
+            </pre>
+            <p>
+                <img src="./image/3.png" alt="设置 PHONEMIZER_ESPEAK_LIBRARY 环境变量之后，matcha-tts -h 查看版本成功" />
+            </p>
+            <h4>matcha-tts --text xxx</h4>
+            <p>到了这里开始尝试文本转语音了，<line-code>matcha-tts --text "hello world"</line-code>。真是一步一个坑啊！右报错了，如下：</p>
+            <p>
+                <img src="./image/4.png" alt="matcha-tts --text 'hello world' 文本转语音报错，找不到模型：matcha_ljspeech.ckpt" />
+            </p>
+            <p>这个问题说报错不太恰当，因为程序会检测某个路径中是否存在模型文件，如果不存在，则会在 GitHub 上下载……关键就是咱们的 GitHub 不太稳定啊！于是只能先想办法自己搞下来。但是他的下载地址在哪里呢？在代码中全局搜索了一下<line-code>matcha_ljspeech.ckpt</line-code>，在<line-code>matcha</line-code>类库的<line-code>cli.py</line-code>文件中找到了他，如下图：</p>
+            <p>
+                <img src="./image/5.png" alt="matcha_ljspeech.ckpt 模型，在代码中的位置" />
+            </p>
+            <p>从上图中便可以发现，这是一个 GitHub 项目，地址为：<a href="https://github.com/shivammehta25/Matcha-TTS-checkpoints" target="_blank" rel="noopener noreferrer">shivammehta25/Matcha-TTS-checkpoints: Repository specific for hosting Matcha-TTS's checkpoints in its release. Mitigation due to the bug in gdown</a>，也确实在该项目的 Releases 中找到了该模型，如下图：</p>
+            <p>
+                <img src="./image/6.png" alt="matcha-tts 依赖模型，在 GitHub 上的位置" />
+            </p>
+            <p>不管了，将这上面的几个都搞下来，放到上面代码运行时提示的位置，这里是：<line-code>C:\Users\xiaodu\AppData\Local\matcha_tts</line-code></p>
+            <mark-block>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="python">
+#   代码位置：venv\Lib\site-packages\matcha\cli.py
+VOCODER_URLS = {
+    "hifigan_T2_v1": "https://github.com/shivammehta25/Matcha-TTS-checkpoints/releases/download/v1.0/generator_v1",  # Old url: https://drive.google.com/file/d/14NENd4equCBLyyCSke114Mv6YR_j_uFs/view?usp=drive_link
+    "hifigan_univ_v1": "https://github.com/shivammehta25/Matcha-TTS-checkpoints/releases/download/v1.0/g_02500000",  # Old url: https://drive.google.com/file/d/1qpgI41wNXFcH-iKq1Y42JlBC9j0je8PW/view?usp=drive_link
+}
+#   代码位置：venv\Lib\site-packages\matcha\app.py
+assert_model_downloaded(VOCODER_LOC("hifigan_T2_v1"), VOCODER_URLS["hifigan_T2_v1"])
+                </pre>
+                <p>开始是在 Matcha-TTS-checkpoints 上将几个文件都下载下来了并放到了指定的路径，之后又开始测试，发现日志中还是在下载（碰巧了，可以访问 GitHub），最后下载的文件是<line-code>hifigan_T2_v1</line-code>。之后在类库中中找到了上面的代码，这里也对比了<line-code>hifigan_T2_v1</line-code>和之前下载的<line-code>generator_v1</line-code>，他们是一样的</p>
+                <p>
+                    <img src="./image/7.png" alt="对比 hifigan_T2_v1 和 generator_v1" />
+                </p>
+            </mark-block>
+            <p>
+                <img src="./image/8.png" alt="下载 matcha-tts 依赖的模型，并放到指定位置" />
+            </p>
+            <p>弄完了这些之后，赶紧再试一下吧，如下图：</p>
+            <p>
+                <img src="./image/9.png" alt="matcha-tts --text 'hello world' 文本转语音成功" />
+            </p>
+            <p>因为才帮助中看到它可以指定一些参数，例如：checkpoint_path、model、spk 等，也看了一下代码，应该可以指定模型路径和模型名称，于是便测试了一下，命令如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+matcha-tts --checkpoint_path "C:\Users\xiaodu\Downloads" --model matcha_ljspeech --vocoder hifigan_univ_v1 --spk 10000 --text "目光所至皆为华夏，五星闪耀皆为信仰"
+            </pre>
+            <p>结果日志显示还是检查不到模型……😅😅😅。是我没有用对？还是 bug ？不过还是可以支持中文的，标准的老外说中的样子，你可以点击播放试试：</p>
+            <audio src="./audio/utterance_001.wav" controls="controls"></audio>
+        </div>
+    </body>
+</html>
