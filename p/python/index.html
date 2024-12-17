@@ -228,6 +228,49 @@ poetry source add --priority=primary mirrors https://pypi.tuna.tsinghua.edu.cn/s
                 <p>开始以为会像<line-code>pip</line-code>一样设置全局镜像，但是根据上面的截图可以看出，<line-code>poetry</line-code>不是，应该是项目级别的</p>
                 <p>那么有没有一种方式可以设置全局镜像？？？</p>
             </mark-block>
+            <h3>conda</h3>
+            <p>本来<line-code>pip</line-code>用的挺好的，不打算安装她了，但是不行啊！命中注定有她，逃也逃不掉啊……</p>
+            <p>下载地址（Anaconda 和 Miniconda 都在这里）：<a href="https://www.anaconda.com/download/success" target="_blank" rel="noopener noreferrer">Download | Anaconda</a></p>
+            <h4>Windows</h4>
+            <details>
+                <summary>点击查看安装过程</summary>
+                <p>下面是在 win11 上的安装截图</p>
+                <p>
+                    <img src="./image/Anaconda-win-001.png" alt="Windows 安装 Anaconda" />
+                </p>
+                <p>注意：看上去安装挺简单的，又在自己的电脑（ win10 ）上安装了一次，安装完成之后检查版本时<line-code>conda --version</line-code>，出现了不一样的情况：上面的 win11 安装之后直接检查没有问题，直接打印版本；但是 win10 不行，重启之后还是不行，卸载 Anaconda 之后安装 Miniconda 也是不行。难道是因为之前 win 11 安装过一次，没有卸载干净……😵😵😵 win10 下没办法，只能自己添加到环境变量了。还不错的是，后面使用时没有遇到问题。</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   Anaconda 和 Miniconda 都安装了一下，最后保留了 Miniconda
+#   添加到环境变量（下面几个都添加过去了）
+#       注意：使用你自己的安装路径   
+D:\ProgramData\miniconda3
+D:\ProgramData\miniconda3\Library\bin
+D:\ProgramData\miniconda3\Scripts
+D:\ProgramData\miniconda3\condabin
+                </pre>
+            </details>
+            <p>下面是一些常用的命令：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   创建虚拟环境
+#       1、使用 environment.yml 文件（没有测试过）
+conda env create -f environment.yml
+#       2、使用命令行创建
+conda create --name 环境名称 python=3.11
+#	        --name 简写方式
+conda create -n 环境名称 python=3.11
+		
+#   虚拟环境列表（可以看到你创建的虚拟环境）
+conda env list
+conda info --envs
+	
+#   激活虚拟环境
+conda activate 环境名称
+#   退出当前虚拟环境
+conda deactivate
+
+#   删除虚拟环境
+conda remove -n 环境名称 --all
+            </pre>
             <h2>__pycache__</h2>
             <details>
                 <summary>kimi 的解释</summary>
