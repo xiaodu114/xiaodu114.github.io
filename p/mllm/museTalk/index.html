@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>MuseTalk - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,MuseTalk,virtualhumans,Lip Synchorization" />
+        <meta name="description" content="我和 MuseTalk 的故事。MuseTalk: Real-Time High Quality Lip Synchorization with Latent Space Inpainting" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/mllm/museTalk/index.html -->
+        <div class="blog-page">
+            <h1>MuseTalk</h1>
+            <p>GitHub：<a href="https://github.com/TMElyralab/MuseTalk" target="_blank" rel="noopener noreferrer">TMElyralab/MuseTalk: MuseTalk: Real-Time High Quality Lip Synchorization with Latent Space Inpainting</a></p>
+            <p>GitHub介绍：MuseTalk: Real-Time High Quality Lip Synchorization with Latent Space Inpainting。（翻译：实时高质量唇部同步）</p>
+            <h2>windows</h2>
+            <p>这是和<line-code>MuseTalk</line-code>约会的第一个地方</p>
+            <h3>克隆项目</h3>
+            <p><line-code>2024-12-20</line-code>克隆的项目。这里将项目放到了<line-code>F:\mllm</line-code>目录下，如下图：</p>
+            <p>
+                <img src="./image/1.png" alt="MuseTalk 项目，git 克隆项目" />
+            </p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+git clone https://github.com/TMElyralab/MuseTalk.git
+cd MuseTalk 
+            </pre>
+            <h3>虚拟环境/安装依赖</h3>
+            <p>既然已经上了<line-code>conda</line-code>的贼船，那就不下来了！这里还是用他来创建虚拟环境。</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   创建虚拟环境
+conda create -n MuseTalk python=3.10
+
+#   激活虚拟环境
+conda activate MuseTalk
+    #   退出虚拟环境
+    conda deactivate
+    #   删除虚拟环境
+    conda remove -n MuseTalk --all
+
+#   安装依赖（GPU版本）
+pip install -r requirements.txt
+#   安装依赖（CPU版本）
+pip install -r requirements-cpu.txt 
+            </pre>
+            <p>或许今天（2024-12-21）的<line-code>MuseTalk</line-code>还是曾经的<line-code>MuseTalk</line-code>，但是依赖的类库已经不是曾经的少年，他们都长大了……你就说，咱们不能把依赖弄利索点吗？每次安装依赖都那么多问题：项目中的<line-code>requirements.txt</line-code>中有些类库没有添加版本，如今安装时已经不再是那个少年，例如，<line-code>moviepy</line-code>，项目中这样引入<line-code>from moviepy.editor import *</line-code>已经不能适应现在的<line-code>moviepy</line-code>，没办法只能找回曾经的他；还有就是有的带有版本，安装时也是一堆问题，例如：<line-code>torch</line-code>、<line-code>diffusers</line-code>、<line-code>tensorflow</line-code>，下面是我废了半天劲儿才调好的，有两个版本：CPU、GPU</p>
+            <p>CPU　版本的<line-code>requirements-cpu.txt</line-code>率先出场：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+torch==2.3.1 -i https://download.pytorch.org/whl/cpu
+torchvision==0.18.1 -i https://download.pytorch.org/whl/cpu
+torchaudio==2.3.1 -i https://download.pytorch.org/whl/cpu
+
+diffusers==0.31.0                  
+accelerate==0.28.0
+tensorflow==2.17.0
+tensorboard==2.17.0
+opencv-python==4.9.0.80
+soundfile==0.12.1
+transformers==4.39.2
+
+gdown==5.2.0
+requests==2.28.2
+imageio[ffmpeg]
+
+omegaconf==2.3.0
+ffmpeg-python==0.2.0
+gradio==5.9.1
+spaces==0.31.1
+# moviepy==2.1.1
+moviepy==1.0.3
+            </pre>
+            <p>GPU　版本的<line-code>requirements.txt</line-code>紧跟其后：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+--extra-index-url https://download.pytorch.org/whl/cu124 
+torch==2.3.1
+torchvision==0.18.1
+torchaudio==2.3.1
+
+diffusers==0.31.0                  
+accelerate==0.28.0
+tensorflow==2.17.0
+tensorboard==2.17.0
+opencv-python==4.9.0.80
+soundfile==0.12.1
+transformers==4.39.2
+
+gdown==5.2.0
+requests==2.28.2
+imageio[ffmpeg]
+
+omegaconf==2.3.0
+ffmpeg-python==0.2.0
+gradio==5.9.1
+spaces==0.31.1
+# moviepy==2.1.1
+moviepy==1.0.3
+            </pre>
+            <p>经过上面一番折腾，<line-code>requirements.txt</line-code>终于安装成功了，</p>
+            <details>
+                <summary>点击查看安装截图</summary>
+                <p>
+                    <img src="./image/2.png" alt="MuseTalk 项目，conda 创建虚拟环境" />
+                </p>
+                <p>
+                    <img src="./image/3.png" alt="MuseTalk 项目，激活虚拟环境" />
+                </p>
+                <p>
+                    <img src="./image/4.png" alt="MuseTalk 项目，开始安装（CPU）依赖" />
+                </p>
+                <p>
+                    <img src="./image/5.png" alt="MuseTalk 项目，依赖安装成功" />
+                </p>
+            </details>
+            <p>你以为这就完了？可以运行程序了？不！不！不，还得继续折腾</p>
+            <h3>mmlab packages</h3>
+            <h4>踩坑</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   MuseTalk GitHub 官方是这样写的
+pip install --no-cache-dir -U openmim 
+mim install mmengine 
+mim install "mmcv>=2.0.1" 
+mim install "mmdet>=3.1.0" 
+mim install "mmpose>=1.1.0" 
+
+#   因为上面安装总是出问题，这里记录一下如何删除
+mim uninstall mmpose 
+mim uninstall mmdet
+mim uninstall mmcv
+            </pre>
+            <p>按照这个安装又出错了，他们之前的关系又乱套了，除了一大堆类似下面的错误：</p>
+            <pre style="overflow-x: auto">
+#   在测试不同版本的时候出现了多次如下错误，这里列出一个举例
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+mmdet 3.3.0 requires mmcv&lt;2.2.0,>=2.0.0rc4; extra == "mim", but you have mmcv 2.2.0 which is incompatible.
+            </pre>
+            <p>又是一番折腾终于从坑里爬出来了</p>
+            <h4>校正版本</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+pip install --no-cache-dir -U openmim 
+mim install mmengine 
+mim install "mmcv==2.1.0" 
+mim install "mmdet==3.2.0" 
+mim install "mmpose==1.2.0"
+
+#   pip list 查看安装的版本
+mmcv            2.1.0
+mmdet           3.2.0
+mmengine        0.10.5
+mmpose          1.2.0
+            </pre>
+            <details>
+                <summary>点击查看安装截图</summary>
+                <p>
+                    <img src="./image/6.png" alt="MuseTalk 项目，安装 openmim" />
+                </p>
+                <p>
+                    <img src="./image/7.png" alt="MuseTalk 项目，mim install mmengine" />
+                </p>
+                <p>
+                    <img src="./image/8.png" alt="MuseTalk 项目，mim install mmcv" />
+                </p>
+                <p>
+                    <img src="./image/9.png" alt="MuseTalk 项目，mim install mmdet" />
+                </p>
+                <p>
+                    <img src="./image/10.png" alt="MuseTalk 项目，mim install mmpose" />
+                </p>
+            </details>
+            <h4>下载模型（权重）</h4>
+            <p>GitHub 上写的很清楚了，参照上面下载即可。</p>
+            <p>
+                <img src="./image/11.png" alt="MuseTalk 项目，下载依赖的模型" />
+            </p>
+            <h3>启动项目</h3>
+            <p>终于到了激动人心的时刻：终于可以启动项目了。稍后，稍后，还有一小步，先设置一下<line-code>ffmpeg</line-code>环境变量，这里如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   powershell
+$Env:FFMPEG_PATH="D:\ProgramOther\ffmpeg-7.1-full_build\bin"
+#   cmd
+set FFMPEG_PATH="D:\ProgramOther\ffmpeg-7.1-full_build\bin"
+            </pre>
+            <p>迫不及待了，赶紧执行<line-code>python app.py</line-code>启动程序吧</p>
+            <p>
+                <img src="./image/12.png" alt="MuseTalk 项目，python app.py 启动程序" />
+            </p>
+            <p>
+                <img src="./image/13.png" alt="MuseTalk 项目，启动成功，浏览器访问截图" />
+            </p>
+            <mark-block>
+                <p>虽然程序启动成功了，但是在输出日志中发现了两个问题：</p>
+                <ul>
+                    <li>
+                        <span>python-fan</span>
+                        <ul>
+                            <li>下载地址：<a href="https://www.adrianbulat.com/downloads/python-fan/s3fd-619a316812.pth" target="_blank" rel="noopener noreferrer">https://www.adrianbulat.com/downloads/python-fan/s3fd-619a316812.pth</a></li>
+                            <li>放置位置：<line-code>C:\Users\xiaodu\.cache\torch\hub\checkpoints\s3fd-619a316812.pth</line-code></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <span>sd-vae-ft-mse</span>
+                        <ul>
+                            <li>之前下载的是<line-code>bin</line-code>，提示需要<line-code>safetensors</line-code>格式的</li>
+                            <li>下载地址：<a href="https://hf-mirror.com/stabilityai/sd-vae-ft-mse" target="_blank" rel="noopener noreferrer">https://hf-mirror.com/stabilityai/sd-vae-ft-mse</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <p>
+                    <img src="./image/14.png" alt="MuseTalk 项目，启动成功，输出日志小问题" />
+                </p>
+            </mark-block>
+            <h4>赶紧测试一下</h4>
+            <p>咱的老朋友还是太老了，行动有些跟不上了，小测一下就花费了很长时间，但是不管怎么说最后是成功了</p>
+            <p>
+                <img src="./image/15.png" alt="MuseTalk 项目，测试，上传音频和视频" />
+            </p>
+            <p>
+                <img src="./image/16.png" alt="MuseTalk 项目，测试成功，输出视频截图" />
+            </p>
+            <p>这次测试是用录的自己的视频测试的，就不露面了啊！</p>
+        </div>
+    </body>
+</html>
