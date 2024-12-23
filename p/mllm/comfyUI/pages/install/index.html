@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ComfyUI - 安装 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,ComfyUI,安装,windows" />
+        <meta name="description" content="该章节将介绍如何安装并启动 ComfyUI，以及运行默认示例" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/mllm/comfyUI/pages/install/index.html -->
+        <div class="blog-page">
+            <h1>ComfyUI 安装</h1>
+            <p>和<line-code>ComfyUI</line-code>的第一次约会</p>
+            <h2>官方整合包</h2>
+            <p>感觉真的太贴心了，还有这神器……</p>
+            <h3>下载</h3>
+            <p>下载地址：<a href="https://github.com/comfyanonymous/ComfyUI/releases" target="_blank" rel="noopener noreferrer">Releases · comfyanonymous/ComfyUI</a></p>
+            <p><line-code>2024-12-21</line-code>，此时的最新版本是<line-code>v0.3.9</line-code>，下载的是<line-code>ComfyUI_windows_portable_nvidia.7z</line-code>。这个文件不小，1.53 GB，这么大肯定包含了很多东西，后面会给我们带来太多的好处……这里的放置位置如下：</p>
+            <p>
+                <img src="./image/1.png" alt="ComfyUI 项目，ComfyUI_windows_portable_nvidia.7z 解压后的目录结构" />
+            </p>
+            <h3>目录解读</h3>
+            <h4>压缩包根目录</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+|   README_VERY_IMPORTANT.txt    #   重要说明，一定要先看看
+|   run_cpu.bat                  #   使用 CPU 运行 ComfyUI
+|   run_nvidia_gpu.bat           #   使用 nvidia GPU 运行 ComfyUI
+|   
++---ComfyUI                      #   ComfyUI 项目（GitHub）
++---python_embeded               #   python 环境
+\---update                       #   更新相关
+            </pre>
+            <h3>下载第一个模型（检查点）</h3>
+            <p><line-code>README_VERY_IMPORTANT.txt</line-code>中给出了下载地址：<a href="https://hf-mirror.com/Comfy-Org/stable-diffusion-v1-5-archive" target="_blank" rel="noopener noreferrer">Comfy-Org/stable-diffusion-v1-5-archive · HF Mirror</a>，国内的都懂是吧，这里替换成镜像地址了。</p>
+            <p>
+                <img src="./image/2.png" alt="ComfyUI 项目，下载第一个模型（检查点）：v1-5-pruned-emaonly-fp16.safetensors" />
+            </p>
+            <p>下载之后放到这里：<line-code>ComfyUI_windows_portable\ComfyUI\models\checkpoints</line-code>，如下图：</p>
+            <p>
+                <img src="./image/3.png" alt="ComfyUI 项目，模型（检查点）放置文件夹路径" />
+            </p>
+            <h3>启动项目</h3>
+            <p>你别说还得是人家<line-code>ComfyUI</line-code>，不用创建虚拟环境、不用安装依赖……仅仅解压之后执行<line-code>bat</line-code>文件即可，完美，必须得点个赞</p>
+            <p>
+                <img src="./image/4.png" alt="ComfyUI 项目，执行 run_cpu.bat，运行 ComfyUI" />
+            </p>
+            <p>记得之前看<line-code>ComfyUI</line-code>教程视频时，界面还都是英文的，现在（0.3.9）直接上中文了，都不用安装插件了，真是太贴心了</p>
+            <p>
+                <img src="./image/5.png" alt="ComfyUI 项目，CPU 模式下启动成功，浏览器自动打开，浏览器页面截图" />
+            </p>
+            <h3>生成第一张图</h3>
+            <p>选择一个检查点，咱就一个啊，上面下载的那个，之后就可以点击“执行”生成图片了。不得不说人家做的是真带劲儿啊，执行过程中可以实时显示进度，执行到哪个环节了，如下图：</p>
+            <p>
+                <img src="./image/6.png" alt="ComfyUI 项目，CPU 模式下启动成功，第一张图生成过程中" />
+            </p>
+            <p>还是老朋友，时间有点久，毕竟岁数大了……经过漫长的等待终于生成了第一张图，图下：</p>
+            <p>
+                <img src="./image/7.png" alt="ComfyUI 项目，CPU 模式下启动成功，第一张图生成成功" />
+            </p>
+            <h2>秋叶启动器</h2>
+            <p>这也是位大神啊！针对国内情况制作了启动器：<a href="https://www.bilibili.com/video/BV1Ew411776J" target="_blank" rel="noopener noreferrer">【AI绘画】ComfyUI整合包发布！解压即用 一键启动 工作流版界面 超多节点 ☆更新 ☆汉化 秋叶整合包_哔哩哔哩_bilibili</a></p>
+        </div>
+    </body>
+</html>

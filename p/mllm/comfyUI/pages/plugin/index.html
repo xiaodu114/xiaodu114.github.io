@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ComfyUI - 自定义节点 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,ComfyUI,windows,插件,plugin,自定义节点,custom node" />
+        <meta name="description" content="该章节将介绍如何安装安装 ComfyUI 自定义节点，以及一些常见的自定义节点" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/mllm/comfyUI/pages/plugin/index.html -->
+        <div class="blog-page">
+            <h1>ComfyUI 自定义节点</h1>
+            <p><line-code>ComfyUI</line-code>本来就已经很强了，更强的是他还支持插件（自定义节点），最强的是已经有很多大神为他开发了插件……</p>
+            <h2>安装方法</h2>
+            <h3>手动安装</h3>
+            <p>这里以安装<line-code>ComfyUI-Manager</line-code>插件为例。该插件是 GitHub 上的一个项目，弄下来之后扔到<line-code>ComfyUI_windows_portable\ComfyUI\custom_nodes</line-code>这个目录下即可。你可以在该插件目录进入 cmd 或者 powershell ,之后使用 git 克隆；你也可以到 GitHub 上下载 zip 格式的项目，之后解压到插件目录即可。</p>
+            <p>插件地址：<a href="https://github.com/ltdrdata/ComfyUI-Manager" target="_blank" rel="noopener noreferrer">ltdrdata/ComfyUI-Manager: ComfyUI-Manager is an extension designed to enhance the usability of ComfyUI. It offers management functions to install, remove, disable, and enable various custom nodes of ComfyUI. Furthermore, this extension provides a hub feature and convenience functions to access a wide range of information within ComfyUI.</a></p>
+            <p>这里是 git 克隆的方式，如下图：</p>
+            <p>
+                <img src="./image/1.png" alt="ComfyUI 项目，custom_nodes 目录下，git 克隆 ComfyUI-Manager 插件" />
+            </p>
+            <p>克隆成功之后，回到根目录，执行<line-code>run_cpu.bat</line-code>启动项目。在启动过程中，你会看到一些关于<line-code>ComfyUI-Manager</line-code>插件的一些日志和一些错误（网络的问题，访问 GitHub），如下图：</p>
+            <p>
+                <img src="./image/2.png" alt="ComfyUI 项目，安装 ComfyUI-Manager 插件之后重启项目，截图一" />
+            </p>
+            <p>
+                <img src="./image/3.png" alt="ComfyUI 项目，安装 ComfyUI-Manager 插件之后重启项目，截图二" />
+            </p>
+            <p>虽然有一些异常，但是界面还是正常出来了，你可以和没有安装之前对比一下：</p>
+            <p>
+                <img src="./image/4.png" alt="ComfyUI 项目，安装 ComfyUI-Manager 插件之后，浏览器界面截图" />
+            </p>
+            <p>点击“Manager”按钮，弹出的是该插件的管理界面，如下图（记作：图5）：</p>
+            <p>
+                <img src="./image/5.png" alt="ComfyUI 项目，ComfyUI-Manager 插件管理界面" />
+            </p>
+            <p>到这里已经说明<line-code>ComfyUI-Manager</line-code>插件安装成功了，该插件的更多功能，请看后面章节。</p>
+            <h3>ComfyUI-Manager 安装</h3>
+            <p>除了上面的安装方式，你还可以使用<line-code>ComfyUI-Manager</line-code>插件来安装插件。你可以点击“图5”中的“Custom Nodes Manager”按钮，打开自定义节点（插件）列表页面，在这里安装插件，如下图：</p>
+            <p>
+                <img src="./image/6.png" alt="ComfyUI 项目，ComfyUI-Manager 之插件列表页面" />
+            </p>
+            <mark-block>
+                <p>这个列表页面可能不是一帆风顺的，根据你的网络而定。就像我第一次安装<line-code>ComfyUI-Manager</line-code>之后，打开这个页面是没有数据的。这也是后面网络可以了，才截的图。</p>
+            </mark-block>
+            <h2>插件</h2>
+            <p>这里列举一些自己用过的插件</p>
+            <h3>ComfyUI-Manager</h3>
+            <p>这里再详细的介绍一下<line-code>ComfyUI-Manager</line-code>插件的用法</p>
+            <h4>安装插件</h4>
+            <p>上面已经说了，咱就不重复了</p>
+            <h4>模型管理</h4>
+            <p>可以点击“图5”中的“Model Manager”按钮，打开模型列表页面，在这里管理模型，如下图：</p>
+            <p>
+                <img src="./image/7.png" alt="ComfyUI 项目，ComfyUI-Manager 之模型列表页面" />
+            </p>
+            <h3>AlekPet</h3>
+            <p>插件地址：<a href="https://github.com/AlekPet/ComfyUI_Custom_Nodes_AlekPet" target="_blank" rel="noopener noreferrer">AlekPet/ComfyUI_Custom_Nodes_AlekPet: Custom nodes that extend the capabilities of Comfyui</a></p>
+            <p>先看一下 git 克隆之后，程序重启和界面中展示该插件的截图：</p>
+            <p>
+                <img src="./image/AlekPet-0.png" alt="ComfyUI 项目，安装 AlekPet 插件之后重启项目" />
+            </p>
+            <p>
+                <img src="./image/AlekPet-1.png" alt="ComfyUI 项目，安装 AlekPet 插件之后，浏览器界面截图" />
+            </p>
+            <h4>Translate CLIP Text Encode Node</h4>
+            <p>怎么着也得试试这个翻译节点，在默认工作流的基础上，将正向提示词节点替换成该翻译节点，顺便生成了一张图片，如下图：</p>
+            <p>
+                <img src="./image/AlekPet-2.png" alt="ComfyUI 项目，AlekPet 插件，Translate CLIP Text Encode Node" />
+            </p>
+        </div>
+    </body>
+</html>

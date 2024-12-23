@@ -1,0 +1,36 @@
+{
+    "pageTitle": "ComfyUI - xiaodu114.github.io",
+    "head": {
+        "title": "我和 ComfyUI 有个约会",
+        "links": [
+            {
+                "href": "https://www.comfy.org/",
+                "text": "ComfyUI 官网"
+            },
+            {
+                "href": "https://github.com/comfyanonymous/ComfyUI",
+                "text": "ComfyUI GitHub"
+            }
+        ]
+    },
+    "nodes": [
+        {
+            "id": 0,
+            "text": "介绍",
+            "code": "introduction",
+            "page": "/p/mllm/comfyUI/pages/introduction.html"
+        },
+        {
+            "id": 1,
+            "text": "安装",
+            "code": "install",
+            "page": "/p/mllm/comfyUI/pages/install/index.html"
+        },
+        {
+            "id": 2,
+            "text": "插件",
+            "code": "plugin",
+            "page": "/p/mllm/comfyUI/pages/plugin/index.html"
+        }
+    ]
+}
