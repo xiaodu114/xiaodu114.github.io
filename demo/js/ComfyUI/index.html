@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ComfyUI 文生图 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,ComfyUI,文生图" />
+        <meta name="description" content="ComfyUI 项目，文生图调用示例" />
+        <link rel="stylesheet" href="./index.css" />
+        <style>
+            #formUserSetting {
+                input,
+                textarea {
+                    width: 100%;
+                }
+            }
+            #imgBox {
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                > img {
+                    margin-bottom: 15px;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="app">
+            <div class="header">
+                <h1>ComfyUI 文生图 示例</h1>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.comfy.org/" target="_blank" rel="noopener noreferrer">ComfyUI | Generate video, images, audio with AI </a>&nbsp;&nbsp;<a href="https://docs.comfy.org/" target="_blank" rel="noopener noreferrer">Docs - ComfyUI</a></span>
+            </div>
+            <div class="main">
+                <div class="left">
+                    <form id="formUserSetting">
+                        <div>
+                            <label>接口地址：</label>
+                            <div>
+                                <input type="text" name="host" value="127.0.0.1:8188" placeholder="请输入接口地址" />
+                            </div>
+                        </div>
+                        <p></p>
+                        <div>
+                            <label>正向提示词：</label>
+                            <div>
+                                <textarea name="positivePrompt" placeholder="请输入正向提示词" rows="5"></textarea>
+                            </div>
+                        </div>
+                        <div>
+                            <span id="msg"></span>
+                        </div>
+                    </form>
+                    <p>
+                        <button type="button" id="btnSend">确定</button>
+                    </p>
+                </div>
+                <div class="content">
+                    <div id="imgBox"></div>
+                </div>
+            </div>
+        </div>
+        <script>
+            function getGUID() {
+                return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+                    let r = (Math.random() * 16) | 0,
+                        v = c == "x" ? r : (r & 0x3) | 0x8;
+                    return v.toString(16).toUpperCase();
+                });
+            }
+
+            //#region  ComfyUI 相关
+
+            function getPromptObj(positivePrompt) {
+                return {
+                    3: {
+                        inputs: {
+                            seed: 23886567613562,
+                            steps: 20,
+                            cfg: 8,
+                            sampler_name: "euler",
+                            scheduler: "normal",
+                            denoise: 1,
+                            model: ["4", 0],
+                            positive: ["6", 0],
+                            negative: ["7", 0],
+                            latent_image: ["5", 0]
+                        },
+                        class_type: "KSampler",
+                        _meta: {
+                            title: "K采样器"
+                        }
+                    },
+                    4: {
+                        inputs: {
+                            ckpt_name: "v1-5-pruned-emaonly-fp16.safetensors"
+                        },
+                        class_type: "CheckpointLoaderSimple",
+                        _meta: {
+                            title: "加载检查点"
+                        }
+                    },
+                    5: {
+                        inputs: {
+                            width: 512,
+                            height: 512,
+                            batch_size: 2
+                        },
+                        class_type: "EmptyLatentImage",
+                        _meta: {
+                            title: "空潜空间图像"
+                        }
+                    },
+                    6: {
+                        inputs: {
+                            text: positivePrompt,
+                            clip: ["4", 1]
+                        },
+                        class_type: "CLIPTextEncode",
+                        _meta: {
+                            title: "CLIP文本编码（提示）"
+                        }
+                    },
+                    7: {
+                        inputs: {
+                            text: "text, watermark",
+                            clip: ["4", 1]
+                        },
+                        class_type: "CLIPTextEncode",
+                        _meta: {
+                            title: "CLIP文本编码（提示）"
+                        }
+                    },
+                    8: {
+                        inputs: {
+                            samples: ["3", 0],
+                            vae: ["4", 2]
+                        },
+                        class_type: "VAEDecode",
+                        _meta: {
+                            title: "VAE解码"
+                        }
+                    },
+                    9: {
+                        inputs: {
+                            filename_prefix: "ComfyUI",
+                            images: ["8", 0]
+                        },
+                        class_type: "SaveImage",
+                        _meta: {
+                            title: "保存图像"
+                        }
+                    }
+                };
+            }
+
+            async function createPromptTask(baseUrl, prompt, clientId) {
+                const response = await fetch(`${baseUrl}/prompt`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        prompt,
+                        client_id: clientId
+                    })
+                });
+                return await response.json();
+            }
+
+            async function getImage(baseUrl, filename, subfolder, folderType) {
+                const urlValues = new URLSearchParams({
+                    filename,
+                    subfolder,
+                    type: folderType
+                });
+                const response = await fetch(`${baseUrl}/view?${urlValues}`);
+                return await response.arrayBuffer();
+            }
+
+            async function getHistory(baseUrl, promptId) {
+                const response = await fetch(`${baseUrl}/history/${promptId}`);
+                return await response.json();
+            }
+
+            async function getImgsByHistory(baseUrl, promptId) {
+                const retImgs = [];
+                const data = await getHistory(baseUrl, promptId);
+                if (data && data[promptId] && data[promptId]["outputs"]) {
+                    for (const key in data[promptId]["outputs"]) {
+                        if (Object.prototype.hasOwnProperty.call(data[promptId]["outputs"], key)) {
+                            const element = data[promptId]["outputs"][key];
+                            if (element && Array.isArray(element.images)) {
+                                retImgs.push(...element.images);
+                            }
+                        }
+                    }
+                }
+                return retImgs;
+            }
+
+            //#endregion
+
+            const CLIENT_ID = getGUID();
+            let current_prompt_id = null;
+
+            const formUserSettingEle = document.getElementById("formUserSetting");
+            const btnSendEle = document.getElementById("btnSend");
+            const msgEle = document.getElementById("msg");
+            const imgBoxEle = document.getElementById("imgBox");
+
+            let is_generating = false;
+
+            function renderImageToBox(baseUrl, images) {
+                if (Array.isArray(images) && images.length > 0) {
+                    msgEle.innerHTML = `图片生成结束，请看看右侧。`;
+                    imgBoxEle.innerHTML = "";
+                    const fragment = document.createDocumentFragment();
+                    images.forEach((item) => {
+                        const imgEle = document.createElement("img");
+                        imgEle.src = `${baseUrl}/view?filename=${item.filename}&type=${item.type}`;
+                        fragment.appendChild(imgEle);
+                        fragment.appendChild(imgEle);
+                    });
+                    imgBoxEle.appendChild(fragment);
+                }
+            }
+
+            btnSendEle.addEventListener("click", () => {
+                if (is_generating) {
+                    alert("正在生成中，请稍候");
+                    return;
+                }
+                const userSettingFormData = new FormData(formUserSettingEle);
+                const strHost = userSettingFormData.get("host");
+                const strPositivePrompt = userSettingFormData.get("positivePrompt");
+
+                if (!strHost) {
+                    alert("请输入接口地址");
+                    return;
+                }
+                if (!strPositivePrompt) {
+                    alert("请输入正向提示词");
+                    return;
+                }
+                is_generating = true;
+                msgEle.innerHTML = "";
+                imgBoxEle.innerHTML = "";
+
+                const baseUrl = `http://${strHost}`;
+                const current_prompt = getPromptObj(strPositivePrompt);
+                const current_imgs = [];
+
+                let ws = new WebSocket(`ws://${strHost}/ws?clientId=${CLIENT_ID}`);
+
+                ws.onopen = async () => {
+                    current_prompt_id = (await createPromptTask(baseUrl, current_prompt, CLIENT_ID)).prompt_id;
+                    msgEle.innerHTML = `创建任务成功，prompt_id 为：
+                    ${current_prompt_id} 。
+                    正在生成图片，请稍等……`;
+                };
+
+                ws.onclose = (event) => {
+                    ws.onopen = null;
+                    ws.onmessage = null;
+                    ws.onerror = null;
+                    ws.onclose = null;
+                    ws = null;
+                };
+
+                ws.onerror = (error) => {
+                    console.error("WebSocket error:", error);
+                };
+
+                ws.onmessage = (event) => {
+                    try {
+                        const message = JSON.parse(event.data);
+                        const msgType = message.type;
+                        const msgData = message.data;
+                        if (!(msgData && msgData.prompt_id === current_prompt_id)) return;
+                        switch (msgType) {
+                            case "executed": {
+                                if (msgData.output && Array.isArray(msgData.output.images) && msgData.output.images.length > 0) {
+                                    current_imgs.push(...msgData.output.images);
+                                }
+                                break;
+                            }
+                            case "execution_success": {
+                                break;
+                            }
+                            case "executing": {
+                                if (msgData.node === null) {
+                                    // 执行完成
+                                    if (current_imgs.length > 0) {
+                                        renderImageToBox(baseUrl, current_imgs);
+                                    } else {
+                                        getImgsByHistory(baseUrl, current_prompt_id).then((images) => {
+                                            renderImageToBox(baseUrl, images);
+                                        });
+                                    }
+                                    ws.close();
+                                    is_generating = false;
+                                }
+                                break;
+                            }
+                        }
+                    } catch (error) {}
+                };
+            });
+        </script>
+    </body>
+</html>
