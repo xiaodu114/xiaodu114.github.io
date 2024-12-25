@@ -31,6 +31,12 @@
             "text": "插件",
             "code": "plugin",
             "page": "/p/mllm/comfyUI/pages/plugin/index.html"
+        },
+        {
+            "id": 3,
+            "text": "API 调用",
+            "code": "clientServer",
+            "page": "/p/mllm/comfyUI/pages/clientServer/index.html"
         }
     ]
 }
