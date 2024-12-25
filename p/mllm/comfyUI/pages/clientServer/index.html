@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ComfyUI - API 调用 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,ComfyUI,Client-Server,Routes,API 调用,API 方式调用 ComfyUI 工作流" />
+        <meta name="description" content="该章节将介绍 ComfyUI 的 Client-Server，他暴露了哪些接口以及如何调用" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/p/mllm/comfyUI/pages/clientServer/index.html -->
+        <div class="blog-page">
+            <h1>ComfyUI API 调用</h1>
+            <p><line-code>ComfyUI</line-code>跑起来之后，作为程序员的我们，不能仅仅满足于在界面上操作工作流生成图片等，还想着如何通过 API 的方式去调用已经创建好的工作流，这样才能借助<line-code>ComfyUI</line-code>能力去开发其他的应用，才能有更多的扩展空间……</p>
+            <h2>官方接口</h2>
+            <p>想要去调用 API，咱得先看看人家提供了哪些。这里从两个地方看一下，他们提供了哪些 API</p>
+            <h3>官方文档</h3>
+            <p>文档地址：<a href="https://docs.comfy.org/" target="_blank" rel="noopener noreferrer">Docs - ComfyUI</a>。在官方文档的海洋中找啊找啊，终于见到了她（😄😄😄，人家支持搜索啊）：<a href="https://docs.comfy.org/essentials/comms_routes" target="_blank" rel="noopener noreferrer">Routes - ComfyUI</a></p>
+            <p>
+                <img src="./image/1.png" alt="ComfyUI 项目，官方文档，Client-Server，Routes" />
+            </p>
+            <h3>源代码</h3>
+            <p>其实上面的截图也就是官方文档中已经给出了接口在代码中的位置：项目根目录的<line-code>server.py</line-code>文件中（注意：这里说的项目根目录不是官方整个包的，而是 GitHub 上 ComfyUI 项目的根目录。或者说是在整合包的 ComfyUI 文件夹下）。</p>
+            <p>
+                <img src="./image/2.png" alt="ComfyUI 项目，官方整合包，ComfyUI\server.py 文件" />
+            </p>
+            <h2>非官方</h2>
+            <ul>
+                <li>
+                    <a href="https://blog.csdn.net/ddafei/article/details/140328897" target="_blank" rel="noopener noreferrer">【ComfyUI的API接口调用示例】_comfyui api调用例子-CSDN博客</a>
+                </li>
+            </ul>
+            <h2>调用 API</h2>
+            <p>该章节介绍一下客户端（Postman 、JavaScript 等）如何调用这些 API 。关于 API 的调用，其实<line-code>ComfyUI</line-code>项目中已经给出了调用示例（ Python 调用 ）,示例位置：<line-code>ComfyUI\script_examples\*.py</line-code>，如下图：</p>
+            <p>
+                <img src="./image/3.png" alt="ComfyUI 项目，官方整合包，ComfyUI\script_examples\basic_api_example.py 文件" />
+            </p>
+            <h3>默认文生图</h3>
+            <p>咱先说一下这个场景：最简单的就是告诉他我想生成什么（例如：一只可爱的小猪），之后调用 API 时将内容带上即可（当然，肯定还有很多配置参数，例如：图片大小，生成几张等）。这里有两个关键的因素：一个是 API 地址；另一个是参数的格式是什么。下面以默认文生图工作流为例，展示一下如何调用。从上图中可以得知请求地址为：<line-code>http://IP地址:端口/prompt</line-code>，剩下就是参数格式了，如何将一大堆配置信息传过去。说的太对了，直接说如何得到请求参数，如下图：</p>
+            <p>
+                <img src="./image/4.png" alt="ComfyUI 项目，浏览器界面，工作流-》导出(API)" />
+            </p>
+            <details>
+                <summary>点击查看导出的JSON文件</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./json/文生图-001-post-data.json" ddz-lang="json"></div>
+            </details>
+            <p></p>
+            <mark-block>
+                <p>如果您的界面没有“导出(API)”这个菜单项，你可以按照下图打开开发者模式（开始没有注意“导出(API)”这个菜单项，开发者模式最开始开启过一次，后面有关闭了，但是还是有“导出(API)”这个菜单项），如下图：</p>
+                <p>
+                    <img src="./image/5.png" alt="ComfyUI 项目，浏览器界面，打开设置页面" />
+                </p>
+            </mark-block>
+            <p>我去这前奏也真够长的，说了这么一大堆还没有到正题，您别急，这不就来了</p>
+            <h4>Postman</h4>
+            <p>看看用了几步才拿到想要的图片，一共用了三步（不一定最优）：</p>
+            <h5>/prompt</h5>
+            <p>请求方式为：<line-code>POST</line-code>。第一个 API ，创建生成图片的任务，他会返回一个包含<line-code>prompt_id</line-code>的对象，该值后面会用到</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="JSON">
+//  请求体（其中 prompt 是“导出（API）”得到的 JSON 文件的内容）
+//      这里测试的正向提示词（也就是想要生成的内容）是：A cute little pig
+{
+    "client_id": "可选",
+    "prompt":{}
+}
+//  响应体（其中 prompt_id 是后续请求的参数）
+{
+    "prompt_id": "11a28a30-20c8-4cf1-bf00-6796ba3374f6",
+    "number": 3,
+    "node_errors": {}
+}
+
+            </pre>
+            <p>
+                <img src="./image/text-to-image-postman-001.png" alt="ComfyUI 项目，postman，/prompt 请求" />
+            </p>
+            <h5>/history/{prompt_id}</h5>
+            <p>请求方式为：<line-code>GET</line-code>。你看看这个官方的说明：retrieve the queue history for a specific prompt。他会返回一些关于这个任务（prompt_id）的信息：例如：创建任务时的"prompt"；生成的图片信息等。如果图片没有生成结束，返回的是<line-code>{}</line-code></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="JSON">
+//  响应体，这里只展示了部分内容
+//      如果工作流中设置生成的图片数量为 2，那么 images 数组中就会有 2 个元素
+{
+    "11a28a30-20c8-4cf1-bf00-6796ba3374f6": {
+        "prompt": [],
+        "outputs": {
+            "9": {
+                "images": [{
+                        "filename": "ComfyUI_00007_.png",
+                        "subfolder": "",
+                        "type": "output"
+                    }
+                ]
+            }
+        },
+        "status": {},
+        "meta": {}
+    }
+}
+            </pre>
+            <p>
+                <img src="./image/text-to-image-postman-002.png" alt="ComfyUI 项目，postman，/history/{prompt_id} 请求" />
+            </p>
+            <h5>/view</h5>
+            <p>请求方式为：<line-code>GET</line-code>。获取生成的图片，需要通过查询参数的方式传入文件名称等，例如：<line-code>/view?filename=ComfyUI_00009_.png&type=output</line-code>。其中<line-code>filename</line-code>和<line-code>type</line-code>可以在上面的<line-code>/history/{prompt_id}</line-code>返回值中获取</p>
+            <p>
+                <img src="./image/text-to-image-postman-003.png" alt="ComfyUI 项目，postman，/view?filename=xxx 请求" />
+            </p>
+            <h4>JavaScript</h4>
+            <p>上面使用 Postman 测试时有没有发现一个问题：客户端什么时候知道生成图片成功了？官方<line-code>ComfyUI\script_examples</line-code>目录下给出了<line-code>Python</line-code>下的调用方案，使用了<line-code>WebSocket</line-code>，这里参照示例改写了一个<line-code>JavaScript</line-code>版本的，并且做了一个页面，你可以试试：<a href="/demo/js/ComfyUI/index.html" target="_blank" rel="noopener noreferrer">ComfyUI 文生图 - xiaodu114.github.io</a></p>
+            <details>
+                <summary>点击查看测试截图</summary>
+                <p>
+                    <img src="./image/text-to-image-js-001.png" alt="ComfyUI 项目，JavaScript 调用 API 获取图片示例" />
+                </p>
+                <p>
+                    <img src="./image/text-to-image-js-002.png" alt="ComfyUI 项目，JavaScript，WebSocket 接收消息示例" />
+                </p>
+                <p>这里发现一个问题：如果你的提示词不换，再次点击生成图片时，服务器端会采用上次生成的图片，哪怕你刷新页面都没用。目前还没有找到对应的开关。</p>
+                <p>
+                    <img src="./image/text-to-image-js-003.png" alt="ComfyUI 项目，生成图片，如果参数不变，服务器端会采用上次生成的图片" />
+                </p>
+            </details>
+        </div>
+    </body>
+</html>
