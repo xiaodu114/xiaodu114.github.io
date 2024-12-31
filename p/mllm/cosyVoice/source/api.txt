@@ -1,0 +1,49 @@
+import os
+import sys
+from datetime import datetime
+
+from fastapi import FastAPI, UploadFile, File, Form
+from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
+
+from cosyvoice.cli.cosyvoice import CosyVoice2
+from cosyvoice.utils.file_utils import load_wav
+import torchaudio
+
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append('{}/third_party/Matcha-TTS'.format(ROOT_DIR))
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.post("/clone_voice_by_file")
+async def clone_voice_by_file(file: UploadFile = File(...),
+                              tts_text: str = Form(
+                                  ..., description="需要转语音的文本，例如：我们生在红旗下，长在春风里，人民有信仰，国家有力量，民族有希望，目光所至皆为华夏，五星闪耀，皆为信仰，愿以吾辈之青春，护我盛世之中华 ，此生无悔入华夏，来生还做中国人！"),
+                              prompt_text: str = Form(...,
+                                                      description="音频文件内容，例如：你今天晚上吃的什么饭呀"),
+                              sample_rate: int = Form(16000, description="采样率，默认为16000")):
+    """根据音频文件进行语音克隆"""
+    clone_audio_filename = 'clone_' + \
+        datetime.now().strftime('%Y-%m-%d %H-%M-%S-%f')[:-3]
+    prompt_speech_16k = load_wav(file.file, sample_rate)
+    for i, j in enumerate(cosyvoice.inference_zero_shot(tts_text, prompt_text, prompt_speech_16k, stream=False)):
+        torchaudio.save(f"{clone_audio_filename}_{i}.wav",
+                        j['tts_speech'], cosyvoice.sample_rate)
+    return True
+
+
+if __name__ == "__main__":
+
+    cosyvoice = CosyVoice2('E:/llm/pretrained_models/CosyVoice2-0.5B',
+                           load_jit=True, load_onnx=False, load_trt=False)
+
+    uvicorn.run(app, host="0.0.0.0", port=13140, workers=1)
