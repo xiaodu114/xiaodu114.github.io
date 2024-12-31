@@ -75,7 +75,7 @@ pip install -r requirements.txt
                     <img src="./image/7.png" alt="CosyVoice 项目，安装依赖成功" />
                 </p>
             </details>
-            <h3>运行项目</h3>
+            <h3>运行项目-WebUI</h3>
             <p>环境和模型都弄好了，下面就是启动项目了，这里用的是<line-code>CosyVoice2-0.5B</line-code>的模型。通往成功的道路上，永远少不了磕磕绊绊，这不问题又来了：</p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 python webui.py --model_dir "E:/llm/pretrained_models/CosyVoice2-0.5B"
@@ -94,8 +94,8 @@ python webui.py --model_dir "E:/llm/pretrained_models/CosyVoice2-0.5B"
             <p>
                 <img src="./image/11.png" alt="CosyVoice 项目，启动成功，浏览器截图" />
             </p>
-            <h3>测试项目</h3>
-            <h4>3s极速复刻</h4>
+            <h4>测试项目</h4>
+            <h5>3s极速复刻</h5>
             <p>对这个比较感兴趣，先尝试这个。需要复刻（或者说合成）的文本时<line-code>目光所至皆为华夏，五星闪耀皆为信仰。</line-code>源音频是我在页面中直接录制的</p>
             <p>
                 <img src="./image/12.png" alt="CosyVoice 项目，启动成功，测试3s极速复刻" />
@@ -136,6 +136,42 @@ torchaudio.save(clone_audio_filename, i['tts_speech'], cosyvoice.sample_rate)
                     <audio src="./audio/clone_2024-12-17 18-04-16-192.wav" controls="controls"></audio>
                 </div>
             </div>
+            <h3>运行项目-API</h3>
+            <p>WebUI 不是我们的终点，我们需要的是 API，但是<line-code>runtime\python\fastapi\server.py</line-code>仅支持 1.0。我们自己弄一个吧，不是很麻烦：</p>
+            <p>先看一下类库方式使用的简单示例：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+import os
+import sys
+from cosyvoice.cli.cosyvoice import CosyVoice2
+from cosyvoice.utils.file_utils import load_wav
+import torchaudio
+
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append('{}/third_party/Matcha-TTS'.format(ROOT_DIR))
+
+if __name__ == "__main__":
+    tts_text = "我们生在红旗下，长在春风里，人民有信仰，国家有力量，民族有希望，目光所至皆为华夏，五星闪耀，皆为信仰，愿以吾辈之青春，护我盛世之中华 ，此生无悔入华夏，来生还做中国人！"
+    prompt_text = "你今天晚上吃的什么饭呀"
+
+    cosyvoice = CosyVoice2('E:/llm/pretrained_models/CosyVoice2-0.5B',load_jit=True, load_onnx=False, load_trt=False)
+    prompt_speech_16k = load_wav('source_001.wav', 16000)
+
+    for i, j in enumerate(cosyvoice.inference_zero_shot(tts_text, prompt_text, prompt_speech_16k, stream=False)):
+        torchaudio.save('zero_shot_ddz_{}.wav'.format(i), j['tts_speech'], cosyvoice.sample_rate)
+            </pre>
+            <p>上面的代码跑通之后，开始弄API，入口文件为<line-code>api.py</line-code>，代码如下：</p>
+            <details>
+                <summary>点击查看代码详情</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="./source/api.txt" ddz-lang="python"></div>
+            </details>
+            <p>之后，你只需要<line-code>python api.py</line-code>即可，记得激活虚拟环境啊</p>
+            <p>
+                <img src="./image/17.png" alt="CosyVoice 项目，API 方式启动项目" />
+            </p>
+            <p>下面再看一下，利用接口文档测试接口的截图：</p>
+            <p>
+                <img src="./image/18.png" alt="CosyVoice 项目，API 方式启动项目，利用接口文档测试" />
+            </p>
         </div>
     </body>
 </html>
