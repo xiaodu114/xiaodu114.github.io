@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>主页 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,主页,站内导航,站点地图" />
+        <meta name="description" content="该站点的导航首页" />
+
+        <link rel="stylesheet" href="https://registry.npmmirror.com/element-plus/2.9.1/files/dist/index.css" />
+        <style>
+            .masker-box {
+                position: fixed;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                outline: 0;
+                overflow: hidden;
+                background-color: rgba(0, 0, 0, 0.2);
+            }
+
+            .dialog-box {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: #fff;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+                display: flex;
+                flex-direction: column;
+                width: 640px;
+                height: 360px;
+
+                & > .header {
+                    position: relative;
+                    flex-shrink: 0;
+                    padding: 10px 39px 10px 15px;
+                    font-size: 18px;
+                    font-weight: bold;
+
+                    &::after {
+                        position: absolute;
+                        bottom: 0;
+                        right: 0;
+                        left: 0;
+                        height: 1px;
+                        content: "";
+                        -webkit-transform: scaleY(0.5);
+                        transform: scaleY(0.5);
+                        background-color: #ccc;
+                    }
+
+                    > .close-dialog {
+                        position: absolute;
+                        right: 15px;
+                        width: 1.5rem;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        font-size: 1.5rem;
+                        line-height: 1;
+                        color: #ccc;
+
+                        &:hover {
+                            color: red;
+                        }
+                    }
+                }
+
+                & > .content {
+                    flex: 1;
+                    padding: 10px 15px;
+                }
+
+                & > .footer {
+                    position: relative;
+                    flex-shrink: 0;
+                    padding: 15px;
+                    text-align: right;
+
+                    &::after {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        left: 0;
+                        height: 1px;
+                        content: "";
+                        -webkit-transform: scaleY(0.5);
+                        transform: scaleY(0.5);
+                        background-color: #ccc;
+                    }
+
+                    & > button {
+                        margin-right: 10px;
+                        cursor: pointer;
+
+                        &:last-child {
+                            margin-right: 0;
+                        }
+                    }
+                }
+            }
+        </style>
+
+        <script src="https://registry.npmmirror.com/vue/3.4.21/files/dist/vue.global.js"></script>
+        <script src="https://registry.npmmirror.com/element-plus/2.9.1/files/dist/index.full.js"></script>
+    </head>
+
+    <body>
+        <div id="app">
+            <h1>{{pageTitle}}</h1>
+            <button @click="showDialog = true">打开弹窗（组件方式）</button>
+            <du-dialog v-if="showDialog" title="这里是标题" :on-close="()=>{showDialog = false}">
+                <p>这是一个弹窗</p>
+            </du-dialog>
+            <hr />
+            <p>
+                <button @click="openDialogByMethod">打开弹窗（调用方法）</button>
+            </p>
+            <hr />
+            <p>
+                <el-button>Default</el-button>
+                <el-button type="primary">Primary</el-button>
+            </p>
+        </div>
+        <template id="dialog-component-tpl">
+            <div class="masker-box">
+                <div class="dialog-box">
+                    <slot name="header">
+                        <div class="header">
+                            {{title}}
+                            <span class="close-dialog" @click="onClose" title="关闭">X</span>
+                        </div>
+                    </slot>
+                    <div class="content"><slot>默认插槽：你想放点什么</slot></div>
+                    <slot name="footer">
+                        <div class="footer">
+                            <button @click="onCancel">取消</button>
+                            <button @click="onConfirm">确定</button>
+                        </div>
+                    </slot>
+                </div>
+            </div>
+        </template>
+        <script>
+            (() => {
+                if (!(window.Vue && window.ElementPlus)) {
+                    alert(`vue.global.js 或者 element-plus 加载异常`);
+                    return;
+                }
+
+                const { createApp, h, render, ref, onMounted } = Vue;
+
+                //#region Dialog 组件
+
+                const DialogComp = {
+                    name: "DuDialog",
+                    props: {
+                        title: {
+                            type: String,
+                            default: "提示"
+                        },
+                        onClose: {
+                            type: Function,
+                            default: () => {}
+                        },
+                        onConfirm: {
+                            type: Function,
+                            default: () => {}
+                        },
+                        onCancel: {
+                            type: Function,
+                            default: () => {}
+                        }
+                    },
+                    template: "#dialog-component-tpl"
+                };
+
+                //#endregion
+
+                //#region 函数方式调用 Dialog 组件
+
+                function openDuDialog(options, slotObj = {}) {
+                    const div = document.createElement("div");
+                    document.body.appendChild(div);
+
+                    function closeDialog() {
+                        app.unmount(div);
+                        document.body.removeChild(div);
+                    }
+
+                    function onConfirmHandler() {
+                        if (typeof options.onConfirm === "function") {
+                            options.onConfirm(closeDialog);
+                        } else {
+                            closeDialog();
+                        }
+                    }
+
+                    function onCancelHandler() {
+                        if (typeof options.onCancel === "function") {
+                            options.onCancel(closeDialog);
+                        } else {
+                            closeDialog();
+                        }
+                    }
+
+                    const dialogComponent = h(
+                        DialogComp,
+                        {
+                            ...options,
+                            onClose: closeDialog,
+                            onConfirm: onConfirmHandler,
+                            onCancel: onCancelHandler
+                        },
+                        {
+                            header: slotObj.headerSlot ? () => slotObj.headerSlot : null,
+                            default: slotObj.defaultSlot ? () => slotObj.defaultSlot : null,
+                            footer: slotObj.footerSlot ? () => slotObj.footerSlot : null
+                        }
+                    );
+
+                    const app = createApp({
+                        render() {
+                            return dialogComponent;
+                        }
+                    });
+                    app.mount(div);
+                    return app;
+                }
+
+                //#endregion
+
+                const app = createApp({
+                    setup() {
+                        // 生命周期钩子
+                        onMounted(() => {
+                            console.log("生命周期钩子：onMounted");
+                        });
+
+                        //  无需暴露的数据
+
+                        //  需要暴露的数据
+                        const pageTitle = ref("Dialog 组件示例"); //
+                        const showDialog = ref(false);
+
+                        function openDialogByMethod() {
+                            openDuDialog(
+                                {
+                                    title: "通过方法调用 Dialog 组件",
+                                    onConfirm: (close) => {
+                                        alert("点击了确定按钮");
+                                        close();
+                                    },
+                                    onCancel: (close) => {
+                                        alert("点击了取消按钮");
+                                        close();
+                                    }
+                                },
+                                {
+                                    defaultSlot: h(
+                                        ElementPlus.ElButton,
+                                        {
+                                            onClick(evt) {
+                                                alert("点击了按钮");
+                                            }
+                                        },
+                                        () => "点击按钮"
+                                    )
+                                }
+                            );
+                        }
+
+                        return {
+                            pageTitle,
+                            showDialog,
+                            openDialogByMethod
+                        };
+                    }
+                });
+
+                app.use(ElementPlus); // 使用 ElementPlus 组件库
+                app.component(DialogComp.name, DialogComp); // 注册组件
+
+                app.mount("#app");
+            })();
+        </script>
+    </body>
+</html>
