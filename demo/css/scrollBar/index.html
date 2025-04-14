@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>自定义滚动条样式（::-webkit-scrollbar） - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,css,滚动条,::-webkit-scrollbar" />
+        <meta name="description" content="自定义滚动条样式示例，使用 ::-webkit-scrollbar。更多请访问 xiaodu114.github.io" />
+        <style>
+            :root {
+                --main-color: #3cb878;
+            }
+
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                height: 100%;
+                width: 100%;
+                margin: 0;
+                overflow: hidden;
+            }
+
+            body {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .header {
+                display: flex;
+                align-items: baseline;
+                gap: 2rem;
+            }
+
+            .scroll-bar-demo-box {
+                flex: 1;
+                overflow-y: auto;
+
+                .scroll-bar-row-box {
+                    display: flex;
+                    justify-content: space-around;
+                    margin-bottom: 2rem;
+
+                    .scroll-bar-box {
+                        height: 235px;
+                        width: 325px;
+                        overflow: auto;
+                        white-space: nowrap;
+                        background: antiquewhite;
+
+                        p {
+                            line-height: 2;
+                        }
+                    }
+                }
+            }
+
+            .scroll-bar-000 {
+                /* 修改滚动条的宽度和高度 */
+                &::-webkit-scrollbar {
+                    width: 8px; /* 水平滚动条的宽度 */
+                    height: 8px; /* 垂直滚动条的高度 */
+                }
+
+                /* 修改滚动条滑块的样式 */
+                &::-webkit-scrollbar-thumb {
+                    border-radius: 8px; /* 滑块的圆角 */
+                    background: var(--main-color); /* 滑块的背景颜色 */
+                }
+
+                /* 修改滚动条轨道的样式 */
+                &::-webkit-scrollbar-track {
+                    border-radius: 8px; /* 轨道的圆角 */
+                    background: rgb(60, 184, 120, 0.5); /* 轨道的背景颜色 */
+                }
+
+                /* 修改滚动条角落的样式 */
+                &::-webkit-scrollbar-corner {
+                    border-radius: 8px; /* 角落的圆角 */
+                    background: red; /* 角落的背景颜色 */
+                }
+
+                /* 滚动条没有滑块的轨道部分 */
+                &::-webkit-scrollbar-track-piece {
+                    border-radius: 8px;
+                    background: none !important;
+                }
+            }
+
+            .scroll-bar-001 {
+                &::-webkit-scrollbar {
+                    width: 8px;
+                }
+
+                &::-webkit-scrollbar-thumb {
+                    background: var(--main-color);
+                }
+
+                &::-webkit-scrollbar-track {
+                    background: rgb(60, 184, 120, 0.5);
+                }
+            }
+
+            .scroll-bar-002 {
+                &::-webkit-scrollbar {
+                    height: 8px;
+                }
+
+                &::-webkit-scrollbar-thumb {
+                    background: var(--main-color);
+                }
+
+                &::-webkit-scrollbar-track {
+                    background: rgb(60, 184, 120, 0.5);
+                }
+            }
+
+            .scroll-bar-003 {
+                &::-webkit-scrollbar {
+                    width: 8px;
+                    height: 8px;
+                }
+
+                &::-webkit-scrollbar-thumb {
+                    background: var(--main-color);
+                }
+
+                &::-webkit-scrollbar-corner {
+                    border-radius: 0;
+                    background: blue;
+                }
+
+                &::-webkit-scrollbar-track-piece {
+                    border-radius: 8px;
+                    background: rebeccapurple;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>自定义滚动条样式</h1>
+            <span>
+                <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/::-webkit-scrollbar" target="_blank" rel="noopener noreferrer">::-webkit-scrollbar - CSS：层叠样式表 | MDN</a>
+            </span>
+        </div>
+        <div class="scroll-bar-demo-box">
+            <div class="scroll-bar-row-box">
+                <div class="scroll-bar-box">
+                    <h2>默认滚动条</h2>
+                    <p>……</p>
+                    <p>……</p>
+                    <p>……</p>
+                    <p>……</p>
+                    <p>……</p>
+                    <p>……</p>
+                    <p>……</p>
+                </div>
+            </div>
+            <div class="scroll-bar-row-box">
+                <div class="scroll-bar-box scroll-bar-001">
+                    <h2>第一个滚动条：纵向</h2>
+                    <p>修改“滑块”和“轨道”的颜色</p>
+                    <p>……</p>
+                    <p>……</p>
+                    <p>……</p>
+                    <p>……</p>
+                    <p>……</p>
+                    <p>……</p>
+                    <p>……</p>
+                </div>
+                <div class="scroll-bar-box scroll-bar-002">
+                    <h2>第二个滚动条：横向……看不到我，你肯定看不到我的，😄😄😄</h2>
+                    <p>修改“滑块”和“轨道”的颜色</p>
+                    <p>……</p>
+                </div>
+            </div>
+            <div class="scroll-bar-row-box">
+                <div class="scroll-bar-box scroll-bar-003">
+                    <h2>第三个滚动条：都有……看不到我，你肯定看不到我的，😄😄😄</h2>
+                    <p>修改“滑块”和“没有滑块的轨道”的颜色</p>
+                    <p>垂直滚动条和水平滚动条交汇部分的颜色</p>
+                    <p>……</p>
+                    <p>……</p>
+                    <p>……</p>
+                    <p>……</p>
+                    <p>……</p>
+                    <p>……</p>
+                    <p>……</p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
