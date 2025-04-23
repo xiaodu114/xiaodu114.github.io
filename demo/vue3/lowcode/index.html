@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>low code 示例 - xiaodu114.github.io</title>
+
+        <meta name="author" content="xiaodu114" />
+        <meta name="keywords" content="xiaodu114,Vue.js,Vue,Vue 3,Pinia,vue-router,low code,lowcode" />
+        <meta name="description" content="基于 Vue.js、Pinia、vue-router、Element Plus 的低代码示例项目" />
+
+        <link rel="stylesheet" href="https://registry.npmmirror.com/element-plus/2.9.8/files/dist/index.css" />
+        <link rel="stylesheet" href="./css/index.css" />
+        <style>
+            [v-cloak] {
+                display: none;
+            }
+        </style>
+
+        <script type="importmap">
+            {
+                "imports": {
+                    "vue": "https://registry.npmmirror.com/vue/3.5.13/files/dist/vue.esm-browser.prod.js",
+                    "birpc": "https://registry.npmmirror.com/birpc/2.3.0/files/dist/index.mjs",
+                    "hookable": "https://registry.npmmirror.com/hookable/5.5.3/files/dist/index.mjs",
+                    "perfect-debounce": "https://registry.npmmirror.com/perfect-debounce/1.0.0/files/dist/index.mjs",
+                    "@vue/devtools-shared": "https://registry.npmmirror.com/@vue/devtools-shared/7.7.5/files/dist/index.js",
+                    "@vue/devtools-kit": "https://registry.npmmirror.com/@vue/devtools-kit/7.7.5/files/dist/index.js",
+                    "@vue/devtools-api": "https://registry.npmmirror.com/@vue/devtools-api/7.7.5/files/dist/index.js",
+                    "pinia": "https://registry.npmmirror.com/pinia/3.0.2/files/dist/pinia.esm-browser.js",
+                    "vue-router": "https://registry.npmmirror.com/vue-router/4.5.0/files/dist/vue-router.esm-browser.js",
+                    "element-plus": "https://registry.npmmirror.com/element-plus/2.9.8/files/dist/index.full.mjs"
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div id="app" class="app" v-cloak>
+            <div class="header">
+                <div class="left">
+                    <h1>{{head.title}}</h1>
+                </div>
+                <div class="right">
+                    <el-dropdown>
+                        <span class="el-dropdown-link">
+                            <el-button type="primary">传送门&nbsp;&nbsp;&equiv;</el-button>
+                        </span>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item v-for="(a,index) in head?.links" :key="index"> <a target="_blank" rel="noopener noreferrer" :href="a.href">{{a.text}}</a></el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </div>
+            </div>
+            <div class="main">
+                <div class="nav">
+                    <ul>
+                        <li v-for="item in navMenuItems" :key="item.name" :class="{active:(activeNav && activeNav.routerName === item.routerName)}" @click="goTo(item)">{{item.text}}</li>
+                    </ul>
+                </div>
+                <div class="content">
+                    <router-view></router-view>
+                </div>
+            </div>
+        </div>
+
+        <script type="module">
+            //  1、引入 vue 全家桶
+            import { createApp, ref } from "vue";
+            import { createPinia } from "pinia";
+            import { useRouter, useRoute } from "vue-router";
+
+            //  2、引入路由配置
+            import { default as router, navItems } from "./router/index.js";
+
+            //  3、引入 UI 库
+            import ElementPlus from "element-plus";
+
+            //  测试
+            import { useUILibStore } from "./store/uiLib.js";
+
+            //  6、开始创建APP
+            const vue3App = createApp({
+                setup(props, {}) {
+                    const uiLibStore = useUILibStore();
+                    console.log(uiLibStore.lib);
+                    //  无需暴露的数据
+                    const router = useRouter();
+                    const route = useRoute();
+
+                    //  需要暴露的数据
+                    const head = ref({
+                        title: "low code 示例",
+                        links: [
+                            {
+                                href: "https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/script",
+                                text: "<script>：脚本元素 - HTML（超文本标记语言） | MDN"
+                            },
+                            {
+                                href: "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Modules",
+                                text: "JavaScript 模块 - JavaScript | MDN"
+                            },
+                            {
+                                href: "https://cn.vuejs.org/",
+                                text: "Vue.js - 渐进式 JavaScript 框架 | Vue.js"
+                            },
+                            {
+                                href: "https://pinia.vuejs.org/zh/",
+                                text: "Pinia | The intuitive store for Vue.js"
+                            },
+                            {
+                                href: "https://router.vuejs.org/zh/",
+                                text: "Vue Router | Vue.js 的官方路由"
+                            },
+                            {
+                                href: "https://element-plus.org/zh-CN/",
+                                text: "一个 Vue 3 UI 框架 | Element Plus"
+                            }
+                        ]
+                    });
+                    const navMenuItems = ref(navItems);
+                    let activeNav = ref(null);
+
+                    //  不需要暴露的方法
+                    const init = () => {
+                        if (route) {
+                            let item = navMenuItems.value.filter((item) => item.routerName === route.name)[0];
+                            if (item) {
+                                activeNav = item;
+                            } else {
+                                goTo(navMenuItems.value[0]);
+                            }
+                        } else {
+                            goTo(navMenuItems.value[0]);
+                        }
+                    };
+
+                    //  需要暴露的方法
+                    const goTo = (item) => {
+                        if (activeNav === item) return;
+                        activeNav.value = item;
+                        router.push({ name: item.routerName, params: { src: item.src } });
+                    };
+
+                    init();
+
+                    return { head, navMenuItems, activeNav, goTo };
+                }
+            });
+
+            const pinia = createPinia();
+            vue3App.use(pinia);
+            vue3App.use(router);
+            vue3App.use(ElementPlus);
+            vue3App.mount("#app");
+        </script>
+    </body>
+</html>
