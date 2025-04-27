@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>js-export-word - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,JavaScript,js-export-word" />
+        <meta name="description" content="js-export-word 示例" />
+
+        <style>
+            .css-style-01 {
+                color: #3cb878;
+                font-weight: 900;
+                font-style: italic;
+                text-shadow: 6px 6px 6px black;
+            }
+        </style>
+
+        <style>
+            .css-style-02 {
+                color: blueviolet;
+                font-style: italic;
+            }
+
+            .css-style-02 > span {
+                color: red;
+                font-weight: bold;
+                font-size: 2rem;
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+        <script src="https://registry.npmmirror.com/file-saver/2.0.5/files/dist/FileSaver.js"></script>
+        <script src="https://registry.npmmirror.com/html2canvas/1.4.1/files/dist/html2canvas.js"></script>
+        <script src="https://unpkg.com/js-export-word@1.0.5/dist/export-word.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/demo/js/Word/pages/jsExportWord.html -->
+        <div class="blog-page">
+            <h1>js-export-word</h1>
+            <p>js-export-word 示例。测试版本：<line-code>1.0.5</line-code>。默认为：<line-code>doc</line-code>格式</p>
+            <p>注意：这里没有测试 <line-code>toImg</line-code> 配置</p>
+            <h2>参考</h2>
+            <ul>
+                <li>
+                    <a href="https://github.com/huangbohang/export-word" target="_blank" rel="noopener noreferrer">GitHub - huangbohang/export-word: 一个html导出为word的JS库</a>
+                </li>
+                <li>
+                    <a href="https://github.com/niklasvh/html2canvas" target="_blank" rel="noopener noreferrer">GitHub - niklasvh/html2canvas: Screenshots with JavaScript</a>
+                </li>
+                <li>
+                    <a href="https://github.com/eligrey/FileSaver.js" target="_blank" rel="noopener noreferrer">GitHub - eligrey/FileSaver.js: An HTML5 saveAs() FileSaver implementation</a>
+                </li>
+            </ul>
+            <h2>说明</h2>
+            <p><strong>注意：</strong>有些样式在 Word 中可能无法正常显示，比如：text-shadow 等。或者 .css-style-02 > span 像这种 css 子选择器也不支持。</p>
+            <h2>css类样式</h2>
+            <p class="css-style-01">这段文字采用的是类样式，生成 Word 之后的效果应该和网页中不一样</p>
+            <p>下面的这个表格也是类样式</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>学号</th>
+                        <th>姓名</th>
+                        <th>语文</th>
+                        <th>数学</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>张三</td>
+                        <td>98</td>
+                        <td>100</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>李四</td>
+                        <td>100</td>
+                        <td>100</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>王五</td>
+                        <td>98</td>
+                        <td>96</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="css-style-02"><span>注意：</span>这段文字虽然采用的是类样式，但是会在拼接的 HTML 中插入该段样式，请留意生成的 Word 文件中的效果</p>
+            <h2>行内样式</h2>
+            <p style="color: red; font-weight: bold; font-style: oblique">这段文字采用的是行内样式，生成 Word 之后的效果应该和网页中一样……</p>
+            <h2>示例</h2>
+            <p>
+                <button type="button" onclick="btnExportToDoc()">导出为 .doc 文件</button>
+            </p>
+        </div>
+        <script>
+            function btnExportToDoc() {
+                exportWord(document.querySelector(".blog-page"), {
+                    addStyle: true, // 是否导出样式，默认为true，此操作会将所有样式转换成行内样式导出
+                    fileName: `js-export-word-${new Date().valueOf()}`, // 导出文件名
+                    // toImg: [], // 页面哪些部分需要转化成图片，例如echart图表之类
+                    success() {} // 完成之后回调，一般页面篇幅比较大，时间比较长
+                });
+            }
+        </script>
+    </body>
+</html>

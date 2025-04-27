@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>docx.js - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,JavaScript,docx,docx.js" />
+        <meta name="description" content="docx.js 示例" />
+
+        <style>
+            .css-style-01 {
+                color: #3cb878;
+                font-weight: 900;
+                font-style: italic;
+                text-shadow: 6px 6px 6px black;
+            }
+        </style>
+
+        <style>
+            .css-style-02 {
+                color: blueviolet;
+                font-style: italic;
+            }
+
+            .css-style-02 > span {
+                color: red;
+                font-weight: bold;
+                font-size: 2rem;
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+        <!-- <script src="https://registry.npmmirror.com/file-saver/2.0.5/files/dist/FileSaver.js"></script> -->
+        <script src="https://unpkg.com/docx@9.4.1/dist/index.iife.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/demo/js/Word/pages/docxJS.html -->
+        <div class="blog-page">
+            <h1>docx.js</h1>
+            <p>docx.js 示例。测试版本：<line-code>3.61.1</line-code>。</p>
+            <h2>参考</h2>
+            <ul>
+                <li>
+                    <a href="https://docx.js.org/" target="_blank" rel="noopener noreferrer">docx.js - Getting Started</a>
+                </li>
+                <li>
+                    <a href="https://github.com/dolanmiu/docx" target="_blank" rel="noopener noreferrer">GitHub - dolanmiu/docx: Easily generate and modify .docx files with JS/TS with a nice declarative API. Works for Node and on the Browser.</a>
+                </li>
+            </ul>
+            <h2>示例</h2>
+            <p>
+                <button type="button" onclick="btnExportToDoc('doc')">导出为 doc 文件</button>
+                <button type="button" onclick="btnExportToDoc('docx')">导出为 docx 文件</button>
+            </p>
+        </div>
+        <script>
+            const { Document, Packer, WidthType, LineRuleType, VerticalAlign, TextRun, TableCell, TableRow, Table, Paragraph, HeadingLevel, AlignmentType } = docx;
+
+            function convertFormData2Paragraphs(formData) {
+                if (!(Array.isArray(formData) && formData.length > 0)) return [];
+                return formData.map((item) => {
+                    return new Paragraph({
+                        spacing: {
+                            line: 1.5 * 240
+                        },
+                        children: [
+                            new TextRun({
+                                text: item.title + item.value,
+                                font: "宋体",
+                                size: 24
+                            })
+                        ]
+                    });
+                });
+            }
+
+            function toDocxTable(config) {
+                if (!(typeof config === "object" && config !== null)) return null;
+                const { data, columns } = config;
+                if (!(Array.isArray(columns) && columns.length > 0)) return null;
+                if (!(Array.isArray(data) && data.length > 0)) return null;
+                const headerTr = new TableRow({
+                    children: columns.map(
+                        (item) =>
+                            new TableCell({
+                                children: [
+                                    new Paragraph({
+                                        children: [
+                                            new TextRun({
+                                                text: item.title?.toString(),
+                                                bold: true
+                                            })
+                                        ]
+                                    })
+                                ]
+                            })
+                    )
+                });
+                const bodyTrs = data.map((item) => {
+                    const cells = columns.map(
+                        (col) =>
+                            new TableCell({
+                                //  如果是数字，下面的代码显示不出来，这里直接转成字符串
+                                children: [new Paragraph({ text: item[col.key]?.toString() })]
+                            })
+                    );
+                    return new TableRow({ children: cells });
+                });
+                return new Table({
+                    width: { size: 100, type: WidthType.PERCENTAGE },
+                    rows: [headerTr, ...bodyTrs]
+                });
+            }
+
+            function btnExportToDoc(type) {
+                const eleBlogPage = document.querySelector(".blog-page");
+                const filename = `docx.js-${new Date().valueOf()}.${type}`;
+
+                const baseInfoArea = convertFormData2Paragraphs([
+                    { title: "姓名：", key: "", value: "杜一" },
+                    { title: "性别：", key: "", value: "你猜" },
+                    { title: "出生日期：", key: "", value: "19xx-xx-xx" },
+                    { title: "手机号：", key: "", value: "13112345678" },
+                    {
+                        title: "技术特长：",
+                        key: "",
+                        value: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                    },
+                    {
+                        title: "个人评价：",
+                        key: "",
+                        value: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                    }
+                ]);
+
+                const rescueForceTableArea = toDocxTable({
+                    columns: [
+                        { title: "学号", key: "id" },
+                        { title: "姓名", key: "name" },
+                        { title: "语文", key: "chinese" },
+                        { title: "数学", key: "math" }
+                    ],
+                    data: [
+                        { id: 1, name: "张三", chinese: 98, math: 100 },
+                        { id: 2, name: "李四", chinese: 100, math: 100 },
+                        { id: 3, name: "王五", chinese: 98, math: 96 }
+                    ]
+                });
+                const doc = new Document({
+                    sections: [
+                        {
+                            properties: {},
+                            children: [
+                                new Paragraph({
+                                    text: "我的简历",
+                                    heading: HeadingLevel.HEADING_1,
+                                    alignment: AlignmentType.CENTER,
+                                    spacing: { before: 500, after: 12000 }
+                                }),
+                                new Paragraph({
+                                    spacing: {
+                                        line: 1.5 * 240,
+                                        lineRule: LineRuleType.AT_LEAST
+                                    },
+                                    children: [
+                                        new TextRun({
+                                            text: "此简历纯属虚构，如有雷同，那可能就是真的……",
+                                            bold: true
+                                        })
+                                    ]
+                                })
+                            ]
+                        },
+                        {
+                            properties: {},
+                            children: [
+                                new Paragraph({
+                                    text: "1. 基本信息",
+                                    heading: HeadingLevel.HEADING_1,
+                                    alignment: AlignmentType.LEFT
+                                }),
+                                ...baseInfoArea,
+                                new Paragraph({
+                                    text: "2. 我的同党",
+                                    heading: HeadingLevel.HEADING_1,
+                                    alignment: AlignmentType.LEFT
+                                }),
+                                rescueForceTableArea,
+                                new Paragraph({
+                                    text: "4. 总结",
+                                    heading: HeadingLevel.HEADING_1,
+                                    alignment: AlignmentType.LEFT
+                                })
+                            ]
+                        }
+                    ]
+                });
+
+                Packer.toBlob(doc).then((blob) => {
+                    //  1、使用 FileSaver.js 保存文件
+                    // saveAs(blob, filename);
+
+                    //  2、自己保存
+                    if (navigator.msSaveOrOpenBlob) {
+                        navigator.msSaveOrOpenBlob(blob, filename);
+                    } else {
+                        const aLink = document.createElement("a");
+                        aLink.href = URL.createObjectURL(blob);
+                        aLink.download = filename;
+                        document.body.appendChild(aLink);
+                        aLink.click();
+                        document.body.removeChild(aLink);
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>
