@@ -1,0 +1,23 @@
+{
+    "short_name": "xiaodu114",
+    "name": "xiaodu114 的小站",
+    "icons": [
+        {
+            "src": "/logo/1024.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/logo/1024.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "/logo/1024.png",
+            "sizes": "1024x1024",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "/index.html",
+    "display": "fullscreen"
+}
