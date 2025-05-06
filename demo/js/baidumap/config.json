@@ -1,0 +1,26 @@
+{
+    "pageTitle": "百度地图 - xiaodu114.github.io",
+    "head": {
+        "title": "我和百度地图的故事",
+        "links": [
+            {
+                "href": "https://lbs.baidu.com/",
+                "text": "百度地图开放平台"
+            }
+        ]
+    },
+    "nodes": [
+        {
+            "id": 1,
+            "text": "介绍",
+            "code": "Introduction",
+            "page": "/demo/js/baidumap/pages/introduction.html"
+        },
+        {
+            "id": 2,
+            "text": "Hello World",
+            "code": "HelloWorld",
+            "page": "/demo/js/baidumap/pages/helloWorld.html"
+        }
+    ]
+}
