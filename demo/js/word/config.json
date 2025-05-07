@@ -9,37 +9,37 @@
             "id": 0,
             "text": "HTML 转 doc",
             "code": "html2doc",
-            "page": "/demo/js/Word/pages/html2doc.html"
+            "page": "/demo/js/word/pages/html2doc.html"
         },
         {
             "id": 1,
             "text": "html-docx-js (npm)",
             "code": "html-docx-js",
-            "page": "/demo/js/Word/pages/htmlDocxJS.html"
+            "page": "/demo/js/word/pages/htmlDocxJS.html"
         },
         {
             "id": 2,
             "text": "js-export-word (npm)",
             "code": "js-export-word",
-            "page": "/demo/js/Word/pages/jsExportWord.html"
+            "page": "/demo/js/word/pages/jsExportWord.html"
         },
         {
             "id": 3,
             "text": "docxtemplater (npm)",
             "code": "docxtemplater",
-            "page": "/demo/js/Word/pages/docxtemplaterJS.html"
+            "page": "/demo/js/word/pages/docxtemplaterJS.html"
         },
         {
             "id": 4,
             "text": "docx (npm)",
             "code": "docx",
-            "page": "/demo/js/Word/pages/docxJS.html"
+            "page": "/demo/js/word/pages/docxJS.html"
         },
         {
             "id": 5,
             "text": "nodejs 环境",
             "code": "nodejs",
-            "page": "/demo/js/Word/pages/nodejs.html"
+            "page": "/demo/js/word/pages/nodejs.html"
         }
     ]
 }
