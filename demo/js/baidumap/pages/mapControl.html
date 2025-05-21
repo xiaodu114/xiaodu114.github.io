@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>百度地图- 地图控件 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,百度地图,地图控件,添加比例尺/缩放控件,添加3D控制控件,添加定位控件,添加城市列表控件,添加第三方版权控件,添加自定义控件" />
+        <meta name="description" content="百度地图之地图控件：添加比例尺/缩放控件、添加3D控制控件、添加定位控件、添加城市列表控件、添加第三方版权控件、添加自定义控件" />
+
+        <style>
+            #allmap {
+                width: 100%;
+                height: 100vh;
+            }
+
+            .btns {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 1rem;
+                flex-wrap: wrap;
+
+                > button {
+                    cursor: pointer;
+                }
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+        <script type="text/javascript" src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=RPgrrNUfpuIGa6Pr0kvPzvoh7FXYy9hg"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>地图控件</h1>
+            <p>地图控件开会啦</p>
+            <h2>添加比例尺/缩放控件</h2>
+            <div class="btns">
+                <button type="button" id="btnAddScaleControl">添加比例尺</button>
+                <button type="button" id="btnAddZoomControl">添加缩放控件</button>
+                <button type="button" id="btnAdd3DControl">添加3D控制控件</button>
+                <button type="button" id="btnAddLocationControl">添加定位控件</button>
+                <button type="button" id="btnAddCityListControl">添加城市列表控件</button>
+                <button type="button" id="btnAddCopyrightControl">添加第三方版权控件</button>
+                <button type="button" id="btnAddCustomControl">添加自定义控件</button>
+            </div>
+            <div id="allmap"></div>
+        </div>
+        <script type="text/javascript">
+            const map = new BMapGL.Map("allmap"); // 创建Map实例
+            map.centerAndZoom(new BMapGL.Point(116.404, 39.915), 12); // 初始化地图,设置中心点坐标和地图级别
+            map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+
+            document.getElementById("btnAddScaleControl").onclick = function () {
+                map.addControl(new BMapGL.ScaleControl()); // 添加比例尺控件
+            };
+
+            document.getElementById("btnAddZoomControl").onclick = function () {
+                map.addControl(new BMapGL.ZoomControl()); // 添加缩放控件
+            };
+
+            document.getElementById("btnAdd3DControl").onclick = function () {
+                map.addControl(new BMapGL.NavigationControl3D()); // 添加3D控件
+            };
+
+            //#region 位置控件
+
+            const locationControl = new BMapGL.LocationControl({
+                // 控件的停靠位置（可选，默认左上角）
+                anchor: BMAP_ANCHOR_TOP_RIGHT,
+                // 控件基于停靠位置的偏移量（可选）
+                offset: new BMapGL.Size(20, 20)
+            });
+            locationControl.addEventListener("locationSuccess", function (e) {
+                var address = "";
+                address += e.addressComponent.province;
+                address += e.addressComponent.city;
+                address += e.addressComponent.district;
+                address += e.addressComponent.street;
+                address += e.addressComponent.streetNumber;
+                alert("当前定位地址为：" + address);
+            });
+            locationControl.addEventListener("locationError", function (e) {
+                alert(e.message);
+            });
+            document.getElementById("btnAddLocationControl").onclick = function () {
+                // 将控件添加到地图上
+                map.addControl(locationControl);
+            };
+
+            //#endregion
+
+            document.getElementById("btnAddCityListControl").onclick = function () {
+                map.addControl(
+                    new BMapGL.CityListControl({
+                        // 控件的停靠位置（可选，默认左上角）
+                        anchor: BMAP_ANCHOR_TOP_LEFT,
+                        // 控件基于停靠位置的偏移量（可选）
+                        offset: new BMapGL.Size(10, 5)
+                    })
+                ); // 添加城市列表控件
+            };
+
+            document.getElementById("btnAddCopyrightControl").onclick = function () {
+                const cr = new BMapGL.CopyrightControl({
+                    anchor: BMAP_ANCHOR_BOTTOM_RIGHT,
+                    offset: new BMapGL.Size(60, 20)
+                }); //设置版权控件位置
+                map.addControl(cr); //添加版权控件
+                const bs = map.getBounds(); //返回地图可视区域
+                cr.addCopyright({
+                    id: 1,
+                    content: "<img src='/logo/1024.png' width='50px' height='50px'/><a href='#' style='font-size:16px;color:#000'>@我是自定义版权控件呀</a>",
+                    bounds: bs
+                });
+            };
+
+            //#region 自定义控件
+
+            //定义一个控件类
+            function ZoomControl() {
+                this.defaultAnchor = BMAP_ANCHOR_BOTTOM_RIGHT;
+                this.defaultOffset = new BMapGL.Size(20, 100);
+            }
+            //通过JavaScript的prototype属性继承于BMap.Control
+            ZoomControl.prototype = new BMapGL.Control();
+
+            //自定义控件必须实现自己的initialize方法，并且将控件的DOM元素返回
+            //在本方法中创建个div元素作为控件的容器，并将其添加到地图容器中
+            ZoomControl.prototype.initialize = function (map) {
+                //创建一个dom元素
+                var div = document.createElement("div");
+                //添加文字说明
+                div.appendChild(document.createTextNode("放大2级"));
+                // 设置样式
+                div.style.cursor = "pointer";
+                div.style.padding = "7px 10px";
+                div.style.boxShadow = "0 2px 6px 0 rgba(27, 142, 236, 0.5)";
+                div.style.borderRadius = "5px";
+                div.style.backgroundColor = "white";
+                // 绑定事件,点击一次放大两级
+                div.onclick = function (e) {
+                    map.setZoom(map.getZoom() + 2);
+                };
+                // 添加DOM元素到地图中
+                map.getContainer().appendChild(div);
+                // 将DOM元素返回
+                return div;
+            };
+            document.getElementById("btnAddCustomControl").onclick = function () {
+                //创建控件元素
+                var myZoomCtrl = new ZoomControl();
+                //添加到地图中
+                map.addControl(myZoomCtrl);
+            };
+
+            //#endregion
+        </script>
+    </body>
+</html>

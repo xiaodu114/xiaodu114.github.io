@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>百度地图- 点覆盖物 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,百度地图,点覆盖物,可拖拽,自定义图标,可点击,自定义文本,Symbol矢量图标" />
+        <meta name="description" content="百度地图之点覆盖物：可拖拽、自定义图标、可点击、自定义文本、Symbol矢量图标" />
+
+        <style>
+            #allmap {
+                width: 100%;
+                height: 100vh;
+            }
+
+            .btns {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 1rem;
+                flex-wrap: wrap;
+
+                > button {
+                    cursor: pointer;
+                }
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+        <script type="text/javascript" src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=RPgrrNUfpuIGa6Pr0kvPzvoh7FXYy9hg"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>点覆盖物</h1>
+            <p>百度地图之点覆盖物</p>
+            <h2>开始你的表演</h2>
+            <div class="btns">
+                <button type="button" id="btnPoint">点标记</button>
+                <button type="button" id="btnPointDrag">点标记可拖拽</button>
+                <button type="button" id="btnPointIcon">点标记自定义图标</button>
+                <button type="button" id="btnPointClick">点标记可点击</button>
+                <button type="button" id="btnCustomText">自定义文本标注</button>
+                <button type="button" id="btnSymbolIcon">Symbol矢量图标</button>
+            </div>
+            <div id="allmap"></div>
+        </div>
+        <script type="text/javascript">
+            // GL版命名空间为BMapGL
+            // 按住鼠标右键，修改倾斜角和角度
+            const map = new BMapGL.Map("allmap"); // 创建Map实例
+            map.centerAndZoom(new BMapGL.Point(116.404, 39.915), 12); // 初始化地图,设置中心点坐标和地图级别
+            // map.centerAndZoom('上海市', 12); // 根据城市设置城市中心点和地图级别
+            map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+
+            document.getElementById("btnPoint").addEventListener("click", () => {
+                const point = new BMapGL.Point(116.40004811368668, 39.99434944582536);
+                const marker = new BMapGL.Marker(point);
+                map.addOverlay(marker);
+            });
+
+            document.getElementById("btnPointDrag").addEventListener("click", () => {
+                const point = new BMapGL.Point(116.40734929938807, 39.83830751065335);
+                const marker = new BMapGL.Marker(point);
+                marker.enableDragging();
+                // 也可以这样写，效果是一样的
+                // const marker = new BMapGL.Marker(point, {
+                //     enableDragging: true
+                // });
+                marker.addEventListener("dragstart", () => {
+                    console.log("可拖拽点标记，开始拖拽：", marker.getPosition());
+                });
+                marker.addEventListener("dragend", () => {
+                    console.log("可拖拽点标记，拖拽结束：", marker.getPosition());
+                });
+                map.addOverlay(marker);
+            });
+
+            document.getElementById("btnPointIcon").addEventListener("click", () => {
+                const point = new BMapGL.Point(116.40346101669394, 39.925178176591324);
+                const myIcon = new BMapGL.Icon("/logo/1024.png", new BMapGL.Size(64, 64));
+                const marker = new BMapGL.Marker(point, {
+                    icon: myIcon,
+                    enableDragging: true
+                });
+                map.addOverlay(marker);
+            });
+
+            document.getElementById("btnPointClick").addEventListener("click", () => {
+                const point = new BMapGL.Point(116.49632767273573, 39.9139392281588);
+                const marker = new BMapGL.Marker(point);
+                marker.addEventListener("click", () => {
+                    alert("点标记被点击了！");
+                });
+                map.addOverlay(marker);
+            });
+
+            document.getElementById("btnCustomText").addEventListener("click", () => {
+                var opts = {
+                    position: new BMapGL.Point(116.38516651227351, 39.87094728138377), // 指定文本标注所在的地理位置
+                    offset: new BMapGL.Size(30, -30) // 设置文本偏移量
+                };
+                // 创建文本标注对象
+                var label = new BMapGL.Label("大家好，我是文本标注", opts);
+                // 自定义文本标注样式
+                label.setStyle({
+                    color: "blue",
+                    borderRadius: "5px",
+                    borderColor: "#ccc",
+                    padding: "10px",
+                    fontSize: "16px",
+                    height: "30px",
+                    lineHeight: "30px",
+                    padding: "0"
+                });
+                map.addOverlay(label);
+            });
+
+            document.getElementById("btnSymbolIcon").addEventListener("click", () => {
+                const marker = new BMapGL.Marker(new BMapGL.Point(116.31922348810556, 39.916006847180896), {
+                    icon: new BMapGL.SVGSymbol(BMapGL.SymbolShapeType.BMap_Symbol_SHAPE_SMILE, { fillColor: "red", fillOpacity: 0.6, scale: 4, anchor: new BMapGL.Size(0, 5) })
+                });
+                map.addOverlay(marker);
+                marker.show();
+            });
+        </script>
+    </body>
+</html>

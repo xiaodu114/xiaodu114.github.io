@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>百度地图- 自定义覆盖物 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,百度地图,自定义覆盖物,自定义 canvas 覆盖物,自定义 DOM 覆盖物" />
+        <meta name="description" content="百度地图之自定义覆盖物：自定义 canvas 覆盖物、自定义 DOM 覆盖物" />
+
+        <style>
+            #allmap {
+                width: 100%;
+                height: 100vh;
+            }
+
+            .btns {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 1rem;
+                flex-wrap: wrap;
+
+                > button {
+                    cursor: pointer;
+                }
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+        <script type="text/javascript" src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=RPgrrNUfpuIGa6Pr0kvPzvoh7FXYy9hg"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>自定义覆盖物</h1>
+            <p>百度地图之自定义覆盖物</p>
+            <h2>开始你的表演</h2>
+            <div class="btns">
+                <button type="button" id="btnAddCanvasCover">自定义canvas覆盖物</button>
+                <button type="button" id="btnAddDomCover">自定义DOM覆盖物</button>
+            </div>
+            <div id="allmap"></div>
+        </div>
+        <script type="text/javascript">
+            // GL版命名空间为BMapGL
+            // 按住鼠标右键，修改倾斜角和角度
+            const map = new BMapGL.Map("allmap"); // 创建Map实例
+            map.centerAndZoom(new BMapGL.Point(116.404, 39.915), 12); // 初始化地图,设置中心点坐标和地图级别
+            // map.centerAndZoom('上海市', 12); // 根据城市设置城市中心点和地图级别
+            map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+
+            function createCanvas(config) {
+                var canvas = document.createElement("canvas");
+
+                const dpr = window.devicePixelRatio || 1;
+                canvas.style.width = 150 + "px";
+                canvas.style.height = 150 + "px";
+                canvas.setAttribute("width", 150 * dpr);
+                canvas.setAttribute("height", 150 * dpr);
+
+                var ctx = canvas.getContext("2d");
+                ctx.scale(dpr, dpr);
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(75, 75, 40, 0, Math.PI * 2, true);
+                ctx.fillStyle = "#3cb878";
+                ctx.fill();
+                ctx.strokeStyle = "rebeccapurple";
+                ctx.stroke();
+
+                return canvas;
+            }
+            document.getElementById("btnAddCanvasCover").addEventListener("click", () => {
+                const customOverlay = new BMapGL.CustomOverlay(createCanvas, {
+                    point: new BMapGL.Point(116.31922348810556, 39.916006847180896),
+                    offsetX: 0,
+                    offsetY: 0,
+                    // 控制覆盖物显示的层级
+                    // minZoom: 13,
+                    // maxZoom: 19,
+                    properties: {
+                        title: "Canvas 覆盖物"
+                    }
+                });
+                map.addOverlay(customOverlay);
+                customOverlay.addEventListener("click", function (e) {
+                    var data = e.target.properties.title;
+                    alert(data);
+                });
+            });
+
+            function createDOM() {
+                const h2Ele = document.createElement("h2");
+                h2Ele.innerText = this.properties.title;
+
+                const img = document.createElement("img");
+                img.style.width = "64px";
+                img.src = this.properties.imgSrc;
+
+                const box = document.createElement("div");
+                box.style.width = "max-content";
+                box.style.textAlign = "center";
+
+                box.appendChild(h2Ele);
+                box.appendChild(img);
+
+                box.onmouseover = function () {
+                    console.log("box.onmouseover");
+                };
+
+                box.onmouseout = function () {
+                    console.log("box.onmouseout");
+                };
+                return box;
+            }
+            document.getElementById("btnAddDomCover").addEventListener("click", () => {
+                const customOverlay = new BMapGL.CustomOverlay(createDOM, {
+                    point: new BMapGL.Point(116.40346101669394, 39.925178176591324),
+                    opacity: 0.5,
+                    offsetY: -10,
+                    properties: {
+                        title: "我的 Logo",
+                        imgSrc: "/logo/1024.png"
+                    }
+                });
+                map.addOverlay(customOverlay);
+                customOverlay.addEventListener("click", function (e) {
+                    const data = e.target.properties.title;
+                    alert(data);
+                });
+            });
+        </script>
+    </body>
+</html>

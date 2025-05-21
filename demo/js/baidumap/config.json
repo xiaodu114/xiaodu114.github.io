@@ -1,0 +1,50 @@
+{
+    "pageTitle": "百度地图 - xiaodu114.github.io",
+    "head": {
+        "title": "我和百度地图的故事",
+        "links": [
+            {
+                "href": "https://lbs.baidu.com/",
+                "text": "百度地图开放平台"
+            }
+        ]
+    },
+    "nodes": [
+        {
+            "id": 1,
+            "text": "介绍",
+            "code": "Introduction",
+            "page": "/demo/js/baidumap/pages/introduction.html"
+        },
+        {
+            "id": 2,
+            "text": "Hello World",
+            "code": "HelloWorld",
+            "page": "/demo/js/baidumap/pages/helloWorld.html"
+        },
+        {
+            "id": 3,
+            "text": "地图属性",
+            "code": "MapAttr",
+            "page": "/demo/js/baidumap/pages/mapAttr.html"
+        },
+        {
+            "id": 4,
+            "text": "地图控件",
+            "code": "MapControl",
+            "page": "/demo/js/baidumap/pages/mapControl.html"
+        },
+        {
+            "id": 5,
+            "text": "点覆盖物",
+            "code": "PointCover",
+            "page": "/demo/js/baidumap/pages/pointCover.html"
+        },
+        {
+            "id": 5,
+            "text": "自定义覆盖物",
+            "code": "CustomCover",
+            "page": "/demo/js/baidumap/pages/customCover.html"
+        }
+    ]
+}
