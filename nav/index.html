@@ -50,7 +50,10 @@
 
             //  4、获取配置数据
             const searchParams = new URLSearchParams(location.search);
-            const configData = await fetchGetJSON(searchParams.get("config"));
+            const configUrl = searchParams.get("config");
+            searchParams.delete("config");
+            const transferURLSearchStr = searchParams.size ? "?" + searchParams.toString() : "";
+            const configData = await fetchGetJSON(configUrl);
 
             //  5、根据配置数据组装路由和导航数据
             let routerOptions = {
@@ -66,7 +69,7 @@
                         component: {
                             template: `<iframe-wrapper :src="src"></iframe-wrapper>`,
                             setup() {
-                                const src = ref(node.page);
+                                const src = ref(node.page + transferURLSearchStr);
                                 return {
                                     src
                                 };
