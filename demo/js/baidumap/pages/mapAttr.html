@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>百度地图- 地图属性 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,百度地图,地图属性,设置/获取地图级别,设置/获取地图中心点,设置地图最大/最小级别,设置地图3D视角,设置底图POI的显示/隐藏,设置元素的显示/隐藏,设置路网显示/隐藏,设置天空颜色" />
+        <meta name="description" content="百度地图之地图属性：设置/获取地图级别、设置/获取地图中心点、设置地图最大/最小级别、设置地图3D视角、设置底图POI的显示/隐藏、设置元素的显示/隐藏、设置路网显示/隐藏、设置天空颜色" />
+
+        <style>
+            #allmap {
+                width: 100%;
+                height: 100vh;
+            }
+
+            .btns {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 1rem;
+                flex-wrap: wrap;
+
+                > button {
+                    cursor: pointer;
+                }
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+        <script>
+            const searchParams = new URLSearchParams(location.search);
+            const ak = searchParams.get("ak");
+            document.write(`<script type="text/javascript" src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=${ak}"><\/script>`);
+        </script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>地图属性</h1>
+            <p>百度地图之地图属性</p>
+            <h2>设置/获取地图级别</h2>
+            <div class="btns">
+                <input type="number" id="inputLevel" step="1" min="4" max="20" value="12" />
+                <button type="button" id="btnSetLevel">设置级别</button>
+                <button type="button" id="btnZoomIn">放大一级</button>
+                <button type="button" id="btnZoomOut">缩小一级</button>
+                <button type="button" id="btnGetLevel">获取当前级别</button>
+            </div>
+            <h2>设置/获取地图中心点</h2>
+            <div>
+                <div class="btns">
+                    <input type="text" id="inputCity" placeholder="城市名称，例如：北京" />
+                    <button type="button" id="btnSetCenterByCity">设置中心点</button>
+                </div>
+                <hr />
+                <div class="btns">
+                    <input type="text" id="inputLng" placeholder="经度，例如：116.404" />
+                    <input type="text" id="inputLat" placeholder="纬度，例如：39.915" />
+                    <button type="button" id="btnSetCenterByLngLat">设置中心点</button>
+                </div>
+            </div>
+            <h2>设置地图最大/最小级别</h2>
+            <ul>
+                <li>
+                    <span>创建地图实例时，通过opts方式设置地图允许的最大最小级别</span>
+                    <pre>
+                        <code>
+new BMapGL.Map('allmap', {
+    minZoom: 4,
+    maxZoom: 20
+});
+                        </code>
+                    </pre>
+                </li>
+                <li>
+                    <span>通过地图的方法设置地图允许的最大最小级别</span>
+                    <pre>
+                        <code>
+map.setMinZoom(4);
+map.setMaxZoom(20);
+                        </code>
+                    </pre>
+                </li>
+            </ul>
+            <h2>设置地图3D视角</h2>
+            <div class="btns">
+                <input type="text" id="inputHeading" placeholder="方向，例如：64.5" />
+                <input type="text" id="inputTilt" placeholder="倾斜角度，例如：73" />
+                <button type="button" id="btnSet3DView">设置3D视角</button>
+            </div>
+            <h2>设置底图POI的显示/隐藏</h2>
+            <div class="btns">
+                <button type="button" id="btnShowPOIText">显示POI文字</button>
+                <button type="button" id="btnHidePOIText">隐藏POI文字</button>
+                <button type="button" id="btnShowPOIIcon">显示POI图标</button>
+                <button type="button" id="btnHidePOIIcon">隐藏POI图标</button>
+            </div>
+            <h2>设置元素的显示/隐藏</h2>
+            <div class="btns">
+                <button type="button" id="btnAddOverlayAndLayer">请先添加覆盖物和图层</button>
+                <button type="button" id="btnShowOverlay">显示覆盖物</button>
+                <button type="button" id="btnHideOverlay">隐藏覆盖物</button>
+                <button type="button" id="btnShowLayer">显示叠加图层</button>
+                <button type="button" id="btnHideLayer">隐藏叠加图层</button>
+            </div>
+            <h2>设置路网显示/隐藏</h2>
+            <div class="btns">
+                <button type="button" id="btnEnterEarthMode">请先进入地球模式</button>
+                <button type="button" id="btnShowRoadNet">显示路网</button>
+                <button type="button" id="btnHideRoadNet">隐藏路网</button>
+            </div>
+            <h2>设置天空颜色</h2>
+            <div class="btns">
+                <button type="button" id="btnFirstSet3DView">请先设置3D视角</button>
+                <button type="button" id="btnSetSkyColor">设置天空颜色</button>
+            </div>
+            <div id="allmap"></div>
+        </div>
+        <script type="text/javascript">
+            const map = new BMapGL.Map("allmap"); // 创建Map实例
+            map.centerAndZoom(new BMapGL.Point(116.404, 39.915), 12); // 初始化地图,设置中心点坐标和地图级别
+            map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+
+            //#region  设置/获取地图级别
+
+            const inputLevelEle = document.getElementById("inputLevel");
+            document.getElementById("btnSetLevel").addEventListener("click", function () {
+                map.setZoom(inputLevelEle.value);
+            });
+
+            document.getElementById("btnZoomIn").addEventListener("click", function () {
+                const level = map.getZoom();
+                map.zoomIn();
+                inputLevelEle.value = level + 1;
+            });
+
+            document.getElementById("btnZoomOut").addEventListener("click", function () {
+                const level = map.getZoom();
+                map.zoomOut();
+                inputLevelEle.value = level - 1;
+            });
+
+            document.getElementById("btnGetLevel").addEventListener("click", function () {
+                alert(map.getZoom());
+            });
+
+            //#endregion
+
+            //#region  设置/获取地图中心点
+
+            const inputCityEle = document.getElementById("inputCity");
+            const inputLngEle = document.getElementById("inputLng");
+            const inputLatEle = document.getElementById("inputLat");
+
+            document.getElementById("btnSetCenterByCity").addEventListener("click", function () {
+                const city = inputCityEle.value;
+                map.setCenter(city);
+            });
+
+            document.getElementById("btnSetCenterByLngLat").addEventListener("click", function () {
+                const lng = inputLngEle.value;
+                const lat = inputLatEle.value;
+                map.setCenter(new BMapGL.Point(lng, lat));
+            });
+
+            //#endregion
+
+            //#region 设置地图3D视角
+
+            const inputHeadingEle = document.getElementById("inputHeading");
+            const inputTiltEle = document.getElementById("inputTilt");
+
+            document.getElementById("btnSet3DView").addEventListener("click", function () {
+                const heading = inputHeadingEle.value;
+                const tilt = inputTiltEle.value;
+                map.setHeading(heading);
+                map.setTilt(tilt);
+            });
+
+            //#endregion
+
+            //#region 设置底图POI的显示/隐藏
+
+            //  下面的两种控制方式都可以
+            document.getElementById("btnShowPOIText").addEventListener("click", function () {
+                // map.setDisplayOptions({
+                //     poiText: true
+                // });
+                map.setOptions({
+                    displayOptions: {
+                        poiText: true
+                    }
+                });
+            });
+            document.getElementById("btnHidePOIText").addEventListener("click", function () {
+                // map.setDisplayOptions({
+                //     poiText: false
+                // });
+                map.setOptions({
+                    displayOptions: {
+                        poiText: false
+                    }
+                });
+            });
+            document.getElementById("btnShowPOIIcon").addEventListener("click", function () {
+                // map.setDisplayOptions({
+                //     poiIcon: true
+                // });
+                map.setOptions({
+                    displayOptions: {
+                        poiIcon: true
+                    }
+                });
+            });
+            document.getElementById("btnHidePOIIcon").addEventListener("click", function () {
+                // map.setDisplayOptions({
+                //     poiIcon: false
+                // });
+                map.setOptions({
+                    displayOptions: {
+                        poiIcon: false
+                    }
+                });
+            });
+
+            //#endregion
+
+            //#region 设置元素的显示/隐藏
+
+            document.getElementById("btnAddOverlayAndLayer").addEventListener("click", function () {
+                //  添加一个覆盖物
+                map.addOverlay(new BMapGL.Marker(new BMapGL.Point(116.40423378136067, 39.90964929958806)));
+
+                //  自定义的图层
+                const tileLayer = new BMapGL.TileLayer({
+                    transparentPng: true
+                });
+                tileLayer.zIndex = 110;
+                tileLayer.getTilesUrl = function (point, level) {
+                    if (!point || level < 0) {
+                        return null;
+                    }
+                    return `//mapsv0.bdimg.com/tile/?udt=${"20190102"}&qt=tile&styles=${"pl"}&x=${point.x}&y=${point.y}&z=${level}`;
+                };
+                map.addTileLayer(tileLayer);
+            });
+
+            document.getElementById("btnShowOverlay").addEventListener("click", function () {
+                map.setDisplayOptions({
+                    overlay: true //是否显示覆盖物
+                });
+            });
+
+            document.getElementById("btnHideOverlay").addEventListener("click", function () {
+                map.setDisplayOptions({
+                    overlay: false
+                });
+            });
+
+            document.getElementById("btnShowLayer").addEventListener("click", function () {
+                map.setDisplayOptions({
+                    layer: true //是否显示叠加图层，地球模式暂不支持
+                });
+            });
+
+            document.getElementById("btnHideLayer").addEventListener("click", function () {
+                map.setDisplayOptions({
+                    layer: false
+                });
+            });
+
+            //#endregion
+
+            //#region 设置路网显示/隐藏
+
+            document.getElementById("btnEnterEarthMode").addEventListener("click", function () {
+                map.setMapType(BMAP_EARTH_MAP);
+                map.setTilt(73);
+            });
+
+            document.getElementById("btnShowRoadNet").addEventListener("click", function () {
+                map.setDisplayOptions({
+                    street: true //是否显示路网（只对卫星图和地球模式有效）
+                });
+            });
+
+            document.getElementById("btnHideRoadNet").addEventListener("click", function () {
+                map.setDisplayOptions({
+                    street: false
+                });
+            });
+
+            //#endregion
+
+            //#region  设置天空颜色
+
+            document.getElementById("btnFirstSet3DView").addEventListener("click", function () {
+                map.setHeading(64.5);
+                map.setTilt(73);
+            });
+            document.getElementById("btnSetSkyColor").addEventListener("click", function () {
+                map.setDisplayOptions({
+                    skyColors: ["rgba(186, 0, 255, 0)", "rgba(186, 0, 255, 0.2)"]
+                });
+            });
+
+            //#endregion
+        </script>
+    </body>
+</html>

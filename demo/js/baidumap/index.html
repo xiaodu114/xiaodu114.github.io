@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>百度地图 - xiaodu114.github.io</title>
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                height: 100%;
+                width: 100%;
+                margin: 0;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            window.transferURLSearch = new URLSearchParams(location.search);
+            window.transferURLSearch.set("config", "/demo/js/baidumap/config.json");
+            document.write(`<iframe src="/nav/index.html?${window.transferURLSearch}" frameborder="0" height="100%" width="100%" title="https://xiaodu114.github.io/"></iframe>`);
+        </script>
+    </body>
+</html>
