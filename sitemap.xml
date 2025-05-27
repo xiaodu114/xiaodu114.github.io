@@ -6,7 +6,7 @@
     
   <url>
     <loc>https://xiaodu114.github.io/</loc>
-    <lastmod>2025-04-14T14:12:50.807Z</lastmod>
+    <lastmod>2025-05-27T14:04:07.208Z</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
@@ -321,7 +321,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/online/index.html</loc>
-    <lastmod>2025-04-14T14:10:44.290Z</lastmod>
+    <lastmod>2025-04-29T22:46:27.331Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -461,7 +461,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/windows/index.html</loc>
-    <lastmod>2025-03-03T13:20:50.141Z</lastmod>
+    <lastmod>2025-04-26T22:28:02.811Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -525,6 +525,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://xiaodu114.github.io/demo/js/baidumap/index.html</loc>
+    <lastmod>2025-05-22T13:33:59.879Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://xiaodu114.github.io/demo/js/BroadcastChannel/index.html</loc>
     <lastmod>2024-12-08T13:40:29.000Z</lastmod>
     <priority>0.8</priority>
@@ -537,6 +542,11 @@
   <url>
     <loc>https://xiaodu114.github.io/demo/js/ComfyUI/index.html</loc>
     <lastmod>2024-12-25T13:10:29.300Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/demo/js/CountUp/index.html</loc>
+    <lastmod>2025-04-10T02:33:59.128Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -580,6 +590,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://xiaodu114.github.io/demo/js/recordScreen/index.html</loc>
+    <lastmod>2025-04-28T01:23:34.055Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://xiaodu114.github.io/demo/js/SharedWorker/index.html</loc>
     <lastmod>2024-12-08T13:40:29.000Z</lastmod>
     <priority>0.8</priority>
@@ -587,6 +602,11 @@
   <url>
     <loc>https://xiaodu114.github.io/demo/js/VideojsPlayer/index.html</loc>
     <lastmod>2024-12-08T13:40:29.000Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/demo/js/word/index.html</loc>
+    <lastmod>2025-04-24T05:11:04.985Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -622,6 +642,11 @@
   <url>
     <loc>https://xiaodu114.github.io/demo/vue3/docCompare/index.html</loc>
     <lastmod>2024-12-08T13:40:29.000Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/demo/vue3/lowcode/index.html</loc>
+    <lastmod>2025-04-23T13:39:09.448Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
