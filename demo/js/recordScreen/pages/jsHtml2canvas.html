@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>原生 JavaScript + html2canvas - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,JavaScript,录屏,html2canvas,MediaRecorder,Blob" />
+        <meta name="description" content="原生 JavaScript + html2canvas 实现指定区域录屏：使用 html2canvas 将指定 DOM 元素（或整个页面）渲染到 canvas，使用 canvas.captureStream() 获取媒体流，使用 MediaRecorder 录制媒体流并生成视频文件，使用 Blob 和 URL.createObjectURL 将录制的视频数据保存为文件或预览" />
+
+        <style>
+            #controls {
+                display: flex;
+                justify-content: center;
+                gap: 2rem;
+                margin-bottom: 2rem;
+
+                button {
+                    cursor: pointer;
+                }
+            }
+
+            #clock {
+                font-size: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                height: 20ch;
+                padding: 4ch;
+                border-radius: 4ch;
+                background: #202020;
+
+                #digital {
+                    perspective: 1000px;
+                    display: flex;
+                    gap: 1ch;
+                    height: 4ch;
+                    margin-top: 4ch;
+                    margin-bottom: 4ch;
+
+                    &::after {
+                        content: "";
+                        display: block;
+                        position: absolute;
+                        top: -150%;
+                        left: -50%;
+                        width: 200%;
+                        height: 400%;
+                        background-image: linear-gradient(180deg, #1a1a1a 10%, #1a1a1a66 30%, #1a1a1a00 40%, #1a1a1a00 60%, #1a1a1a66 70%, #1a1a1a 90%);
+                    }
+                }
+
+                .slot {
+                    position: relative;
+                    width: 1ch;
+                    height: 2ch;
+                    color: #fff;
+                    display: flex;
+                    transform-style: preserve-3d;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    font-size: 2em;
+                }
+                .colon {
+                    transform: translateZ(3ch);
+                }
+                .numbers > div {
+                    position: absolute;
+                    transform-style: preserve-3d;
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    backface-visibility: hidden;
+                    transform-origin: center center 0px;
+                }
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+        <script type="importmap">
+            {
+                "imports": {
+                    "animejs": "https://registry.npmmirror.com/animejs/4.0.2/files/lib/anime.esm.js"
+                }
+            }
+        </script>
+        <script src="https://registry.npmmirror.com/html2canvas/1.4.1/files/dist/html2canvas.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/demo/js/recordScreen/pages/jsHtml2canvas.html -->
+        <div class="blog-page">
+            <h1>原生 JavaScript + html2canvas</h1>
+            <p>原生 JavaScript + html2canvas 实现指定区域录屏：使用 html2canvas 将指定 DOM 元素（或整个页面）渲染到 canvas，使用 canvas.captureStream() 获取媒体流，使用 MediaRecorder 录制媒体流并生成视频文件，使用 Blob 和 URL.createObjectURL 将录制的视频数据保存为文件或预览</p>
+            <h2>参考</h2>
+            <ul>
+                <li>
+                    <a href="https://github.com/niklasvh/html2canvas" target="_blank" rel="noopener noreferrer">GitHub - niklasvh/html2canvas: Screenshots with JavaScript</a>
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                    <a href="https://html2canvas.hertzen.com/" target="_blank" rel="noopener noreferrer">html2canvas - Screenshots with JavaScript</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/MediaRecorder" target="_blank" rel="noopener noreferrer">MediaRecorder - Web API | MDN</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Blob" target="_blank" rel="noopener noreferrer">Blob - Web API | MDN</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/URL/createObjectURL_static" target="_blank" rel="noopener noreferrer">URL：createObjectURL() 静态方法 - Web API | MDN</a>
+                </li>
+            </ul>
+            <h2>示例</h2>
+            <div id="controls">
+                <button id="play">开始录制</button>
+                <button id="pause">停止录制</button>
+            </div>
+            <p>现在的时间是：<span id="spanNowTime"></span></p>
+            <div id="clock">
+                <div id="digital"></div>
+            </div>
+        </div>
+        <script type="module">
+            import { animate, createTimeline, utils } from "animejs";
+
+            //#region  Anime.js 动画部分
+
+            // 代码来源：https://codepen.io/juliangarnier/pen/azbXzWX
+
+            const [$digitalClock] = utils.$("#digital");
+
+            const s = 1000;
+            const m = 60 * s;
+            const h = 60 * m;
+            const oneday = h * 24;
+
+            const masterTL = createTimeline({ defaults: { ease: "linear" }, autoplay: false });
+
+            [h * 10, h, 0, m * 10, m, 0, s * 10, s, 0, 100, 10].forEach((d) => {
+                const $el = document.createElement("div");
+                $digitalClock.appendChild($el);
+                $el.classList.add("slot");
+                if (!d) {
+                    $el.classList.add("colon");
+                    $el.textContent = ":";
+                } else {
+                    $el.classList.add("numbers");
+                    for (let i = 0; i < 10; i++) {
+                        const $num = document.createElement("div");
+                        $num.textContent = `${i}`;
+                        utils.set($num, { rotateX: i * 36, z: "3ch" });
+                        $el.appendChild($num);
+                    }
+                    const canStop = d > 100;
+                    const ease = canStop ? "cubicBezier(1,0,.6,1.2)" : "linear";
+                    const duration = canStop ? 650 : d;
+                    const position = `+=${canStop ? d - 650 : 0}`;
+                    const numTL = createTimeline({ defaults: { ease }, loop: true });
+                    const t = d === h * 10 ? 4 : d === h ? 25 : d === m * 10 || d === s * 10 ? 7 : 11;
+                    for (let i = 1; i < t; i++) {
+                        const rotateX = -(i * 36 + (i === t - 1 ? 360 - i * 36 : 0));
+                        numTL.add($el, { rotateX, duration }, d === h * 10 && i === t - 1 ? "+=" + (h * 4 - 650) : position);
+                    }
+                    masterTL.sync(numTL, 0);
+                }
+            });
+
+            masterTL.duration = oneday;
+            masterTL.iterationDuration = oneday;
+
+            const getNow = () => new Date().getTime() % oneday;
+
+            masterTL.currentTime = getNow();
+
+            masterTL.onUpdate = ({ currentTime, speed }) => {};
+
+            masterTL.reset();
+
+            //#endregion
+
+            //#region 原生 和 html2canvas 实现指定区域录屏
+
+            let mediaRecorder;
+            let recordedChunks = [];
+            let animationFrameId;
+
+            async function recordVideo(target, fn) {
+                let isRecording = false;
+                // 创建 canvas
+                const canvas = document.createElement("canvas");
+                canvas.width = target.offsetWidth;
+                canvas.height = target.offsetHeight;
+                const ctx = canvas.getContext("2d");
+                ctx.mozImageSmoothingEnabled = false;
+                ctx.webkitImageSmoothingEnabled = false;
+                ctx.msImageSmoothingEnabled = false;
+                ctx.imageSmoothingEnabled = false;
+
+                // 动态绘制目标元素到 canvas
+                async function draw2Canvas() {
+                    if (!isRecording) return;
+                    try {
+                        // 使用 html2canvas 渲染 DOM 到 canvas
+                        const renderedCanvas = await html2canvas(target, {
+                            // scale: 1, // 保持原始分辨率
+                            scale: window.devicePixelRatio * 2, // 放大倍数，提高清晰度[^1^]
+                            useCORS: true, // 支持跨域资源
+                            allowTaint: true,
+                            // backgroundColor: null // 透明背景
+                            width: target.offsetWidth,
+                            height: target.offsetHeight
+                        });
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(renderedCanvas, 0, 0, canvas.width, canvas.height);
+                    } catch (err) {
+                        console.error("html2canvas 渲染失败:", err);
+                    }
+                    if (isRecording) {
+                        // 持续绘制
+                        animationFrameId = requestAnimationFrame(draw2Canvas);
+                    }
+                }
+
+                isRecording = true;
+                // 开始绘制
+                draw2Canvas();
+
+                // 从 canvas 获取流
+                let stream = canvas.captureStream(30); // 30fps 优化性能
+
+                try {
+                    // 创建 MediaRecorder 实例
+                    mediaRecorder = new MediaRecorder(stream, {
+                        mimeType: "video/webm; codecs=vp9"
+                    });
+
+                    // 监听数据可用事件
+                    mediaRecorder.ondataavailable = (event) => {
+                        if (event.data.size > 0) {
+                            recordedChunks.push(event.data);
+                        }
+                    };
+
+                    // 监听停止事件
+                    mediaRecorder.onstop = () => {
+                        isRecording = false;
+                        canvas.remove();
+                        // 停止绘制
+                        cancelAnimationFrame(animationFrameId);
+
+                        const blob = new Blob(recordedChunks, { type: "video/webm" });
+                        const url = URL.createObjectURL(blob);
+
+                        // 提供下载链接
+                        var aLink = document.createElement("a");
+                        aLink.href = url;
+                        aLink.download = `原生和html2canvas-${new Date().valueOf()}.webm`;
+                        document.body.appendChild(aLink);
+                        aLink.click();
+                        document.body.removeChild(aLink);
+
+                        // 清空 recordedChunks 数组
+                        recordedChunks = [];
+                        mediaRecorder = null;
+                        if (stream) {
+                            stream.getTracks().forEach((track) => track.stop());
+                            stream = null;
+                        }
+                    };
+
+                    // 开始录制
+                    mediaRecorder.start();
+
+                    if (typeof fn === "function") {
+                        fn();
+                    }
+                } catch (error) {
+                    console.error("屏幕共享失败:", error);
+                    alert("屏幕共享失败，请确保浏览器支持并授予相关权限");
+                }
+            }
+
+            //#endregion
+
+            document.getElementById("play").addEventListener("click", () => {
+                recordVideo(document.querySelector(".blog-page"), () => {
+                    masterTL.reset();
+                    masterTL.play();
+                });
+            });
+
+            document.getElementById("pause").addEventListener("click", () => {
+                mediaRecorder.stop();
+                masterTL.pause();
+            });
+
+            const spanNowTimeEle = document.getElementById("spanNowTime");
+            spanNowTimeEle.innerText = new Date().toLocaleString();
+            setInterval(() => {
+                spanNowTimeEle.innerText = new Date().toLocaleString();
+            }, 1000);
+        </script>
+    </body>
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>rrweb 录屏 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,录屏,rrweb,rrweb-player" />
+        <meta name="description" content="rrweb + rrweb-player ：使用 rrweb 录制网页内容，使用 rrweb-player 播放录制的网页内容" />
+
+        <style>
+            #controls {
+                display: flex;
+                justify-content: center;
+                gap: 2rem;
+                margin-bottom: 2rem;
+
+                button {
+                    cursor: pointer;
+                }
+            }
+
+            #clock {
+                font-size: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                height: 20ch;
+                padding: 4ch;
+                border-radius: 4ch;
+                background: #202020;
+
+                #digital {
+                    perspective: 1000px;
+                    display: flex;
+                    gap: 1ch;
+                    height: 4ch;
+                    margin-top: 4ch;
+                    margin-bottom: 4ch;
+
+                    &::after {
+                        content: "";
+                        display: block;
+                        position: absolute;
+                        top: -150%;
+                        left: -50%;
+                        width: 200%;
+                        height: 400%;
+                        background-image: linear-gradient(180deg, #1a1a1a 10%, #1a1a1a66 30%, #1a1a1a00 40%, #1a1a1a00 60%, #1a1a1a66 70%, #1a1a1a 90%);
+                    }
+                }
+
+                .slot {
+                    position: relative;
+                    width: 1ch;
+                    height: 2ch;
+                    color: #fff;
+                    display: flex;
+                    transform-style: preserve-3d;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    font-size: 2em;
+                }
+                .colon {
+                    transform: translateZ(3ch);
+                }
+                .numbers > div {
+                    position: absolute;
+                    transform-style: preserve-3d;
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    backface-visibility: hidden;
+                    transform-origin: center center 0px;
+                }
+            }
+
+            .replay-wrapper {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                display: none;
+                justify-content: center;
+                align-items: center;
+
+                .close-box {
+                    position: absolute;
+                    top: 1.5rem;
+                    right: 1.5rem;
+                    width: 2rem;
+                    height: 2rem;
+                    font-size: 1.5rem;
+                    cursor: pointer;
+                    border: 2px solid;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    color: #fff;
+
+                    &:hover {
+                        color: #3cb878;
+                    }
+                }
+            }
+        </style>
+
+        <link rel="stylesheet" href="https://unpkg.com/rrweb-player@1.0.0-alpha.4/dist/style.css" />
+
+        <script src="/p/_/js/main.js"></script>
+        <script type="importmap">
+            {
+                "imports": {
+                    "animejs": "https://registry.npmmirror.com/animejs/4.0.2/files/lib/anime.esm.js"
+                }
+            }
+        </script>
+        <script src="https://unpkg.com/rrweb@2.0.0-alpha.4/dist/rrweb.js"></script>
+        <script src="https://unpkg.com/rrweb-player@1.0.0-alpha.4/dist/index.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/demo/js/recordScreen/pages/rrweb.html -->
+        <div class="blog-page">
+            <h1>rrweb 录屏</h1>
+            <p>rrweb + rrweb-player ：使用 rrweb 录制网页内容，使用 rrweb-player 播放录制的网页内容</p>
+            <h2>参考</h2>
+            <ul>
+                <li>
+                    <a href="https://github.com/rrweb-io/rrweb" target="_blank" rel="noopener noreferrer">GitHub - rrweb-io/rrweb: record and replay the web</a>
+                </li>
+                <li>
+                    <a href="https://www.rrweb.io/" target="_blank" rel="noopener noreferrer">rrweb.io | Open source web session replay library</a>
+                </li>
+            </ul>
+            <h2>示例</h2>
+            <div id="controls">
+                <button id="play">开始录制</button>
+                <button id="pause">停止录制</button>
+                <button type="button" id="btnReplay">回放</button>
+                <button type="button" id="btnDownload">下载</button>
+            </div>
+            <p>现在的时间是：<span id="spanNowTime"></span></p>
+            <div id="clock">
+                <div id="digital"></div>
+            </div>
+            <div class="replay-wrapper">
+                <div class="close-box" title="关闭">&Chi;</div>
+                <div id="replay-box"></div>
+            </div>
+        </div>
+        <script type="module">
+            import { animate, createTimeline, utils } from "animejs";
+
+            //#region  Anime.js 动画部分
+
+            // 代码来源：https://codepen.io/juliangarnier/pen/azbXzWX
+
+            const [$digitalClock] = utils.$("#digital");
+
+            const s = 1000;
+            const m = 60 * s;
+            const h = 60 * m;
+            const oneday = h * 24;
+
+            const masterTL = createTimeline({ defaults: { ease: "linear" }, autoplay: false });
+
+            [h * 10, h, 0, m * 10, m, 0, s * 10, s, 0, 100, 10].forEach((d) => {
+                const $el = document.createElement("div");
+                $digitalClock.appendChild($el);
+                $el.classList.add("slot");
+                if (!d) {
+                    $el.classList.add("colon");
+                    $el.textContent = ":";
+                } else {
+                    $el.classList.add("numbers");
+                    for (let i = 0; i < 10; i++) {
+                        const $num = document.createElement("div");
+                        $num.textContent = `${i}`;
+                        utils.set($num, { rotateX: i * 36, z: "3ch" });
+                        $el.appendChild($num);
+                    }
+                    const canStop = d > 100;
+                    const ease = canStop ? "cubicBezier(1,0,.6,1.2)" : "linear";
+                    const duration = canStop ? 650 : d;
+                    const position = `+=${canStop ? d - 650 : 0}`;
+                    const numTL = createTimeline({ defaults: { ease }, loop: true });
+                    const t = d === h * 10 ? 4 : d === h ? 25 : d === m * 10 || d === s * 10 ? 7 : 11;
+                    for (let i = 1; i < t; i++) {
+                        const rotateX = -(i * 36 + (i === t - 1 ? 360 - i * 36 : 0));
+                        numTL.add($el, { rotateX, duration }, d === h * 10 && i === t - 1 ? "+=" + (h * 4 - 650) : position);
+                    }
+                    masterTL.sync(numTL, 0);
+                }
+            });
+
+            masterTL.duration = oneday;
+            masterTL.iterationDuration = oneday;
+
+            const getNow = () => new Date().getTime() % oneday;
+
+            masterTL.currentTime = getNow();
+
+            masterTL.onUpdate = ({ currentTime, speed }) => {};
+
+            masterTL.reset();
+
+            //#endregion
+
+            //#region  rrweb 录屏部分
+
+            let stopRecording = null;
+            let events = [];
+            let replayer = null;
+            async function recordVideo(fn) {
+                events = []; // 清空事件
+                stopRecording = rrweb.record({
+                    emit(event) {
+                        events.push(event); // 收集事件
+                    },
+                    recordCanvas: true, // 支持录制 canvas 内容
+                    sampling: {
+                        mousemove: 100, // 每100ms记录一次鼠标移动
+                        scroll: 150, // 每150ms记录一次滚动
+                        input: "last" // 仅记录输入的最后值
+                    },
+                    checkoutEveryNms: 1000 * 60 * 10 // 每10分钟切分会话
+                });
+                if (typeof fn === "function") {
+                    fn();
+                }
+                if (replayer) {
+                    replayer.destroy && replayer.destroy();
+                    replayer = null;
+                    replayContainer.innerHTML = "";
+                }
+            }
+
+            //#endregion
+
+            document.getElementById("play").addEventListener("click", () => {
+                recordVideo(() => {
+                    masterTL.reset();
+                    masterTL.play();
+                });
+            });
+
+            document.getElementById("pause").addEventListener("click", () => {
+                masterTL.pause();
+                if (stopRecording) {
+                    stopRecording();
+                    stopRecording = null;
+                }
+            });
+
+            const btnPlayEle = document.getElementById("btnReplay");
+            const btnDownloadEle = document.getElementById("btnDownload");
+
+            const replayWrapper = document.querySelector(".replay-wrapper");
+            const closeReplayEle = document.querySelector(".close-box");
+            const replayContainer = document.getElementById("replay-box");
+
+            btnPlayEle.addEventListener("click", () => {
+                if (replayer) {
+                    replayer.destroy && replayer.destroy();
+                    replayer = null;
+                    replayContainer.innerHTML = "";
+                }
+                replayWrapper.style.display = "flex";
+                try {
+                    replayer = new rrwebPlayer({
+                        target: replayContainer,
+                        props: {
+                            events,
+                            autoPlay: true,
+                            width: 600,
+                            height: 400
+                        }
+                    });
+                    replayer.play();
+                } catch (err) {
+                    console.error("回放失败:", err);
+                    alert("回放失败，请检查事件数据");
+                }
+            });
+            closeReplayEle.addEventListener("click", () => {
+                replayWrapper.style.display = "none";
+            });
+            btnDownloadEle.addEventListener("click", () => {
+                const blob = new Blob([JSON.stringify(events, null, 2)], {
+                    type: "application/json"
+                });
+                const url = URL.createObjectURL(blob);
+
+                var aLink = document.createElement("a");
+                aLink.href = url;
+                aLink.download = `rrweb-recording-${new Date().valueOf()}.json`;
+                document.body.appendChild(aLink);
+                aLink.click();
+                document.body.removeChild(aLink);
+            });
+
+            const spanNowTimeEle = document.getElementById("spanNowTime");
+            spanNowTimeEle.innerText = new Date().toLocaleString();
+            const setIntervalId = setInterval(() => {
+                spanNowTimeEle.innerText = new Date().toLocaleString();
+            }, 1000);
+
+            // 清理资源（页面关闭时）
+            window.addEventListener("beforeunload", () => {
+                if (stopRecording) {
+                    stopRecording();
+                    stopRecording = null;
+                }
+                if (replayer) {
+                    replayer.destroy && replayer.destroy();
+                    replayer = null;
+                    replayContainer.innerHTML = "";
+                }
+                clearInterval(setIntervalId);
+            });
+        </script>
+    </body>
+</html>

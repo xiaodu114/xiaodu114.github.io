@@ -1,0 +1,27 @@
+{
+  "pageTitle": "Web 前端录屏 - xiaodu114.github.io",
+  "head": {
+    "title": "Web 前端录屏",
+    "links": []
+  },
+  "nodes": [
+    {
+      "id": 0,
+      "text": "原生 JavaScript",
+      "code": "JavaScript",
+      "page": "/demo/js/recordScreen/pages/js.html"
+    },
+    {
+      "id": 1,
+      "text": "原生 JavaScript + html2canvas",
+      "code": "JavaScript-html2canvas",
+      "page": "/demo/js/recordScreen/pages/jsHtml2canvas.html"
+    },
+    {
+      "id": 2,
+      "text": "rrweb + rrweb-player",
+      "code": "rrweb",
+      "page": "/demo/js/recordScreen/pages/rrweb.html"
+    }
+  ]
+}

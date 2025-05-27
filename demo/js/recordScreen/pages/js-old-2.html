@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>原生 JavaScript 录屏 - xiaodu114.github.io</title>
+
+        <style>
+            #controls {
+                display: flex;
+                justify-content: center;
+                gap: 2rem;
+                margin-bottom: 2rem;
+
+                button {
+                    cursor: pointer;
+                }
+            }
+
+            #clock {
+                font-size: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                height: 20ch;
+                padding: 4ch;
+                border-radius: 4ch;
+                background: #202020;
+
+                #digital {
+                    perspective: 1000px;
+                    display: flex;
+                    gap: 1ch;
+                    height: 4ch;
+                    margin-top: 4ch;
+                    margin-bottom: 4ch;
+
+                    &::after {
+                        content: "";
+                        display: block;
+                        position: absolute;
+                        top: -150%;
+                        left: -50%;
+                        width: 200%;
+                        height: 400%;
+                        background-image: linear-gradient(180deg, #1a1a1a 10%, #1a1a1a66 30%, #1a1a1a00 40%, #1a1a1a00 60%, #1a1a1a66 70%, #1a1a1a 90%);
+                    }
+                }
+
+                .slot {
+                    position: relative;
+                    width: 1ch;
+                    height: 2ch;
+                    color: #fff;
+                    display: flex;
+                    transform-style: preserve-3d;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    font-size: 2em;
+                }
+                .colon {
+                    transform: translateZ(3ch);
+                }
+                .numbers > div {
+                    position: absolute;
+                    transform-style: preserve-3d;
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    backface-visibility: hidden;
+                    transform-origin: center center 0px;
+                }
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+        <script type="importmap">
+            {
+                "imports": {
+                    "animejs": "https://registry.npmmirror.com/animejs/4.0.2/files/lib/anime.esm.js"
+                }
+            }
+        </script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h2>第二版</h2>
+            <div id="controls">
+                <button id="play">开始录制</button>
+                <button id="pause">停止录制</button>
+            </div>
+            <p>现在的时间是：<span id="spanNowTime"></span></p>
+            <div id="clock">
+                <div id="digital"></div>
+            </div>
+        </div>
+
+        <script type="module">
+            import { animate, createTimeline, utils } from "animejs";
+
+            //#region  Anime.js 动画部分
+
+            // 代码来源：https://codepen.io/juliangarnier/pen/azbXzWX
+
+            const [$digitalClock] = utils.$("#digital");
+
+            const s = 1000;
+            const m = 60 * s;
+            const h = 60 * m;
+            const oneday = h * 24;
+
+            const masterTL = createTimeline({ defaults: { ease: "linear" }, autoplay: false });
+
+            [h * 10, h, 0, m * 10, m, 0, s * 10, s, 0, 100, 10].forEach((d) => {
+                const $el = document.createElement("div");
+                $digitalClock.appendChild($el);
+                $el.classList.add("slot");
+                if (!d) {
+                    $el.classList.add("colon");
+                    $el.textContent = ":";
+                } else {
+                    $el.classList.add("numbers");
+                    for (let i = 0; i < 10; i++) {
+                        const $num = document.createElement("div");
+                        $num.textContent = `${i}`;
+                        utils.set($num, { rotateX: i * 36, z: "3ch" });
+                        $el.appendChild($num);
+                    }
+                    const canStop = d > 100;
+                    const ease = canStop ? "cubicBezier(1,0,.6,1.2)" : "linear";
+                    const duration = canStop ? 650 : d;
+                    const position = `+=${canStop ? d - 650 : 0}`;
+                    const numTL = createTimeline({ defaults: { ease }, loop: true });
+                    const t = d === h * 10 ? 4 : d === h ? 25 : d === m * 10 || d === s * 10 ? 7 : 11;
+                    for (let i = 1; i < t; i++) {
+                        const rotateX = -(i * 36 + (i === t - 1 ? 360 - i * 36 : 0));
+                        numTL.add($el, { rotateX, duration }, d === h * 10 && i === t - 1 ? "+=" + (h * 4 - 650) : position);
+                    }
+                    masterTL.sync(numTL, 0);
+                }
+            });
+
+            masterTL.duration = oneday;
+            masterTL.iterationDuration = oneday;
+
+            const getNow = () => new Date().getTime() % oneday;
+
+            masterTL.currentTime = getNow();
+
+            masterTL.onUpdate = ({ currentTime, speed }) => {};
+
+            masterTL.reset();
+
+            //#endregion
+
+            //#region JavaScript 原生录屏
+
+            class RecordScreenHelper {
+                recordedChunks = [];
+                mediaRecorder = null;
+                isRecording = false;
+
+                constructor() {}
+
+                isObject(obj) {
+                    return typeof obj === "object" && obj !== null;
+                }
+
+                async recordVideo(fnConfig, optionConfig) {
+                    if (this.isRecording) {
+                        return;
+                    }
+                    try {
+                        const defaultDisplayMedia = {
+                            video: {
+                                frameRate: 30 // 设置帧率
+                            },
+                            audio: true // 如果需要录制音频，确保麦克风已开启
+                        };
+                        const defaultMediaRecorder = {
+                            mimeType: 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"' // 指定录制为 MP4 格式[^9^]
+                        };
+
+                        if (this.isObject(optionConfig)) {
+                            if (this.isObject(optionConfig.displayMedia)) {
+                                Object.assign(defaultDisplayMedia, optionConfig.displayMedia);
+                            }
+                            if (this.isObject(optionConfig.mediaRecorder)) {
+                                Object.assign(defaultMediaRecorder, optionConfig.mediaRecorder);
+                            }
+                        }
+
+                        // 请求屏幕共享
+                        let stream = await navigator.mediaDevices.getDisplayMedia(defaultDisplayMedia);
+
+                        // 创建 MediaRecorder 实例
+                        this.mediaRecorder = new MediaRecorder(stream, defaultMediaRecorder);
+                        this.isRecording = true;
+
+                        // 监听数据可用事件
+                        this.mediaRecorder.ondataavailable = (event) => {
+                            if (event.data.size > 0) {
+                                this.recordedChunks.push(event.data);
+                            }
+                        };
+
+                        // 监听停止事件
+                        this.mediaRecorder.onstop = () => {
+                            if (this.isObject(fnConfig) && typeof fnConfig.onstop === "function") {
+                                const blob = new Blob(this.recordedChunks, {
+                                    type: defaultMediaRecorder.mimeType
+                                });
+                                fnConfig.onstop(blob, [...this.recordedChunks]);
+                            }
+                            this.recordedChunks = [];
+                            this.mediaRecorder = null;
+                            if (stream) {
+                                stream.getTracks().forEach((track) => track.stop());
+                                stream = null;
+                            }
+                            this.isRecording = false;
+                        };
+
+                        this.mediaRecorder.onerror = (event) => {
+                            if (this.isObject(fnConfig) && typeof fnConfig.onerror === "function") {
+                                fnConfig.onerror(event.error);
+                            } else {
+                                console.error(event.error);
+                            }
+                            this.recordedChunks = [];
+                            this.mediaRecorder = null;
+                            if (stream) {
+                                stream.getTracks().forEach((track) => track.stop());
+                                stream = null;
+                            }
+                            this.isRecording = false;
+                        };
+
+                        // 开始录制
+                        this.mediaRecorder.start();
+
+                        if (this.isObject(fnConfig) && typeof fnConfig.afterStart === "function") {
+                            fnConfig.afterStart(this.mediaRecorder);
+                        }
+                    } catch (error) {
+                        this.isRecording = false;
+                        if (this.isObject(fnConfig) && typeof fnConfig.onerror === "function") {
+                            fnConfig.onerror(error);
+                        } else {
+                            throw error;
+                        }
+                    }
+                }
+                stopRecord() {
+                    if (!this.isRecording || !this.mediaRecorder) {
+                        return;
+                    }
+                    this.mediaRecorder.stop();
+                }
+            }
+
+            //#endregion
+
+            const recordScreenHelper = new RecordScreenHelper();
+
+            document.getElementById("play").addEventListener("click", () => {
+                function recordStopCallback(blob, chunks) {
+                    const url = URL.createObjectURL(blob);
+
+                    // 提供下载链接
+                    var aLink = document.createElement("a");
+                    aLink.href = url;
+                    aLink.download = `第二版-原生录屏-${new Date().valueOf()}.mp4`;
+                    document.body.appendChild(aLink);
+                    aLink.click();
+                    document.body.removeChild(aLink);
+                }
+
+                function startRecordCallback() {
+                    masterTL.reset();
+                    masterTL.play();
+                }
+
+                recordScreenHelper.recordVideo({
+                    afterStart: startRecordCallback,
+                    onstop: recordStopCallback
+                });
+            });
+
+            document.getElementById("pause").addEventListener("click", () => {
+                recordScreenHelper.stopRecord();
+                masterTL.pause();
+            });
+
+            const spanNowTimeEle = document.getElementById("spanNowTime");
+            spanNowTimeEle.innerText = new Date().toLocaleString();
+            setInterval(() => {
+                spanNowTimeEle.innerText = new Date().toLocaleString();
+            }, 1000);
+        </script>
+    </body>
+</html>

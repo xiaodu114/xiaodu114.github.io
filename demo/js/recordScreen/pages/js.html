@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>原生 JavaScript 录屏 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,JavaScript,录屏,navigator.mediaDevices.getDisplayMedia,MediaRecorder,Blob" />
+        <meta name="description" content="原生 JavaScript 实现录屏：使用 navigator.mediaDevices.getDisplayMedia 获取屏幕或窗口的媒体流，使用 MediaRecorder 录制媒体流并生成视频文件，使用 Blob 和 URL.createObjectURL 将录制的视频数据保存为文件或预览" />
+
+        <style>
+            #controls {
+                display: flex;
+                justify-content: center;
+                gap: 2rem;
+                margin-bottom: 2rem;
+
+                button {
+                    cursor: pointer;
+                }
+            }
+
+            #clock {
+                font-size: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                height: 20ch;
+                padding: 4ch;
+                border-radius: 4ch;
+                background: #202020;
+
+                #digital {
+                    perspective: 1000px;
+                    display: flex;
+                    gap: 1ch;
+                    height: 4ch;
+                    margin-top: 4ch;
+                    margin-bottom: 4ch;
+
+                    &::after {
+                        content: "";
+                        display: block;
+                        position: absolute;
+                        top: -150%;
+                        left: -50%;
+                        width: 200%;
+                        height: 400%;
+                        background-image: linear-gradient(180deg, #1a1a1a 10%, #1a1a1a66 30%, #1a1a1a00 40%, #1a1a1a00 60%, #1a1a1a66 70%, #1a1a1a 90%);
+                    }
+                }
+
+                .slot {
+                    position: relative;
+                    width: 1ch;
+                    height: 2ch;
+                    color: #fff;
+                    display: flex;
+                    transform-style: preserve-3d;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    font-size: 2em;
+                }
+                .colon {
+                    transform: translateZ(3ch);
+                }
+                .numbers > div {
+                    position: absolute;
+                    transform-style: preserve-3d;
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    backface-visibility: hidden;
+                    transform-origin: center center 0px;
+                }
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+        <script type="importmap">
+            {
+                "imports": {
+                    "animejs": "https://registry.npmmirror.com/animejs/4.0.2/files/lib/anime.esm.js"
+                }
+            }
+        </script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/demo/js/recordScreen/pages/js.html -->
+        <div class="blog-page">
+            <h1>原生 JavaScript 录屏</h1>
+            <p>原生 JavaScript 实现录屏：使用 navigator.mediaDevices.getDisplayMedia 获取屏幕或窗口的媒体流，使用 MediaRecorder 录制媒体流并生成视频文件，使用 Blob 和 URL.createObjectURL 将录制的视频数据保存为文件或预览</p>
+            <h2>参考</h2>
+            <ul>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/getDisplayMedia" target="_blank" rel="noopener noreferrer">MediaDevices.getDisplayMedia() - Web API | MDN</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/MediaRecorder" target="_blank" rel="noopener noreferrer">MediaRecorder - Web API | MDN</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Blob" target="_blank" rel="noopener noreferrer">Blob - Web API | MDN</a>
+                </li>
+                <li>
+                    <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/URL/createObjectURL_static" target="_blank" rel="noopener noreferrer">URL：createObjectURL() 静态方法 - Web API | MDN</a>
+                </li>
+            </ul>
+            <p><strong>说明：</strong>动画的代码来源：<a href="https://codepen.io/juliangarnier/pen/azbXzWX" target="_blank" rel="noopener noreferrer">Clock playback controls - codepen.io</a></p>
+            <p>更多 Anime.js v4 示例：<a href="https://codepen.io/collection/Poerqa" target="_blank" rel="noopener noreferrer">Anime.js v4 examples - a Collection by Julian Garnier on CodePen</a></p>
+            <h2>示例</h2>
+            <div id="controls">
+                <button id="play">开始录制</button>
+                <button id="pause">停止录制</button>
+            </div>
+            <p>现在的时间是：<span id="spanNowTime"></span></p>
+            <div id="clock">
+                <div id="digital"></div>
+            </div>
+        </div>
+
+        <script type="module">
+            import { animate, createTimeline, utils } from "animejs";
+
+            //#region  Anime.js 动画部分
+
+            // 代码来源：https://codepen.io/juliangarnier/pen/azbXzWX
+
+            const [$digitalClock] = utils.$("#digital");
+
+            const s = 1000;
+            const m = 60 * s;
+            const h = 60 * m;
+            const oneday = h * 24;
+
+            const masterTL = createTimeline({ defaults: { ease: "linear" }, autoplay: false });
+
+            [h * 10, h, 0, m * 10, m, 0, s * 10, s, 0, 100, 10].forEach((d) => {
+                const $el = document.createElement("div");
+                $digitalClock.appendChild($el);
+                $el.classList.add("slot");
+                if (!d) {
+                    $el.classList.add("colon");
+                    $el.textContent = ":";
+                } else {
+                    $el.classList.add("numbers");
+                    for (let i = 0; i < 10; i++) {
+                        const $num = document.createElement("div");
+                        $num.textContent = `${i}`;
+                        utils.set($num, { rotateX: i * 36, z: "3ch" });
+                        $el.appendChild($num);
+                    }
+                    const canStop = d > 100;
+                    const ease = canStop ? "cubicBezier(1,0,.6,1.2)" : "linear";
+                    const duration = canStop ? 650 : d;
+                    const position = `+=${canStop ? d - 650 : 0}`;
+                    const numTL = createTimeline({ defaults: { ease }, loop: true });
+                    const t = d === h * 10 ? 4 : d === h ? 25 : d === m * 10 || d === s * 10 ? 7 : 11;
+                    for (let i = 1; i < t; i++) {
+                        const rotateX = -(i * 36 + (i === t - 1 ? 360 - i * 36 : 0));
+                        numTL.add($el, { rotateX, duration }, d === h * 10 && i === t - 1 ? "+=" + (h * 4 - 650) : position);
+                    }
+                    masterTL.sync(numTL, 0);
+                }
+            });
+
+            masterTL.duration = oneday;
+            masterTL.iterationDuration = oneday;
+
+            const getNow = () => new Date().getTime() % oneday;
+
+            masterTL.currentTime = getNow();
+
+            masterTL.onUpdate = ({ currentTime, speed }) => {};
+
+            masterTL.reset();
+
+            //#endregion
+
+            //#region JavaScript 原生录屏
+
+            class RecordScreenHelper {
+                #recordedChunks = [];
+                #mediaRecorder = null;
+                #stream = null;
+                #isRecording = false;
+
+                /**
+                 * Validates if a value is a non-null object
+                 * @param {*} obj - Value to check
+                 * @returns {boolean}
+                 */
+                #isObject(obj) {
+                    return typeof obj === "object" && obj !== null;
+                }
+
+                /**
+                 * Checks if a MIME type is supported by MediaRecorder
+                 * @param {string} mimeType - MIME type to check
+                 * @returns {boolean}
+                 */
+                #isMimeTypeSupported(mimeType) {
+                    return MediaRecorder.isTypeSupported(mimeType);
+                }
+
+                /**
+                 * Stops all tracks in the media stream
+                 */
+                #stopStreamTracks() {
+                    if (this.#stream) {
+                        this.#stream.getTracks().forEach((track) => track.stop());
+                        this.#stream = null;
+                    }
+                }
+
+                /**
+                 * Starts screen recording with the provided configurations
+                 * @param {Object} [fnConfig] - Callback functions { onstop, afterStart, onerror }
+                 * @param {Object} [optionConfig] - Media configurations { displayMedia, mediaRecorder }
+                 * @param {number} [timeslice] - Timeslice for chunked recording in milliseconds
+                 * @returns {Promise<void>}
+                 */
+                async recordVideo(fnConfig = {}, optionConfig = {}, timeslice) {
+                    if (this.#isRecording) {
+                        throw new Error("Recording is already in progress");
+                    }
+
+                    try {
+                        const defaultDisplayMedia = {
+                            video: {
+                                frameRate: 30 // Default frame rate
+                            },
+                            audio: true
+                        };
+
+                        const defaultMediaRecorder = {
+                            // mimeType: 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"' // 指定录制为 MP4 格式[^9^]
+                            mimeType: "video/webm;codecs=vp8,opus" // Default to VP8 and Opus for wider support
+                        };
+
+                        // Merge user-provided configurations
+                        if (this.#isObject(optionConfig)) {
+                            if (this.#isObject(optionConfig.displayMedia)) {
+                                Object.assign(defaultDisplayMedia, optionConfig.displayMedia);
+                            }
+                            if (this.#isObject(optionConfig.mediaRecorder)) {
+                                Object.assign(defaultMediaRecorder, optionConfig.mediaRecorder);
+                            }
+                        }
+
+                        // Validate MIME type
+                        if (!this.#isMimeTypeSupported(defaultMediaRecorder.mimeType)) {
+                            throw new Error(`Unsupported MIME type: ${defaultMediaRecorder.mimeType}`);
+                        }
+
+                        // Request screen sharing
+                        this.#stream = await navigator.mediaDevices.getDisplayMedia(defaultDisplayMedia);
+
+                        // Create MediaRecorder instance
+                        this.#mediaRecorder = new MediaRecorder(this.#stream, defaultMediaRecorder);
+                        this.#isRecording = true;
+
+                        // Handle data available
+                        this.#mediaRecorder.ondataavailable = (event) => {
+                            if (event.data.size > 0) {
+                                this.#recordedChunks.push(event.data);
+                            }
+                        };
+
+                        // Handle stop event
+                        this.#mediaRecorder.onstop = () => {
+                            if (this.#isObject(fnConfig) && typeof fnConfig.onstop === "function") {
+                                const blob = new Blob(this.#recordedChunks, {
+                                    type: defaultMediaRecorder.mimeType
+                                });
+                                fnConfig.onstop(blob, [...this.#recordedChunks]);
+                            }
+                            // Cleanup
+                            this.#stopStreamTracks();
+                            this.#recordedChunks = [];
+                            this.#mediaRecorder = null;
+                            this.#isRecording = false;
+                        };
+
+                        // Handle errors
+                        this.#mediaRecorder.onerror = (event) => {
+                            const error = event.error || new Error("MediaRecorder error");
+                            if (this.#isObject(fnConfig) && typeof fnConfig.onerror === "function") {
+                                fnConfig.onerror(error);
+                            } else {
+                                console.error("Recording error:", error);
+                            }
+                            this.#stopStreamTracks();
+                            this.#recordedChunks = [];
+                            this.#mediaRecorder = null;
+                            this.#isRecording = false;
+                        };
+
+                        // Start recording
+                        this.#mediaRecorder.start(timeslice);
+
+                        if (this.#isObject(fnConfig) && typeof fnConfig.afterStart === "function") {
+                            fnConfig.afterStart(this.#mediaRecorder);
+                        }
+                    } catch (error) {
+                        this.#isRecording = false;
+                        if (this.#isObject(fnConfig) && typeof fnConfig.onerror === "function") {
+                            fnConfig.onerror(error);
+                        } else {
+                            throw error; // Rethrow if no error callback provided
+                        }
+                    }
+                }
+
+                /**
+                 * Stops the current recording
+                 */
+                stopRecord() {
+                    if (!this.#isRecording || !this.#mediaRecorder) {
+                        console.warn("No active recording to stop");
+                        return;
+                    }
+                    this.#mediaRecorder.stop();
+                }
+
+                /**
+                 * Returns whether a recording is in progress
+                 * @returns {boolean}
+                 */
+                isRecording() {
+                    return this.#isRecording;
+                }
+
+                /**
+                 * Creates a downloadable video file from recorded chunks
+                 * @param {string} [filename="recording.webm"] - Name of the file
+                 * @returns {string} - URL of the downloadable file
+                 */
+                createDownloadUrl(filename = "recording.webm") {
+                    if (!this.#recordedChunks.length) {
+                        throw new Error("No recorded data available");
+                    }
+                    const blob = new Blob(this.#recordedChunks, {
+                        type: this.#recordedChunks[0].type
+                    });
+                    return URL.createObjectURL(blob);
+                }
+            }
+
+            //#endregion
+
+            const recordScreenHelper = new RecordScreenHelper();
+
+            document.getElementById("play").addEventListener("click", () => {
+                function recordStopCallback(blob, chunks) {
+                    const url = URL.createObjectURL(blob);
+
+                    // 提供下载链接
+                    var aLink = document.createElement("a");
+                    aLink.href = url;
+                    aLink.download = `原生录屏正式版-${new Date().valueOf()}.webm`;
+                    document.body.appendChild(aLink);
+                    aLink.click();
+                    document.body.removeChild(aLink);
+                }
+
+                function startRecordCallback() {
+                    masterTL.reset();
+                    masterTL.play();
+                }
+
+                recordScreenHelper.recordVideo({
+                    afterStart: startRecordCallback,
+                    onstop: recordStopCallback
+                });
+            });
+
+            document.getElementById("pause").addEventListener("click", () => {
+                recordScreenHelper.stopRecord();
+                masterTL.pause();
+            });
+
+            const spanNowTimeEle = document.getElementById("spanNowTime");
+            spanNowTimeEle.innerText = new Date().toLocaleString();
+            setInterval(() => {
+                spanNowTimeEle.innerText = new Date().toLocaleString();
+            }, 1000);
+        </script>
+    </body>
+</html>
