@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>纯CSS无限轮播</title>
+        <meta name="keywords" content="xiaodu114,css,marquee,轮播" />
+        <meta name="description" content="纯CSS实现无限轮播" />
+        
+        <style>
+            :root {
+                --main-color: #3cb878;
+            }
+
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                height: 100%;
+                width: 100%;
+                margin: 0;
+                overflow: hidden;
+            }
+
+            body{
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              overflow-y: auto;
+            }
+        </style>
+
+        <style>
+            @keyframes demo1_scrollUp {
+                0% {
+                    transform: translateY(0);
+                }
+                100% {
+                    transform: translateY(-100%);
+                }
+            }
+
+            .demo1-marquee-container {
+                width: 300px;
+                height: 200px;
+                border: 1px solid #ccc;
+                margin-bottom: 1rem;
+
+                .marquee {
+                    position: relative;
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    overflow: hidden;
+
+                    .marquee-content {
+                        display: flex;
+                        flex-direction: column;
+                        transition: transform 0s;
+                        animation: demo1_scrollUp 10s linear infinite;
+                        /* animation: demo1_scrollUp 10s ease-in-out infinite; */
+
+                        .marquee-item {
+                            padding: 10px;
+                            border-bottom: 1px solid #eee;
+                            white-space: nowrap;
+                        }
+                    }
+
+                    &:hover .marquee-content {
+                        animation-play-state: paused;
+                    }
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <h1>纯CSS无限轮播</h1>
+        <p>一些纯CSS实现的轮播，正在不断搜集中……</p>
+        <h2>示例一</h2>
+        <div class="demo demo1-marquee-container">
+            <div class="marquee">
+                <div class="marquee-content">
+                    <div class="marquee-item">内容1</div>
+                    <div class="marquee-item">内容2</div>
+                    <div class="marquee-item">内容3</div>
+                    <div class="marquee-item">内容4</div>
+                    <div class="marquee-item">内容5</div>
+                    <div class="marquee-item">内容6</div>
+                    <div class="marquee-item">内容7</div>
+                    <div class="marquee-item">内容8</div>
+                    <div class="marquee-item">内容9</div>
+                    <div class="marquee-item">内容10</div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
