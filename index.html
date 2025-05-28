@@ -652,6 +652,12 @@
                     <a href="/demo/css/clockDial/index.html" target="_blank">钟表表盘 - xiaodu114.github.io</a>
                 </li>
             </ul>
+            <h4>marquee</h4>
+            <ul>
+                <li>
+                    <a href="/demo/css/marquee/index.html" target="_blank">纯CSS无限轮播</a>
+                </li>
+            </ul>
             <h4>scrollBar</h4>
             <ul>
                 <li>
@@ -808,5 +814,9 @@
                 </li>
             </ul>
         </div>
+        <script>
+            const urlSearchParams = new URLSearchParams(location.search);
+            console.log(`测试是否是 PWA 方式启动：`, urlSearchParams, urlSearchParams.toString());
+        </script>
     </body>
 </html>
