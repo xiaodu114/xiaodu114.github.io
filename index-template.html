@@ -33,5 +33,9 @@
             <h2>代码示例</h2>
             <!-- xiaodu114-placeholder-demo -->
         </div>
+        <script>
+            const urlSearchParams = new URLSearchParams(location.search);
+            console.log(`测试是否是 PWA 方式启动：`, urlSearchParams, urlSearchParams.toString());
+        </script>
     </body>
 </html>
