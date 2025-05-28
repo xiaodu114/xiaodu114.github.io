@@ -6,6 +6,10 @@
             {
                 "href": "https://lbs.baidu.com/",
                 "text": "百度地图开放平台"
+            },
+            {
+                "href": "https://api.map.baidu.com/lbsapi/getpoint/index.html",
+                "text": "拾取坐标系统"
             }
         ]
     },
