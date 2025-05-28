@@ -192,16 +192,55 @@ function generateSitemapXML(treeNodes, options) {
 }
 
 const root_p = path.join(__dirname, "p");
-const excludePaths_p = ["/p/_", "/p/0", "/p/llm/bigdl/source", "/p/mllm/comfyUI/pages", "/p/web/browser/pages", "/p/web/js/base", "/p/web/js/a2bei4", "/p/web/problem/crossDomain/cookie1.html", "/p/web/problem/crossDomain/documentDomain1.html", "/p/web/problem/crossDomain/locationHash0.html", "/p/web/problem/crossDomain/locationHash1.html", "/p/web/problem/crossDomain/postMessage1.html", "/p/web/problem/crossDomain/windowName0.html", "/p/web/problem/crossDomain/windowName1.html", "/p/web/problem/sameOrigin/index-vue.html", "/p/web/vite", "/p/web/vue2/source/iframe", "/p/web/vue3/0introduction/code", "/p/web/vue3/1learn"];
+const excludePaths_p = {
+    "/p/0": 1,
+    "/p/_": 1,
+    "/p/llm/bigdl/source": 1,
+    "/p/mllm/comfyUI/pages": 1,
+    "/p/web/browser/pages": 1,
+    "/p/web/js/a2bei4": 1,
+    "/p/web/js/base": 1,
+    "/p/web/problem/crossDomain/cookie1.html": 1,
+    "/p/web/problem/crossDomain/documentDomain1.html": 1,
+    "/p/web/problem/crossDomain/locationHash0.html": 1,
+    "/p/web/problem/crossDomain/locationHash1.html": 1,
+    "/p/web/problem/crossDomain/postMessage1.html": 1,
+    "/p/web/problem/crossDomain/windowName0.html": 1,
+    "/p/web/problem/crossDomain/windowName1.html": 1,
+    "/p/web/problem/sameOrigin/index-vue.html": 1,
+    "/p/web/vite": 1,
+    "/p/web/vue2/source/iframe": 1,
+    "/p/web/vue3/0introduction/code": 1,
+    "/p/web/vue3/1learn": 1
+};
 const root_demo = path.join(__dirname, "demo");
-const excludePaths_demo = ["/demo/angular1/angularjs-music", "/demo/angular1/angularjs-music-table/tabletr.html", "/demo/angular1/angularjs-music-table/translate3d.html", "/demo/angular1/angularjs-music-table", "/demo/angular1/angularjs-table/tpl", "/demo/angular1/ui-router-demo/module", "/demo/js/BroadcastChannel/demo1.html", "/demo/js/BroadcastChannel/demo2.html", "/demo/js/Drag-and-Drop", "/demo/js/VideojsPlayer/index-unpkg.html", "/demo/js/VideojsPlayer/index-iframe.html", "/demo/js/SharedWorker/demo1.html", "/demo/js/SharedWorker/demo2.html", "/demo/vue2", "/demo/webpack"];
+const excludePaths_demo = {
+    "/demo/angular1/angularjs-music": 1,
+    "/demo/angular1/angularjs-music-table": 1,
+    "/demo/angular1/angularjs-music-table/tabletr.html": 1,
+    "/demo/angular1/angularjs-music-table/translate3d.html": 1,
+    "/demo/angular1/angularjs-table/tpl": 1,
+    "/demo/angular1/ui-router-demo/module": 1,
+    "/demo/js/BroadcastChannel/demo1.html": 1,
+    "/demo/js/BroadcastChannel/demo2.html": 1,
+    "/demo/js/Drag-and-Drop": 1,
+    "/demo/js/SharedWorker/demo1.html": 1,
+    "/demo/js/SharedWorker/demo2.html": 1,
+    "/demo/js/VideojsPlayer/index-iframe.html": 1,
+    "/demo/js/VideojsPlayer/index-unpkg.html": 1,
+    "/demo/js/baidumap/pages": 1,
+    "/demo/js/recordScreen/pages": 1,
+    "/demo/js/word/pages": 1,
+    "/demo/vue2": 1,
+    "/demo/webpack": 1
+};
 //  获取需要添加主页的页面：博客目录
 let treeNodes_p = handler(root_p, (branch) => {
-    return !excludePaths_p.includes(branch.shortPath);
+    return !excludePaths_p.hasOwnProperty(branch.shortPath);
 });
 //  获取需要添加主页的页面：代码实例目录
 let treeNodes_demo = handler(root_demo, (branch) => {
-    return !excludePaths_demo.includes(branch.shortPath);
+    return !excludePaths_demo.hasOwnProperty(branch.shortPath);
 });
 
 //  将某些页面添加到主页
