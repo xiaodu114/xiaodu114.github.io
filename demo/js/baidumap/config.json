@@ -10,6 +10,10 @@
             {
                 "href": "https://api.map.baidu.com/lbsapi/getpoint/index.html",
                 "text": "拾取坐标系统"
+            },
+            {
+                "href": "https://lbsyun.baidu.com/cms/jsapi/reference/jsapi_webgl_1_0.html",
+                "text": "百度地图JSAPI WebGL v1.0类参考"
             }
         ]
     },
@@ -49,6 +53,18 @@
             "text": "自定义覆盖物",
             "code": "CustomCover",
             "page": "/demo/js/baidumap/pages/customCover.html"
+        },
+        {
+            "id": 6,
+            "text": "绘制->bmap-draw->01",
+            "code": "bmap-draw-01",
+            "page": "/demo/js/baidumap/pages/bmapDraw.html"
+        },
+        {
+            "id": 7,
+            "text": "绘制->bmap-draw->02",
+            "code": "bmap-draw-02",
+            "page": "/demo/js/baidumap/pages/bmapDraw2.html"
         }
     ]
 }
