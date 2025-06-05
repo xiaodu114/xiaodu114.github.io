@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>百度地图- bmap-draw - 02 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,百度地图,bmap-draw,bmap draw,点,Point,线,Polyline,多边形,Polygon,点选,平移,线平移,多边形平移,编辑,线编辑,多边形编辑" />
+        <meta name="description" content="百度地图之 bmap-draw 示例 02：绘制点、线、多边形；点选；线平移、多边形平移；线编辑、多边形编辑" />
+
+        <style>
+            #allmap {
+                width: 100%;
+                height: 100vh;
+            }
+
+            .btns {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 1rem;
+                flex-wrap: wrap;
+
+                > button {
+                    cursor: pointer;
+                }
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+        <script>
+            const searchParams = new URLSearchParams(location.search);
+            const ak = searchParams.get("ak");
+            document.write(`<script type="text/javascript" src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=${ak}"><\/script>`);
+        </script>
+        <script src="https://unpkg.com/bmap-draw@latest"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>BMap Draw 之 02</h1>
+            <p></p>
+            <h2>绘制标记点、线、多边形</h2>
+            <div class="btns">
+                <button type="button" id="btnDrawPoint">添加点</button>
+                <button type="button" id="btnDrawLine">添加线</button>
+                <button type="button" id="btnDrawPolygon">添加多边形</button>
+                <button type="button" id="btnDrawClear">清空</button>
+            </div>
+            <div id="allmap"></div>
+        </div>
+        <script type="text/javascript">
+            // GL版命名空间为BMapGL
+            // 按住鼠标右键，修改倾斜角和角度
+            const map = new BMapGL.Map("allmap"); // 创建Map实例
+            map.centerAndZoom(new BMapGL.Point(116.404, 39.915), 11); // 初始化地图,设置中心点坐标和地图级别
+            map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+
+            const { DrawScene, OperateEventType, DrawingType, MarkerDraw, PolylineDraw, PolygonDraw, Select, PolylineMove, PolygonMove, PolylineEdit, PolygonEdit } = BMapGLDraw;
+
+            // 初始化绘制场景类
+            const scene = new DrawScene(map, {
+                noLimit: true
+            });
+
+            //  存储绘制相关的对象
+            const drawId2DrawRelated = new Map();
+            let currentDrawId = "";
+
+            //#region   平移相关：线、多边形
+
+            const lineMove = new PolylineMove(scene);
+            lineMove.setCurrentModel(PolylineMove.MODEL.MOVE);
+
+            const poyMove = new PolygonMove(scene);
+            poyMove.setCurrentModel(PolygonMove.MODEL.MOVE);
+
+            //#endregion
+
+            //#region   编辑相关：线、多边形
+
+            const polyEdit = new PolygonEdit(scene);
+            const lineEdit = new PolylineEdit(scene);
+
+            //#endregion
+
+            //#region   绘制相关：点、线、多边形
+
+            const marker = new MarkerDraw(scene, {
+                isOpen: false,
+                isSeries: true,
+                enableDragging: true,
+                baseOpts: {}
+            });
+
+            marker.addEventListener(OperateEventType.COMPLETE, (evt) => {
+                console.log("------------------------------------------> 【标记点】绘制完成：");
+                const drawRelatedObj = {
+                    id: new Date().valueOf(),
+                    drawType: evt.target.overlay.toString(),
+                    overlay: evt.target.overlay
+                };
+                drawRelatedObj.overlay._du_extend_ = {
+                    id: drawRelatedObj.id
+                };
+                drawId2DrawRelated.set(drawRelatedObj.id, drawRelatedObj);
+                polyLayer.addOverlay(drawRelatedObj.overlay);
+                marker.close();
+                select.open();
+            });
+
+            const polyline = new PolylineDraw(scene, {
+                hideTip: false, // 显示绘制提示（默认显示）
+                isOpen: false,
+                isSeries: true, // 是否开启批量绘制
+                labelOptions: {
+                    borderRadius: "2px",
+                    background: "#b5d3fb",
+                    border: "1px solid #b5d3fb",
+                    color: "#333",
+                    fontSize: "12px",
+                    letterSpacing: "0",
+                    padding: "5px"
+                },
+                baseOpts: {
+                    strokeWeight: 4,
+                    strokeOpacity: 1,
+                    fillOpacity: 0.2
+                }
+            });
+
+            polyline.addEventListener(OperateEventType.COMPLETE, (evt) => {
+                console.log("------------------------------------------> 【折线】绘制完成：");
+                const drawRelatedObj = {
+                    id: new Date().valueOf(),
+                    drawType: evt.target.overlay.toString(),
+                    overlay: evt.target.overlay
+                };
+                drawRelatedObj.overlay._du_extend_ = {
+                    id: drawRelatedObj.id
+                };
+                drawId2DrawRelated.set(drawRelatedObj.id, drawRelatedObj);
+                polyLayer.addOverlay(drawRelatedObj.overlay);
+                setTimeout(() => {
+                    polyline.closeAll();
+                });
+                select.open();
+            });
+
+            const polygon = new PolygonDraw(scene, {
+                isOpen: false,
+                hideTip: false, // 隐藏绘制提示
+                isSeries: true, // 是否开启批量绘制
+                labelOptions: {
+                    borderRadius: "2px",
+                    background: "#b5d3fb",
+                    border: "1px solid #b5d3fb",
+                    color: "#333",
+                    fontSize: "12px",
+                    letterSpacing: "0",
+                    padding: "5px"
+                },
+                baseOpts: {
+                    fillColor: "#fff",
+                    strokeWeight: 5,
+                    strokeOpacity: 1,
+                    fillOpacity: 0.2
+                }
+            });
+
+            polygon.addEventListener(OperateEventType.COMPLETE, (evt) => {
+                console.log("------------------------------------------> 【多边形】绘制完成：");
+                const drawRelatedObj = {
+                    id: new Date().valueOf(),
+                    drawType: evt.target.overlay.toString(),
+                    overlay: evt.target.overlay
+                };
+                drawRelatedObj.overlay._du_extend_ = {
+                    id: drawRelatedObj.id
+                };
+                drawId2DrawRelated.set(drawRelatedObj.id, drawRelatedObj);
+                polyLayer.addOverlay(drawRelatedObj.overlay);
+                setTimeout(() => {
+                    polygon.closeAll();
+                });
+                select.open();
+            });
+
+            //#endregion
+
+            //#region   信息窗口相关
+
+            let infoWindowDomForDraw = null;
+
+            function createInfoWindowDom() {
+                const div = document.createElement("div");
+                div.style.display = "flex";
+                div.style.gap = "1rem";
+
+                const editBtn = document.createElement("button");
+                editBtn.type = "button";
+                editBtn.innerText = "编辑";
+                editBtn.dataset.code = "edit";
+                editBtn.style.cursor = "pointer";
+                editBtn.addEventListener("click", (e) => {
+                    if (!drawId2DrawRelated.has(currentDrawId)) return;
+
+                    const drawRelatedObj = drawId2DrawRelated.get(currentDrawId);
+                    if (drawRelatedObj.infoWindow) {
+                        drawRelatedObj.infoWindow.hide();
+                    }
+                    switch (drawRelatedObj.drawType) {
+                        case "Polyline": {
+                            lineEdit.open(drawRelatedObj.overlay);
+                            break;
+                        }
+                        case "Polygon": {
+                            polyEdit.open(drawRelatedObj.overlay);
+                            break;
+                        }
+                    }
+                });
+
+                const moveBtn = document.createElement("button");
+                moveBtn.type = "button";
+                moveBtn.innerText = "平移";
+                moveBtn.dataset.code = "move";
+                moveBtn.style.cursor = "pointer";
+                moveBtn.addEventListener("click", (e) => {
+                    if (!drawId2DrawRelated.has(currentDrawId)) return;
+
+                    const drawRelatedObj = drawId2DrawRelated.get(currentDrawId);
+                    if (drawRelatedObj.infoWindow) {
+                        drawRelatedObj.infoWindow.hide();
+                    }
+                    switch (drawRelatedObj.drawType) {
+                        case "Polyline": {
+                            lineMove.open(drawRelatedObj.overlay);
+                            break;
+                        }
+                        case "Polygon": {
+                            poyMove.open(drawRelatedObj.overlay);
+                            break;
+                        }
+                    }
+                });
+
+                const deleteBtn = document.createElement("button");
+                deleteBtn.type = "button";
+                deleteBtn.innerText = "删除";
+                deleteBtn.dataset.code = "delete";
+                deleteBtn.style.cursor = "pointer";
+                deleteBtn.addEventListener("click", (e) => {
+                    if (!drawId2DrawRelated.has(currentDrawId)) return;
+
+                    const drawRelatedObj = drawId2DrawRelated.get(currentDrawId);
+                    if (drawRelatedObj.infoWindow) {
+                        drawRelatedObj.infoWindow.hide();
+                        drawRelatedObj.infoWindow = null;
+                    }
+                    polyLayer.removeOverlay(drawRelatedObj.overlay);
+                    scene.removeOverlay(drawRelatedObj.overlay);
+                    drawId2DrawRelated.delete(currentDrawId);
+                });
+
+                div.appendChild(editBtn);
+                div.appendChild(moveBtn);
+                div.appendChild(deleteBtn);
+                return div;
+            }
+
+            function createInfoWindowForDraw() {
+                if (infoWindowDomForDraw == null) {
+                    infoWindowDomForDraw = createInfoWindowDom();
+                }
+                return new BMapGL.InfoWindow(infoWindowDomForDraw, {
+                    enableCloseOnClick: true
+                });
+            }
+
+            //#endregion
+
+            //#region   选择相关
+
+            // 初始化选择类
+            const select = new Select(scene, {
+                type: DrawingType.DRAWING_POINT
+            });
+            select.open();
+            select.addEventListener(OperateEventType.CLICK, (e) => {
+                let target = polyLayer.pickOverlays(e.target);
+                if (Array.isArray(target) && target.length > 0) {
+                    const overlay = target[0];
+                    const duExtend = overlay._du_extend_;
+                    if (!drawId2DrawRelated.has(duExtend.id)) return;
+                    const drawRelatedObj = drawId2DrawRelated.get(duExtend.id);
+                    let overlayBoundsCenter = null;
+                    switch (drawRelatedObj.drawType) {
+                        case "Marker": {
+                            overlayBoundsCenter = overlay.latLng;
+                            break;
+                        }
+                        case "Polyline":
+                        case "Polygon": {
+                            const overlayBounds = overlay.getBounds();
+                            overlayBoundsCenter = overlayBounds.getCenter();
+                            break;
+                        }
+                    }
+
+                    if (!drawRelatedObj.infoWindow) {
+                        drawRelatedObj.infoWindow = createInfoWindowForDraw();
+                    }
+                    currentDrawId = duExtend.id;
+                    map.openInfoWindow(drawRelatedObj.infoWindow, overlayBoundsCenter);
+                }
+            });
+
+            const polyLayer = new BMapGL.GeoJSONLayer("poly");
+            map.addGeoJSONLayer(polyLayer);
+            scene.attachSnapSource(polyLayer.overlayData);
+
+            //#endregion
+
+            document.getElementById("btnDrawPoint").addEventListener("click", () => {
+                select.close();
+                marker.open(() => {});
+            });
+
+            document.getElementById("btnDrawLine").addEventListener("click", () => {
+                select.close();
+                polyline.open(() => {});
+            });
+
+            document.getElementById("btnDrawPolygon").addEventListener("click", () => {
+                select.close();
+                polygon.open(() => {});
+            });
+
+            document.getElementById("btnDrawClear").addEventListener("click", () => {
+                scene.clearData();
+            });
+        </script>
+    </body>
+</html>

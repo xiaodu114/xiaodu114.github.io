@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>百度地图- bmap-draw - 01 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,百度地图,bmap-draw,bmap draw,点,Point,自定义点图标,线,Polyline,多边形,Polygon,矩形,Rectangle,圆形,Circle" />
+        <meta name="description" content="百度地图之 bmap-draw 示例：绘制点、自定义点图标、线、多边形、矩形、圆形" />
+
+        <style>
+            #allmap {
+                width: 100%;
+                height: 100vh;
+            }
+
+            .btns {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 1rem;
+                flex-wrap: wrap;
+
+                > button {
+                    cursor: pointer;
+                }
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+        <script>
+            const searchParams = new URLSearchParams(location.search);
+            const ak = searchParams.get("ak");
+            document.write(`<script type="text/javascript" src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=${ak}"><\/script>`);
+        </script>
+        <script src="https://unpkg.com/bmap-draw@latest"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>BMap Draw 之 01</h1>
+            <p>官方说明：基于百度地图 JSAPI GL 的鼠标绘制库</p>
+            <ul>
+                <li>
+                    <a href="https://lbsyun.baidu.com/index.php?title=jspopularGL" target="_blank" rel="noopener noreferrer">jspopularGL | 百度地图API SDK</a>
+                </li>
+                <li>
+                    <a href="https://lbsyun.baidu.com/bmap-draw" target="_blank" rel="noopener noreferrer">bmap-draw - BMap Draw</a>
+                </li>
+            </ul>
+            <h2>绘制标记点</h2>
+            <div class="btns">
+                <button type="button" id="btnDrawPointOpen">开启</button>
+                <button type="button" id="btnDrawPointClose">关闭</button>
+                <button type="button" id="btnDrawPointClear">清除</button>
+            </div>
+            <h2>绘制标记点（自定义图标）</h2>
+            <div class="btns">
+                <button type="button" id="btnDrawPointIconOpen">开启</button>
+                <button type="button" id="btnDrawPointIconClose">关闭</button>
+                <button type="button" id="btnDrawPointIconClear">清除</button>
+            </div>
+            <h2>绘制折线</h2>
+            <div class="btns">
+                <button type="button" id="btnDrawLineOpen">开启</button>
+                <button type="button" id="btnDrawLineClose">关闭</button>
+                <button type="button" id="btnDrawLineClear">清除</button>
+            </div>
+            <h2>绘制多边形</h2>
+            <div class="btns">
+                <button type="button" id="btnDrawPolygonOpen">开启</button>
+                <button type="button" id="btnDrawPolygonClose">关闭</button>
+                <button type="button" id="btnDrawPolygonClear">清除</button>
+            </div>
+            <h2>绘制矩形</h2>
+            <div class="btns">
+                <button type="button" id="btnDrawRectOpen">开启</button>
+                <button type="button" id="btnDrawRectClose">关闭</button>
+                <button type="button" id="btnDrawRectClear">清除</button>
+            </div>
+            <h2>绘制圆形</h2>
+            <div class="btns">
+                <button type="button" id="btnDrawCircleOpen">开启</button>
+                <button type="button" id="btnDrawCircleClose">关闭</button>
+                <button type="button" id="btnDrawCircleClear">清除</button>
+            </div>
+            <div id="allmap"></div>
+        </div>
+        <script type="text/javascript">
+            // GL版命名空间为BMapGL
+            // 按住鼠标右键，修改倾斜角和角度
+            const map = new BMapGL.Map("allmap"); // 创建Map实例
+            map.centerAndZoom(new BMapGL.Point(116.404, 39.915), 11); // 初始化地图,设置中心点坐标和地图级别
+            map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+
+            const { DrawScene, OperateEventType, MarkerDraw, PolylineDraw, PolygonDraw, RectDraw, CircleDraw } = BMapGLDraw;
+
+            // 初始化绘制场景类
+            const scene = new DrawScene(map, {
+                noLimit: true
+            });
+
+            //#region   绘制标记点
+
+            const marker = new MarkerDraw(scene, {
+                isOpen: false,
+                isSeries: true,
+                enableDragging: true,
+                baseOpts: {}
+            });
+
+            marker.addEventListener(OperateEventType.COMPLETE, (evt) => {
+                console.log("------------------------------------------> 【标记点】绘制完成：");
+                console.log(evt);
+            });
+
+            document.getElementById("btnDrawPointOpen").addEventListener("click", () => {
+                marker.open(() => {});
+            });
+
+            document.getElementById("btnDrawPointClose").addEventListener("click", () => {
+                marker.close();
+            });
+
+            document.getElementById("btnDrawPointClear").addEventListener("click", () => {
+                scene.clearData();
+            });
+
+            //#endregion
+
+            //#region   绘制标记点（自定义图标）
+
+            const markerIcon = new MarkerDraw(scene, {
+                isOpen: false,
+                isSeries: true,
+                enableDragging: true,
+                baseOpts: {
+                    icon: new BMapGL.Icon("/logo/1024.png", new BMapGL.Size(64, 64))
+                }
+            });
+
+            markerIcon.addEventListener(OperateEventType.COMPLETE, (evt) => {
+                console.log("------------------------------------------> 【标记点（自定义图标）】绘制完成：");
+                console.log(evt);
+            });
+
+            document.getElementById("btnDrawPointIconOpen").addEventListener("click", () => {
+                markerIcon.open(() => {});
+            });
+
+            document.getElementById("btnDrawPointIconClose").addEventListener("click", () => {
+                markerIcon.close();
+            });
+
+            document.getElementById("btnDrawPointIconClear").addEventListener("click", () => {
+                scene.clearData();
+            });
+
+            //#endregion
+
+            //#region   绘制折线
+
+            const polyline = new PolylineDraw(scene, {
+                hideTip: false, // 显示绘制提示（默认显示）
+                isOpen: false,
+                isSeries: true, // 是否开启批量绘制
+                labelOptions: {
+                    borderRadius: "2px",
+                    background: "#b5d3fb",
+                    border: "1px solid #b5d3fb",
+                    color: "#333",
+                    fontSize: "12px",
+                    letterSpacing: "0",
+                    padding: "5px"
+                },
+                baseOpts: {
+                    strokeWeight: 4,
+                    strokeOpacity: 1,
+                    fillOpacity: 0.2
+                }
+            });
+
+            polyline.addEventListener(OperateEventType.COMPLETE, (evt) => {
+                console.log("------------------------------------------> 【折线】绘制完成：");
+                console.log(evt);
+            });
+
+            document.getElementById("btnDrawLineOpen").addEventListener("click", () => {
+                polyline.open(() => {});
+            });
+
+            document.getElementById("btnDrawLineClose").addEventListener("click", () => {
+                polyline.closeAll();
+            });
+
+            document.getElementById("btnDrawLineClear").addEventListener("click", () => {
+                scene.clearData();
+            });
+
+            //#endregion
+
+            //#region   绘制多边形
+
+            const polygon = new PolygonDraw(scene, {
+                isOpen: false,
+                hideTip: false, // 隐藏绘制提示
+                isSeries: true, // 是否开启批量绘制
+                labelOptions: {
+                    borderRadius: "2px",
+                    background: "#b5d3fb",
+                    border: "1px solid #b5d3fb",
+                    color: "#333",
+                    fontSize: "12px",
+                    letterSpacing: "0",
+                    padding: "5px"
+                },
+                baseOpts: {
+                    fillColor: "#fff",
+                    strokeWeight: 5,
+                    strokeOpacity: 1,
+                    fillOpacity: 0.2
+                }
+            });
+
+            polygon.addEventListener(OperateEventType.COMPLETE, (evt) => {
+                console.log("------------------------------------------> 【多边形】绘制完成：");
+                console.log(evt);
+            });
+
+            document.getElementById("btnDrawPolygonOpen").addEventListener("click", () => {
+                polygon.open(() => {});
+            });
+
+            document.getElementById("btnDrawPolygonClose").addEventListener("click", () => {
+                polygon.closeAll();
+            });
+
+            document.getElementById("btnDrawPolygonClear").addEventListener("click", () => {
+                scene.clearData();
+            });
+
+            //#endregion
+
+            //#region   绘制矩形
+
+            let rect = new RectDraw(scene, {
+                hideTip: true, // 隐藏绘制提示
+                isOpen: false,
+                isSeries: true, // 是否开启批量绘制
+                labelOptions: {
+                    borderRadius: "2px",
+                    background: "#b5d3fb",
+                    border: "1px solid #b5d3fb",
+                    color: "#333",
+                    fontSize: "12px",
+                    letterSpacing: "0",
+                    padding: "5px"
+                },
+                baseOpts: {
+                    fillColor: "#fff",
+                    strokeWeight: 5,
+                    strokeOpacity: 1,
+                    fillOpacity: 0.2
+                }
+            });
+
+            rect.addEventListener(OperateEventType.COMPLETE, (evt) => {
+                console.log("------------------------------------------> 【矩形】绘制完成：");
+                console.log(evt);
+            });
+
+            document.getElementById("btnDrawRectOpen").addEventListener("click", () => {
+                rect.open(() => {});
+            });
+
+            document.getElementById("btnDrawRectClose").addEventListener("click", () => {
+                rect.closeAll();
+            });
+
+            document.getElementById("btnDrawRectClear").addEventListener("click", () => {
+                scene.clearData();
+            });
+
+            //#endregion
+
+            //#region   绘制圆形
+
+            const circle = new CircleDraw(scene, {
+                isOpen: true,
+                isSeries: true, // 是否开启批量绘制
+                labelOptions: {
+                    borderRadius: "2px",
+                    background: "#b5d3fb",
+                    border: "1px solid #b5d3fb",
+                    color: "#333",
+                    fontSize: "12px",
+                    letterSpacing: "0",
+                    padding: "5px"
+                },
+                baseOpts: {
+                    strokeColor: "#6d77f9",
+                    fillColor: "#fff",
+                    strokeWeight: 5,
+                    strokeOpacity: 1,
+                    fillOpacity: 0.2
+                }
+            });
+
+            circle.addEventListener(OperateEventType.COMPLETE, (evt) => {
+                console.log("------------------------------------------> 【圆形】绘制完成：");
+                console.log(evt);
+            });
+
+            document.getElementById("btnDrawCircleOpen").addEventListener("click", () => {
+                circle.open(() => {});
+            });
+
+            document.getElementById("btnDrawCircleClose").addEventListener("click", () => {
+                circle.closeAll();
+            });
+
+            document.getElementById("btnDrawCircleClear").addEventListener("click", () => {
+                scene.clearData();
+            });
+
+            //#endregion
+        </script>
+    </body>
+</html>
