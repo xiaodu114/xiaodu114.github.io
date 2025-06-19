@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>OpenLayers - 高德地图 - 点覆盖物 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,OpenLayers,高德地图,点覆盖物,点击事件,Feature,VectorSource,VectorLayer" />
+        <meta name="description" content="OpenLayers 加载高德地图示例之点覆盖物：Feature + VectorSource + VectorLayer 实现点覆盖物，并添加点击事件" />
+
+        <link href="https://registry.npmmirror.com/ol/10.5.0/files/ol.css" rel="stylesheet" />
+
+        <style>
+            #map {
+                width: 100%;
+                height: 100vh;
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+        <script src="https://registry.npmmirror.com/ol/10.5.0/files/dist/ol.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>点覆盖物之一</h1>
+            <p>Feature + VectorSource + VectorLayer 实现点覆盖物，并添加点击事件</p>
+            <div id="map"></div>
+        </div>
+        <script>
+            function obj2QueryString(obj) {
+                return Object.keys(obj)
+                    .map((key) => `${key}=${obj[key]}`)
+                    .join("&");
+            }
+
+            const { Map, View, Feature } = ol;
+            const { Tile, Vector: VectorLayer } = ol.layer;
+            const { XYZ, Vector: VectorSource } = ol.source;
+            const { Point } = ol.geom;
+            const { Style, Icon, Fill, Text } = ol.style;
+
+            const map = new Map({
+                target: "map",
+                view: new View({
+                    projection: "EPSG:4326",
+                    center: [116.40404291497349, 39.9110069683746],
+                    zoom: 12
+                }),
+                layers: [
+                    new Tile({
+                        source: new XYZ({
+                            url: `https://wprd0{1-4}.is.autonavi.com/appmaptile?${obj2QueryString({ lang: "zh_cn", size: "1", style: "7", x: "{x}", y: "{y}", z: "{z}" })}`
+                        })
+                    })
+                ]
+            });
+
+            //  先弄一个图层，后面再添加点
+            const pointVectorSource = new VectorSource({
+                // features: [pointFeature]
+            });
+            const pointVectorLayer = new VectorLayer({
+                source: pointVectorSource
+            });
+            map.addLayer(pointVectorLayer);
+
+            function addPoint(coordinate, name) {
+                const pointFeature = new Feature({
+                    geometry: new Point(coordinate),
+                    name: new Date().valueOf()
+                });
+                const pointStyle = new Style({
+                    image: new Icon({
+                        src: "/logo/1024.png",
+                        width: 64,
+                        height: 64
+                    }),
+                    text: new Text({
+                        textAlign: "center",
+                        textBaseline: "top",
+                        offsetX: 0,
+                        offsetY: 20,
+                        backgroundFill: new Fill({
+                            color: "#67C23A"
+                        }),
+                        padding: [0, 2, 0, 2],
+                        text: "我的 Logo",
+                        fill: new Fill({
+                            color: "white"
+                        })
+                    })
+                });
+                pointFeature.setStyle(pointStyle);
+
+                pointVectorSource.addFeatures([pointFeature]);
+            }
+
+            map.on("click", function (evt) {
+                const feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
+                    return feature;
+                });
+                if (feature) {
+                    const coordinates = feature.getGeometry().getCoordinates();
+                    const name = feature.get("name");
+                    alert("Feature Name: " + name + "\nCoordinates: " + coordinates);
+                } else {
+                    addPoint(evt.coordinate);
+                }
+            });
+        </script>
+    </body>
+</html>

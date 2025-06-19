@@ -1,0 +1,54 @@
+{
+    "pageTitle": "OpenLayers - xiaodu114.github.io",
+    "head": {
+        "title": "我和 OpenLayers 的故事",
+        "links": [
+            {
+                "href": "https://openlayers.org/",
+                "text": "OpenLayers - Welcome"
+            },
+            {
+                "href": "https://github.com/openlayers/openlayers",
+                "text": "GitHub - openlayers/openlayers: OpenLayers"
+            }
+        ]
+    },
+    "nodes": [
+        {
+            "id": 1,
+            "text": "介绍",
+            "code": "Introduction",
+            "page": "/demo/js/openlayers/pages/introduction.html"
+        },
+        {
+            "id": 2,
+            "text": "高德地图：Hello World",
+            "code": "AMapHelloWorld",
+            "page": "/demo/js/openlayers/pages/amapHelloWorld.html"
+        },
+         {
+            "id": 3,
+            "text": "高德地图：地图属性",
+            "code": "AMapAttr",
+            "page": "/demo/js/openlayers/pages/amapAttr.html"
+        },
+        {
+            "id": 4,
+            "text": "高德地图：地图控件",
+            "code": "AMapControl",
+            "page": "/demo/js/openlayers/pages/amapControl.html"
+        },
+        {
+            "id": 5,
+            "text": "高德地图：点覆盖物",
+            "code": "AMapPointCover01",
+            "page": "/demo/js/openlayers/pages/amapPointCover01.html"
+        },
+        {
+            "id": 6,
+            "text": "高德地图：点覆盖物（DOM）",
+            "code": "AMapPointCover02",
+            "page": "/demo/js/openlayers/pages/amapPointCover02.html"
+        }
+    ]
+}

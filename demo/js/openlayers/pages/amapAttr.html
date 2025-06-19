@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>OpenLayers - 高德地图 - Hello World - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,OpenLayers,高德地图,地图属性,设置/获取地图级别,设置/获取地图中心点,设置地图最大/最小级别" />
+        <meta name="description" content="OpenLayers 加载高德地图之地图属性：设置/获取地图级别、设置/获取地图中心点、设置地图最大/最小级别" />
+
+        <link href="https://registry.npmmirror.com/ol/10.5.0/files/ol.css" rel="stylesheet" />
+
+        <style>
+            #map {
+                width: 100%;
+                height: 100vh;
+            }
+
+            .btns {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 1rem;
+                flex-wrap: wrap;
+
+                > button {
+                    cursor: pointer;
+                }
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+        <script src="https://registry.npmmirror.com/ol/10.5.0/files/dist/ol.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>地图属性</h1>
+            <p>编程方式控制地图属性</p>
+            <h2>设置/获取地图级别</h2>
+            <div class="btns">
+                <input type="number" id="inputLevel" step="1" min="4" max="20" value="12" style="width: 200px" />
+                <button type="button" id="btnSetLevel">设置级别</button>
+                <button type="button" id="btnZoomIn">放大一级</button>
+                <button type="button" id="btnZoomOut">缩小一级</button>
+                <button type="button" id="btnGetLevel">获取当前级别</button>
+            </div>
+            <h2>设置/获取地图中心点</h2>
+            <div class="btns">
+                <input type="text" id="inputLng" placeholder="经度，例如：116.404" />
+                <input type="text" id="inputLat" placeholder="纬度，例如：39.915" />
+                <button type="button" id="btnSetCenterByLngLat">设置中心点</button>
+                <button type="button" id="btnGetCenterByLngLat">获取中心点</button>
+            </div>
+            <h2>设置地图最大/最小级别</h2>
+            <div class="btns">
+                <input type="number" id="inputMinZoom" placeholder="最小级别，例如：4" />
+                <input type="number" id="inputMaxZoom" placeholder="最大级别，例如：20" />
+                <button type="button" id="btnSetMinMaxZoom">设置最大/最小级别</button>
+                <button type="button" id="btnGetMinMaxZoom">获取最大/最小级别</button>
+            </div>
+            <div id="map"></div>
+        </div>
+        <script>
+            function obj2QueryString(obj) {
+                return Object.keys(obj)
+                    .map((key) => `${key}=${obj[key]}`)
+                    .join("&");
+            }
+
+            const { Map, View } = ol;
+            const { Tile } = ol.layer;
+            const { XYZ } = ol.source;
+
+            const map = new Map({
+                target: "map",
+                view: new View({
+                    projection: "EPSG:4326",
+                    center: [116.40404291497349, 39.9110069683746],
+                    zoom: 12,
+                    minZoom: 4,
+                    maxZoom: 20
+                }),
+                layers: [
+                    new Tile({
+                        source: new XYZ({
+                            url: `https://wprd0{1-4}.is.autonavi.com/appmaptile?${obj2QueryString({ lang: "zh_cn", size: "1", style: "7", x: "{x}", y: "{y}", z: "{z}" })}`
+                        })
+                    })
+                ]
+            });
+
+            const mapView = map.getView();
+            mapView.on("change:resolution", function (evt) {
+                const level = mapView.getZoom();
+                inputLevelEle.value = level;
+            });
+
+            //#region  设置/获取地图级别
+
+            const inputLevelEle = document.getElementById("inputLevel");
+
+            document.getElementById("btnSetLevel").addEventListener("click", function () {
+                mapView.setZoom(inputLevelEle.value);
+            });
+
+            document.getElementById("btnZoomIn").addEventListener("click", function () {
+                const level = mapView.getZoom();
+                mapView.setZoom(level + 1);
+                inputLevelEle.value = level + 1;
+            });
+
+            document.getElementById("btnZoomOut").addEventListener("click", function () {
+                const level = mapView.getZoom();
+                mapView.setZoom(level - 1);
+                inputLevelEle.value = level - 1;
+            });
+
+            document.getElementById("btnGetLevel").addEventListener("click", function () {
+                alert(mapView.getZoom());
+            });
+
+            //#endregion
+
+            //#region  设置/获取地图中心点
+
+            const inputLngEle = document.getElementById("inputLng");
+            const inputLatEle = document.getElementById("inputLat");
+
+            document.getElementById("btnSetCenterByLngLat").addEventListener("click", function () {
+                const lng = inputLngEle.value;
+                const lat = inputLatEle.value;
+                mapView.setCenter([lng, lat]);
+            });
+
+            document.getElementById("btnGetCenterByLngLat").addEventListener("click", function () {
+                const center = mapView.getCenter();
+                alert(`经度：${center[0]}，纬度：${center[1]}`);
+            });
+            //#endregion
+
+            //#region  设置地图最大/最小级别
+
+            const inputMinZoomEle = document.getElementById("inputMinZoom");
+            const inputMaxZoomEle = document.getElementById("inputMaxZoom");
+            inputMinZoomEle.value = mapView.getMinZoom();
+            inputMaxZoomEle.value = mapView.getMaxZoom();
+
+            document.getElementById("btnSetMinMaxZoom").addEventListener("click", function () {
+                const minZoom = inputMinZoomEle.value;
+                const maxZoom = inputMaxZoomEle.value;
+                mapView.setMinZoom(Number(minZoom));
+                mapView.setMaxZoom(Number(maxZoom));
+            });
+
+            document.getElementById("btnGetMinMaxZoom").addEventListener("click", function () {
+                const minZoom = mapView.getMinZoom();
+                const maxZoom = mapView.getMaxZoom();
+                alert(`最小级别：${minZoom}，最大级别：${maxZoom}`);
+            });
+
+            //#endregion
+        </script>
+    </body>
+</html>
