@@ -18,15 +18,12 @@
 
     > .main {
         > .nav {
-            ul {
-                padding: 0;
-
-                li {
+            .menu-box {
+                padding-left: 1.5rem;
+                .menu-item {
                     position: relative;
-                    list-style: none;
                     cursor: pointer;
                     line-height: 2;
-                    padding-left: 2rem;
 
                     &:hover {
                         color: var(--main-color);
@@ -40,12 +37,15 @@
                             position: absolute;
                             top: 0;
                             bottom: 0;
-                            left: 0;
+                            right: 0;
                             width: 4px;
                             content: "";
                             background-color: var(--main-color);
                         }
                     }
+                }
+
+                .menu-item--directory {
                 }
             }
         }
