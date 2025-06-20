@@ -55,9 +55,17 @@
             </div>
             <div class="main">
                 <div class="nav">
-                    <ul>
-                        <li v-for="item in navMenuItems" :key="item.name" :class="{active:(activeNav && activeNav.routerName === item.routerName)}" @click="goTo(item)">{{item.text}}</li>
-                    </ul>
+                    <div class="menu-box">
+                        <template v-for="item in navMenuItems" :key="item.id">
+                            <div class="menu-item--directory" v-if="item.isDirectory">
+                                <div>{{item.text}}</div>
+                                <div class="menu-box">
+                                    <div class="menu-item" v-for="subItem in item.children" :key="subItem.id" :class="{active:activeNav.id === subItem.id}" @click="goTo(subItem)">{{subItem.text}}</div>
+                                </div>
+                            </div>
+                            <div class="menu-item" :class="{active:activeNav.id === item.id}" v-else @click="goTo(item)">{{item.text}}</div>
+                        </template>
+                    </div>
                 </div>
                 <div class="content">
                     <router-view></router-view>
@@ -120,25 +128,36 @@
                         ]
                     });
                     const navMenuItems = ref(navItems);
-                    let activeNav = ref(null);
+                    let activeNav = ref({});
 
                     //  不需要暴露的方法
                     const init = () => {
-                        if (route) {
+                        function goToFirst() {
+                            const firstItem = navMenuItems.value[0];
+                            if (!firstItem) return;
+                            if (firstItem.isDirectory) {
+                                if (Array.isArray(firstItem.children) && firstItem.children.length > 0) {
+                                    goTo(firstItem.children[0]);
+                                }
+                            } else {
+                                goTo(firstItem);
+                            }
+                        }
+                        if (route && route.name) {
                             let item = navMenuItems.value.filter((item) => item.routerName === route.name)[0];
                             if (item) {
-                                activeNav = item;
+                                activeNav.value = item;
                             } else {
-                                goTo(navMenuItems.value[0]);
+                                goToFirst();
                             }
                         } else {
-                            goTo(navMenuItems.value[0]);
+                            goToFirst();
                         }
                     };
 
                     //  需要暴露的方法
                     const goTo = (item) => {
-                        if (activeNav === item) return;
+                        if (activeNav.value === item) return;
                         activeNav.value = item;
                         router.push({ name: item.routerName, params: { src: item.src } });
                     };
