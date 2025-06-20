@@ -1,5 +1,5 @@
-@import url(/nav/css/app.css);
-@import url(/nav/css/app-nav.css);
+@import url(./app.css);
+@import url(./app-nav.css);
 
 :root {
     --main-color: #3cb878;
