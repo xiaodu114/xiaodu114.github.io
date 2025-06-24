@@ -73,6 +73,10 @@
             </div>
         </div>
 
+        <script>
+            window._du_uiLib_ = "element-plus";
+        </script>
+
         <script type="module">
             //  1、引入 vue 全家桶
             import { createApp, ref } from "vue";
@@ -84,6 +88,8 @@
 
             //  3、引入 UI 库
             import ElementPlus from "element-plus";
+
+            import DuForm from "./components/duForm.js";
 
             //  测试
             import { useUILibStore } from "./store/uiLib.js";
@@ -172,6 +178,8 @@
             vue3App.use(pinia);
             vue3App.use(router);
             vue3App.use(ElementPlus);
+            //  注册全局组件
+            vue3App.component(DuForm.name, DuForm);
             vue3App.mount("#app");
         </script>
     </body>
