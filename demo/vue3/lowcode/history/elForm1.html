@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>xiaodu114.github.io</title>
+        <link rel="stylesheet" href="https://registry.npmmirror.com/element-plus/2.9.8/files/dist/index.css" />
+        <style>
+            [v-cloak] {
+                display: none;
+            }
+        </style>
+        <script type="importmap">
+            {
+                "imports": {
+                    "vue": "https://registry.npmmirror.com/vue/3.5.13/files/dist/vue.esm-browser.prod.js",
+                    "element-plus": "https://registry.npmmirror.com/element-plus/2.9.8/files/dist/index.full.mjs"
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div id="app" v-cloak>
+            <pre>{{formBind.model}}</pre>
+            <hr />
+            <du-form ref="duFormRef" :form-bind="formBind" :form-items="formItems"></du-form>
+        </div>
+        <template id="du-form-component-tpl">
+            <el-form ref="formRef" :="formBind">
+                <el-form-item v-for="formItem in formItems" :key="formItem.id" :="formItemBindings[formItem.id]">
+                    <component :is="formItem.component" :="componentBindings[formItem.id]" />
+                </el-form-item>
+            </el-form>
+        </template>
+        <script type="module">
+            import { createApp, ref, reactive, computed, isReactive } from "vue";
+            import ElementPlus from "element-plus";
+
+            //#region 封装表单组件
+
+            const DuFormComp = {
+                name: "DuForm",
+                template: "#du-form-component-tpl",
+                props: {
+                    formBind: {
+                        type: Object,
+                        default: () => ({})
+                    },
+                    formItems: {
+                        type: Array,
+                        default: () => []
+                    }
+                },
+                setup(props, context) {
+                    const { slots, attrs, expose, emit } = context;
+
+                    const formRef = ref(null);
+                    const formModel = props.formBind["model"];
+
+                    const formItemBindings = computed(() => {
+                        const obj = {};
+                        props.formItems.forEach((item) => {
+                            obj[item.id] = {
+                                label: item.title,
+                                prop: item.code,
+                                rules: []
+                            };
+                        });
+                        return obj;
+                    });
+
+                    const componentBindings = computed(() => {
+                        const obj = {};
+                        props.formItems.forEach((item) => {
+                            const bind = {
+                                modelValue: formModel[item.code],
+                                onInput: (value) => {
+                                    formModel[item.code] = value;
+                                }
+                            };
+                            Object.assign(bind, item.props || {});
+                            obj[item.id] = bind;
+                        });
+                        return obj;
+                    });
+
+                    return {
+                        formRef,
+                        formItemBindings,
+                        componentBindings
+                    };
+                }
+            };
+
+            //#endregion
+
+            const vue3App = createApp({
+                setup() {
+                    const duFormRef = ref(null);
+                    const formBind = ref({
+                        model: {
+                            name: ""
+                        }
+                    });
+                    return {
+                        duFormRef,
+                        formBind,
+                        formItems: [
+                            {
+                                id: "1",
+                                code: "name",
+                                title: "姓名",
+                                type: "Text",
+                                config: {
+                                    required: true
+                                },
+                                component: "el-input",
+                                props: {
+                                    placeholder: "请输入姓名"
+                                }
+                            }
+                        ]
+                    };
+                }
+            });
+            vue3App.use(ElementPlus);
+
+            vue3App.component(DuFormComp.name, DuFormComp);
+
+            vue3App.mount("#app");
+        </script>
+    </body>
+</html>
