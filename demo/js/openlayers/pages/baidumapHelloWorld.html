@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>OpenLayers - 百度地图 - Hello World - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,OpenLayers,百度地图,第一个示例,Hello World,点标记" />
+        <meta name="description" content="OpenLayers 加载百度地图示例：Hello World，点标记" />
+
+        <link href="https://registry.npmmirror.com/ol/10.5.0/files/ol.css" rel="stylesheet" />
+
+        <style>
+            #map {
+                width: 100%;
+                height: 100vh;
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+        <script src="https://unpkg.com/proj4@2.16.2/dist/proj4-src.js"></script>
+        <script src="https://registry.npmmirror.com/ol/10.5.0/files/dist/ol.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>Hello World</h1>
+            <p>OpenLayers 加载百度地图示例：Hello World</p>
+            <p><strong>说明：</strong>百度地图的坐标系有点不友好啊！还得转换……</p>
+            <details>
+                <summary>点击查看参考</summary>
+                <ul>
+                    <li>
+                        <a href="https://kuangyx.cn/docs/%E6%A1%86%E6%9E%B6/openlayers%E7%A4%BA%E4%BE%8B/%E5%9C%B0%E5%9B%BE%E6%8E%A7%E4%BB%B6/%E5%8A%A0%E8%BD%BD%E7%99%BE%E5%BA%A6%E5%9C%B0%E5%9B%BE.html" target="_blank" rel="noopener noreferrer">openlayers 6 加载百度地图瓦片(在线，离线) | web技术学习</a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/youzi-xuchongyou/p/13129032.html" target="_blank" rel="noopener noreferrer">OpenLayers调用百度地图 - Youse的二分口粮地 - 博客园</a>
+                    </li>
+                    <li>
+                        <a href="https://zhuanlan.zhihu.com/p/465599092" target="_blank" rel="noopener noreferrer">React+Openlayers加载无偏差百度地图 - 知乎</a>
+                    </li>
+                    <li>
+                        <a href="https://segmentfault.com/a/1190000044342833" target="_blank" rel="noopener noreferrer">前端 - OpenLayers.js 入门教程：打造互动地图的入门指南 - 个人文章 - SegmentFault 思否</a>
+                    </li>
+                    <li>
+                        <a href="https://zrysmt.github.io/2017/03/28/openlayers%203%E6%89%A9%E5%B1%95%EF%BC%8C%E8%B0%83%E7%94%A8%E7%99%BE%E5%BA%A6%E5%9C%B0%E5%9B%BE%E3%80%81%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BE%E3%80%81%E5%A4%A9%E5%9C%B0%E5%9B%BE%E6%9C%8D%E5%8A%A1/" target="_blank" rel="noopener noreferrer">openlayers 3扩展，调用百度地图、高德地图、天地图服务 | 漫漫技术路</a>
+                    </li>
+                </ul>
+            </details>
+            <p>&nbsp;</p>
+            <div id="map"></div>
+        </div>
+        <script>
+            const { Map, View, Feature } = ol;
+            const { Tile, Vector: VectorLayer } = ol.layer;
+            const { OSM, Vector: VectorSource, TileImage } = ol.source;
+            const { TileGrid } = ol.tilegrid;
+            const { Point } = ol.geom;
+            const { Style, Icon } = ol.style;
+            const { fromLonLat, transform } = ol.proj;
+            const { register } = ol.proj.proj4;
+
+            const mapCenterLonLat = [116.40404291497349, 39.9110069683746];
+
+            proj4.defs("EPSG:4008", "+proj=longlat +ellps=clrk66 +no_defs");
+            proj4.defs("BD-MC", "+proj=merc +lon_0=0 +units=m +ellps=clrk66 +no_defs");
+            register(proj4);
+
+            const tilegrid = new TileGrid({
+                origin: [0, 0],
+                resolutions: new Array(20).fill(0).map((item, index) => {
+                    return Math.pow(2, 18 - index);
+                }),
+                tileSize: [256, 256]
+            });
+
+            const baiduMapLayer = new Tile({
+                title: "百度地图瓦片图",
+                source: new TileImage({
+                    projection: "BD-MC",
+                    tileGrid: tilegrid,
+                    tilePixelRatio: devicePixelRatio,
+                    tileUrlFunction: function (tileCoord, pixelRatio, proj) {
+                        if (!tileCoord) {
+                            return "";
+                        }
+                        const z = tileCoord[0];
+                        const x = tileCoord[1];
+                        const y = -tileCoord[2] - 1;
+
+                        if (x < 0) {
+                            x = "M" + -x;
+                        }
+
+                        if (y < 0) {
+                            y = "M" + -y;
+                        }
+                        return `https://maponline0.bdimg.com/tile/?qt=vtile&x=${x}&y=${y}&z=${z}&styles=pl&scaler=1&udt=20210730&from=jsapi3_0`;
+                        // return `http://online3.map.bdimg.com/onlinelabel/?qt=tile&x=${x}&y=${y}&z=${z}&styles=pl&udt=20151021&scaler=1&p=1`;
+                    }
+                })
+            });
+            const map = new Map({
+                target: "map",
+                layers: [baiduMapLayer],
+                view: new View({
+                    projection: "BD-MC",
+                    center: transform(mapCenterLonLat, "EPSG:4326", "BD-MC"),
+                    zoom: 12
+                })
+            });
+
+            const markerLayer = new VectorLayer({
+                source: new VectorSource({
+                    features: [
+                        new Feature({
+                            geometry: new Point(transform(mapCenterLonLat, "EPSG:4326", "BD-MC"))
+                        })
+                    ]
+                }),
+                style: new Style({
+                    image: new Icon({
+                        src: "/logo/1024.png",
+                        width: 64,
+                        height: 64
+                    })
+                })
+            });
+            map.addLayer(markerLayer);
+
+            map.on("click", function (evt) {
+                const coordinate = transform(evt.coordinate, "BD-MC", "EPSG:4326");
+                alert(`经度：${coordinate[0]}，纬度：${coordinate[1]}`);
+            });
+        </script>
+    </body>
+</html>
