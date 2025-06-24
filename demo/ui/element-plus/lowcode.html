@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>低代码示例 | element-plus vue3 - xiaodu114.github.io</title>
+        <meta name="keywords" content="Element Plus, Vue 3, 低代码, 列表, 新建, 编辑" />
+        <meta name="description" content="这是一个使用Element Plus和Vue 3构建的低代码示例页面，展示了如何创建列表、新建和编辑功能。" />
+
+        <!-- 引入样式 -->
+        <link rel="stylesheet" href="https://registry.npmmirror.com/element-plus/2.9.3/files/dist/index.css" />
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                height: 100%;
+                width: 100%;
+                margin: 0;
+                overflow: hidden;
+            }
+
+            .demo-box {
+                height: 100%;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+
+                > .header {
+                    flex-shrink: 0;
+                    position: relative;
+
+                    &::after {
+                        position: absolute;
+                        bottom: 0;
+                        right: 0;
+                        left: 0;
+                        height: 1px;
+                        content: "";
+                        -webkit-transform: scaleY(0.5);
+                        transform: scaleY(0.5);
+                        background-color: #ccc;
+                    }
+                }
+
+                > .main {
+                    flex: 1;
+                    overflow: hidden;
+                    display: flex;
+                    padding: 15px;
+
+                    > .list-page-box {
+                        height: 100%;
+                        width: 100%;
+                        padding: 15px;
+                        box-shadow: 0 15px 35px rgba(50, 50, 90, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+                    }
+                }
+            }
+        </style>
+
+        <style>
+            .du-list-page-box {
+                height: 100%;
+                width: 100%;
+                display: flex;
+
+                > .list-page-left {
+                    flex-shrink: 0;
+                }
+
+                > .list-page-main {
+                    flex: 1;
+                    overflow: hidden;
+                    display: flex;
+                    flex-direction: column;
+
+                    > .list-page-quick-search-box {
+                        flex-shrink: 0;
+                    }
+
+                    > .list-page-toolbar-box {
+                        flex-shrink: 0;
+                    }
+
+                    > .list-page-table-box {
+                        flex: 1;
+                        overflow: hidden;
+                    }
+                }
+            }
+        </style>
+
+        <style>
+            .form-layout-table {
+                width: 100%;
+                border-collapse: collapse;
+                border-spacing: 0;
+                table-layout: fixed;
+                border-collapse: separate;
+                border-spacing: 15px 5px;
+            }
+        </style>
+        <!-- 引入 Vue 3 -->
+        <script src="https://registry.npmmirror.com/vue/3.5.13/files/dist/vue.global.js"></script>
+        <!-- 引入组件库 -->
+        <script src="https://registry.npmmirror.com/element-plus/2.9.3/files/dist/index.full.min.js"></script>
+    </head>
+    <body>
+        <div id="vue3App" class="demo-box">
+            <div class="header">
+                <p>官网：<a href="https://element-plus.org/zh-CN" target="_blank">Element Plus</a></p>
+            </div>
+            <div class="main">
+                <div class="list-page-box">
+                    <du-list-page :table-props="{'data':listData}" :list-config="listConfig" @quick-search-reset-click="handleQuickSearchReset" @quick-search-submit-click="handleQuickSearchSubmit" @list-toolbar-btn-click="handleListToolbarBtnClick" @list-default-operate-column-btn-click="handleListDefaultOperateColumnBtnClick"></du-list-page>
+                </div>
+            </div>
+            <du-dialog-form v-if="showDialog" v-model:open="showDialog" :title="isEditMode?'编辑':'新建'" align-center :destroy-on-close="true" :form-props="{formBind, formItems}" @ok="dialogFormOkHandle" @cancel="dialogFormCancelHandle"></du-dialog-form>
+        </div>
+        <template id="du-form-component-tpl">
+            <component ref="formRef" :is="formComponentName" :="formBind">
+                <table class="form-layout-table" v-if="isGird">
+                    <tbody>
+                        <template v-for="(row, rowIndex) in rows">
+                            <tr>
+                                <template v-for="(col, colIndex) in row">
+                                    <td :rowspan="col.rowspan" :colspan="col.colspan">
+                                        <slot :name="'form-item-' + col.item.id" :formItem="col.item" :formModel="formBind[formDataPropName]">
+                                            <component :is="formItemComponentName" :="formItemBindings[col.item.id]">
+                                                <du-form-control-render :form-item="col.item" :control-bind="componentBindings[col.item.id]"></du-form-control-render>
+                                            </component>
+                                        </slot>
+                                    </td>
+                                </template>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                <template v-else>
+                    <template v-for="item in formItems">
+                        <slot :name="'form-item-' + item.id" :formItem="item" :formModel="formBind[formDataPropName]">
+                            <component :is="formItemComponentName" :="formItemBindings[item.id]">
+                                <du-form-control-render :form-item="item" :control-bind="componentBindings[item.id]"></du-form-control-render>
+                            </component>
+                        </slot>
+                    </template>
+                </template>
+            </component>
+        </template>
+        <template id="du-dialog-form-component-tpl">
+            <!-- el-dialog v-model="localOpen" :="attrs" -->
+            <component :is="dialogComponentName" :="{...attrs, ...vModelBind}">
+                <template v-if="!slots.default">
+                    <du-form ref="duFormRef" :="formProps"></du-form>
+                </template>
+                <template v-if="!slots.footer" #footer>
+                    <div class="dialog-footer">
+                        <component :is="footerBtnComponentName" @click="handleCancel($event)">取消</component>
+                        <component :is="footerBtnComponentName" @click="handleOk($event)" :="footerBtnSubmitBind">确定</component>
+                    </div>
+                </template>
+                <template v-for="(_, name) in slots" #[name]="slotProps" :key="name">
+                    <slot :name="name" v-bind="slotProps ?? {}"></slot>
+                </template>
+            </component>
+        </template>
+        <template id="du-list-quick-search-component-tpl">
+            <div>
+                <du-form ref="quickSearchFormRef" :is-gird="false" :="{...formProps, ...innerFormProps}">
+                    <template #form-item-quick-search-btn-box>
+                        <el-form-item>
+                            <el-button @click="handleReset($event)">重置</el-button>
+                            <el-button type="primary" @click="handleSearch($event)">搜索</el-button>
+                        </el-form-item>
+                    </template>
+                </du-form>
+            </div>
+        </template>
+        <template id="du-list-toolbar-button-component-tpl">
+            <div>
+                <el-button v-for="btn in btns" :key="btn.btnCode" :type="btn.btnType" @click="handleBtnClick(btn, $event)"> {{btn.btnName}} </el-button>
+            </div>
+        </template>
+        <template id="du-list-custom-operate-column-component-tpl">
+            <div>
+                <el-button v-for="btn in btns" :key="btn.btnCode" :type="btn.btnType" @click="handleBtnClick(btn, $event)"> {{btn.btnName}} </el-button>
+            </div>
+        </template>
+        <template id="du-list-page-component-tpl">
+            <div class="du-list-page-box" ref="listPageBoxRef">
+                <div class="list-page-left"></div>
+                <div class="list-page-main">
+                    <div class="list-page-quick-search-box" v-if="quickSearch.open">
+                        <du-list-quick-search :form-props="{ formBind:quickSearchFormBind, formItems: quickSearch.items}" :reset="quickSearchResetHandler" :search="quickSearchSubmitHandler"></du-list-quick-search>
+                    </div>
+                    <div class="list-page-toolbar-box">
+                        <div class="toolbar-button-box">
+                            <du-list-toolbar-button :btns="toolbarBtns" @btn-click="handleToolbarBtnClick"></du-list-toolbar-button>
+                        </div>
+                    </div>
+                    <div class="list-page-table-box">
+                        <component v-if="isShowTable" :is="componentName" :="{...innerTableProps, ...tableProps}" />
+                    </div>
+                </div>
+            </div>
+        </template>
+        <script>
+            (() => {
+                if (!(window.Vue && window.ElementPlus)) {
+                    alert(` vue 或者 element-plus 加载异常`);
+                    return;
+                }
+
+                function getGUID() {
+                    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+                        let r = (Math.random() * 16) | 0,
+                            v = c == "x" ? r : (r & 0x3) | 0x8;
+                        return v.toString(16).toUpperCase();
+                    });
+                }
+
+                const { createApp, h, render, resolveComponent, ref, reactive, onMounted, defineOptions, defineProps, defineEmits, useSlots, useAttrs, computed, toRaw } = Vue;
+
+                const ElementPlusExtend = {
+                    formHelper: {
+                        form: {
+                            formDataPropName: "model"
+                        },
+                        formItem: {
+                            modelKeyPropName: "prop",
+                            validateRulesPropName: "rules"
+                        },
+                        type2Comp: {
+                            Text: {
+                                name: "el-input",
+                                vModel: {
+                                    value: "modelValue",
+                                    event: "onInput",
+                                    handleChangeValue(value) {
+                                        return value;
+                                    }
+                                },
+                                placeholderPrefix: "请输入"
+                            },
+                            Textarea: {
+                                name: "el-input",
+                                placeholderPrefix: "请输入",
+                                handleFormItem: function (formItem, config) {
+                                    if (!(Array.isArray(formItem.children) && formItem.children.length > 0)) return;
+                                    if (!(Array.isArray(config.children) && config.children.length > 0)) return;
+                                    formItem.children.forEach((child, index) => {
+                                        child.props["type"] = "textarea";
+                                    });
+                                }
+                            },
+                            Number: {
+                                name: "el-input-number",
+                                vModel: {
+                                    value: "modelValue",
+                                    event: "onInput"
+                                },
+                                placeholderPrefix: "请输入"
+                            },
+                            Select: {
+                                name: "el-select",
+                                vModel: {
+                                    value: "modelValue",
+                                    event: "onChange"
+                                },
+                                placeholderPrefix: "请选择",
+                                handleFormItem: function (formItem, config) {
+                                    if (!(Array.isArray(formItem.children) && formItem.children.length > 0)) return;
+                                    if (!(Array.isArray(config.children) && config.children.length > 0)) return;
+                                    formItem.children.forEach((child, index) => {
+                                        if (config.children[index] && config.children[index].config && Array.isArray(config.children[index].config.options)) {
+                                            if (!child.props) child.props = {};
+                                            child.props["options"] = config.children[index].config.options;
+                                        }
+                                    });
+                                    if (Array.isArray(config.children[0].config.options) && config.children[0].config.options.length > 0) {
+                                        formItem.slots = {
+                                            default: () => {
+                                                return config.children[0].config.options.map(({ label, value }) => {
+                                                    return h(toRaw(resolveComponent("el-option")), {
+                                                        key: value,
+                                                        label: label,
+                                                        value: value
+                                                    });
+                                                });
+                                            }
+                                        };
+                                    }
+                                }
+                            },
+                            Date: {
+                                name: "el-date-picker",
+                                vModel: {
+                                    value: "modelValue",
+                                    event: "onUpdate:modelValue"
+                                },
+                                placeholderPrefix: "请选择",
+                                handleFormItem: function (formItem, config) {
+                                    if (!(Array.isArray(formItem.children) && formItem.children.length > 0)) return;
+                                    if (!(Array.isArray(config.children) && config.children.length > 0)) return;
+                                    formItem.children.forEach((child, index) => {
+                                        child.props["type"] = "date";
+                                    });
+                                }
+                            }
+                        },
+                        handleConfig(formConfig) {
+                            const formBind = {},
+                                formItems = [],
+                                formData = {},
+                                formItemIdObj = {},
+                                formItemCodeObj = {};
+                            let isShowLabel = false;
+                            if (formConfig) {
+                                const { items = [], baseInfo = {} } = formConfig;
+                                //  处理表单基本信息
+                                if (baseInfo) {
+                                    isShowLabel = baseInfo.label && !!baseInfo.label.isShow;
+                                    if (isShowLabel) {
+                                        if (baseInfo.layout) {
+                                            formBind["inline"] = baseInfo.layout === "inline";
+                                        }
+                                        if (baseInfo.label.position) {
+                                            formBind["label-position"] = baseInfo.label.position;
+                                        }
+                                        if (baseInfo.label.width) {
+                                            formBind["label-width"] = baseInfo.label.width;
+                                        }
+                                    }
+                                }
+                                // 处理表单项
+                                if (Array.isArray(items) && items.length > 0) {
+                                    items.forEach((item) => {
+                                        if (!(Array.isArray(item.children) && item.children.length > 0)) return;
+                                        const typeComp = ElementPlusExtend.formHelper.type2Comp[item.type];
+                                        if (!typeComp) {
+                                            console.warn(`未找到${item.type}对应的组件`);
+                                            return;
+                                        }
+                                        const formItem = {
+                                            id: item.id,
+                                            title: item.title,
+                                            type: item.type,
+                                            labelProps: {
+                                                label: item.title
+                                            },
+                                            component: typeComp.name,
+                                            pos: item.pos,
+                                            children: []
+                                        };
+                                        if (typeof item.config === "object" && item.config !== null) {
+                                            if (item.config.label?.isShow === true) {
+                                                formItem.labelProps["labelCol"] = {
+                                                    style: {}
+                                                };
+                                                if (item.config.label.width) {
+                                                    formItem.labelProps["labelCol"]["style"]["width"] = item.config.label.width;
+                                                }
+                                                if (item.config.label.align) {
+                                                    formItem.labelProps["labelCol"]["style"]["textAlign"] = item.config.label.align;
+                                                }
+                                            }
+                                        }
+                                        item.children.forEach((child) => {
+                                            formData[child.code] = null;
+                                            const childTitle = child.title ? child.title : item.title;
+                                            const childItem = {
+                                                title: childTitle,
+                                                code: child.code,
+                                                rules: [],
+                                                props: {
+                                                    placeholder: typeComp.placeholderPrefix + childTitle
+                                                }
+                                            };
+                                            if (child.config?.required === true) {
+                                                childItem.rules.push({ required: true, message: typeComp.placeholderPrefix + childTitle, trigger: "change" });
+                                            }
+                                            formItem.children.push(childItem);
+                                            formItemCodeObj[child.code] = {
+                                                ...childItem,
+                                                type: item.type,
+                                                component: formItem.component
+                                            };
+                                        });
+                                        typeof typeComp.handleFormItem === "function" && typeComp.handleFormItem(formItem, item);
+                                        formItemIdObj[formItem.id] = formItem;
+                                        formItems.push(formItem);
+                                    });
+                                }
+                            }
+
+                            formBind[ElementPlusExtend.formHelper.form.formDataPropName] = formData;
+                            return { formItems, formData, formBind, formItemIdObj, formItemCodeObj };
+                        }
+                    },
+                    tableHelper: {
+                        handleConfig(listConfig, boxWidth) {
+                            const columns = [];
+                            if (!(listConfig && Array.isArray(listConfig.items) && listConfig.items.length > 0)) return columns;
+                            const defaultColumnWidth = 150;
+                            const itemCopy = JSON.parse(JSON.stringify(listConfig.items));
+                            const itemLength = itemCopy.length;
+                            const widthCounter = {
+                                auto: 0,
+                                fixed: {
+                                    value: 0,
+                                    count: 0,
+                                    remainingWidth: 0
+                                },
+                                percent: {
+                                    value: 0,
+                                    count: 0,
+                                    remainingPercent: 0
+                                }
+                            };
+                            itemCopy.forEach((item) => {
+                                if (typeof item.width === "object" && Object.keys(item.width).length > 0) {
+                                    switch (item.width.type) {
+                                        case "auto": {
+                                            widthCounter.auto++;
+                                            break;
+                                        }
+                                        case "fixed": {
+                                            item.width.value = Math.sign(item.width.value) === 1 ? item.width.value : defaultColumnWidth;
+                                            widthCounter.fixed.value += item.width.value;
+                                            widthCounter.fixed.count++;
+                                            break;
+                                        }
+                                        case "percent": {
+                                            if (Math.sign(item.width.value) === 1) {
+                                                widthCounter.percent.value += item.width.value;
+                                                widthCounter.percent.count++;
+                                            } else {
+                                                item.width.type = "auto";
+                                                widthCounter.auto++;
+                                            }
+                                            break;
+                                        }
+                                        default: {
+                                            console.log("这里与没有考虑到的情况，需要处理一下");
+                                            item.width.type = "auto";
+                                            widthCounter.auto++;
+                                            break;
+                                        }
+                                    }
+                                } else {
+                                    item.width = {
+                                        type: "auto"
+                                    };
+                                    widthCounter.auto++;
+                                }
+                            });
+                            widthCounter.percent.remainingPercent = 100 - widthCounter.percent.value;
+                            widthCounter.fixed.remainingWidth = boxWidth - widthCounter.fixed.value;
+                            itemCopy.forEach((item) => {
+                                const minWidth = Math.sign(item.width.minWidth) === 1 ? item.width.minWidth : defaultColumnWidth;
+                                switch (item.width.type) {
+                                    case "auto": {
+                                        if (widthCounter.percent.remainingPercent > 0) {
+                                            item.width.value = (widthCounter.percent.remainingPercent / widthCounter.auto / 100) * boxWidth;
+                                        } else {
+                                            item.width.value = minWidth;
+                                        }
+                                        item.width.minWidth = minWidth;
+                                        break;
+                                    }
+                                    case "fixed": {
+                                        if (widthCounter.fixed.count === itemLength) {
+                                            if (widthCounter.fixed.value < boxWidth) {
+                                                item.width.value = (item.width.value / widthCounter.fixed.value) * boxWidth;
+                                            }
+                                        }
+                                        item.width.minWidth = Math.sign(item.width.minWidth) === 1 ? item.width.minWidth : item.width.value;
+                                        break;
+                                    }
+                                    case "percent": {
+                                        if (widthCounter.percent.value > 100) {
+                                            item.width.value = (item.width.value / widthCounter.percent.value) * 100;
+                                        }
+                                        item.width.value = (item.width.value / 100) * boxWidth;
+                                        item.width.minWidth = minWidth;
+                                        break;
+                                    }
+                                }
+                            });
+                            itemCopy.forEach((item) => {
+                                switch (item.columnType) {
+                                    case 0: {
+                                        columns.push({
+                                            title: item.columnAlias,
+                                            key: item.dataIndex,
+                                            dataKey: item.dataIndex,
+                                            align: item.align ? item.align : "left",
+                                            width: item.width.value,
+                                            minWidth: item.width.minWidth
+                                        });
+                                        break;
+                                    }
+                                    case 10: {
+                                        break;
+                                    }
+                                    case 11: {
+                                        columns.push({
+                                            title: item.columnAlias,
+                                            align: item.align ? item.align : "left",
+                                            width: item.width.value,
+                                            minWidth: item.width.minWidth,
+                                            cellRenderer: ({ rowIndex }) => `${rowIndex + 1}`
+                                        });
+                                        break;
+                                    }
+                                    case 12: {
+                                        columns.push({
+                                            key: item.dataIndex,
+                                            title: item.columnAlias,
+                                            align: item.align ? item.align : "left",
+                                            width: item.width.value,
+                                            minWidth: item.width.minWidth,
+                                            cellRenderer: ({ column, rowIndex, rowData }) => h(DuListCustomOperateColumnComp, { btns: item.extend?.btns, tr: rowData, th: column })
+                                        });
+                                        break;
+                                    }
+                                }
+                            });
+                            return { columns };
+                        }
+                    }
+                };
+
+                //#region 封装表单组件
+
+                const DuFormControlRenderComp = {
+                    name: "DuFormControlRender",
+                    props: {
+                        formItem: {
+                            type: Object,
+                            default: () => ({})
+                        },
+                        controlBind: {
+                            type: Object,
+                            default: () => ({})
+                        }
+                    },
+                    render(props) {
+                        if (props.formItem.slots && Object.keys(props.formItem.slots).length > 0) {
+                            return h(resolveComponent(props.formItem.component), props.controlBind, props.formItem.slots);
+                        } else {
+                            return h(resolveComponent(props.formItem.component), props.controlBind);
+                        }
+                    }
+                };
+
+                const DuFormComp = {
+                    name: "DuForm",
+                    template: "#du-form-component-tpl",
+                    props: {
+                        isGird: {
+                            type: Boolean,
+                            default: () => true
+                        },
+                        formBind: {
+                            type: Object,
+                            default: () => ({})
+                        },
+                        formItems: {
+                            type: Array,
+                            default: () => []
+                        },
+                        formExtend: {
+                            type: Object,
+                            default: () => ({})
+                        }
+                    },
+                    emits: ["du-form-value-change"],
+                    setup(props, context) {
+                        const { slots, attrs, expose, emit } = context;
+
+                        const formRef = ref(null);
+                        const formComponentName = ref("");
+                        const formDataPropName = ref("");
+                        const formItemComponentName = ref("");
+                        //  根据不同的UI框架，渲染不同的组件
+                        formComponentName.value = "el-form";
+                        formDataPropName.value = ElementPlusExtend.formHelper.form.formDataPropName;
+                        formItemComponentName.value = "el-form-item";
+
+                        const formId = props.formBind["du-form-id"];
+                        const formModel = props.formBind[formDataPropName.value];
+
+                        function emitFormValueChange(fieldCode, fieldValue) {
+                            let isTriggerChange = false;
+                            if (props.formExtend?.listenChange?.isOpen) {
+                                if (Array.isArray(props.formExtend.listenChange.codes)) {
+                                    if (props.formExtend.listenChange.codes.includes(fieldCode)) {
+                                        isTriggerChange = true;
+                                    }
+                                } else {
+                                    isTriggerChange = true;
+                                }
+                            }
+                            if (isTriggerChange) {
+                                emit("du-form-value-change", { value: fieldValue, code: fieldCode, formId, formItemBindings, componentBindings, formModel });
+                            }
+                        }
+
+                        const rows = computed(() => {
+                            const retArr = [];
+                            const maxRow = Math.max(...props.formItems.map((item) => item.pos.endRow));
+                            const maxCol = Math.max(...props.formItems.map((item) => item.pos.endCol));
+                            const weakMap = new WeakMap();
+                            for (let row = 1; row <= maxRow; row++) {
+                                const tr = [];
+                                for (let col = 1; col <= maxCol; col++) {
+                                    const formItem = props.formItems.find((item) => row >= item.pos.startRow && row <= item.pos.endRow && col >= item.pos.startCol && col <= item.pos.endCol);
+                                    if (formItem && !weakMap.has(formItem)) {
+                                        tr.push({
+                                            startRow: formItem.pos.startRow,
+                                            startCol: formItem.pos.startCol,
+                                            rowspan: formItem.pos.endRow - formItem.pos.startRow,
+                                            colspan: formItem.pos.endCol - formItem.pos.startCol,
+                                            item: formItem
+                                        });
+                                        weakMap.set(formItem, 1);
+                                    }
+                                }
+                                retArr.push(tr);
+                            }
+                            return retArr;
+                        });
+
+                        function getFormItemBind(item) {
+                            const bind = {
+                                label: item.title
+                            };
+                            if (typeof item.labelProps === "object" && item.labelProps !== null && Object.keys(item.labelProps).length > 0) {
+                                Object.assign(bind, item.labelProps);
+                            }
+                            const { modelKeyPropName, validateRulesPropName } = ElementPlusExtend.formHelper.formItem;
+                            if (Array.isArray(item.children) && item.children.length) {
+                                if (item.children.length === 1) {
+                                    const first = item.children[0];
+                                    if (first) {
+                                        bind[modelKeyPropName] = first.code;
+                                        bind[validateRulesPropName] = first.rules;
+                                    }
+                                } else {
+                                    let isRequired = false;
+                                    for (let i = 0; i < item.children.length; i++) {
+                                        if (isRequired) break;
+                                        const child = item.children[i];
+                                        if (Array.isArray(child.rules) && child.rules.length) {
+                                            for (let j = 0; j < child.rules.length; j++) {
+                                                if (isRequired) break;
+                                                const rule = child.rules[j];
+                                                if (rule.required === true) {
+                                                    isRequired = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (isRequired) {
+                                        bind["required"] = true;
+                                    }
+                                }
+                            }
+                            return bind;
+                        }
+
+                        function getComponentBind(item) {
+                            const bind = {};
+                            const typeComp = ElementPlusExtend.formHelper.type2Comp[item.type];
+                            if (Array.isArray(item.children) && item.children.length) {
+                                if (item.children.length === 1) {
+                                    const first = item.children[0];
+                                    if (first) {
+                                        if (first.code) {
+                                            let vModelValue = "modelValue";
+                                            let vModelEvents = ["onInput"]; //  oninput 也可以，但是需要使用 event.target.value 取值
+                                            if (typeComp && typeComp.vModel) {
+                                                if (typeComp.vModel.value) {
+                                                    vModelValue = typeComp.vModel.value;
+                                                }
+                                                if (typeof typeComp.vModel.event === "string" && typeComp.vModel.event.length > 0) {
+                                                    vModelEvents = [typeComp.vModel.event];
+                                                } else if (Array.isArray(typeComp.vModel.event) && typeComp.vModel.event.length > 0) {
+                                                    vModelEvents = typeComp.vModel.event;
+                                                }
+                                            }
+                                            function vModelEventHandler(value) {
+                                                const newValue = typeof typeComp?.vModel?.handleChangeValue === "function" ? typeComp.vModel.handleChangeValue(value) : value;
+                                                formModel[first.code] = newValue;
+
+                                                emitFormValueChange(first.code, newValue);
+                                            }
+                                            bind[vModelValue] = formModel[first.code];
+                                            vModelEvents.forEach((vModelEvent) => {
+                                                bind[vModelEvent] = vModelEventHandler;
+                                            });
+                                        }
+                                        Object.assign(bind, first.props || {});
+                                    }
+                                } else {
+                                    bind["children"] = item.children;
+                                    item.children.forEach((child, index) => {
+                                        if (child.code) {
+                                            bind[`value${index}`] = props.formBind[formDataPropName][child.code];
+                                            bind[`onUpdate:value${index}`] = (newValue) => {
+                                                props.formBind[formDataPropName][child.code] = newValue;
+                                            };
+                                        }
+                                    });
+                                }
+                            }
+                            return bind;
+                        }
+
+                        const formItemBindings = computed(() => {
+                            const obj = {};
+                            props.formItems.forEach((item) => {
+                                obj[item.id] = getFormItemBind(item);
+                            });
+                            return obj;
+                        });
+
+                        const componentBindings = computed(() => {
+                            const obj = {};
+                            props.formItems.forEach((item) => {
+                                obj[item.id] = getComponentBind(item);
+                            });
+                            return obj;
+                        });
+
+                        function resetForm() {
+                            if (!formRef) return;
+                            formRef.value.resetFields();
+                        }
+
+                        function validateForm() {
+                            if (!formRef) return;
+                            return new Promise((resolve, reject) => {
+                                formRef.value.validate((valid, fields) => {
+                                    resolve({ valid, fields });
+                                });
+                            });
+                        }
+
+                        //  表单加载完成后，触发表单值变化事件
+                        function initValueChange() {
+                            if (Object.keys(formModel).length > 0) {
+                                for (const key in formModel) {
+                                    if (Object.prototype.hasOwnProperty.call(formModel, key)) {
+                                        emitFormValueChange(key, formModel[key]);
+                                    }
+                                }
+                            }
+                        }
+                        return {
+                            formComponentName,
+                            formItemComponentName,
+                            formDataPropName,
+                            formRef,
+                            rows,
+                            formItemBindings,
+                            componentBindings,
+                            validateForm,
+                            resetForm
+                        };
+                    }
+                };
+
+                //#endregion
+
+                //#region 封装对话框表单组件
+
+                const DuDialogFormComp = {
+                    name: "DuDialogForm",
+                    template: "#du-dialog-form-component-tpl",
+                    props: {
+                        open: {
+                            type: Boolean,
+                            default: () => false
+                        },
+                        formProps: {
+                            type: Object,
+                            default: () => ({})
+                        }
+                        // formBind: {
+                        //     type: Object,
+                        //     default: () => ({})
+                        // },
+                        // formItems: {
+                        //     type: Array,
+                        //     default: () => []
+                        // },
+                        // formExtend: {
+                        //     type: Object,
+                        //     default: () => ({})
+                        // }
+                    },
+                    emits: ["update:open"],
+                    setup(props, context) {
+                        // defineOptions({
+                        //     inheritAttrs: false
+                        // });
+                        // const emits = defineEmits(["update:open"]);
+                        const formDataPropName = ElementPlusExtend.formHelper.form.formDataPropName;
+
+                        const { slots, attrs, expose, emit } = context;
+
+                        const dialogComponentName = ref("");
+                        //  根据不同的UI框架，渲染不同的组件
+                        dialogComponentName.value = "el-dialog";
+
+                        const duFormRef = ref(null);
+
+                        const footerBtnComponentName = ref("");
+                        footerBtnComponentName.value = "el-button";
+                        const footerBtnSubmitBind = {
+                            type: "primary"
+                        };
+
+                        const localOpen = computed({
+                            get() {
+                                return !!props?.open;
+                            },
+                            set(val) {
+                                emit("update:open", val);
+                            }
+                        });
+
+                        const vModelBind = ref(null);
+                        //  根据不同的UI框架，做不同的处理
+                        vModelBind.value = {
+                            modelValue: localOpen,
+                            onClose: () => {
+                                resetForm();
+                                localOpen.value = false;
+                            }
+                        };
+
+                        function resetForm() {
+                            if (!duFormRef) return;
+                            duFormRef.value.resetForm();
+                        }
+
+                        function validateForm() {
+                            if (!duFormRef) return;
+                            return duFormRef.value.validateForm();
+                        }
+
+                        function handleCancel(evt) {
+                            if (typeof attrs?.onCancel === "function") {
+                                attrs.onCancel(resetForm, evt);
+                            } else {
+                                resetForm();
+                                localOpen.value = false;
+                            }
+                        }
+
+                        function handleOk(evt) {
+                            if (!duFormRef) return;
+                            duFormRef.value
+                                .validateForm()
+                                .then(({ valid, fields }) => {
+                                    if (valid) {
+                                        if (typeof attrs?.onOk === "function") {
+                                            attrs.onOk(toRaw(props.formProps.formBind[formDataPropName]), resetForm, evt);
+                                        }
+                                    }
+                                })
+                                .catch((err) => {
+                                    console.error(err);
+                                });
+                        }
+
+                        return {
+                            dialogComponentName,
+                            vModelBind,
+                            slots,
+                            attrs,
+                            localOpen,
+                            duFormRef,
+                            footerBtnComponentName,
+                            footerBtnSubmitBind,
+                            handleCancel,
+                            handleOk
+                        };
+                    }
+                };
+
+                //#endregion
+
+                //#region  封装列表组件
+
+                const DuListQuickSearchComp = {
+                    name: "DuListQuickSearch",
+                    template: "#du-list-quick-search-component-tpl",
+                    props: {
+                        formProps: {
+                            type: Object,
+                            default: () => ({})
+                        },
+                        reset: {
+                            type: Function,
+                            default: null
+                        },
+                        search: {
+                            type: Function,
+                            default: null
+                        }
+                    },
+                    setup(props, context) {
+                        const { slots, attrs, expose, emit } = context;
+
+                        const quickSearchFormRef = ref(null);
+                        const innerFormProps = ref({
+                            inline: true
+                        });
+
+                        props.formProps.formItems.push({
+                            id: "quick-search-btn-box"
+                        });
+
+                        function handleReset(evt) {
+                            if (!quickSearchFormRef) return;
+                            quickSearchFormRef.value.resetForm();
+                            if (typeof props.reset === "function") {
+                                props.reset();
+                            }
+                        }
+
+                        function handleSearch(evt) {
+                            if (!quickSearchFormRef) return;
+                            if (typeof props.search === "function") {
+                                props.search(toRaw(props.formProps.formBind.model));
+                            }
+                        }
+
+                        return {
+                            quickSearchFormRef,
+                            innerFormProps,
+                            handleReset,
+                            handleSearch
+                        };
+                    }
+                };
+
+                const DuListToolbarButtonComp = {
+                    name: "DuListToolbarButton",
+                    template: "#du-list-toolbar-button-component-tpl",
+                    props: {
+                        btns: {
+                            type: Array,
+                            default: () => []
+                        }
+                    },
+                    emits: ["btn-click"],
+                    setup(props, context) {
+                        const { slots, attrs, expose, emit } = context;
+
+                        function handleBtnClick(btn, evt) {
+                            emit("btn-click", btn, evt);
+                        }
+                        return {
+                            handleBtnClick
+                        };
+                    }
+                };
+
+                const DuListCustomOperateColumnComp = {
+                    name: "DuListCustomOperateColumn",
+                    template: "#du-list-custom-operate-column-component-tpl",
+                    props: {
+                        th: {
+                            type: Object,
+                            default: () => {}
+                        },
+                        trIndex: {
+                            type: Number,
+                            default: () => -1
+                        },
+                        tr: {
+                            type: Object,
+                            default: () => {}
+                        },
+                        btns: {
+                            type: Array,
+                            default: () => []
+                        }
+                    },
+                    setup(props, context) {
+                        function handleBtnClick(btn, evt) {
+                            document.dispatchEvent(
+                                new CustomEvent("list-default-operate-column-btn-click-custom-event", {
+                                    detail: { btn, trIndex: props.trIndex, tr: toRaw(props.tr), th: toRaw(props.th), evt },
+                                    bubbles: true, // 事件冒泡
+                                    cancelable: true // 事件可取消
+                                })
+                            );
+                        }
+                        return {
+                            handleBtnClick
+                        };
+                    }
+                };
+
+                const DuListPageComp = {
+                    name: "DuListPage",
+                    template: "#du-list-page-component-tpl",
+                    props: {
+                        listConfig: {
+                            type: Object,
+                            default: () => {}
+                        },
+                        tableProps: {
+                            type: Object,
+                            default: () => {}
+                        }
+                    },
+                    emits: ["quick-search-submit-click", "quick-search-reset-click", "list-toolbar-btn-click", "list-default-operate-column-btn-click"],
+                    setup(props, context) {
+                        const { slots, attrs, expose, emit } = context;
+
+                        const listPageBoxRef = ref(null);
+                        const isShowTable = ref(false);
+                        const componentName = ref("");
+                        const innerTableProps = reactive({
+                            // columns: listObj.columns,
+                            // with:0,
+                            // height:0
+                        });
+
+                        //  根据不同的UI框架，渲染不同的组件
+                        componentName.value = "el-table-v2";
+
+                        const { items = [], toolbarBtns = [], quickSearch = {} } = toRaw(props.listConfig);
+                        const quickSearchFormBind = ref({});
+                        quickSearchFormBind.value[ElementPlusExtend.formHelper.form.formDataPropName] = quickSearch.model;
+
+                        function quickSearchResetHandler() {
+                            emit("quick-search-reset-click");
+                        }
+
+                        function quickSearchSubmitHandler(searchData) {
+                            emit("quick-search-submit-click", searchData);
+                        }
+
+                        function handleToolbarBtnClick(btn, evt) {
+                            emit("list-toolbar-btn-click", btn, evt);
+                        }
+
+                        //  计算表格的列宽：初次加载、窗口大小修改
+                        function calcColumnsWidth() {
+                            let boxWidth = 0;
+                            if (listPageBoxRef.value) {
+                                const tableBox = listPageBoxRef.value.querySelector(".list-page-table-box");
+                                if (tableBox) {
+                                    const rect = tableBox.getBoundingClientRect();
+                                    innerTableProps.height = rect.height;
+                                    innerTableProps.width = rect.width;
+                                    boxWidth = rect.width;
+                                }
+                            }
+                            //  根据不同的UI框架，做不同的处理
+                            const listObj = ElementPlusExtend.tableHelper.handleConfig(toRaw(props.listConfig), boxWidth);
+                            innerTableProps.columns = listObj.columns;
+                        }
+
+                        onMounted(() => {
+                            calcColumnsWidth();
+                            isShowTable.value = true;
+                        });
+
+                        document.addEventListener("list-default-operate-column-btn-click-custom-event", (event) => {
+                            const { btn, trIndex, tr, th, evt } = event.detail;
+                            emit("list-default-operate-column-btn-click", btn, trIndex, tr, th, evt);
+                        });
+
+                        return {
+                            listPageBoxRef,
+                            quickSearch,
+                            quickSearchFormBind,
+                            quickSearchResetHandler,
+                            quickSearchSubmitHandler,
+                            toolbarBtns,
+                            handleToolbarBtnClick,
+                            isShowTable,
+                            componentName,
+                            innerTableProps
+                        };
+                    }
+                };
+
+                //#endregion
+
+                const GV_FormConfig = {
+                    baseInfo: {
+                        id: "",
+                        name: "",
+                        layout: "", //  inline |
+                        label: {
+                            isShow: true,
+                            position: "top", //  left | right | top
+                            width: "100px"
+                        },
+                        control: {
+                            style: {}
+                        },
+                        validate: {
+                            trigger: "change"
+                        }
+                    },
+                    items: [
+                        {
+                            id: "1",
+                            title: "姓名",
+                            type: "Text",
+                            children: [
+                                {
+                                    code: "name",
+                                    config: {
+                                        required: true
+                                    }
+                                }
+                            ],
+                            pos: { startRow: 1, endRow: 2, startCol: 1, endCol: 2 }
+                        },
+                        {
+                            id: "2",
+                            title: "性别",
+                            type: "Select",
+                            children: [
+                                {
+                                    code: "gender",
+                                    config: {
+                                        required: true,
+                                        options: [
+                                            {
+                                                value: 0,
+                                                label: "男"
+                                            },
+                                            {
+                                                value: 1,
+                                                label: "女"
+                                            },
+                                            {
+                                                value: 2,
+                                                label: "其他"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            pos: { startRow: 1, endRow: 2, startCol: 2, endCol: 3 }
+                        },
+                        {
+                            id: "3",
+                            title: "出生日期",
+                            type: "Date",
+                            children: [
+                                {
+                                    code: "birthday",
+                                    config: {
+                                        required: false
+                                    }
+                                }
+                            ],
+                            pos: { startRow: 2, endRow: 3, startCol: 1, endCol: 2 }
+                        },
+                        {
+                            id: "4",
+                            title: "微信",
+                            type: "Text",
+                            children: [
+                                {
+                                    code: "weChat",
+                                    config: {
+                                        required: true
+                                    }
+                                }
+                            ],
+                            pos: { startRow: 2, endRow: 3, startCol: 2, endCol: 3 }
+                        },
+                        {
+                            id: "5",
+                            title: "手机号",
+                            type: "Text",
+                            children: [
+                                {
+                                    code: "mobilePhone",
+                                    config: {
+                                        required: true
+                                    }
+                                }
+                            ],
+                            pos: { startRow: 3, endRow: 4, startCol: 1, endCol: 2 }
+                        },
+                        {
+                            id: "6",
+                            title: "邮箱",
+                            type: "Text",
+                            children: [
+                                {
+                                    code: "email",
+                                    config: {
+                                        required: true
+                                    }
+                                }
+                            ],
+                            pos: { startRow: 3, endRow: 4, startCol: 2, endCol: 3 }
+                        },
+                        {
+                            id: "7",
+                            title: "院校",
+                            type: "Text",
+                            children: [
+                                {
+                                    code: "university",
+                                    config: {
+                                        required: true
+                                    }
+                                }
+                            ],
+                            pos: { startRow: 4, endRow: 5, startCol: 1, endCol: 2 }
+                        },
+                        {
+                            id: "8",
+                            title: "专业",
+                            type: "Text",
+                            children: [
+                                {
+                                    code: "major",
+                                    config: {
+                                        required: true
+                                    }
+                                }
+                            ],
+                            pos: { startRow: 4, endRow: 5, startCol: 2, endCol: 3 }
+                        },
+                        {
+                            id: "9",
+                            title: "学历",
+                            type: "Select",
+                            children: [
+                                {
+                                    code: "qualification",
+                                    config: {
+                                        required: true,
+                                        options: [
+                                            {
+                                                value: 1,
+                                                label: "博士后"
+                                            },
+                                            {
+                                                value: 2,
+                                                label: "博士研究生"
+                                            },
+                                            {
+                                                value: 3,
+                                                label: "硕士研究生"
+                                            },
+                                            {
+                                                value: 4,
+                                                label: "大学本科"
+                                            },
+                                            {
+                                                value: 5,
+                                                label: "大学专科"
+                                            },
+                                            {
+                                                value: 6,
+                                                label: "中等师范学校"
+                                            },
+                                            {
+                                                value: 7,
+                                                label: "中等专业学校"
+                                            },
+                                            {
+                                                value: 8,
+                                                label: "高等职业学校"
+                                            },
+                                            {
+                                                value: 9,
+                                                label: "职业高中"
+                                            },
+                                            {
+                                                value: 10,
+                                                label: "技工学校"
+                                            },
+                                            {
+                                                value: 11,
+                                                label: "初中"
+                                            },
+                                            {
+                                                value: 12,
+                                                label: "小学"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            pos: { startRow: 5, endRow: 6, startCol: 1, endCol: 2 }
+                        },
+                        {
+                            id: "10",
+                            title: "主页",
+                            type: "Text",
+                            children: [
+                                {
+                                    code: "homepage",
+                                    config: {
+                                        required: true
+                                    }
+                                }
+                            ],
+                            pos: { startRow: 5, endRow: 6, startCol: 2, endCol: 3 }
+                        },
+                        {
+                            id: "11",
+                            title: "特长",
+                            type: "Textarea",
+                            children: [
+                                {
+                                    code: "talent"
+                                }
+                            ],
+                            pos: { startRow: 6, endRow: 7, startCol: 1, endCol: 3 }
+                        },
+                        {
+                            id: "12",
+                            title: "自我评价",
+                            type: "Textarea",
+                            children: [
+                                {
+                                    code: "selfEvaluation"
+                                }
+                            ],
+                            pos: { startRow: 7, endRow: 8, startCol: 1, endCol: 3 }
+                        },
+                        {
+                            id: "13",
+                            title: "数值测试",
+                            type: "Number",
+                            children: [
+                                {
+                                    code: "number001"
+                                }
+                            ],
+                            pos: { startRow: 8, endRow: 9, startCol: 1, endCol: 3 }
+                        }
+                    ]
+                };
+
+                const formObj = ElementPlusExtend.formHelper.handleConfig(GV_FormConfig);
+
+                const GV_ListConfig = {
+                    name: "",
+                    serialNumber: { isShow: true },
+                    items: [
+                        {
+                            dataIndex: "name",
+                            columnType: 0
+                        },
+                        {
+                            dataIndex: "gender",
+                            columnType: 0
+                        },
+                        {
+                            dataIndex: "birthday",
+                            columnType: 0
+                        },
+                        {
+                            dataIndex: "weChat",
+                            columnType: 0
+                        },
+                        {
+                            dataIndex: "mobilePhone",
+                            columnType: 0
+                        },
+                        {
+                            dataIndex: "university",
+                            columnType: 0
+                        },
+                        {
+                            dataIndex: "qualification",
+                            columnType: 0
+                        },
+                        {
+                            dataIndex: "operate",
+                            columnType: 12,
+                            columnAlias: "操作",
+                            width: {
+                                type: "fixed",
+                                value: 150
+                            },
+                            extend: JSON.stringify({
+                                btns: [
+                                    {
+                                        btnCode: "edit",
+                                        btnName: "编辑",
+                                        btnType: "primary",
+                                        btnIcon: "EditOutlined"
+                                    },
+                                    {
+                                        btnCode: "delete",
+                                        btnName: "删除",
+                                        btnType: "danger",
+                                        btnIcon: "DeleteOutlined"
+                                    }
+                                ]
+                            })
+                        }
+                    ],
+                    quickSearch: {
+                        open: true,
+                        items: [
+                            {
+                                id: "1"
+                            },
+                            {
+                                id: "3"
+                            }
+                        ]
+                    },
+                    toolbarBtns: [
+                        {
+                            btnCode: "add",
+                            btnName: "新增",
+                            btnType: "primary",
+                            btnIcon: "PlusOutlined"
+                        }
+                    ]
+                };
+
+                function assembleListConfig(listConfig, fieldCodeObj = {}, fieldIdObj = {}) {
+                    if (typeof listConfig !== "object") return listConfig;
+                    const newListConfig = JSON.parse(JSON.stringify(listConfig));
+                    //  1、处理列表列
+                    const items = [];
+                    //  columnType 0:数据列 10:自定义列 ( 11:序号列 12:操作列)
+                    if (listConfig.serialNumber?.isShow === true) {
+                        items.push({
+                            dataIndex: "SerialNumber",
+                            columnType: 11,
+                            columnAlias: listConfig.serialNumber?.title ? listConfig.serialNumber.title : "序号",
+                            width: {
+                                type: "fixed",
+                                value: 85
+                            }
+                        });
+                    }
+                    listConfig.items.forEach((item) => {
+                        switch (item.columnType) {
+                            case 0: {
+                                if (!Object.hasOwn(fieldCodeObj, item.dataIndex)) break;
+                                items.push({
+                                    dataIndex: item.dataIndex,
+                                    columnType: item.columnType,
+                                    columnAlias: item.columnAlias ? item.columnAlias : fieldCodeObj[item.dataIndex].title,
+                                    width: item.width
+                                });
+                                break;
+                            }
+                            case 10: {
+                                break;
+                            }
+                            case 12: {
+                                let itemExtend = null;
+                                try {
+                                    itemExtend = JSON.parse(item.extend);
+                                } catch (error) {}
+                                const colItem = {
+                                    dataIndex: item.dataIndex,
+                                    columnType: item.columnType,
+                                    columnAlias: item.columnAlias,
+                                    width: item.width,
+                                    extend: null
+                                };
+                                if (itemExtend != null && typeof itemExtend === "object" && Array.isArray(itemExtend.btns) && itemExtend.btns.length > 0) {
+                                    colItem.extend = itemExtend;
+                                }
+                                items.push(colItem);
+                                break;
+                            }
+                        }
+                    });
+                    newListConfig.items = items;
+                    //  2、处理快速查询
+                    if (listConfig.quickSearch?.open === true && Array.isArray(listConfig.quickSearch.items) && listConfig.quickSearch.items.length > 0) {
+                        const quickSearchItems = [];
+                        const quickSearchFormData = {};
+                        listConfig.quickSearch.items.forEach((item) => {
+                            if (!Object.hasOwn(fieldIdObj, item.id)) return;
+                            const formItem = JSON.parse(JSON.stringify(fieldIdObj[item.id]));
+                            if (!(Array.isArray(formItem.children) && formItem.children.length > 0)) return;
+                            formItem.children.forEach((child) => {
+                                quickSearchFormData[child.code] = null;
+                            });
+                            quickSearchItems.push(formItem);
+                        });
+                        newListConfig.quickSearch.items = quickSearchItems;
+                        newListConfig.quickSearch.model = quickSearchFormData;
+                    }
+                    return newListConfig;
+                }
+
+                const newListConfig = assembleListConfig(GV_ListConfig, formObj.formItemCodeObj, formObj.formItemIdObj);
+
+                let app = createApp({
+                    data() {
+                        return {
+                            listConfig: newListConfig,
+                            formItems: formObj.formItems
+                        };
+                    },
+                    setup(props, context) {
+                        const listData = ref([]);
+                        const showDialog = ref(false);
+                        const isEditMode = ref(false);
+                        const formBind = ref(null);
+                        const formModelCopy = JSON.parse(JSON.stringify(formObj.formBind.model));
+                        function dialogFormOkHandle(data, resetForm, evt) {
+                            let msg = "";
+                            if (data.id) {
+                                let index = listData.value.findIndex((item) => item.id === data.id);
+                                if (index > -1) {
+                                    listData.value.splice(index, 1, { ...data });
+                                }
+                                msg = "修改成功！";
+                            } else {
+                                listData.value.push({ ...data, ...{ id: getGUID() } });
+                                msg = "添加成功！";
+                            }
+                            resetForm();
+                            showDialog.value = false;
+                            ElementPlus.ElMessage({
+                                message: msg,
+                                type: "success"
+                            });
+                        }
+                        function dialogFormCancelHandle(resetForm, evt) {
+                            resetForm();
+                            showDialog.value = false;
+                        }
+                        function handleQuickSearchSubmit(searchData) {
+                            ElementPlus.ElMessage({
+                                message: "快捷查询：点击【提交】按钮。",
+                                type: "success"
+                            });
+                        }
+                        function handleQuickSearchReset() {
+                            ElementPlus.ElMessage({
+                                message: "快捷查询：点击【重置】按钮。",
+                                type: "success"
+                            });
+                        }
+                        function handleListToolbarBtnClick(btn, evt) {
+                            switch (btn.btnCode) {
+                                case "add": {
+                                    isEditMode.value = false;
+                                    formObj.formBind.model = JSON.parse(JSON.stringify(formModelCopy));
+                                    formBind.value = formObj.formBind;
+                                    showDialog.value = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        function handleListDefaultOperateColumnBtnClick(btn, trIndex, tr, th, evt) {
+                            switch (btn.btnCode) {
+                                case "edit": {
+                                    ElementPlus.ElMessage({
+                                        message: "列表内置操作列：点击【编辑】按钮。",
+                                        type: "success"
+                                    });
+                                    isEditMode.value = true;
+                                    formObj.formBind.model = { ...tr };
+                                    formBind.value = formObj.formBind;
+                                    showDialog.value = true;
+                                    break;
+                                }
+                                case "delete": {
+                                    ElementPlus.ElMessage({
+                                        message: "列表内置操作列：点击【删除】按钮。",
+                                        type: "success"
+                                    });
+                                    break;
+                                }
+                            }
+                        }
+                        return {
+                            listData,
+                            showDialog,
+                            isEditMode,
+                            formBind,
+                            dialogFormOkHandle,
+                            dialogFormCancelHandle,
+                            handleQuickSearchSubmit,
+                            handleQuickSearchReset,
+                            handleListToolbarBtnClick,
+                            handleListDefaultOperateColumnBtnClick
+                        };
+                    },
+                    methods: {},
+                    created() {}
+                });
+                app.use(ElementPlus);
+                app.component(DuListQuickSearchComp.name, DuListQuickSearchComp); // 注册组件
+                app.component(DuListToolbarButtonComp.name, DuListToolbarButtonComp); // 注册组件
+                app.component(DuListCustomOperateColumnComp.name, DuListCustomOperateColumnComp); // 注册组件
+                app.component(DuListPageComp.name, DuListPageComp); // 注册组件
+                app.component(DuFormControlRenderComp.name, DuFormControlRenderComp); // 注册组件
+                app.component(DuFormComp.name, DuFormComp); // 注册组件
+                app.component(DuDialogFormComp.name, DuDialogFormComp); // 注册组件
+                app.mount("#vue3App");
+            })();
+        </script>
+    </body>
+</html>
