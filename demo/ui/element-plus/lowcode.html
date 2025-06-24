@@ -525,7 +525,7 @@
                                             align: item.align ? item.align : "left",
                                             width: item.width.value,
                                             minWidth: item.width.minWidth,
-                                            cellRenderer: ({ column, rowIndex, rowData }) => h(DuListCustomOperateColumnComp, { btns: item.extend?.btns, tr: rowData, th: column })
+                                            cellRenderer: ({ column, rowIndex, rowData }) => h(DuListCustomOperateColumnComp, { btns: item.extend?.btns, trIndex: rowIndex, tr: rowData, th: column })
                                         });
                                         break;
                                     }
