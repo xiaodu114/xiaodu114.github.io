@@ -229,9 +229,12 @@ const excludePaths_demo = {
     "/demo/js/VideojsPlayer/index-iframe.html": 1,
     "/demo/js/VideojsPlayer/index-unpkg.html": 1,
     "/demo/js/baidumap/pages": 1,
+    "/demo/js/canvas/pages": 1,
+    "/demo/js/openlayers/pages": 1,
     "/demo/js/recordScreen/pages": 1,
     "/demo/js/word/pages": 1,
     "/demo/vue2": 1,
+    "/demo/vue3/lowcode/history": 1,
     "/demo/webpack": 1
 };
 //  获取需要添加主页的页面：博客目录
