@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Canvas - 涂鸦 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,Canvas,画布,Doodle,涂鸦,保存为图片,保存为路径,保存为SVG" />
+        <meta name="description" content="Canvas 涂鸦篇，随便画点什么吧。支持保存为图片、保存为路径、保存为SVG。" />
+
+        <style>
+            .btns {
+                display: flex;
+                gap: 1rem;
+                margin-top: 1rem;
+                margin-bottom: 1rem;
+                flex-wrap: wrap;
+
+                > button {
+                    cursor: pointer;
+                }
+            }
+
+            .canvas-box {
+                width: 100%;
+                height: 61.8vh;
+                box-shadow: rgba(37, 43, 58, 0.12) 0px 2px 8px 0px;
+
+                canvas {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>涂鸦</h1>
+            <p>随便画点什么吧</p>
+            <div>
+                <p>
+                    <label>画笔颜色：<input type="color" id="txtPenColor" value="#000000" onchange="penColorChange(this.value)"/></label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label>画笔宽度：<input type="number" id="txtPenWidth" value="5" min="1" max="100" step="1" onchange="penWidthChange(this.value)" /></label>
+                </p>
+            </div>
+            <div class="canvas-box">
+                <canvas id="canvas"></canvas>
+            </div>
+             <div class="btns">
+                <button type="button" id="btnClear">清空</button>
+                <button type="button" id="btnSaveAsImg">保存为图片</button>
+                <button type="button" id="btnSaveAsPaths">保存为路径</button>
+                <button type="button" id="btnSaveAsSvg">保存为SVG</button>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: center; margin-top: 1rem; margin-bottom: 1rem">
+                <textarea id="txtPaths" rows="6" placeholder="你可以在这里输入上面保存的路径数据，然后点击后面的按钮" style="flex: 1"></textarea>
+                <div>
+                    <button type="button" id="btnFillPaths" style="cursor: pointer">填充</button>
+                </div>
+            </div>
+        </div>
+        <script>
+            //#region Canvas 涂鸦相关
+
+            let penColor = "#000000";
+            let penWidth = 5;
+            const bgColor = "#ffffff";
+
+            function penColorChange(value) {
+                penColor = value;
+            }
+
+            function penWidthChange(value) {
+                penWidth = Number(value);
+            }
+
+            const boxEle = document.querySelector(".canvas-box");
+            const canvasEle = boxEle.querySelector("canvas");
+            const ctx = canvasEle.getContext("2d");
+
+            let paths = [];
+            let currentPath = [];
+            let isDrawing = false;
+
+            function updateContextOption() {
+                const boxRect = boxEle.getBoundingClientRect();
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(0, 0, boxRect.width, boxRect.height);
+            }
+
+            function setupCanvas() {
+                const boxRect = boxEle.getBoundingClientRect();
+                canvasEle.width = boxRect.width;
+                canvasEle.height = boxRect.height;
+
+                ctx.lineCap = "round";
+                ctx.lineJoin = "round";
+
+                updateContextOption();
+            }
+
+            function getPosition(event) {
+                if (!canvasEle) return { x: 0, y: 0 };
+
+                const rect = canvasEle.getBoundingClientRect();
+                let x, y;
+
+                if (event instanceof MouseEvent) {
+                    x = event.clientX - rect.left;
+                    y = event.clientY - rect.top;
+                } else {
+                    x = event.touches[0].clientX - rect.left;
+                    y = event.touches[0].clientY - rect.top;
+                }
+
+                return { x, y };
+            }
+
+            function startDrawing(event) {
+                event.preventDefault();
+                isDrawing = true;
+                currentPath = [getPosition(event)];
+            }
+
+            function draw(event) {
+                if (!isDrawing || !ctx) return;
+
+                event.preventDefault();
+                const point = getPosition(event);
+                currentPath.push(point);
+
+                ctx.strokeStyle = penColor;
+                ctx.lineWidth = penWidth;
+                ctx.lineCap = "round";
+                ctx.lineJoin = "round";
+
+                ctx.beginPath();
+                ctx.moveTo(currentPath[currentPath.length - 2].x, currentPath[currentPath.length - 2].y);
+                ctx.lineTo(point.x, point.y);
+                ctx.stroke();
+            }
+
+            function stopDrawing(event) {
+                if (isDrawing) {
+                    isDrawing = false;
+                    paths.push({
+                        points: [...currentPath],
+                        color: penColor,
+                        width: penWidth
+                    });
+                    currentPath = [];
+                }
+            }
+
+            function saveAsSvg() {
+                const rect = canvasEle.getBoundingClientRect();
+                let svg = `<svg width="${rect.width}" height="${rect.height}" xmlns="http://www.w3.org/2000/svg">`;
+                svg += `<rect width="100%" height="100%" fill="${bgColor}" />`;
+                paths.forEach((path) => {
+                    if (path.points.length > 0) {
+                        let d = `M${path.points[0].x},${path.points[0].y}`;
+                        for (let i = 1; i < path.points.length; i++) {
+                            d += ` L${path.points[i].x},${path.points[i].y}`;
+                        }
+                        svg += `<path d="${d}" stroke="${path.color}" stroke-width="${path.width}" stroke-linecap="round" stroke-linejoin="round" fill="none" />`;
+                    }
+                });
+                svg += "</svg>";
+                // return `data:image/svg+xml;base64,${btoa(svg)}`;
+                return svg;
+            }
+
+            function saveAsImage() {
+                return canvasEle.toDataURL("image/png");
+            }
+
+            function saveAsPaths() {
+                return paths;
+            }
+
+            function redrawCanvas(paths) {
+                updateContextOption();
+                paths.forEach((path) => {
+                    ctx.beginPath();
+                    ctx.strokeStyle = path.color;
+                    ctx.lineWidth = path.width;
+                    path.points.forEach((point, index) => {
+                        if (index === 0) {
+                            ctx.moveTo(point.x, point.y);
+                        } else {
+                            ctx.lineTo(point.x, point.y);
+                        }
+                    });
+                    ctx.stroke();
+                });
+            }
+            
+            //#endregion
+
+            document.addEventListener("custom-event-blog-page-loaded", (event) => {
+                setupCanvas();
+                updateContextOption();
+
+                canvasEle.addEventListener("mousedown", startDrawing);
+                canvasEle.addEventListener("mousemove", draw);
+                canvasEle.addEventListener("mouseup", stopDrawing);
+
+                canvasEle.addEventListener("touchstart", startDrawing);
+                canvasEle.addEventListener("touchmove", draw);
+                canvasEle.addEventListener("touchend", stopDrawing);
+            });
+
+            function downloadFileByA(href, fileName) {
+                const downA = document.createElement("a");
+                downA.href = href;
+                downA.download = fileName;
+                downA.click();
+                window.URL.revokeObjectURL(href);
+            }
+
+            document.getElementById("btnClear").addEventListener("click", () => {
+                paths = [];
+                updateContextOption();
+            });
+
+            document.getElementById("btnSaveAsImg").addEventListener("click", () => {
+                const image = saveAsImage();
+                downloadFileByA(image, `doodle-${new Date().valueOf()}.png`);
+            });
+
+            document.getElementById("btnSaveAsPaths").addEventListener("click", () => {
+                const paths = saveAsPaths();
+                console.log(paths);
+            });
+
+            document.getElementById("btnSaveAsSvg").addEventListener("click", () => {
+                const svg = saveAsSvg();
+                console.log(svg);
+            });
+
+            document.getElementById("btnFillPaths").addEventListener("click", () => {
+                const inputPaths = document.getElementById("txtPaths").value;
+                try {
+                    const paths = JSON.parse(inputPaths);
+                    if (Array.isArray(paths) && paths.length > 0) {
+                        redrawCanvas(paths);
+                    }
+                    else{
+                        alert("输入的路径格式不正确");
+                    }
+                } catch (error) {
+                    alert("输入的路径格式不正确");
+                }
+            });
+        </script>
+    </body>
+</html>

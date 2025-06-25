@@ -1,0 +1,30 @@
+{
+    "pageTitle": "Canvas - xiaodu114.github.io",
+    "head": {
+        "title": "我和 Canvas 的故事",
+        "links": [
+            {
+                "href": "https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements/canvas",
+                "text": "<canvas> - HTML（超文本标记语言） | MDN"
+            },
+            {
+                "href": "https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API",
+                "text": "Canvas API - Web API | MDN"
+            }
+        ]
+    },
+    "nodes": [
+        {
+            "id": 1,
+            "text": "介绍",
+            "code": "Introduction",
+            "page": "/demo/js/canvas/pages/introduction.html"
+        },
+        {
+            "id": 2,
+            "text": "涂鸦",
+            "code": "Doodle",
+            "page": "/demo/js/canvas/pages/doodle.html"
+        }
+    ]
+}
