@@ -6,7 +6,7 @@
     
   <url>
     <loc>https://xiaodu114.github.io/</loc>
-    <lastmod>2025-05-27T14:04:07.208Z</lastmod>
+    <lastmod>2025-06-25T14:37:13.424Z</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
@@ -131,7 +131,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/ide/vscode/index.html</loc>
-    <lastmod>2025-04-14T14:08:57.727Z</lastmod>
+    <lastmod>2025-06-24T14:39:03.122Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -146,7 +146,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/life/fun/index.html</loc>
-    <lastmod>2024-12-08T13:40:29.000Z</lastmod>
+    <lastmod>2025-06-19T12:34:39.586Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -321,7 +321,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/online/index.html</loc>
-    <lastmod>2025-04-29T22:46:27.331Z</lastmod>
+    <lastmod>2025-05-28T12:27:45.956Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -515,6 +515,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://xiaodu114.github.io/demo/css/marquee/index.html</loc>
+    <lastmod>2025-05-28T05:45:58.000Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://xiaodu114.github.io/demo/css/problem.html</loc>
     <lastmod>2024-12-08T13:40:29.000Z</lastmod>
     <priority>0.8</priority>
@@ -532,6 +537,11 @@
   <url>
     <loc>https://xiaodu114.github.io/demo/js/BroadcastChannel/index.html</loc>
     <lastmod>2024-12-08T13:40:29.000Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/demo/js/canvas/index.html</loc>
+    <lastmod>2025-06-25T07:08:48.000Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -567,6 +577,11 @@
   <url>
     <loc>https://xiaodu114.github.io/demo/js/openai/index.html</loc>
     <lastmod>2024-12-08T13:40:29.000Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/demo/js/openlayers/index.html</loc>
+    <lastmod>2025-06-24T13:29:14.000Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -606,12 +621,17 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/demo/js/word/index.html</loc>
-    <lastmod>2025-04-24T05:11:04.985Z</lastmod>
+    <lastmod>2025-05-28T12:26:57.074Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://xiaodu114.github.io/demo/react/learning/index.html</loc>
     <lastmod>2024-12-08T13:40:29.000Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/demo/ui/element-plus/lowcode.html</loc>
+    <lastmod>2025-06-24T14:06:15.925Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -646,7 +666,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/demo/vue3/lowcode/index.html</loc>
-    <lastmod>2025-04-23T13:39:09.448Z</lastmod>
+    <lastmod>2025-06-24T14:37:20.463Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
