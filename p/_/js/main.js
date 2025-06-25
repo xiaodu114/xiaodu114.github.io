@@ -184,6 +184,8 @@
     });
 
     Promise.all([loadHighlight(), loadUtilsJS(), checkCSSIsLoaded(), checkDOMContentLoaded()]).then(() => {
+        document.dispatchEvent(new CustomEvent("custom-event-blog-page-loaded", {}));
+
         //  添加    回到顶部和自动生成目录组件
         document.querySelector("body>.blog-page").appendChild(document.createElement("back-to-top"));
         document.querySelector("body>.blog-page").appendChild(document.createElement("auto-generate-directory"));
