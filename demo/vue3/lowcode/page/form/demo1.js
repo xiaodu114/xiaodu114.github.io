@@ -6,7 +6,7 @@ const demo1_FormConfig = {
     baseInfo: {
         label: {
             isShow: true,
-            position: "top", //  left | right | top
+            position: "top" //  left | right | top
         }
     },
     items: [
