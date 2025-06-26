@@ -186,9 +186,15 @@
     Promise.all([loadHighlight(), loadUtilsJS(), checkCSSIsLoaded(), checkDOMContentLoaded()]).then(() => {
         document.dispatchEvent(new CustomEvent("custom-event-blog-page-loaded", {}));
 
+        const blogPageEle = document.querySelector("body>.blog-page");
+        //  添加    github 链接
+        const githubIconBox = document.createElement("div");
+        githubIconBox.classList.add("github-icon-wrapper");
+        githubIconBox.appendChild(document.createElement("github-icon-link"));
+        blogPageEle.appendChild(githubIconBox);
         //  添加    回到顶部和自动生成目录组件
-        document.querySelector("body>.blog-page").appendChild(document.createElement("back-to-top"));
-        document.querySelector("body>.blog-page").appendChild(document.createElement("auto-generate-directory"));
+        blogPageEle.appendChild(document.createElement("back-to-top"));
+        blogPageEle.appendChild(document.createElement("auto-generate-directory"));
 
         //  代码高亮相关
         //let fragment = document.createDocumentFragment();
