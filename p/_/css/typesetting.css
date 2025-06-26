@@ -78,6 +78,12 @@ ul li {
     padding: 120px 150px 120px 150px;
     background-color: #fff;
     opacity: 1;
+
+    .github-icon-wrapper {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+    }
 }
 
 .blog-page h2 {
