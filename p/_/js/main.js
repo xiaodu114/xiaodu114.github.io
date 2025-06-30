@@ -72,7 +72,7 @@
     }
 
     function loadHighlight() {
-        return Promise.any([checkHighlightResponse("/lib/highlight/highlight.min.js"), checkHighlightResponse("https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js"), checkHighlightResponse("https://fastly.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js"), checkHighlightResponse("https://unpkg.com/@highlightjs/cdn-assets/highlight.min.js"), checkHighlightResponse("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js")]).then((firstData) => {
+        return checkHighlightResponse("/lib/highlight/highlight.min.js").then((firstData) => {
             if (firstData) {
                 window.hljs = _HandleStrCodeCommonjs(firstData);
             }
