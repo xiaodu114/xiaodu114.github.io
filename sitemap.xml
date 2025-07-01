@@ -6,7 +6,7 @@
     
   <url>
     <loc>https://xiaodu114.github.io/</loc>
-    <lastmod>2025-06-25T14:37:13.424Z</lastmod>
+    <lastmod>2025-07-01T13:25:01.722Z</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
@@ -532,6 +532,11 @@
   <url>
     <loc>https://xiaodu114.github.io/demo/js/baidumap/index.html</loc>
     <lastmod>2025-05-22T13:33:59.879Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/demo/js/bnmap/index.html</loc>
+    <lastmod>2025-05-18T09:42:46.691Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
