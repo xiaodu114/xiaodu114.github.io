@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>博能地图- Hello World - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,博能地图,第一个示例,Hello World" />
+        <meta name="description" content="博能地图第一个示例：Hello World" />
+
+        <link href="http://8.137.116.133:9090/BNMap/style.css" rel="stylesheet" />
+
+        <style>
+            #allmap {
+                width: 100%;
+                height: 100vh;
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+        <script type="text/javascript" src="http://8.137.116.133:9090/BNMap/BNMap.umd.js?appSecret=37cc3b51b3420e1fbf207e7d94aa7383&amp;appkey=c3fa8d7e8598eec2dce01f45d09084e8"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>Hello World</h1>
+            <p>博能地图第一个示例：Hello World</p>
+            <div id="allmap"></div>
+        </div>
+        <script type="text/javascript">
+            let map = null;
+            let isLoadedMap = false;
+            BNMap.BFactory.Load(
+                "1",
+                {
+                    container: "allmap", // 容器id，可不传
+                    //center: [116.39388154349899,39.916984702100734], // 初始化地图位置，可不传
+                    zoom: 12.5 // starting zoom
+                },
+                (mapObj) => {
+                    map = mapObj;
+                    mapObj.on("load", function () {
+                        isLoadedMap = true;
+                        alert(`load 事件：地图加载完成`);
+                    });
+                },
+                (err) => {
+                    console.error(err);
+                }
+            );
+        </script>
+    </body>
+</html>

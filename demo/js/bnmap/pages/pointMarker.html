@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>博能地图- 点标记 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,博能地图,点标记" />
+        <meta name="description" content="博能地图之点标记：点标记。这个是真厉害，一个标记搞定所有，你想他长什么样就长什么样，一生万物……" />
+
+        <link href="http://8.137.116.133:9090/BNMap/style.css" rel="stylesheet" />
+
+        <style>
+            #allmap {
+                width: 100%;
+                height: 100vh;
+            }
+
+            .btns {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 1rem;
+
+                > button {
+                    cursor: pointer;
+                }
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+        <script type="text/javascript" src="http://8.137.116.133:9090/BNMap/BNMap.umd.js?appSecret=37cc3b51b3420e1fbf207e7d94aa7383&amp;appkey=c3fa8d7e8598eec2dce01f45d09084e8"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>点标记</h1>
+            <p>博能地图之点标记：点标记。这个是真厉害，一个标记搞定所有，你想他长什么样就长什么样，一生万物……</p>
+            <div class="btns">
+                <button type="button">点击地图标记，不用点我哦</button>
+            </div>
+            <div class="btns">
+                <input type="text" id="inputLng" placeholder="经度，例如：116.46249462300005" />
+                <input type="text" id="inputLat" placeholder="纬度，例如： 40.250346979000035" />
+                <button type="button" id="btnUpdateMarkerLngLat">你也可以这样更新标记位置</button>
+            </div>
+            <div id="allmap"></div>
+        </div>
+        <script type="text/javascript">
+            let map = null;
+            let isLoadedMap = false;
+            let markerMapClicked = null;
+
+            function batchAddMarkers(data, mapInstance) {
+                const markers = [];
+                if (Array.isArray(data) && data.length > 0) {
+                    data.forEach((item) => {
+                        markers.push(new BNMap.BNMarker(item.options).setLngLat(item.lngLat).addTo(mapInstance));
+                    });
+                }
+                return markers;
+            }
+
+            function mapClickHandler_AddMarker(lngLat) {
+                if (markerMapClicked) {
+                    markerMapClicked.setLngLat(lngLat);
+                } else {
+                    let el = document.createElement("div");
+                    el.className = "marker";
+                    el.style.width = `48px`;
+                    el.style.height = `48px`;
+                    el.style.backgroundImage = `url(/logo/1024.png)`;
+                    el.style.backgroundSize = "100%";
+                    el.style.transform = "translate(-50%, -100%)";
+                    el.addEventListener("click", (evt) => {
+                        alert("点击了marker");
+                    });
+
+                    markerMapClicked = batchAddMarkers(
+                        [
+                            {
+                                lngLat,
+                                options: {
+                                    element: el, //  标签的 dom 结点
+                                    draggable: true // 如果为 true，则标记是可拖动的。
+                                }
+                            }
+                        ],
+                        map
+                    )[0];
+                }
+            }
+
+            BNMap.BFactory.Load(
+                "1",
+                {
+                    container: "allmap", // 容器id，可不传
+                    //center: [116.39388154349899,39.916984702100734], // 初始化地图位置，可不传
+                    zoom: 12.5 // starting zoom
+                },
+                (mapObj) => {
+                    map = mapObj;
+                    mapObj.on("load", function () {
+                        isLoadedMap = true;
+                    });
+
+                    mapObj.on("click", function (evt) {
+                        mapClickHandler_AddMarker(evt.lngLat);
+                    });
+                },
+                (err) => {
+                    console.error(err);
+                }
+            );
+
+            const inputLngEle = document.getElementById("inputLng");
+            const inputLatEle = document.getElementById("inputLat");
+
+            document.getElementById("btnUpdateMarkerLngLat").addEventListener("click", () => {
+                if (!markerMapClicked) {
+                    alert("请先点击地图添加标记");
+                    return;
+                }
+
+                const lng = inputLngEle.value;
+                const lat = inputLatEle.value;
+
+                if (lng && lat) {
+                    markerMapClicked.setLngLat({
+                        lng,
+                        lat
+                    });
+                }
+            });
+        </script>
+    </body>
+</html>

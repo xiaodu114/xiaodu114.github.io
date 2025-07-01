@@ -1,0 +1,38 @@
+{
+    "pageTitle": "博能地图 - xiaodu114.github.io",
+    "head": {
+        "title": "我和博能地图的故事",
+        "links": [
+            {
+                "href": "http://8.137.116.133:9090/knowledge/agsp3.0.html",
+                "text": "知识库 - 博能地图"
+            }
+        ]
+    },
+    "nodes": [
+        {
+            "id": 1,
+            "text": "介绍",
+            "code": "Introduction",
+            "page": "/demo/js/bnmap/pages/introduction.html"
+        },
+        {
+            "id": 2,
+            "text": "Hello World",
+            "code": "HelloWorld",
+            "page": "/demo/js/bnmap/pages/helloWorld.html"
+        },
+        {
+            "id": 3,
+            "text": "点标记",
+            "code": "PointMarker",
+            "page": "/demo/js/bnmap/pages/pointMarker.html"
+        },
+        {
+            "id": 4,
+            "text": "地图标绘",
+            "code": "Plotting",
+            "page": "/demo/js/bnmap/pages/plotting.html"
+        }
+    ]
+}

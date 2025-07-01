@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>博能地图 - 标绘（点、线、面） - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,博能地图,地图标绘,点,线,面,地图窗口,BNWindow" />
+        <meta name="description" content="博能地图之地图标绘：点、线、面，可点击，可拖拽" />
+
+        <link href="http://8.137.116.133:9090/BNMap/style.css" rel="stylesheet" />
+
+        <style>
+            #allmap {
+                width: 100%;
+                height: 100vh;
+            }
+
+            .btns {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 1rem;
+
+                > button {
+                    cursor: pointer;
+                }
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+        <script type="text/javascript" src="http://8.137.116.133:9090/BNMap/BNMap.umd.js?appSecret=37cc3b51b3420e1fbf207e7d94aa7383&amp;appkey=c3fa8d7e8598eec2dce01f45d09084e8"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>地图标绘</h1>
+            <p>博能地图之地图标绘：点、线、面，支持点击、编辑等</p>
+            <div class="btns">
+                <button type="button" id="btnAddPoint">添加点</button>
+                <button type="button" id="btnAddLine">添加线</button>
+                <button type="button" id="btnAddPolygon">添加面</button>
+            </div>
+            <div id="allmap"></div>
+        </div>
+        <script type="text/javascript">
+            let map = null;
+            let isLoadedMap = false;
+            let draw = null;
+            let drawMode = "";
+            const drawId2DrawRelated = new Map();
+
+            function drawSetBNWindowBtnClickHandler(evt) {
+                const windowId = evt.currentTarget.dataset.bnWindowId;
+                if (!drawId2DrawRelated.has(windowId)) return;
+                const drawRelatedObj = drawId2DrawRelated.get(windowId);
+                const btnCode = evt.currentTarget.dataset.btnCode;
+                switch (btnCode) {
+                    case "set": {
+                        break;
+                    }
+                    case "del": {
+                        drawRelatedObj.bnWindow.remove();
+                        drawId2DrawRelated.delete(windowId);
+                        draw.delete(windowId);
+                        break;
+                    }
+                }
+            }
+
+            function drawSetBNWindowOpenHandler(evt) {}
+
+            function drawSetBNWindowCloseHandler(evt) {}
+
+            function getDrawSetBNWindow(windowId) {
+                const btnSetEle = document.createElement("button");
+                btnSetEle.innerText = "设置";
+                btnSetEle.style.cursor = "pointer";
+                btnSetEle.dataset.btnCode = "set";
+                btnSetEle.dataset.bnWindowId = windowId;
+                btnSetEle.addEventListener("click", drawSetBNWindowBtnClickHandler);
+
+                const btnDelEle = document.createElement("button");
+                btnDelEle.innerText = "删除";
+                btnDelEle.style.cursor = "pointer";
+                btnDelEle.dataset.btnCode = "del";
+                btnDelEle.dataset.bnWindowId = windowId;
+                btnDelEle.addEventListener("click", drawSetBNWindowBtnClickHandler);
+
+                const btnBoxEle = document.createElement("div");
+                btnBoxEle.className = "btn-box";
+                btnBoxEle.style.display = "flex";
+                btnBoxEle.style.gap = "1rem";
+                btnBoxEle.appendChild(btnSetEle);
+                btnBoxEle.appendChild(btnDelEle);
+
+                const bnWindow = new BNMap.BNWindow(map, {
+                    className: "bn-window-0",
+                    closeButton: false
+                });
+                bnWindow._duBNWindowID = windowId;
+                bnWindow.addClassName("bn-window-" + windowId);
+                // bnWindow.setHTML(`<div>666</div>`);
+                bnWindow.setDOMContent(btnBoxEle);
+                bnWindow.on("close", drawSetBNWindowCloseHandler);
+                bnWindow.on("open", drawSetBNWindowOpenHandler);
+                return bnWindow;
+            }
+
+            function initBNDraw(drawOptions) {
+                draw = new BNMap.BNDraw({
+                    displayControlsDefault: true,
+                    controls: {
+                        //polygon: true, // 允许绘制多边形
+                        trash: true // 允许删除
+                    }
+                });
+                map.addControl(draw, "top-left");
+
+                map.on("draw.create", function (evt) {
+                    const { features, target, type } = evt;
+                    if (!(Array.isArray(features) && features.length > 0)) return;
+
+                    //  模拟请求
+                    setTimeout(() => {
+                        features.forEach((feature) => {
+                            if (!(typeof feature === "object" && feature !== null)) return;
+                            const { id, geometry, properties, type: geoType } = feature;
+                            if (!(typeof geometry === "object" && geometry !== null)) return;
+                            const { coordinates, type: drawType } = geometry;
+                            drawId2DrawRelated.set(id, {
+                                id,
+                                drawType,
+                                feature
+                            });
+                        });
+                    });
+                });
+
+                map.on("draw.update", function (evt) {
+                    const { features, target, type } = evt;
+                    if (!(Array.isArray(features) && features.length > 0)) return;
+                    const feature = features[0];
+                    if (!(typeof feature === "object" && feature !== null)) return;
+                    const { id, geometry, properties, type: geoType } = feature;
+                    if (!(typeof geometry === "object" && geometry !== null)) return;
+                    const { coordinates, type: drawType } = geometry;
+                });
+                map.on("draw.delete", function (evt) {
+                    alert("自带的删除");
+                    const { features, target, type } = evt;
+                    if (!(Array.isArray(features) && features.length > 0)) return;
+                    const feature = features[0];
+                    if (!(typeof feature === "object" && feature !== null)) return;
+                    const { id, geometry, properties, type: geoType } = feature;
+                    if (!drawId2DrawRelated.has(id)) return;
+                    const drawRelatedObj = drawId2DrawRelated.get(id);
+                    drawRelatedObj.bnWindow.remove();
+                    drawId2DrawRelated.delete(id);
+                    draw.delete(id);
+                });
+                map.on("draw.selectionchange", function (evt) {
+                    const { features, target, type } = evt;
+                    if (!(Array.isArray(features) && features.length > 0)) return;
+                    const feature = features[0];
+                    if (!(typeof feature === "object" && feature !== null)) return;
+                    const { id, geometry, properties, type: geoType } = feature;
+                    if (!(typeof geometry === "object" && geometry !== null)) return;
+                    const { coordinates, type: drawType } = geometry;
+                    if (!drawId2DrawRelated.has(id)) return;
+                    const drawRelatedObj = drawId2DrawRelated.get(id);
+                    let bnWindow = null;
+                    if (drawRelatedObj.bnWindow) {
+                        bnWindow = drawRelatedObj.bnWindow;
+                        bnWindow.remove();
+                    } else {
+                        bnWindow = getDrawSetBNWindow(id);
+                        drawRelatedObj.bnWindow = bnWindow;
+                    }
+
+                    let tempCoordinates = [];
+                    switch (drawType) {
+                        case "Point": {
+                            tempCoordinates = [coordinates];
+                            break;
+                        }
+                        case "LineString": {
+                            tempCoordinates = coordinates;
+                            break;
+                        }
+                        case "Polygon": {
+                            tempCoordinates = coordinates[0];
+                            break;
+                        }
+                    }
+
+                    let maxLng = tempCoordinates[0][0],
+                        maxLat = tempCoordinates[0][1],
+                        minLng = maxLng,
+                        minLat = maxLat;
+
+                    tempCoordinates.forEach((coordinate) => {
+                        if (Array.isArray(coordinate)) {
+                            coordinate.forEach((item) => {
+                                if (item[0] > maxLng) {
+                                    maxLng = item[0];
+                                }
+                                if (item[1] > maxLat) {
+                                    maxLat = item[1];
+                                }
+                                if (item[0] < minLng) {
+                                    minLng = item[0];
+                                }
+                                if (item[1] < minLat) {
+                                    minLat = item[1];
+                                }
+                            });
+                        }
+                    });
+
+                    bnWindow.setLngLat({
+                        lng: maxLng,
+                        lat: maxLat
+                    });
+                    bnWindow.addTo(map);
+                });
+            }
+
+            BNMap.BFactory.Load(
+                "1",
+                {
+                    container: "allmap", // 容器id，可不传
+                    //center: [116.39388154349899,39.916984702100734], // 初始化地图位置，可不传
+                    zoom: 12.5 // starting zoom
+                },
+                (mapObj) => {
+                    map = mapObj;
+                    mapObj.on("load", function () {
+                        isLoadedMap = true;
+                        initBNDraw();
+                    });
+                },
+                (err) => {
+                    console.error(err);
+                }
+            );
+
+            document.getElementById("btnAddPoint").addEventListener("click", () => {
+                if (!draw) {
+                    alert("draw未初始化");
+                    return;
+                }
+                draw.changeMode("draw_point");
+                drawMode = "draw_point";
+            });
+
+            document.getElementById("btnAddLine").addEventListener("click", () => {
+                if (!draw) {
+                    alert("draw未初始化");
+                    return;
+                }
+                draw.changeMode("draw_line_string");
+                drawMode = "draw_line_string";
+            });
+
+            document.getElementById("btnAddPolygon").addEventListener("click", () => {
+                if (!draw) {
+                    alert("draw未初始化");
+                    return;
+                }
+                draw.changeMode("draw_polygon");
+                drawMode = "draw_polygon";
+            });
+        </script>
+    </body>
+</html>
