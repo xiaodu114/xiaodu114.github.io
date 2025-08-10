@@ -22,24 +22,16 @@
                 height: 100%;
                 width: 100%;
                 margin: 0;
-                overflow: hidden;
             }
 
-            body {
-                display: flex;
-                flex-direction: column;
-            }
-
-            .header {
-                display: flex;
-                align-items: baseline;
-                gap: 2rem;
+            section {
+                max-width: 1140px;
+                margin-left: auto;
+                margin-right: auto;
+                overflow-y: auto;
             }
 
             .scroll-bar-demo-box {
-                flex: 1;
-                overflow-y: auto;
-
                 .scroll-bar-row-box {
                     display: flex;
                     justify-content: space-around;
@@ -139,16 +131,20 @@
                     background: rebeccapurple;
                 }
             }
+
+            .scroll-bar-004 {
+                scrollbar-width: thin;
+                scrollbar-color: var(--main-color) transparent;
+            }
         </style>
     </head>
     <body>
-        <div class="header">
-            <h1>自定义滚动条样式</h1>
-            <span>
+        <section class="scroll-bar-demo-box">
+            <h1>滚动条</h1>
+            <h2>自定义滚动条样式</h2>
+            <p>
                 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/::-webkit-scrollbar" target="_blank" rel="noopener noreferrer">::-webkit-scrollbar - CSS：层叠样式表 | MDN</a>
-            </span>
-        </div>
-        <div class="scroll-bar-demo-box">
+            </p>
             <div class="scroll-bar-row-box">
                 <div class="scroll-bar-box">
                     <h2>默认滚动条</h2>
@@ -193,6 +189,35 @@
                     <p>……</p>
                 </div>
             </div>
-        </div>
+            <h2>scrollbar-*</h2>
+            <h3>scrollbar-width</h3>
+            <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/scrollbar-width" target="_blank" rel="noopener noreferrer">scrollbar-width - CSS：层叠样式表 | MDN</a> | <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/scrollbar-color" target="_blank" rel="noopener noreferrer">scrollbar-color - CSS：层叠样式表 | MDN</a></p>
+            <ul>
+                <li>
+                    <span>scrollbar-width</span>
+                    <ul>
+                        <li>scrollbar-width 属性允许开发者在元素显示滚动条时设置滚动条的最大宽度。</li>
+                    </ul>
+                </li>
+                <li>
+                    <span>scrollbar-color</span>
+                    <ul>
+                        <li>scrollbar-color CSS 属性设置滚动条轨道（track）和滑块（thumb）的颜色。</li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="scroll-bar-row-box">
+                <div class="scroll-bar-box scroll-bar-004">
+                    <h2>默认滚动条</h2>
+                    <p>none</p>
+                    <p>thin</p>
+                    <p>auto</p>
+                    <p>……</p>
+                    <p>……</p>
+                    <p>……</p>
+                    <p>……</p>
+                </div>
+            </div>
+        </section>
     </body>
 </html>
