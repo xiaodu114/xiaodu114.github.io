@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>wavesurfer.js - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,JavaScript,wavesurfer,wavesurfer.js,音波,音浪,波形图" />
+        <meta name="description" content="wavesurfer.js 示例：播放URL音频、上传音频等，并显示波形图" />
+
+        <script src="/p/_/js/main.js"></script>
+        <script src="https://unpkg.com/wavesurfer.js"></script>
+    </head>
+
+    <body>
+        <!-- github访问地址：/demo/js/wavesurfer/index.html -->
+        <div class="blog-page">
+            <h1>wavesurfer.js</h1>
+            <p>官网：<a href="https://wavesurfer.xyz/" target="_blank" rel="noopener noreferrer">wavesurfer.js | audio waveform player JavaScript library</a></p>
+            <p>官网描述：<b>Wavesurfer.js</b> is an open-source audio visualization library for creating interactive, customizable waveforms</p>
+            <h2>示例</h2>
+            <h3>URL 音频</h3>
+            <p>路径形如：</p>
+            <ul>
+                <li>../audio/北京的金山上.mp3</li>
+                <li>/source/audio/北京的金山上.mp3</li>
+                <li>https://xiaodu114.github.io/source/audio/北京的金山上.mp3</li>
+            </ul>
+            <div id="waveform1"></div>
+            <p><strong>说明：</strong>音频来自 <a href="https://news.cri.cn/20190930/fceb3dd7-d21c-4efe-9c38-554c209418c9.html" target="_blank" rel="noopener noreferrer">毛泽东主席宣读公告 纪录片《重生》首度披露开国珍贵镜头-国际在线</a></p>
+            <p style="text-align: center"><button id="playBtn1">播放 / 暂停</button></p>
+            <h3>上传文件</h3>
+            <p><input type="file" id="fileInput2" accept="audio/*" /></p>
+            <div id="waveform2"></div>
+            <p style="text-align: center"><button id="playBtn2">播放 / 暂停</button></p>
+        </div>
+        <script>
+            //#region 示例一：URL 音频
+
+            const ws1 = WaveSurfer.create({
+                container: "#waveform1",
+                waveColor: "#3cb878",
+                progressColor: "#1a7d4c",
+                backend: "MediaElement", // 支持流式
+                height: 128
+            });
+
+            // 播放本地 MP3 或 HTTP 音频流
+            ws1.load("/demo/js/wavesurfer/source/开国大典.m4a");
+
+            document.getElementById("playBtn1").onclick = () => ws1.playPause();
+
+            //#endregion
+
+            //#region 示例二：上传文件
+
+            const ws2 = WaveSurfer.create({
+                container: "#waveform2",
+                waveColor: "#3cb878",
+                progressColor: "#1a7d4c",
+                backend: "MediaElement", // 支持流式
+                height: 128
+            });
+
+            document.getElementById("fileInput2").addEventListener("change", (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                // 生成浏览器本地 URL
+                const url = URL.createObjectURL(file);
+                ws2.load(url); // WaveSurfer 直接加载本地 blob URL
+            });
+
+            document.getElementById("playBtn2").onclick = () => ws2.playPause();
+
+            //#endregion
+
+            //#region 示例三：HTTP 音频流
+
+            //#endregion
+        </script>
+    </body>
+</html>
