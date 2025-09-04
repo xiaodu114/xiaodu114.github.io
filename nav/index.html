@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>xiaodu114.github.io</title>
+        <link rel="stylesheet" href="./css/index.css" />
+        <link rel="stylesheet" href="./css/menu.css" />
+        <script src="https://registry.npmmirror.com/vue/3.4.38/files/dist/vue.global.js"></script>
+        <script src="https://registry.npmmirror.com/vue-router/4.4.3/files/dist/vue-router.global.js"></script>
+    </head>
+    <body>
+        <div id="app"></div>
+        <!-- 这里放置一些模板 -->
+        <template id="appTemplate">
+            <div class="app">
+                <div class="header">
+                    <div class="left">
+                        <h1>{{head.title}}</h1>
+                    </div>
+                    <div class="right">
+                        <span v-for="(a,index) in head.links" :key="index"> <a target="_blank" rel="noopener noreferrer" :href="a.href">{{a.text}}</a>&nbsp;&nbsp; </span>
+                    </div>
+                </div>
+                <div class="main">
+                    <div class="nav">
+                        <du-menu :items="navItems" :selected-keys="selectedKeys" @select="selectHandler"></du-menu>
+                    </div>
+                    <div class="content">
+                        <router-view></router-view>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template id="menuTemplate">
+            <div class="du-menu-box" :class="{'du-menu-root-box':depth === 0}">
+                <div class="du-menu-item" v-for="item in items" :key="item.key" :class="{'du-menu-item-selected':isSelected(item),'sub-menu-opened':isOpened(item)}">
+                    <template v-if="item.children && item.children.length>0">
+                        <div class="du-menu-item-content" :style="{paddingLeft:depth*16 + 'px'}" @click="toggleSubMenu(item)">
+                            <span class="du-menu-item-padding"></span>
+                            <span class="du-menu-item-icon"></span>
+                            <span class="du-menu-item-title">{{item.label}}</span>
+                            <svg-icon-arrow-down class="sub-menu-toggle-icon"></svg-icon-arrow-down>
+                        </div>
+                        <div class="du-sub-menu-box">
+                            <du-menu :items="item.children" :depth="depth+1"></du-menu>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div class="du-menu-item-content" :style="{paddingLeft:depth*16 + 'px'}" @click="handleLeafItemClick(item)">
+                            <span class="du-menu-item-padding"></span>
+                            <span class="du-menu-item-icon"></span>
+                            <span class="du-menu-item-title">{{item.label}}</span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
+        <template id="iframeWrapperTemplate">
+            <iframe frameborder="0" height="100%" width="100%"></iframe>
+        </template>
+        <script type="module">
+            //  1、引入公共基础方法等
+            import { fetchGetJSON, handleDbMenuItems } from "./lib/utils.js";
+
+            //  2、引入 Vue 组件
+            import App from "./js/index.js";
+            import { registerComponent } from "./components/index.js";
+
+            //  3、引入 Vue 全家桶
+            const { createApp, defineComponent, ref } = Vue;
+            const { createMemoryHistory, createRouter } = VueRouter;
+
+            //  4、获取配置数据
+
+            const searchParams = new URLSearchParams(location.search);
+            const configUrl = searchParams.get("config");
+            searchParams.delete("config");
+            const transferURLSearchStr = searchParams.size ? "?" + searchParams.toString() : "";
+            const configData = await fetchGetJSON(configUrl);
+
+            //  5、根据配置数据组装路由和导航数据
+            let routerOptions = {
+                history: createMemoryHistory(),
+                routes: []
+            };
+            const { uiMenuItems, routeItems, nodeMap } = handleDbMenuItems(configData.nodes);
+
+            if (Array.isArray(routeItems) && routeItems.length > 0) {
+                const nodeId2Obj = {};
+                configData.nodes.forEach((item) => {
+                    nodeId2Obj[item.id] = item;
+                });
+                routeItems.forEach((item) => {
+                    const nodeId = item.meta.id;
+                    const nodeItem = nodeId2Obj[nodeId];
+                    if (!nodeItem) return;
+                    routerOptions.routes.push({
+                        ...item,
+                        component: defineComponent({
+                            template: `<iframe-wrapper :src="src"></iframe-wrapper>`,
+                            setup() {
+                                const src = ref(nodeItem.page + transferURLSearchStr);
+                                return {
+                                    src
+                                };
+                            }
+                        })
+                    });
+                });
+            }
+
+            const router = createRouter(routerOptions);
+
+            //  6、开始创建APP
+            const vue3App = createApp(App, {
+                head: configData.head,
+                navItems: uiMenuItems
+            });
+            //  忽略自定义元素
+            vue3App.config.compilerOptions.isCustomElement = (tag) => tag === "line-code";
+            //  注册全局组件
+            registerComponent(vue3App);
+            //
+            vue3App.use(router);
+            //  挂载到DOM
+            vue3App.mount("#app");
+        </script>
+    </body>
+</html>
