@@ -1,0 +1,24 @@
+{
+    "pageTitle": "Node.js - xiaodu114.github.io",
+    "head": {
+        "title": "我和 Node.js 的故事",
+        "links": [
+            {
+                "href": "https://nodejs.org",
+                "text": "Node.js — Run JavaScript Everywhere"
+            },
+            {
+                "href": "https://nodejs.org/docs/latest/api",
+                "text": "Index | Node.js x.x.x Documentation"
+            }
+        ]
+    },
+    "nodes": [
+        {
+            "id": 1,
+            "text": "介绍",
+            "code": "Introduction",
+            "page": "/p/nodejs/pages/introduction.html"
+        }
+    ]
+}
