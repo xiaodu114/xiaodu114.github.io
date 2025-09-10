@@ -9,7 +9,7 @@
         flex-shrink: 0;
         position: relative;
         display: flex;
-        align-items: baseline;
+        align-items: center;
         padding-left: 25px;
         padding-right: 25px;
 
