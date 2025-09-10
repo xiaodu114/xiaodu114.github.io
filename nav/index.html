@@ -17,6 +17,7 @@
                 <div class="header">
                     <div class="left">
                         <h1>{{head.title}}</h1>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;{{head.subtitle}}</span>
                     </div>
                     <div class="right">
                         <span v-for="(a,index) in head.links" :key="index"> <a target="_blank" rel="noopener noreferrer" :href="a.href">{{a.text}}</a>&nbsp;&nbsp; </span>
