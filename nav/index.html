@@ -44,7 +44,7 @@
                             <svg-icon-arrow-down class="sub-menu-toggle-icon"></svg-icon-arrow-down>
                         </div>
                         <div class="du-sub-menu-box">
-                            <du-menu :items="item.children" :depth="depth+1"></du-menu>
+                            <du-menu :items="item.children" :depth="depth+1" @select="$emit('select', $event)"></du-menu>
                         </div>
                     </template>
                     <template v-else>
@@ -88,13 +88,9 @@
             const { uiMenuItems, routeItems, nodeMap } = handleDbMenuItems(configData.nodes);
 
             if (Array.isArray(routeItems) && routeItems.length > 0) {
-                const nodeId2Obj = {};
-                configData.nodes.forEach((item) => {
-                    nodeId2Obj[item.id] = item;
-                });
                 routeItems.forEach((item) => {
                     const nodeId = item.meta.id;
-                    const nodeItem = nodeId2Obj[nodeId];
+                    const nodeItem = nodeMap.get(nodeId);
                     if (!nodeItem) return;
                     routerOptions.routes.push({
                         ...item,
