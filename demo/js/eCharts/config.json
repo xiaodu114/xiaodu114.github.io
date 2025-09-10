@@ -20,6 +20,19 @@
             "text": "介绍",
             "code": "Introduction",
             "page": "/demo/js/eCharts/pages/introduction.html"
+        },
+        {
+            "id": 200000,
+            "text": "饼图",
+            "code": "Pie",
+            "children": [
+                {
+                    "id": 200001,
+                    "text": "基础饼图",
+                    "code": "BasicPie",
+                    "page": "/demo/js/eCharts/pages/pie/basicPie.html"
+                }
+            ]
         }
     ]
 }
