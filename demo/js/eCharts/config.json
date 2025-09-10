@@ -2,6 +2,7 @@
     "pageTitle": "ECharts - xiaodu114.github.io",
     "head": {
         "title": "我和 ECharts 的故事",
+        "subtitle": "版本：v6.0.0",
         "links": [
             {
                 "href": "https://echarts.apache.org/zh/index.html",
