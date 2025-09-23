@@ -33,6 +33,63 @@
                     "page": "/demo/js/eCharts/pages/pie/basicPie.html"
                 }
             ]
+        },
+        {
+            "id": 300000,
+            "text": "仪表盘",
+            "code": "Gauge",
+            "children": [
+                {
+                    "id": 300001,
+                    "text": "基础仪表盘",
+                    "code": "BasicGauge",
+                    "page": "/demo/js/eCharts/pages/gauge/basic.html"
+                }
+            ]
+        },
+        {
+            "id": 400000,
+            "text": "圆环图",
+            "code": "Ring",
+            "children": [
+                {
+                    "id": 400001,
+                    "text": "饼图演变",
+                    "code": "Pie2Ring",
+                    "page": "/demo/js/eCharts/pages/ring/ringByPie.html"
+                },
+                {
+                    "id": 400002,
+                    "text": "仪表盘演变",
+                    "code": "Gauge2Ring",
+                    "page": "/demo/js/eCharts/pages/ring/ringByGauge.html"
+                },
+                {
+                    "id": 400003,
+                    "text": "自定义",
+                    "code": "Custom2Ring",
+                    "page": "/demo/js/eCharts/pages/ring/ringByCustom.html"
+                }
+            ]
+        },
+        {
+            "id": 500000,
+            "text": "柱状图",
+            "code": "Bar",
+            "children": [
+                {
+                    "id": 500001,
+                    "text": "基础柱状图",
+                    "code": "BasicBar",
+                    "page": "/demo/js/eCharts/pages/bar/basic.html"
+                },
+                {
+                    "id": 500002,
+                    "text": "堆叠柱状图",
+                    "code": "StackBar",
+                    "page": "/demo/js/eCharts/pages/bar/stack.html"
+                }
+            ]
         }
     ]
 }
