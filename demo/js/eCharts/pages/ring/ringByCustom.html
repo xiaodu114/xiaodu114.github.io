@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Apache ECharts - 圆环图（自定义） - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,Apache ECharts,图表,圆环图,自定义" />
+        <meta name="description" content="Apache ECharts 之圆环图：自定义方式实现，随便画……" />
+
+        <script src="/p/_/js/main.js"></script>
+        <script type="importmap">
+            {
+                "imports": {
+                    "echarts": "https://registry.npmmirror.com/echarts/6.0.0/files/dist/echarts.esm.min.js"
+                }
+            }
+        </script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>Apache ECharts 之圆环图（自定义）</h1>
+            <h2>渐变圆环</h2>
+            <div id="chart" style="width: 100%; height: 521px"></div>
+            <h2>渐变圆环（百分比）</h2>
+            <div id="chart2" style="width: 100%; height: 521px"></div>
+        </div>
+        <script type="module">
+            import * as echarts from "echarts";
+
+            const CONFIG = {
+                ringRadius: "48%", // 外环半径，支持 '45%' 或 180
+                ringThickness: 0.35, // 厚度 0~1
+                ringStart: -Math.PI / 2 // 12 点方向
+            };
+
+            function makeConicGradient(size, colors) {
+                const canvas = document.createElement("canvas");
+                canvas.width = canvas.height = size;
+                const ctx = canvas.getContext("2d");
+                const grad = ctx.createConicGradient(CONFIG.ringStart, size / 2, size / 2);
+                colors.forEach(({ offset, color }) => grad.addColorStop(offset, color));
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, size, size);
+                return canvas.toDataURL();
+            }
+
+            function parseRadius(val, max) {
+                if (typeof val === "string" && val.endsWith("%")) {
+                    return (Number(val.slice(0, -1)) / 100) * max;
+                }
+                return Number(val); // 已经是数字
+            }
+
+            function renderRing(params, api) {
+                const width = api.getWidth();
+                const height = api.getHeight();
+                const cx = width / 2;
+                const cy = height / 2;
+
+                /* 关键：把百分比转成像素 */
+                const maxSide = Math.min(width, height);
+                const outer = parseRadius(CONFIG.ringRadius, maxSide);
+                const inner = outer * (1 - CONFIG.ringThickness);
+                const size = outer * 2;
+
+                /* 以下与你原来逻辑完全一致 */
+                if (!renderRing._pattern) {
+                    renderRing._pattern = makeConicGradient(size, [
+                        { offset: 0, color: "hsl(0,100%,50%)" },
+                        { offset: 0.5, color: "hsl(60,100%,50%)" },
+                        { offset: 1, color: "hsl(120,100%,50%)" }
+                    ]);
+                }
+
+                return {
+                    type: "image",
+                    style: {
+                        image: renderRing._pattern,
+                        x: cx - outer,
+                        y: cy - outer,
+                        width: size,
+                        height: size
+                    },
+                    clipPath: {
+                        type: "ring",
+                        shape: { cx, cy, r: outer, r0: inner }
+                    },
+                    silent: true
+                };
+            }
+
+            const option = {
+                // backgroundColor: "#000",
+                xAxis: { show: false, min: -1, max: 1 },
+                yAxis: { show: false, min: -1, max: 1 },
+                series: [{ type: "custom", renderItem: renderRing, data: [0] }],
+                animation: false
+            };
+
+            const chart = echarts.init(document.getElementById("chart"));
+            chart.setOption(option);
+
+            //#region  渐变圆环（百分比）
+
+            const dataValue = 0.75; // 数据值
+
+            function getPieRadius_1(api) {
+                const outer = parseRadius(CONFIG.ringRadius, Math.min(api.getWidth(), api.getHeight()));
+                const inner = outer * (1 - CONFIG.ringThickness);
+                // 转回百分比字符串，防止窗口缩放后错位
+                const max = Math.min(api.getWidth(), api.getHeight());
+                return [((inner / max) * 200 - 1).toFixed(2) + "%", ((outer / max) * 200 + 1).toFixed(2) + "%"];
+            }
+
+            function getPieRadius(api) {
+                const short = Math.min(api.getWidth(), api.getHeight());
+                const outerPx = parseRadius(CONFIG.ringRadius, short) + 2; // 你的 px 外径; +2 是为了防止边框重叠
+                const innerPx = outerPx * (1 - CONFIG.ringThickness) - 2; // 你的 px 内径; -2 是为了防止边框重叠
+
+                // 换算成 ECharts 百分比（以 short/2 为 100%）
+                const outerPct = (outerPx / (short / 2)) * 100;
+                const innerPct = (innerPx / (short / 2)) * 100;
+
+                return [innerPct.toFixed(2) + "%", outerPct.toFixed(2) + "%"];
+            }
+
+            const chart2 = echarts.init(document.getElementById("chart2"));
+
+            const option2 = {
+                xAxis: { show: false, min: -1, max: 1 },
+                yAxis: { show: false, min: -1, max: 1 },
+                graphic: {
+                    type: "text",
+                    left: "center",
+                    top: "center",
+                    style: {
+                        text: `${dataValue * 100}%`,
+                        textAlign: "center",
+                        textVerticalAlign: "middle",
+                        fontSize: 16,
+                        fontWeight: "600",
+                        color: "#33353B"
+                    }
+                },
+                series: [
+                    { type: "custom", renderItem: renderRing, data: [0] },
+                    {
+                        name: "扇形区域",
+                        type: "pie",
+                        center: ["50%", "50%"],
+                        radius: getPieRadius({ getWidth: () => chart.getWidth(), getHeight: () => chart.getHeight() }),
+                        clockwise: true,
+                        avoidLabelOverlap: false,
+                        label: { show: false },
+                        emphasis: { disabled: true },
+                        data: [{ value: 10, name: "", itemStyle: { color: "#fff" } }],
+                        startAngle: 90,
+                        endAngle: 90 - (1 - dataValue) * 360,
+                        animation: false,
+                        z2: 2
+                    }
+                ],
+                animation: false
+            };
+            chart2.setOption(option2);
+
+            //#endregion
+        </script>
+    </body>
+</html>

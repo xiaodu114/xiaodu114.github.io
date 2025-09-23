@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Apache ECharts - 圆环图（饼图演变） - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,Apache ECharts,图表,圆环图,饼图" />
+        <meta name="description" content="Apache ECharts 之圆环图：饼图的扩展，可以显示成环状。" />
+
+        <script src="/p/_/js/main.js"></script>
+        <script type="importmap">
+            {
+                "imports": {
+                    "echarts": "https://registry.npmmirror.com/echarts/6.0.0/files/dist/echarts.esm.min.js"
+                }
+            }
+        </script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>Apache ECharts 之圆环图（饼图演变）</h1>
+            <h2>单环</h2>
+            <div id="chart" style="width: 100%; height: 521px"></div>
+            <h2>多环</h2>
+            <div id="chart2" style="width: 100%; height: 521px"></div>
+            <h2>彩虹圆环</h2>
+            <div id="chart3" style="width: 100%; height: 521px"></div>
+            <h2>圆环（百分比）</h2>
+            <div id="chart4" style="width: 100%; height: 521px"></div>
+        </div>
+        <script type="module">
+            import * as echarts from "echarts";
+
+            const myChart = echarts.init(document.getElementById("chart"));
+            const option = {
+                grid: {
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                    bottom: 0
+                },
+                tooltip: { trigger: "item" },
+                legend: { top: 14, right: "4%" },
+                series: [
+                    {
+                        type: "pie",
+                        radius: ["40%", "70%"], // 内半径≠0 → 圆环
+                        data: [
+                            {
+                                value: 1024,
+                                name: "Github"
+                            },
+                            {
+                                value: 640,
+                                name: "博客园"
+                            },
+                            {
+                                value: 550,
+                                name: "CSDN"
+                            },
+                            {
+                                value: 200,
+                                name: "微信"
+                            },
+                            {
+                                value: 30,
+                                name: "其他"
+                            }
+                        ]
+                    }
+                ]
+            };
+            myChart.setOption(option);
+
+            //#region 多环
+
+            const myChart2 = echarts.init(document.getElementById("chart2"));
+            const option2 = {
+                grid: {
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                    bottom: 0
+                },
+                tooltip: { trigger: "item" },
+                legend: { bottom: 4, right: "4%" },
+                series: [
+                    {
+                        type: "pie",
+                        radius: ["40%", "60%"],
+                        data: [
+                            {
+                                value: 9996,
+                                name: "Github"
+                            },
+                            {
+                                value: 8840,
+                                name: "博客园"
+                            },
+                            {
+                                value: 5500,
+                                name: "CSDN"
+                            }
+                        ]
+                    },
+                    {
+                        type: "pie",
+                        radius: ["70%", "90%"], // 内半径≠0 → 圆环
+                        data: [
+                            {
+                                value: 1024,
+                                name: "Github"
+                            },
+                            {
+                                value: 640,
+                                name: "博客园"
+                            },
+                            {
+                                value: 550,
+                                name: "CSDN"
+                            },
+                            {
+                                value: 200,
+                                name: "微信"
+                            },
+                            {
+                                value: 30,
+                                name: "其他"
+                            }
+                        ]
+                    }
+                ]
+            };
+            myChart2.setOption(option2);
+
+            //#endregion
+
+            //#region 彩虹圆环
+
+            const myChart3 = echarts.init(document.getElementById("chart3"));
+            const chart3_n = 36;
+            const option3 = {
+                grid: {
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                    bottom: 0
+                },
+                series: [
+                    {
+                        type: "pie",
+                        radius: ["80%", "90%"],
+                        startAngle: 90,
+                        clockwise: false,
+                        data: Array.from({ length: chart3_n }, (_, i) => ({
+                            value: 10,
+                            name: i,
+                            itemStyle: {
+                                color: `hsl(${i * (360 / chart3_n)},90%,60%)`,
+                                borderRadius: 0,
+                                borderWidth: 5,
+                                borderColor: "#fff"
+                            }
+                        })),
+                        label: { show: false },
+                        emphasis: { scale: false }
+                    }
+                ]
+            };
+            myChart3.setOption(option3);
+
+            //#endregion
+
+            //#region 圆环（百分比）
+
+            const myChart4 = echarts.init(document.getElementById("chart4"));
+            const chart4_dataValue = 0.75;
+            const chart4_color = "#3cb878";
+            const option4 = {
+                tooltip: {
+                    show: false // 禁用tooltip
+                },
+                graphic: {
+                    type: "text",
+                    left: "center",
+                    top: "center",
+                    style: {
+                        text: `${chart4_dataValue * 100}%`,
+                        textAlign: "center",
+                        textVerticalAlign: "middle",
+                        fontSize: 16,
+                        fontWeight: "600",
+                        color: "#33353B"
+                    }
+                },
+                series: [
+                    {
+                        name: "访问来源",
+                        type: "pie",
+                        radius: ["76%", "96%"],
+                        clockwise: true,
+                        avoidLabelOverlap: false,
+                        label: {
+                            show: false
+                        },
+                        emphasis: {
+                            disabled: true
+                        },
+                        data: [
+                            {
+                                value: 1,
+                                name: "隐藏部分",
+                                itemStyle: {
+                                    color: chart4_color,
+                                    borderColor: chart4_color,
+                                    borderWidth: 0
+                                }
+                            }
+                        ],
+                        startAngle: 90,
+                        endAngle: 90 - (1 - chart4_dataValue) * 360
+                    }
+                ]
+            };
+            myChart4.setOption(option4);
+
+            //#endregion
+        </script>
+    </body>
+</html>
