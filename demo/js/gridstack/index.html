@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Gridstack.js 示例 - xiaodu114.github.io</title>
+
+        <meta name="author" content="xiaodu114" />
+        <meta name="keywords" content="xiaodu114,Vue.js,Vue,Vue 3,Gridstack.js,Drag and drop,仪表盘" />
+        <meta name="description" content="基于 Vue.js、Gridstack.js 的拖拉拽仪表盘示例项目" />
+
+        <style>
+            :root {
+                --main-color: #3cb878;
+            }
+
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                height: 100%;
+                width: 100%;
+                margin: 0;
+                overflow: hidden;
+            }
+
+            .app {
+                height: 100%;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+
+                > .header {
+                    flex-shrink: 0;
+                    position: relative;
+                    display: flex;
+                    align-items: baseline;
+                    padding-left: 25px;
+                    padding-right: 25px;
+
+                    &::after {
+                        position: absolute;
+                        bottom: 0;
+                        right: 0;
+                        left: 0;
+                        height: 1px;
+                        content: "";
+                        -webkit-transform: scaleY(0.5);
+                        transform: scaleY(0.5);
+                        background-color: var(--main-color);
+                    }
+                }
+
+                > .main {
+                    flex: 1;
+                    min-height: 0;
+                }
+            }
+        </style>
+        <style>
+            .runtime-box {
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+                display: flex;
+
+                > .left {
+                    width: 300px;
+                    flex-shrink: 0;
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    padding: 10px;
+
+                    &::after {
+                        position: absolute;
+                        top: 0;
+                        bottom: 0;
+                        right: 0;
+                        width: 1px;
+                        content: "";
+                        -webkit-transform: scaleX(0.5);
+                        transform: scaleX(0.5);
+                        background-color: var(--main-color);
+                    }
+
+                    > .input-box {
+                        flex: 1;
+                        overflow: hidden;
+
+                        textarea {
+                            height: 100%;
+                            width: 100%;
+                            resize: none;
+                        }
+                    }
+
+                    > .footer-btn-box {
+                        flex-shrink: 0;
+                        display: flex;
+                        justify-content: flex-end;
+                        gap: 1rem;
+                        padding-top: 10px;
+                    }
+                }
+
+                > .grid-layout-wrapper {
+                    flex: 1;
+                    overflow-y: auto;
+                    margin: 15px;
+                    background: #f1f5ff;
+                }
+            }
+        </style>
+        <style>
+            [v-cloak] {
+                display: none;
+            }
+        </style>
+        <link rel="stylesheet" href="./css/gridstackItemContentTransfer.css" />
+        <link rel="stylesheet" href="./css/gridstackLayout.css" />
+        <link rel="stylesheet" href="./css/gridstackLayoutBuilder.css" />
+        <link rel="stylesheet" href="https://unpkg.com/gridstack@12.3.3/dist/gridstack.min.css" />
+        <script type="importmap">
+            {
+                "imports": {
+                    "vue": "https://registry.npmmirror.com/vue/3.5.13/files/dist/vue.esm-browser.prod.js"
+                }
+            }
+        </script>
+        <script src="https://unpkg.com/gridstack@12.3.3/dist/gridstack-all.js"></script>
+    </head>
+    <body>
+        <div id="app" class="app" v-cloak>
+            <div class="header">
+                <h1>Gridstack.js 示例，版本为： 12.3.3</h1>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://gridstackjs.com/" target="_blank" rel="noopener noreferrer">Gridstack.js | Build interactive dashboards in minutes.</a>&nbsp;&nbsp;<a href="https://github.com/gridstack/gridstack.js/" target="_blank" rel="noopener noreferrer">gridstack/gridstack.js: Build interactive dashboards in minutes.</a></span>
+            </div>
+            <div class="main">
+                <grid-stack-layout-builder v-if="isDesignMode" :material-items="materialItems" :grid-stack-items="gridStackItems" :fn-options="{ getGridStackItemConfig }" @get-layout-info="getLayoutInfoHandler" @cancel="closeDesignModeHandler"></grid-stack-layout-builder>
+                <div class="runtime-box" v-else>
+                    <div class="left">
+                        <div class="input-box">
+                            <textarea v-model="inputLayoutJson"></textarea>
+                        </div>
+                        <div class="footer-btn-box">
+                            <button type="button" @click="updateLayoutHandler">更新数据</button>
+                            <button type="button" @click="openDesignModeHandler">设计模式</button>
+                        </div>
+                    </div>
+                    <div class="grid-layout-wrapper">
+                        <grid-stack-layout :items="gridStackItems" :key="refreshKey">
+                            <template #item-content="{ item, isDesignMode }">
+                                <grid-stack-item-content-transfer :item="item" />
+                            </template>
+                        </grid-stack-layout>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="module">
+            import { createApp, ref, computed, onMounted, nextTick, h, render } from "vue";
+
+            import gridStackItemContentTransfer from "./components/gridStackItemContentTransfer.js";
+            import gridStackLayout from "./components/gridStackLayout.js";
+            import gridStackLayoutBuilder from "./components/gridStackLayoutBuilder.js";
+
+            import { component001, component002, component003, component004, component005, component006 } from "./components/materials/index.js";
+
+            const materialType2Comp = {
+                "component-1": {
+                    comp: component001,
+                    extend: {
+                        isSizeChange2Refresh: false
+                    }
+                },
+                "component-2": {
+                    comp: component002
+                },
+                "component-3": {
+                    comp: component003
+                },
+                "component-4": {
+                    comp: component004
+                },
+                "component-5": {
+                    comp: component005
+                },
+                "component-6": {
+                    comp: component006
+                }
+            };
+
+            const vue3App = createApp({
+                setup(props, { attrs, slots, emit, expose }) {
+                    const isDesignMode = ref(false);
+                    const gridStackItems = ref([]);
+
+                    function getGridStackItemConfig(materialType, gsId, widget) {
+                        return {
+                            content: {
+                                comp: materialType2Comp[materialType].comp
+                            },
+                            extend: structuredClone(materialType2Comp[materialType].extend)
+                        };
+                    }
+
+                    function handleDbLayoutData(layoutData) {
+                        const items = [];
+                        if (Array.isArray(layoutData) && layoutData.length > 0) {
+                            layoutData.forEach((item) => {
+                                const { content, extend } = getGridStackItemConfig(item.type, item.id, item.widget);
+                                items.push({
+                                    id: item.id,
+                                    type: item.type,
+                                    widget: item.widget,
+                                    content,
+                                    extend
+                                });
+                            });
+                        }
+                        return items;
+                    }
+
+                    //#region 运行时
+
+                    const inputLayoutJson = ref("");
+                    const refreshKey = ref(new Date().valueOf());
+
+                    function openDesignModeHandler() {
+                        isDesignMode.value = true;
+                    }
+
+                    function updateLayoutHandler() {
+                        try {
+                            const layoutInfo = JSON.parse(inputLayoutJson.value);
+                            const items = handleDbLayoutData(layoutInfo);
+                            gridStackItems.value = items;
+                            refreshKey.value++;
+                        } catch (error) {
+                            alert("JSON格式错误");
+                        }
+                    }
+
+                    //#endregion
+
+                    //#region   设计时
+
+                    const materialItems = ref([
+                        {
+                            type: "component-1",
+                            text: "组件一（改变大小不销毁，默认为销毁重建）",
+                            widget: {
+                                w: 12,
+                                h: 2,
+                                x: 0,
+                                y: 0
+                            }
+                        },
+                        {
+                            type: "component-2",
+                            text: "组件二（只允许出现一次）",
+                            isOnlyOne: true,
+                            widget: {
+                                w: 6,
+                                h: 3,
+                                x: 0,
+                                y: 0
+                            }
+                        },
+                        {
+                            type: "component-3",
+                            text: "组件三",
+                            widget: {
+                                w: 6,
+                                h: 3,
+                                x: 0,
+                                y: 0
+                            }
+                        },
+                        {
+                            type: "component-4",
+                            text: "组件四",
+                            widget: {
+                                w: 4,
+                                h: 4,
+                                x: 0,
+                                y: 0
+                            }
+                        },
+                        {
+                            type: "component-5",
+                            text: "组件五",
+                            widget: {
+                                w: 4,
+                                h: 4,
+                                x: 0,
+                                y: 0
+                            }
+                        },
+                        {
+                            type: "component-6",
+                            text: "组件六",
+                            widget: {
+                                w: 4,
+                                h: 4,
+                                x: 0,
+                                y: 0
+                            }
+                        }
+                    ]);
+
+                    function getLayoutInfoHandler(layoutInfo) {
+                        const items = handleDbLayoutData(layoutInfo);
+                        inputLayoutJson.value = JSON.stringify(layoutInfo, null, 4);
+                        gridStackItems.value = items;
+                        isDesignMode.value = false;
+                    }
+
+                    function closeDesignModeHandler() {
+                        isDesignMode.value = false;
+                    }
+
+                    //#endregion
+
+                    return {
+                        isDesignMode,
+                        gridStackItems,
+                        getGridStackItemConfig,
+                        inputLayoutJson,
+                        refreshKey,
+                        updateLayoutHandler,
+                        openDesignModeHandler,
+                        materialItems,
+                        getLayoutInfoHandler,
+                        closeDesignModeHandler
+                    };
+                }
+            });
+
+            vue3App.component(gridStackItemContentTransfer.name, gridStackItemContentTransfer);
+            vue3App.component(gridStackLayout.name, gridStackLayout);
+            vue3App.component(gridStackLayoutBuilder.name, gridStackLayoutBuilder);
+
+            vue3App.mount("#app");
+        </script>
+    </body>
+</html>

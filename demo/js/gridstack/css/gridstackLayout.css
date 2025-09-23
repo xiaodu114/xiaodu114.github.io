@@ -1,0 +1,10 @@
+.grid-stack-layout-box {
+    width: 100%;
+    min-height: 100%;
+
+    > .grid-stack-item {
+        > .grid-stack-item-content {
+            background-color: #fff;
+        }
+    }
+}
