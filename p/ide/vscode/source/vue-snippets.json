@@ -18,23 +18,41 @@
         ],
         "description": "VueInit"
     },
-	"VueBase": {
+    "VueBase": {
         "prefix": "VueBase",
         "body": [
             "<template>",
             "    <div>",
             "    </div>",
             "</template>",
-			"\t",
-            "<script lang=\"ts\" setup>",
-			"\t",
+            "\t",
+            "<script setup>",
+            "\t",
             "</script>",
-			"\t",
+            "\t",
             "<style lang=\"scss\" scoped>",
-			"\t",
+            "\t",
             "</style>"
         ],
         "description": "VueBase"
+    },
+    "VueBaseTS": {
+        "prefix": "VueBaseTS",
+        "body": [
+            "<template>",
+            "    <div>",
+            "    </div>",
+            "</template>",
+            "\t",
+            "<script lang=\"ts\" setup>",
+            "\t",
+            "</script>",
+            "\t",
+            "<style lang=\"scss\" scoped>",
+            "\t",
+            "</style>"
+        ],
+        "description": "VueBaseTS"
     },
     "templateLang": {
         "prefix": "templateLang",
