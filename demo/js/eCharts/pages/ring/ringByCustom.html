@@ -22,8 +22,14 @@
             <h1>Apache ECharts 之圆环图（自定义）</h1>
             <h2>渐变圆环</h2>
             <div id="chart" style="width: 100%; height: 521px"></div>
-            <h2>渐变圆环（百分比）</h2>
+            <h2>渐变圆环（百分比）之一</h2>
+            <p><strong>说明：</strong>这里的实现方式为，先画一个360°的渐变圆环（起点为12点钟位置，逆时针转动），之后在前面的完整圆环上再画一个扇形圆环（起点为12点钟位置，顺时针转动），来达到百分比的效果</p>
             <div id="chart2" style="width: 100%; height: 521px"></div>
+            <h2>渐变圆环（百分比）之二</h2>
+            <p><strong>说明：</strong>这个实现比较厉害，直接画的</p>
+            <div id="chart3" style="width: 100%; height: 521px"></div>
+            <h2>渐变圆环（百分比）带刻度</h2>
+            <div id="chart4" style="width: 100%; height: 521px"></div>
         </div>
         <script type="module">
             import * as echarts from "echarts";
@@ -101,9 +107,9 @@
             const chart = echarts.init(document.getElementById("chart"));
             chart.setOption(option);
 
-            //#region  渐变圆环（百分比）
+            //#region  渐变圆环（百分比）之一
 
-            const dataValue = 0.75; // 数据值
+            const dataValue = 0.85; // 数据值
 
             function getPieRadius_1(api) {
                 const outer = parseRadius(CONFIG.ringRadius, Math.min(api.getWidth(), api.getHeight()));
@@ -164,6 +170,174 @@
                 animation: false
             };
             chart2.setOption(option2);
+
+            //#endregion
+
+            //#region  渐变圆环（百分比）之二
+
+            let isClockwise = false; // true 顺时针，false 逆时针
+
+            function renderRing_3(params, api) {
+                const progress = api.value(0);
+                if (progress <= 0) return null;
+
+                const width = api.getWidth();
+                const height = api.getHeight();
+                const cx = width / 2;
+                const cy = height / 2;
+                const maxSide = Math.min(width, height);
+                const outer = parseRadius(CONFIG.ringRadius, maxSide);
+                const inner = outer * (1 - CONFIG.ringThickness);
+                const size = outer * 2;
+
+                // 缓存位图
+                if (!renderRing_3._pattern) {
+                    renderRing_3._pattern = makeConicGradient(
+                        size,
+                        isClockwise
+                            ? [
+                                  { offset: 0, color: "hsl(120,100%,50%)" },
+                                  { offset: 0.5, color: "hsl(60,100%,50%)" },
+                                  { offset: 1, color: "hsl(0,100%,50%)" }
+                              ]
+                            : [
+                                  { offset: 1, color: "hsl(120,100%,50%)" },
+                                  { offset: 0.5, color: "hsl(60,100%,50%)" },
+                                  { offset: 0, color: "hsl(0,100%,50%)" }
+                              ]
+                    );
+                }
+
+                const startAngle = CONFIG.ringStart;
+                // 根据进度算出“无符号”终点角
+                let endAngle = startAngle + progress * 2 * Math.PI * (isClockwise ? 1 : -1);
+
+                let clipPath;
+                if (progress >= 1) {
+                    clipPath = { type: "ring", shape: { cx, cy, r: outer, r0: inner } };
+                } else {
+                    // 计算四点
+                    const x1 = cx + outer * Math.cos(startAngle);
+                    const y1 = cy + outer * Math.sin(startAngle);
+                    const x2 = cx + outer * Math.cos(endAngle);
+                    const y2 = cy + outer * Math.sin(endAngle);
+                    const x3 = cx + inner * Math.cos(endAngle);
+                    const y3 = cy + inner * Math.sin(endAngle);
+                    const x4 = cx + inner * Math.cos(startAngle);
+                    const y4 = cy + inner * Math.sin(startAngle);
+
+                    // 方向相关标志
+                    const delta = Math.abs(endAngle - startAngle);
+                    const largeArc = delta > Math.PI ? 1 : 0;
+                    const sweepFlag = isClockwise ? 1 : 0;
+
+                    const path = [`M ${x1} ${y1}`, `A ${outer} ${outer} 0 ${largeArc} ${sweepFlag} ${x2} ${y2}`, `L ${x3} ${y3}`, `A ${inner} ${inner} 0 ${largeArc} ${1 - sweepFlag} ${x4} ${y4}`, `Z`].join(" ");
+
+                    clipPath = { type: "path", shape: { d: path } };
+                }
+
+                return {
+                    type: "image",
+                    style: {
+                        image: renderRing_3._pattern,
+                        x: cx - outer,
+                        y: cy - outer,
+                        width: size,
+                        height: size
+                    },
+                    clipPath: clipPath,
+                    silent: true
+                };
+            }
+
+            const dataValue3 = 0.75; // 数据值
+
+            const option3 = {
+                graphic: {
+                    type: "text",
+                    left: "center",
+                    top: "center",
+                    style: {
+                        text: `${dataValue3 * 100}%`,
+                        textAlign: "center",
+                        textVerticalAlign: "middle",
+                        fontSize: 16,
+                        fontWeight: "600",
+                        color: "#33353B"
+                    }
+                },
+                xAxis: { show: false, min: -1, max: 1 },
+                yAxis: { show: false, min: -1, max: 1 },
+                series: [
+                    {
+                        type: "custom",
+                        renderItem: renderRing_3,
+                        data: [dataValue3]
+                    }
+                ],
+                animation: false
+            };
+
+            const chart3 = echarts.init(document.getElementById("chart3"));
+            chart3.setOption(option3);
+
+            //#endregion
+
+            //#region  渐变圆环（百分比）带刻度
+
+            const dataValue4 = 0.65; // 数据值
+
+            const option4 = {
+                graphic: {
+                    type: "text",
+                    left: "center",
+                    top: "center",
+                    style: {
+                        text: `${dataValue4 * 100}%`,
+                        textAlign: "center",
+                        textVerticalAlign: "middle",
+                        fontSize: 16,
+                        fontWeight: "600",
+                        color: "#33353B"
+                    }
+                },
+                xAxis: { show: false, min: -1, max: 1 },
+                yAxis: { show: false, min: -1, max: 1 },
+                series: [
+                    {
+                        type: "gauge",
+                        startAngle: 90,
+                        endAngle: -270,
+                        radius: "100%",
+                        splitLine: { show: false },
+                        axisLabel: { show: false },
+                        axisLine: {
+                            show: true,
+                            lineStyle: {
+                                width: 0
+                            }
+                        },
+                        axisTick: {
+                            show: true,
+                            splitNumber: 5, // 每大格中的小刻度数量
+                            length: 45, // 刻度线长度
+                            lineStyle: {
+                                width: 10, // 刻度线宽度
+                                color: "#e9ecf0"
+                            }
+                        }
+                    },
+                    {
+                        type: "custom",
+                        renderItem: renderRing_3,
+                        data: [dataValue4]
+                    }
+                ],
+                animation: false
+            };
+
+            const chart4 = echarts.init(document.getElementById("chart4"));
+            chart4.setOption(option4);
 
             //#endregion
         </script>
