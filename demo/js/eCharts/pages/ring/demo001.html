@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <title>可控制方向的彩色圆环</title>
+        <script src="https://registry.npmmirror.com/echarts/6.0.0/files/dist/echarts.min.js"></script>
+        <style>
+            #chart-container {
+                width: 600px;
+                height: 600px;
+                margin: 20px auto;
+                border: 1px solid #ddd;
+            }
+            .ctrl {
+                text-align: center;
+                margin-bottom: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="ctrl">
+            <label>
+                方向：
+                <select id="dir">
+                    <option value="1">顺时针</option>
+                    <option value="0">逆时针</option>
+                </select>
+            </label>
+            <label>
+                进度：
+                <input type="range" id="prog" min="0" max="100" value="75" />
+                <span id="val">75%</span>
+            </label>
+        </div>
+
+        <div id="chart-container"></div>
+
+        <script>
+            /******************************************************************
+             * 1. 配置 & 方向开关
+             ******************************************************************/
+            const CONFIG = {
+                ringRadius: "48%",
+                ringThickness: 0.35,
+                ringStart: -Math.PI / 2 // 12 点钟方向
+            };
+
+            let clockwise = true; // true 顺时针，false 逆时针
+
+            /******************************************************************
+             * 2. 生成圆锥渐变位图（仅一次）
+             ******************************************************************/
+            function makeConicGradient(size, colors) {
+                const canvas = document.createElement("canvas");
+                canvas.width = canvas.height = size;
+                const ctx = canvas.getContext("2d");
+                const grad = ctx.createConicGradient(CONFIG.ringStart, size / 2, size / 2);
+                colors.forEach(({ offset, color }) => grad.addColorStop(offset, color));
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, size, size);
+                return canvas.toDataURL();
+            }
+
+            /******************************************************************
+             * 3. 工具：把 % 或 px 换算成数字
+             ******************************************************************/
+            function parseRadius(val, max) {
+                if (typeof val === "string" && val.endsWith("%")) {
+                    return (Number(val.slice(0, -1)) / 100) * max;
+                }
+                return Number(val);
+            }
+
+            /******************************************************************
+             * 4. 核心：绘制圆环（方向受 clockwise 控制）
+             ******************************************************************/
+            function renderRing(params, api) {
+                const progress = api.value(0);
+                if (progress <= 0) return null;
+
+                const width = api.getWidth();
+                const height = api.getHeight();
+                const cx = width / 2;
+                const cy = height / 2;
+                const maxSide = Math.min(width, height);
+                const outer = parseRadius(CONFIG.ringRadius, maxSide);
+                const inner = outer * (1 - CONFIG.ringThickness);
+                const size = outer * 2;
+
+                // 缓存位图
+                if (!renderRing._pattern) {
+                    renderRing._pattern = makeConicGradient(
+                        size,
+                        clockwise
+                            ? [
+                                  { offset: 0, color: "hsl(120,100%,50%)" },
+                                  { offset: 0.5, color: "hsl(60,100%,50%)" },
+                                  { offset: 1, color: "hsl(0,100%,50%)" }
+                              ]
+                            : [
+                                  { offset: 1, color: "hsl(120,100%,50%)" },
+                                  { offset: 0.5, color: "hsl(60,100%,50%)" },
+                                  { offset: 0, color: "hsl(0,100%,50%)" }
+                              ]
+                    );
+                }
+
+                const startAngle = CONFIG.ringStart;
+                // 根据进度算出“无符号”终点角
+                let endAngle = startAngle + progress * 2 * Math.PI * (clockwise ? 1 : -1);
+
+                let clipPath;
+                if (progress >= 1) {
+                    clipPath = { type: "ring", shape: { cx, cy, r: outer, r0: inner } };
+                } else {
+                    // 计算四点
+                    const x1 = cx + outer * Math.cos(startAngle);
+                    const y1 = cy + outer * Math.sin(startAngle);
+                    const x2 = cx + outer * Math.cos(endAngle);
+                    const y2 = cy + outer * Math.sin(endAngle);
+                    const x3 = cx + inner * Math.cos(endAngle);
+                    const y3 = cy + inner * Math.sin(endAngle);
+                    const x4 = cx + inner * Math.cos(startAngle);
+                    const y4 = cy + inner * Math.sin(startAngle);
+
+                    // 方向相关标志
+                    const delta = Math.abs(endAngle - startAngle);
+                    const largeArc = delta > Math.PI ? 1 : 0;
+                    const sweepFlag = clockwise ? 1 : 0;
+
+                    const path = [`M ${x1} ${y1}`, `A ${outer} ${outer} 0 ${largeArc} ${sweepFlag} ${x2} ${y2}`, `L ${x3} ${y3}`, `A ${inner} ${inner} 0 ${largeArc} ${1 - sweepFlag} ${x4} ${y4}`, `Z`].join(" ");
+
+                    clipPath = { type: "path", shape: { d: path } };
+                }
+
+                return {
+                    type: "image",
+                    style: {
+                        image: renderRing._pattern,
+                        x: cx - outer,
+                        y: cy - outer,
+                        width: size,
+                        height: size
+                    },
+                    clipPath: clipPath,
+                    silent: true
+                };
+            }
+
+            /******************************************************************
+             * 5. 初始化 ECharts
+             ******************************************************************/
+            const myChart = echarts.init(document.getElementById("chart-container"));
+
+            function updateChart(p) {
+                myChart.setOption({
+                    xAxis: { show: false, min: -1, max: 1 },
+                    yAxis: { show: false, min: -1, max: 1 },
+                    series: [
+                        {
+                            type: "custom",
+                            renderItem: renderRing,
+                            data: [p]
+                        }
+                    ],
+                    animation: false
+                });
+            }
+
+            /******************************************************************
+             * 6. 控件联动
+             ******************************************************************/
+            const progInput = document.getElementById("prog");
+            const dirSelect = document.getElementById("dir");
+            const valSpan = document.getElementById("val");
+
+            function onChange() {
+                clockwise = dirSelect.value === "1";
+                const p = progInput.value / 100;
+                valSpan.textContent = progInput.value + "%";
+                renderRing._pattern = null;
+                updateChart(p);
+            }
+            dirSelect.addEventListener("change", onChange);
+            progInput.addEventListener("input", onChange);
+
+            // 首次渲染
+            onChange();
+        </script>
+    </body>
+</html>
