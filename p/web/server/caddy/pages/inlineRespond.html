@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Caddy - inline respond - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,Caddy,Web服务器,HTTP/2,HTTPS,自动证书,内联响应" />
+        <meta name="description" content="Caddy：我还支持内联响应（inline respond）哦" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>内联响应（inline respond）</h1>
+            <p></p>
+            <h2>Hello Word</h2>
+            <p>首先创建一个<line-code>Caddyfile</line-code>文件。是的，你没看错，没有后缀名。这里的目录是<line-code>D:\ProgramOther\web-servers\caddy-server\hello-word\Caddyfile</line-code>，内容如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="nginx">
+:9999 {
+	respond "大家好，我是 Caddy"
+}
+            </pre>
+            <p>上面弄好之后，你就可以在任意目录的<line-code>cmd</line-code>或者<line-code>powershell</line-code>输入下面的命令启动了</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+caddy run --config "D:\ProgramOther\web-servers\caddy-server\hello-word\Caddyfile"
+            </pre>
+            <h2>函数</h2>
+            <p>罗列一些可以在 respond / header / templates 等指令里直接调用的函数</p>
+            <h3>请求信息相关</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="nginx">
+:9999 {
+	#	http://xiaodu114:admin123@localhost:9999/dist/index.html?a=1&b=2#666
+	
+    templates
+    respond `
+服务器时间为： {{now.Format "2006-01-02 15:04:05"}}
+
+***	客户端信息	***
+	客户端原始地址（remote）：{remote}
+	客户端原始地址（.Req.RemoteAddr）：{{.Req.RemoteAddr}}
+	客户端真实IP（client_ip）：{client_ip}
+	客户端真实IP（remote_host）：{remote_host}
+	客户端真实IP（.ClientIP）：{{.ClientIP}}
+	客户端真实端口（remote_port）：{remote_port}
+
+
+***	请求信息	***
+	HTTP 协议版本：{http.request.proto}
+	HTTP 完整的URL地址-拼接的，不包含块标识符：{scheme}://{hostport}{uri}
+	HTTP 请求协议（scheme）：{scheme}
+	HTTP Basic Auth 说明：？？？不知道如何获取用户名和密码
+	HTTP 请求域名-带端口（hostport）：{hostport}
+	HTTP 请求域名-带端口（.Req.Host）：{{.Req.Host}}
+	HTTP 请求域名（host）：{host}
+	HTTP 请求端口（port）：{port}
+	HTTP 请求路径-带查询参数（uri）：{uri}
+	HTTP 请求路径（path）：{path}
+	HTTP 请求路径（.Req.URL.Path）：{{.Req.URL.Path}}
+	HTTP 查询参数（query）：{query}
+	HTTP 获取查询参数 a（query.a）：{query.a}
+	HTTP 获取查询参数 a（.Req.URL.Query.Get "a"）：{{.Req.URL.Query.Get "a"}}
+	
+	HTTP 请求方法（method）：{method}
+	HTTP 请求方法（.Req.Method）：{{.Req.Method}}
+	HTTP 请求头之User-Agent（header.User-Agent）：{header.User-Agent}
+	HTTP 请求头之User-Agent（.Req.Header.Get "User-Agent"）：{{.Req.Header.Get "User-Agent"}}
+	HTTP 请求头之cookie（header.cookie）：{header.cookie}
+	
+	HTTP cookie 获取 satoken 的值：{cookie.satoken}
+	`
+}
+            </pre>
+            <p>启动命令如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+caddy run --config "D:\ProgramOther\web-servers\caddy-server\request-info\Caddyfile"
+            </pre>
+             <p>启动成功之后，你可以使用后面的地址测试一下：<line-code>http://xiaodu114:admin123@localhost:9999/dist/index.html?a=1&b=2#666</line-code></p>
+            <h3>其他常用函数</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="nginx">
+:9999 {
+	templates
+	respond `
+***	常用函数	***
+    服务器时间为：{{now.Format "2006-01-02 15:04:05"}}
+    uuid：{uuid}
+    `
+}
+            </pre>
+            <p>启动命令如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+caddy run --config "D:\ProgramOther\web-servers\caddy-server\function\Caddyfile"
+            </pre>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,43 @@
+{
+    "pageTitle": "Caddy - xiaodu114.github.io",
+    "head": {
+        "title": "我和 Caddy 的故事",
+        "subtitle": "版本：v2.10.2",
+        "links": [
+            {
+                "href": "https://caddyserver.com/",
+                "text": "Caddy - The Ultimate Server with Automatic HTTPS"
+            },
+            {
+                "href": "https://github.com/caddyserver/caddy",
+                "text": "GitHub - caddyserver/caddy"
+            }
+        ]
+    },
+    "nodes": [
+        {
+            "id": 1,
+            "text": "介绍",
+            "code": "Introduction",
+            "page": "/p/web/server/caddy/pages/introduction.html"
+        },
+        {
+            "id": 2,
+            "text": "内联响应",
+            "code": "InlineRespond",
+            "page": "/p/web/server/caddy/pages/inlineRespond.html"
+        },
+        {
+            "id": 3,
+            "text": "Mock 服务器",
+            "code": "MockServer",
+            "page": "/p/web/server/caddy/pages/mock.html"
+        },
+        {
+            "id": 4,
+            "text": "反向代理/静态文件服务器",
+            "code": "ReverseProxy",
+            "page": "/p/web/server/caddy/pages/reverseProxy.html"
+        }
+    ]
+}
