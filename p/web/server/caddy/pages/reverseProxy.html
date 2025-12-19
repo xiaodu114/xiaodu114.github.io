@@ -14,10 +14,11 @@
         <div class="blog-page">
             <h1>反向代理/静态文件服务器</h1>
             <p>作为反向代理/静态文件服务器来使用，这应该是我们最常用的功能了。他可以自动 HTTPS，你就说香不香……</p>
+            <h2>单个项目（https）</h2>
             <p>配置文件内容如下：</p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="nginx">
 # 说明：x.x.x.x 为本机地址
-# 说明：y.y.y.y 为接口地址
+# 说明：y.y.y.y 为接口服务器地址
 
 # 0. 强制 HTTPS 跳转
 http://x.x.x.x {
@@ -69,6 +70,40 @@ https://x.x.x.x:8443 {
             <p>启动命令如下：</p>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 caddy run --config "D:\ProgramOther\web-servers\caddy-server\project-001\Caddyfile"
+            </pre>
+            <h2>多个项目（http）</h2>
+            <p>有一个场景：多个独立的前端项目，打包之后需要部署到同一个站点下，使用相同的IP地址和端口……部署方式如下：（例如）项目的根目录为<line-code>D:\project-001</line-code>，其中又包含多个子项目（也就是多个子文件夹），就像下面示例中的<line-code>admin</line-code>，还有 admin2 等其他的。完整的配置文件内容如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="nginx">
+# 说明：13140 为前端项目端口
+# 说明：y.y.y.y 为接口服务器地址
+
+# 1. HTTP 站点
+:13140 {
+	
+    # ① 先处理接口 —— 匹配到立即转发，不再往下走
+    handle /api/* {
+        reverse_proxy http://y.y.y.y:521 {
+            header_up Host {upstream_hostport}
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-For {remote_host}
+            header_up X-Forwarded-Proto {scheme}
+        }
+    }
+
+    # ② 剩下的才是静态文件 + History 模式
+    #   handle /admin* 可以匹配 /admin（* 匹配零个字符）和 /admin/（* 匹配 /）以及所有子路径。
+    handle /admin* {
+        root * D:\project-001
+        try_files {path} {path}/ /admin/index.html
+        file_server
+    }
+
+    # ③ 日志
+    log {
+        output stdout
+        format json
+    }
+}
             </pre>
         </div>
     </body>
