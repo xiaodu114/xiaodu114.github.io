@@ -34,6 +34,21 @@
                 <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 wsl --set-default-version 2
                 </pre>
+                <mark-block>
+                    <p>查看 WSL 状态：</p>
+                    <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+wsl --status
+                    </pre>
+                    <p>更新 WSL2 内核：</p>
+                    <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+wsl --update
+                    </pre>
+                    <p>如果上面的命令进度特别慢，你可以试试这个：<a href="https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi" target="_blank" rel="noopener noreferrer">wsl_update_x64.msi</a></p>
+                    <p>重启 WSL：</p>
+                    <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+wsl --shutdown
+                    </pre>
+                </mark-block>
                 <p>4、安装Ubuntu22.04</p>
                 <p>这里是在<line-code>Microsoft Store</line-code>中安装的。打开之后，搜索<line-code>Ubuntu</line-code>，之后选择“Ubuntu 22.04.2 LTS”即可</p>
                 <p>
