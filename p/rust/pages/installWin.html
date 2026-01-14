@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Rust - Windows 环境安装篇 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,Rust,编程语言,Windows,安装" />
+        <meta name="description" content="Rust 之 Windows 环境安装篇" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>Windows 环境安装</h1>
+            <p>这里还原一下我在<line-code>Windows</line-code>下安装<line-code>Rust</line-code>的过程，也是我们的开始……</p>
+            <h2>Visual C++ prerequisites</h2>
+            <p><line-code>Rust</line-code>还依赖这个，那咱就把他放到最前面吧！其实安装<line-code>rustup-init.exe</line-code>过程中，人家会检查的，并且帮助你下载、安装（帮咱们安装的是<line-code>MSVC v143 - VS 20?? C++ x64/x86 生成工具</line-code>）。既然如此，为什么咱还单独说呢？因为咱踩坑了:新建项目后，执行<line-code>cargo run</line-code>时会报错，如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+PS F:\Visual Studio Code\rust\demo1> cargo run
+   Compiling demo1 v0.1.0 (F:\Visual Studio Code\rust\demo1)
+error: linking with `link.exe` failed: exit code: 1181
+  |
+  = note: "link.exe" "/NOLOGO" "C:\\Users\\xiaodu\\AppData\\Local\\Temp\\rustcuYEfNy\\symbols.o" "&lt;7 object files omitted>" "&lt;sysroot>\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib/{libstd-*,libpanic_unwind-*,libcfg_if-*,libwindows_targets-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libunwind-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "kernel32.lib" "kernel32.lib" "kernel32.lib" "ntdll.lib" "userenv.lib" "ws2_32.lib" "dbghelp.lib" "/defaultlib:msvcrt" "/NXCOMPAT" "/OUT:F:\\Visual Studio Code\\rust\\demo1\\target\\debug\\deps\\demo1.exe" "/OPT:REF,NOICF" "/DEBUG" "/PDBALTPATH:%_PDB%" "/NATVIS:&lt;sysroot>\\lib\\rustlib\\etc\\intrinsic.natvis" "/NATVIS:&lt;sysroot>\\lib\\rustlib\\etc\\liballoc.natvis" "/NATVIS:&lt;sysroot>\\lib\\rustlib\\etc\\libcore.natvis" "/NATVIS:&lt;sysroot>\\lib\\rustlib\\etc\\libstd.natvis"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: LINK : fatal error LNK1181: cannot open input file 'kernel32.lib'␍
+
+error: could not compile `demo1` (bin "demo1") due to 1 previous error
+PS F:\Visual Studio Code\rust\demo1>
+            </pre>
+            <p>后面咱就老老实实的将<line-code>Windows SDK</line-code>给装上了。至于你选择<line-code>Windows 10/11 SDK</line-code>的哪个版本，应该都可以。因为我的电脑就是<line-code>win 10</line-code>，所以选择的是<line-code>Windows 10 SDK</line-code>。安装成功之后，再去<line-code>cargo run</line-code>，就没有任何问题了。</p>
+            <p>最后总结一下，使用<line-code>Visual Studio Installer</line-code>安装时，至少选择两项：<line-code>MSVC v143 - VS 20?? C++ x64/x86 生成工具</line-code>；<line-code>Windows 10 SDK</line-code>或者<line-code>Windows 11 SDK</line-code></p>
+            <h2>下载</h2>
+            <p>官方下载地址：<a href="https://rust-lang.org/zh-CN/tools/install/" target="_blank">安装 Rust - Rust 程序设计语言</a>。这里下载的是<line-code>x64</line-code>版本的<line-code>rustup-init.exe</line-code></p>
+            <h2>安装</h2>
+            <p>下载<line-code>rustup-init.exe</line-code>之后，如果你像对待别的<line-code>exe</line-code>一样对他，那你很可能像我一样，也掉进坑里了……不是说不行，而是太慢了！！！点击<line-code>rustup-init.exe</line-code>进入的不是友好的UI安装界面，而是黑洞洞的命令行终端界面：他会检查<line-code>C++</line-code>环境（如果没有安装，会下载<line-code>Visual Studio Installer</line-code>，用它来安装<line-code>C++</line-code>），之后便会依次下载<line-code>cargo</line-code>、<line-code>clippy</line-code>、<line-code>rust-docs</line-code>、<line-code>rust-std</line-code>、<line-code>rustc</line-code>等，你的会不会慢，不清楚。但是我这边是真慢啊！于是，我就醒悟了，镜像，我的镜像</p>
+            <p>这里使用的是清华源，对，就是清华源。在<line-code>rustup-init.exe</line-code>所在的文件夹进入<line-code>CMD</line-code>或者<line-code>PowerShell</line-code>，按照下面的来，你会有飘的感觉……</p>
+            <h3>CMD</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+set RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup
+set RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup
+rustup-init.exe
+            </pre>
+            <h3>PowerShell</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+$env:RUSTUP_DIST_SERVER="https://mirrors.tuna.tsinghua.edu.cn/rustup"
+$env:RUSTUP_UPDATE_ROOT="https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup"
+.\rustup-init.exe
+            </pre>
+            <h2>检查是否安装成功</h2>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#
+rustc -V
+#
+cargo -V
+            </pre>
+            <h2>配置 crates.io 镜像</h2>
+            <p>安装完<line-code>Rust</line-code>后，建议立刻配置<line-code>crates.io</line-code>的镜像。要不然你先<line-code>cargo build</line-code>试试，看看下载第三方库（crate）是不是很慢……</p>
+            <h3>全局配置</h3>
+            <p>在你的用户目录下<line-code>C:\Users\你的用户名\</line-code>检查是否存在一个名为<line-code>.cargo</line-code>的文件夹，如果不存在创建即可；在该文件夹内新建一个文件<line-code>config</line-code>（注意没有后缀名，是 config 不是 config.txt）或者<line-code>config.toml</line-code>，文件内容有两种方式可选：</p>
+            <h4>方式一</h4>
+            <p>Git 镜像，传统方式，兼容性最好</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="toml">
+[source.crates-io]
+replace-with = 'tuna'
+
+[source.tuna]
+registry = "https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
+            </pre>
+            <h4>方式二</h4>
+            <p>使用稀疏索引（Sparse Index，速度更快，Rust 1.68+ 默认支持）</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="toml">
+[source.crates-io]
+replace-with = 'tuna-sparse'
+
+[registries.tuna-sparse]
+index = "sparse+https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"
+            </pre>
+            <mark-block>
+                <ol>
+                    <li>如果你是新安装的 Rust（版本 ≥ 1.68），直接用方式二，体验会好很多。</li>
+                    <li>如果你的 Rust 版本很老（&lt; 1.68），或者遇到问题，可以回退到方式一。</li>
+                    <li>两种方式可以随时切换，只需修改 ~/.cargo/config 文件即可，无需重新安装 Rust。</li>
+                </ol>
+            </mark-block>
+            <h3>项目级别配置</h3>
+            <p>在你项目的根目录（即<line-code>Cargo.toml</line-code>文件所在的目录）下，建立一个<line-code>.cargo</line-code>文件夹，然后在里面新建 <line-code>config</line-code>或者<line-code>config.toml</line-code>文件。内容写法跟全局的一模一样。</p>
+        </div>
+    </body>
+</html>

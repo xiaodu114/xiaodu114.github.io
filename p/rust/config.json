@@ -1,0 +1,41 @@
+{
+    "pageTitle": "Rust - xiaodu114.github.io",
+    "head": {
+        "title": "我和 Rust 的故事",
+        "subtitle": "版本：rustc 1.92.0 (ded5c06cf 2025-12-08)",
+        "links": [
+            {
+                "href": "https://rust-lang.org/zh-CN/",
+                "text": "Rust 程序设计语言"
+            },
+            {
+                "href": "https://rust-lang.org/",
+                "text": "Rust Programming Language"
+            },
+            {
+                "href": "https://doc.rust-lang.org/book/",
+                "text": "The Rust Programming Language - The Rust Programming Language"
+            }
+        ]
+    },
+    "nodes": [
+        {
+            "id": 1,
+            "text": "介绍",
+            "code": "Introduction",
+            "page": "/p/rust/pages/introduction.html"
+        },
+        {
+            "id": 2,
+            "text": "安装 -> Windows 环境",
+            "code": "InstallInWindows",
+            "page": "/p/rust/pages/installWin.html"
+        },
+        {
+            "id": 3,
+            "text": "Hello Word",
+            "code": "HelloWord",
+            "page": "/p/rust/pages/helloWord.html"
+        }
+    ]
+}
