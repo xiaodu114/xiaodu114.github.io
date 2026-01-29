@@ -28,7 +28,7 @@
             "children": [
                 {
                     "id": 200001,
-                    "text": "基础饼图",
+                    "text": "基础饼图（带打印）",
                     "code": "BasicPie",
                     "page": "/demo/js/eCharts/pages/pie/basicPie.html"
                 }
@@ -93,3 +93,4 @@
         }
     ]
 }
+
