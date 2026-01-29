@@ -1,13 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hans-CN">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Apache ECharts - 饼图 - xiaodu114.github.io</title>
-        <meta name="keywords" content="xiaodu114,Apache ECharts,图表,饼图" />
-        <meta name="description" content="Apache ECharts 之饼图" />
+        <meta name="keywords" content="xiaodu114,Apache ECharts,图表,饼图,保存为图片,print-js,打印" />
+        <meta name="description" content="Apache ECharts 之饼图：保存为图片，使用print-js打印" />
+
+        <link rel="stylesheet" href="https://registry.npmmirror.com/print-js/1.6.0/files/dist/print.css" />
 
         <script src="/p/_/js/main.js"></script>
+        <script src="https://registry.npmmirror.com/print-js/1.6.0/files/dist/print.js"></script>
         <script type="importmap">
             {
                 "imports": {
@@ -20,6 +23,7 @@
     <body>
         <div class="blog-page">
             <h1>Apache ECharts 之饼图</h1>
+            <p>打印功能使用的是<line-code>print-js</line-code>：<a href="https://printjs.crabbly.com/" target="_blank" rel="noopener noreferrer">Print.js - Javascript library for HTML elements, PDF and image files printing.</a></p>
             <div id="pie" style="width: 100%; height: 521px"></div>
         </div>
         <script type="module">
@@ -37,9 +41,46 @@
                     formatter: "{a} <br/>{b} : {c} ({d}%)"
                 },
                 legend: {
-                    orient: "vertical",
-                    top: "top",
-                    left: "right"
+                    // orient: "vertical",
+                    top: "bottom",
+                    left: "left"
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        // 自定义一个打印按钮
+                        myPrintButton: {
+                            show: true,
+                            title: "打印",
+                            //  icon 属性，它只接收 字符串，且该字符串必须以 path:// 或 image:// 开头
+                            //      1、'path://' 格式（SVG 路径字符串）：<path d="这里就是你要的内容" /> 中的 d 属性值
+                            //      2、'image://' + 图片的 URL (http/https)
+                            //      3、'image://' + Base64 字符串
+                            icon: "path://M28 9h-3V3H7v6H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h3v6h18v-6h3a2 2 0 0 0 2-2V11a2 2 0 0 0-2-2M9 5h14v4H9Zm14 22H9V17h14Zm5-6h-3v-6H7v6H4V11h24Z",
+                            onclick: function () {
+                                const imgUrl = myChart.getDataURL({
+                                    type: "png",
+                                    pixelRatio: 2, // 提高清晰度
+                                    backgroundColor: "#fff" // 确保背景是白色的（否则打印可能是黑底）
+                                });
+                                // printJS(imgUrl, "image");
+                                printJS({
+                                    printable: imgUrl,
+                                    type: "image",
+                                    documentTitle: " ",
+                                    style: "@page { size: auto; margin: 0mm }"
+                                });
+                            }
+                        },
+                        // 也可以保留原有的保存图片功能作为备选
+                        saveAsImage: {
+                            show: true,
+                            name: "我的博客文章占比", // 下载文件名
+                            title: "保存为图片",
+                            icon: `path://M26 24v4H6v-4H4v4a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2v-4Zm0-10l-1.41-1.41L17 20.17V2h-2v18.17l-7.59-7.58L6 14l10 10z`,
+                            pixelRatio: 2 // 提高下载图片清晰度
+                        }
+                    }
                 },
                 series: [
                     {
