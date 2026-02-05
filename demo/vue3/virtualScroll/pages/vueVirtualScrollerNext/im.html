@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>vue-virtual-scroller@next ： 即时消息</title>
+        <meta name="keywords" content="xiaodu114,Vue,Vue 3,vue-virtual-scroller@next,虚拟滚动,即时消息" />
+        <meta name="description" content="vue-virtual-scroller@next ： 即时消息示例" />
+
+        <script src="/p/_/js/main.js"></script>
+
+        <link rel="stylesheet" href="https://unpkg.com/vue-resize@2.0.0-alpha.1/dist/vue-resize.css" />
+        <link rel="stylesheet" href="https://unpkg.com/vue-virtual-scroller@2.0.0-beta.8/dist/vue-virtual-scroller.css" />
+
+        <style>
+            [v-cloak] {
+                display: none;
+            }
+
+            #app {
+                height: 100vh;
+                padding-bottom: 1.5rem;
+
+                .im-wrapper {
+                    height: 100%;
+                    background: white;
+                    border-radius: 16px;
+                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                    overflow: hidden;
+                    position: relative;
+
+                    .scroller {
+                        height: 100%;
+                        padding: 20px 10px;
+                    }
+                }
+            }
+
+            :root {
+                --primary-color: #007bff;
+                --bg-color: #f5f7fa;
+                --chat-bg: #ffffff;
+                --bubble-me: #95ec69;
+                --bubble-other: #ffffff;
+                --text-color: #333;
+                --secondary-text: #999;
+                --border-color: #eee;
+                --text-time: #aeaeb2;
+            }
+
+            .chat-window-box {
+                width: 100%;
+                height: 100%;
+                background: var(--chat-bg);
+                display: flex;
+                flex-direction: column;
+                position: relative;
+
+                /* 头部样式 */
+                header {
+                    height: 60px;
+                    border-bottom: 1px solid var(--border-color);
+                    display: flex;
+                    align-items: center;
+                    padding: 0 16px;
+                    background: #fff;
+                    z-index: 10;
+                    flex-shrink: 0;
+
+                    h1 {
+                        font-size: 18px;
+                        font-weight: 600;
+                    }
+
+                    .status-badge {
+                        font-size: 12px;
+                        color: #666;
+                        margin-left: 10px;
+                        background: #f0f0f0;
+                        padding: 2px 6px;
+                        border-radius: 4px;
+                    }
+                }
+
+                /* 消息列表区域 */
+                .chat-container {
+                    flex: 1;
+                    overflow: hidden;
+                    background-color: #ededed; /* 微信风格的背景色 */
+                    position: relative;
+
+                    /* 必须给 scroller 设置明确的高度或 flex: 1 */
+                    .scroller {
+                        height: 100%;
+                        padding: 20px 10px;
+                    }
+                }
+
+                /* 时间戳：居中，灰色，小字体 */
+                .message-time {
+                    width: 100%;
+                    text-align: center;
+                    font-size: 0.75rem;
+                    color: var(--text-time);
+                    margin-bottom: 12px;
+                    opacity: 0.8;
+                    letter-spacing: 0.5px;
+                }
+
+                /* 消息气泡样式 */
+                .message-item {
+                    display: flex;
+                    margin-bottom: 16px;
+                    align-items: flex-start;
+
+                    .avatar {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 6px;
+                        background-color: #ddd;
+                        flex-shrink: 0;
+                        overflow: hidden;
+
+                        img {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                        }
+                    }
+
+                    .bubble-wrapper {
+                        max-width: 70%;
+                        margin: 0 12px;
+                        position: relative;
+                    }
+
+                    .bubble {
+                        padding: 10px 14px;
+                        border-radius: 8px;
+                        font-size: 15px;
+                        line-height: 1.5;
+                        word-wrap: break-word;
+                        position: relative;
+                        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+                    }
+
+                    /* 状态与元数据 */
+                    .meta-info {
+                        font-size: 11px;
+                        color: #ccc;
+                        margin-top: 4px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-end;
+                        gap: 4px;
+
+                        .status-icon {
+                            font-size: 14px;
+                        }
+                        .status-sending {
+                            color: #999;
+                        }
+                        .status-error {
+                            color: #ff4d4f;
+                        }
+                        .status-read {
+                            color: var(--primary-color);
+                        }
+                    }
+
+                    &.me {
+                        flex-direction: row-reverse;
+
+                        .bubble {
+                            background-color: var(--bubble-me);
+                        }
+                    }
+
+                    &.other {
+                        .bubble {
+                            background-color: var(--bubble-other);
+                            border: 1px solid #e5e5e5;
+                        }
+
+                        .meta-info {
+                            justify-content: flex-start;
+                        }
+                    }
+                }
+
+                /* 消息类型特定样式 */
+                .msg-image img {
+                    max-width: 100%;
+                    border-radius: 4px;
+                    display: block;
+                    cursor: pointer;
+                }
+
+                .msg-file {
+                    display: flex;
+                    align-items: center;
+                    min-width: 200px;
+
+                    .file-icon {
+                        font-size: 32px;
+                        margin-right: 10px;
+                        color: var(--primary-color);
+                    }
+
+                    .file-info {
+                        display: flex;
+                        flex-direction: column;
+                        overflow: hidden;
+
+                        .file-name {
+                            font-weight: 500;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+
+                        .file-size {
+                            font-size: 12px;
+                            color: #888;
+                            margin-top: 4px;
+                        }
+                    }
+                }
+
+                /* 输入区域 */
+                footer {
+                    min-height: 60px;
+                    background: #f7f7f7;
+                    border-top: 1px solid #ddd;
+                    padding: 10px 16px;
+                    display: flex;
+                    align-items: flex-end;
+                    gap: 10px;
+                    flex-shrink: 0;
+
+                    textarea {
+                        flex: 1;
+                        border: none;
+                        background: #fff;
+                        border-radius: 6px;
+                        padding: 10px;
+                        font-size: 15px;
+                        resize: none;
+                        max-height: 120px;
+                        outline: none;
+                        font-family: inherit;
+                    }
+
+                    button.send-btn {
+                        background: var(--primary-color);
+                        color: white;
+                        border: none;
+                        border-radius: 6px;
+                        padding: 8px 16px;
+                        font-size: 14px;
+                        cursor: pointer;
+                        height: 40px;
+                        margin-bottom: 1px;
+                        transition: background 0.2s;
+
+                        &:hover {
+                            background: #0069d9;
+                        }
+
+                        &:disabled {
+                            background: #ccc;
+                            cursor: not-allowed;
+                        }
+                    }
+                }
+            }
+        </style>
+
+        <script type="importmap">
+            {
+                "imports": {
+                    "a2bei4-utils": "https://unpkg.com/a2bei4-utils@1.0.3/dist/a2bei4.utils.esm.js",
+                    "vue": "https://registry.npmmirror.com/vue/3.5.27/files/dist/vue.esm-browser.prod.js",
+                    "mitt": "https://unpkg.com/mitt@3.0.1/dist/mitt.mjs",
+                    "vue-observe-visibility": "https://unpkg.com/vue-observe-visibility@2.0.0-alpha.1/dist/vue-observe-visibility.esm.js",
+                    "vue-resize": "https://unpkg.com/vue-resize@2.0.0-alpha.1/dist/vue-resize.esm.js",
+                    "vue-virtual-scroller": "https://unpkg.com/vue-virtual-scroller@2.0.0-beta.8/dist/vue-virtual-scroller.esm.js"
+                }
+            }
+        </script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>即时消息</h1>
+             <p><line-code>vue-virtual-scroller@next</line-code>即时消息示例。</p>
+            <p>看咱模拟的怎么样，赶紧体验一下吧！</p>
+            <div id="app" v-cloak>
+                <div class="im-wrapper">
+                    <div class="chat-window-box">
+                        <header>
+                            <h1>Web Chat Demo</h1>
+                            <span class="status-badge">{{ connectionStatus }}</span>
+                        </header>
+
+                        <main class="chat-container">
+                            <dynamic-scroller class="scroller" :items="messages" :min-item-size="60" :buffer="200" @scroll="handleScroll" ref="scroller">
+                                <template #before>
+                                    <div v-if="isLoadingMore" class="loading-top">正在加载更多历史记录...</div>
+                                </template>
+
+                                <template #default="{ item, index, active }">
+                                    <dynamic-scroller-item :item="item" :active="active" :size-dependencies="[item.content, item.timestampForShow, item.type]" :data-index="index">
+                                        <div class="mesage-item-wrapper">
+                                            <div class="message-time" v-if="shouldShowTime(index)">{{ item.timestampForShow }}</div>
+                                            <div class="message-item" :class="item.isMe ? 'me' : 'other'">
+                                                <!-- 头像 -->
+                                                <div class="avatar">
+                                                    <img :src="item.avatar" alt="avatar" />
+                                                </div>
+
+                                                <!-- 气泡区域 -->
+                                                <div class="bubble-wrapper">
+                                                    <div class="bubble">
+                                                        <!-- 文本消息 -->
+                                                        <div v-if="item.type === 'text'" class="msg-text">{{ item.content }}</div>
+
+                                                        <!-- 图片消息 -->
+                                                        <div v-else-if="item.type === 'image'" class="msg-image">
+                                                            <img :src="item.content" alt="image" loading="lazy" />
+                                                        </div>
+
+                                                        <!-- 视频消息 (模拟) -->
+                                                        <div v-else-if="item.type === 'video'" class="msg-image">
+                                                            <div style="position: relative; display: inline-block">
+                                                                <img :src="item.thumbnail || item.content" style="opacity: 0.8" />
+                                                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-size: 30px">▶</div>
+                                                                <div style="position: absolute; bottom: 5px; right: 5px; color: #fff; font-size: 12px; background: rgba(0, 0, 0, 0.5); padding: 2px 4px; border-radius: 4px">00:30</div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- 文件消息 -->
+                                                        <div v-else-if="item.type === 'file'" class="msg-file">
+                                                            <span class="file-icon">📄</span>
+                                                            <div class="file-info">
+                                                                <span class="file-name">{{ item.fileName }}</span>
+                                                                <span class="file-size">{{ item.fileSize }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- 状态栏 -->
+                                                    <div class="meta-info">
+                                                        <!-- 仅显示 '我' 的消息状态 -->
+                                                        <span v-if="item.isMe" class="status-icon" :class="getStatusClass(item.status)">
+                                                            <span v-if="item.status === 'sending'">⏳</span>
+                                                            <span v-else-if="item.status === 'failed'">⚠️</span>
+                                                            <span v-else-if="item.status === 'read'">✓✓</span>
+                                                            <span v-else>✓</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div style="line-height: 0">&nbsp;</div>
+                                        </div>
+                                    </dynamic-scroller-item>
+                                </template>
+                            </dynamic-scroller>
+                        </main>
+
+                        <footer>
+                            <textarea v-model="inputText" @keydown.enter.prevent="sendMessage" placeholder="输入消息..." rows="1"></textarea>
+                            <button class="send-btn" @click="sendMessage" :disabled="!inputText.trim()">发送</button>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="module">
+            import { getGUID, randomIntInRange, randomHanOrEn, randomDateInRange, formatTimeForLocale } from "a2bei4-utils";
+            import { createApp, ref, reactive, computed, nextTick, watch, onMounted } from "vue";
+            import { RecycleScroller, DynamicScroller, DynamicScrollerItem } from "vue-virtual-scroller";
+
+            const PAGE_SIZE = 25; // 每页数量
+
+            const randomAvatar = (seed) => `https://picsum.photos/seed/${seed}/100/100`;
+            const randomName = () => ["Alice", "Bob", "Charlie", "David", "Eva"][Math.floor(Math.random() * 5)];
+
+            function createMockMessage(isHistory = false, maxTimestamp = new Date().getTime()) {
+                const isMe = Math.random() > 0.5; // 随机是我还是对方
+                const message_types = ["text", "text", "text", "image", "video", "file"];
+                const message_type = message_types[randomIntInRange(0, message_types.length - 1)];
+                const seedId = randomIntInRange(1, 999999);
+                const file_types = ["doc", "docx", "xls", "xlsx", "ppt", "pptx", "pdf", "txt", "zip", "rar"];
+                const file_type = file_types[randomIntInRange(0, file_types.length - 1)];
+
+                let content = "";
+                let fileName = "";
+                let fileSize = "";
+                let thumbnail = "";
+
+                switch (message_type) {
+                    case "text": {
+                        const randomText = randomHanOrEn(randomIntInRange(10, 500));
+                        content = isHistory ? `这是一条历史消息：${randomText}` : `${randomText}`;
+                        break;
+                    }
+                    case "image": {
+                        content = `https://picsum.photos/seed/${seedId}/300/200`;
+                        break;
+                    }
+                    case "video": {
+                        content = `https://picsum.photos/seed/${seedId}/300/200`; // 模拟视频封面
+                        thumbnail = content;
+                        break;
+                    }
+                    case "file": {
+                        fileName = `${randomHanOrEn(randomIntInRange(2, 50))}.${file_type}`;
+                        fileSize = (Math.random() * 10).toFixed(1) + " MB";
+                        break;
+                    }
+                }
+
+                // 模拟状态
+                let status = "succeeded";
+                if (isMe && !isHistory) {
+                    const rand = Math.random();
+                    if (rand > 0.9) status = "failed";
+                    else if (rand > 0.8) status = "sending";
+                    else if (rand > 0.6) status = "read";
+                    else status = "unread"; // 实际上对方未读通常不显示，这里仅作演示
+                }
+
+                maxTimestamp = maxTimestamp - 1000 * 60;
+                const timestamp = randomDateInRange(new Date(maxTimestamp - 1000 * 60 * randomIntInRange(1, 60 * 24)), new Date(maxTimestamp)).getTime();
+
+                return {
+                    id: getGUID(),
+                    isMe: isMe,
+                    avatar: isMe ? randomAvatar("my_avatar") : randomAvatar(`user_${seedId}`),
+                    nickname: isMe ? "我" : randomName(),
+                    type: message_type,
+                    content: content,
+                    fileName: fileName,
+                    fileSize: fileSize,
+                    thumbnail: thumbnail,
+                    timestamp,
+                    timestampForShow: formatTimeForLocale(timestamp),
+                    status: status
+                };
+            }
+
+            function createPageMockMessages(pageSize, isHistory = false, maxTimestamp = new Date().getTime()) {
+                const messages = [];
+                for (let i = 0; i < pageSize; i++) {
+                    messages.push(createMockMessage(isHistory, maxTimestamp));
+                }
+                messages.sort((a, b) => a.timestamp - b.timestamp);
+                return messages;
+            }
+
+            const vue3App = createApp({
+                setup() {
+                    const scroller = ref(null);
+                    const messages = ref([]);
+                    const inputText = ref("");
+                    const isLoadingMore = ref(false);
+                    const hasMore = ref(true);
+                    const connectionStatus = ref("在线");
+
+                    // 模拟当前用户ID
+                    const CURRENT_USER_ID = "me";
+
+                    // 判断是否应该显示时间
+                    function shouldShowTime(index) {
+                        if (index === 0) return true; // 第一条消息总是显示时间
+
+                        const currentMsg = messages.value[index];
+                        const prevMsg = messages.value[index - 1];
+
+                        if (!prevMsg) return true;
+
+                        const currentDate = new Date(currentMsg.timestamp);
+                        const prevDate = new Date(prevMsg.timestamp);
+
+                        // 如果日期不同，显示时间
+                        if (currentDate.toDateString() !== prevDate.toDateString()) {
+                            return true;
+                        }
+
+                        // 如果时间差超过30分钟，显示时间
+                        const timeDiff = Math.abs(currentMsg.timestamp - prevMsg.timestamp);
+                        const minutesDiff = Math.floor(timeDiff / (1000 * 60));
+
+                        return minutesDiff >= 30;
+                    }
+
+                    const getStatusClass = (status) => {
+                        return `status-${status}`;
+                    };
+
+                    // 滚动到底部
+                    const scrollToBottom = () => {
+                        nextTick(() => {
+                            scroller.value?.scrollToBottom();
+                        });
+                    };
+
+                    async function fetchHistoryMessages() {
+                        // 模拟API调用延迟
+                        await new Promise((resolve) => setTimeout(resolve, 100));
+                        return createPageMockMessages(PAGE_SIZE, true, messages.value[0].timestamp);
+                    }
+
+                    // 需求4：滚动到顶部时，加载更多聊天记录，并保持位置
+                    async function loadMore() {
+                        if (isLoadingMore.value || !hasMore.value) return;
+
+                        isLoadingMore.value = true;
+
+                        try {
+                            const newMessages = await fetchHistoryMessages();
+                            if (newMessages.length < PAGE_SIZE) {
+                                hasMore.value = false;
+                            } else {
+                                // 将新消息添加到开头
+                                messages.value = [...newMessages, ...messages.value];
+
+                                // 等待DOM更新后调整滚动位置
+                                await nextTick();
+
+                                requestAnimationFrame(() => {
+                                    scroller.value?.scrollToItem(newMessages.length - 1, { align: "start", behavior: "auto" });
+                                });
+                            }
+                        } catch (error) {
+                        } finally {
+                            isLoadingMore.value = false;
+                        }
+                    }
+
+                    // 处理滚动事件
+                    function handleScroll(event) {
+                        const { scrollTop } = event.target;
+                        if (scrollTop <= 10 && !isLoadingMore.value && hasMore.value) {
+                            loadMore();
+                        }
+                    }
+
+                    function scrollToTopHandler() {
+                        loadMore();
+                    }
+
+                    async function initData() {
+                        messages.value = createPageMockMessages(PAGE_SIZE, false);
+                    }
+
+                    // 需求3：初次进入页面时，滚动条自动滚动到底部
+                    onMounted(async () => {
+                        await initData();
+                        setTimeout(() => {
+                            scrollToBottom();
+                        }, 100);
+                    });
+
+                    // 发送消息
+                    const sendMessage = async () => {
+                        const text = inputText.value.trim();
+                        if (!text) return;
+
+                        const newMsg = {
+                            id: Date.now(),
+                            isMe: true,
+                            avatar: randomAvatar("my_avatar"),
+                            nickname: "我",
+                            type: "text",
+                            content: text,
+                            timestamp: Date.now(),
+                            status: "sending"
+                        };
+                        newMsg.timestampForShow = formatTimeForLocale(newMsg.timestamp);
+
+                        messages.value.push(newMsg);
+                        inputText.value = "";
+
+                        scrollToBottom();
+
+                        // 模拟发送过程
+                        setTimeout(() => {
+                            const msgIndex = messages.value.findIndex((m) => m.id === newMsg.id);
+                            if (msgIndex !== -1) {
+                                // 模拟随机失败
+                                const isSuccess = Math.random() > 0.2;
+                                messages.value[msgIndex].status = isSuccess ? "succeeded" : "failed";
+                            }
+                        }, 1000);
+                    };
+
+                    return {
+                        scroller,
+                        messages,
+                        inputText,
+                        isLoadingMore,
+                        loadMore,
+                        sendMessage,
+                        shouldShowTime,
+                        getStatusClass,
+                        handleScroll,
+                        scrollToTopHandler,
+                        connectionStatus
+                    };
+                }
+            });
+
+            vue3App.component(RecycleScroller.name, RecycleScroller);
+            vue3App.component(DynamicScroller.name, DynamicScroller);
+            vue3App.component(DynamicScrollerItem.name, DynamicScrollerItem);
+            vue3App.mount("#app");
+        </script>
+    </body>
+</html>

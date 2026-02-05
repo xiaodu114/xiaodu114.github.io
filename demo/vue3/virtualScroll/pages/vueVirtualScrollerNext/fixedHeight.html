@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>vue-virtual-scroller@next ： 固定行高</title>
+        <meta name="keywords" content="xiaodu114,Vue,Vue 3,vue-virtual-scroller@next,虚拟滚动,固定行高" />
+        <meta name="description" content="vue-virtual-scroller@next ： 固定行高示例" />
+
+        <script src="/p/_/js/main.js"></script>
+
+        <link rel="stylesheet" href="https://unpkg.com/vue-resize@2.0.0-alpha.1/dist/vue-resize.css" />
+        <link rel="stylesheet" href="https://unpkg.com/vue-virtual-scroller@2.0.0-beta.8/dist/vue-virtual-scroller.css" />
+
+        <style>
+            [v-cloak] {
+                display: none;
+            }
+
+            #app {
+                height: 80vh;
+                .virtual-scroller-wrapper {
+                    height: 100%;
+                    background: white;
+                    border-radius: 16px;
+                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                    overflow: hidden;
+                    position: relative;
+
+                    .scroller {
+                        height: 100%;
+                        padding: 10px;
+                    }
+                }
+            }
+
+            .item-box {
+                display: flex;
+                gap: 1rem;
+                padding: 16px 20px;
+                margin: 0 8px 8px;
+                background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                cursor: pointer;
+                position: relative;
+                overflow: hidden;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    bottom: 0;
+                    width: 4px;
+                    background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+                    transform: scaleY(0);
+                    transition: transform 0.3s ease;
+                }
+
+                .avatar-box {
+                    flex-shrink: 0;
+                    width: 48px;
+                    height: 48px;
+                    position: relative;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        border-radius: 50%;
+                        border: 3px solid white;
+                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+                        transition: transform 0.3s ease;
+                    }
+                }
+
+                .mate-info-box {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    overflow: hidden;
+
+                    .name-text {
+                        font-size: 16px;
+                        font-weight: 600;
+                        color: #333;
+                        margin-bottom: 4px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .desc-text {
+                        font-size: 13px;
+                        color: #888;
+                        line-height: 1.5;
+                        display: -webkit-box;
+                        -webkit-box-orient: vertical;
+                        -webkit-line-clamp: 2;
+                        overflow: hidden;
+                    }
+                }
+
+                &:hover {
+                    transform: translateX(4px);
+                    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.25);
+
+                    .avatar-box {
+                        img {
+                            transform: scale(1.1);
+                        }
+                    }
+                }
+
+                &:hover::before {
+                    transform: scaleY(1);
+                }
+            }
+        </style>
+
+        <script type="importmap">
+            {
+                "imports": {
+                    "a2bei4-utils": "https://unpkg.com/a2bei4-utils@1.0.3/dist/a2bei4.utils.esm.js",
+                    "vue": "https://registry.npmmirror.com/vue/3.5.27/files/dist/vue.esm-browser.prod.js",
+                    "mitt": "https://unpkg.com/mitt@3.0.1/dist/mitt.mjs",
+                    "vue-observe-visibility": "https://unpkg.com/vue-observe-visibility@2.0.0-alpha.1/dist/vue-observe-visibility.esm.js",
+                    "vue-resize": "https://unpkg.com/vue-resize@2.0.0-alpha.1/dist/vue-resize.esm.js",
+                    "vue-virtual-scroller": "https://unpkg.com/vue-virtual-scroller@2.0.0-beta.8/dist/vue-virtual-scroller.esm.js"
+                }
+            }
+        </script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>固定行高</h1>
+            <p><line-code>vue-virtual-scroller@next</line-code>固定行高示例。</p>
+            <p>滚动到底部会加载更多哦！赶紧试试吧！</p>
+            <div id="app" v-cloak>
+                <div class="virtual-scroller-wrapper">
+                    <recycle-scroller class="scroller" ref="scroller" :items="items" :item-size="88" key-field="id" v-slot="{ item }" @scroll-start="scrollToTopHandler" @scroll-end="scrollToBottomHandler">
+                        <div class="item-box">
+                            <div class="avatar-box">
+                                <img :src="item.avatar" alt="" srcset="" />
+                            </div>
+                            <div class="mate-info-box">
+                                <div class="name-text">{{ item.name }}</div>
+                                <div class="desc-text">{{ item.desc }}</div>
+                            </div>
+                        </div>
+                    </recycle-scroller>
+                </div>
+            </div>
+        </div>
+        <script type="module">
+            import { getGUID, randomIntInRange, randomHanOrEn } from "a2bei4-utils";
+            import { createApp, ref, reactive, computed, nextTick, watch, onMounted } from "vue";
+            import { RecycleScroller, DynamicScroller, DynamicScrollerItem } from "vue-virtual-scroller";
+
+            const PAGE_SIZE = 24; // 每页数量
+
+            function createMockData(count) {
+                const items = [];
+                for (let i = 0; i < count; i++) {
+                    items.push({
+                        id: getGUID(),
+                        name: randomHanOrEn(randomIntInRange(2, 8)),
+                        desc: randomHanOrEn(randomIntInRange(10, 50)),
+                        avatar: `https://picsum.photos/40/40?random=${randomIntInRange(1, 1000)}`
+                    });
+                }
+                return items;
+            }
+
+            const vue3App = createApp({
+                setup() {
+                    const scroller = ref(null);
+                    const items = ref([]);
+                    const isLoadingMore = ref(false);
+                    const hasMore = ref(true);
+
+                    async function loadDataAPI() {
+                        if (isLoadingMore.value || !hasMore.value) {
+                            return;
+                        }
+                        try {
+                            isLoadingMore.value = true;
+                            await new Promise((resolve) => setTimeout(resolve, 300));
+                            return createMockData(PAGE_SIZE);
+                        } catch (error) {
+                            throw error;
+                        } finally {
+                            isLoadingMore.value = false;
+                        }
+                    }
+
+                    async function refreshData() {
+                        items.value = [];
+                        hasMore.value = true;
+                        const curItems = await loadDataAPI();
+                        if (Array.isArray(curItems)) {
+                            items.value = curItems;
+                        }
+                    }
+
+                    async function loadMore() {
+                        const curItems = await loadDataAPI();
+                        if (Array.isArray(curItems)) {
+                            items.value = [...items.value, ...curItems];
+                        }
+                        if (curItems.length < PAGE_SIZE) {
+                            hasMore.value = false;
+                        }
+                    }
+
+                    function scrollToTopHandler() {
+                        // refreshData();
+                    }
+
+                    function scrollToBottomHandler() {
+                        loadMore();
+                    }
+
+                    onMounted(() => {
+                        refreshData();
+                    });
+
+                    return {
+                        scroller,
+                        items,
+                        isLoadingMore,
+                        loadMore,
+                        scrollToTopHandler,
+                        scrollToBottomHandler
+                    };
+                }
+            });
+
+            vue3App.component(RecycleScroller.name, RecycleScroller);
+            vue3App.component(DynamicScroller.name, DynamicScroller);
+            vue3App.component(DynamicScrollerItem.name, DynamicScrollerItem);
+            vue3App.mount("#app");
+        </script>
+    </body>
+</html>

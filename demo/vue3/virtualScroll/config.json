@@ -1,0 +1,46 @@
+{
+    "pageTitle": "Vue 3 虚拟滚动 - xiaodu114.github.io",
+    "head": {
+        "title": "Vue 3 + 虚拟滚动 专栏",
+        "subtitle": "",
+        "links": [
+            {
+                "href": "https://github.com/Akryum/vue-virtual-scroller/tree/master/packages/vue-virtual-scroller",
+                "text": "vue-virtual-scroller@next"
+            }
+        ]
+    },
+    "nodes": [
+        {
+            "id": 1,
+            "text": "介绍",
+            "code": "Introduction",
+            "page": "/demo/vue3/virtualScroll/pages/introduction.html"
+        },
+        {
+            "id": 200000,
+            "text": "vue-virtual-scroller@next",
+            "code": "vue-virtual-scroller@next",
+            "children": [
+                {
+                    "id": 200001,
+                    "text": "固定行高",
+                    "code": "FixedHeight",
+                    "page": "/demo/vue3/virtualScroll/pages/vueVirtualScrollerNext/fixedHeight.html"
+                },
+                {
+                    "id": 200002,
+                    "text": "动态行高",
+                    "code": "DynamicHeight",
+                    "page": "/demo/vue3/virtualScroll/pages/vueVirtualScrollerNext/dynamicHeight.html"
+                },
+                {
+                    "id": 200003,
+                    "text": "即时消息",
+                    "code": "IM",
+                    "page": "/demo/vue3/virtualScroll/pages/vueVirtualScrollerNext/im.html"
+                }
+            ]
+        }
+    ]
+}
