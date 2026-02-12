@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@tanstack/vue-virtual + @tanstack/vue-query：即时消息</title>
+        <meta name="keywords" content="xiaodu114,Vue,Vue 3,@tanstack/vue-virtual,@tanstack/vue-query,虚拟滚动,即时消息" />
+        <meta name="description" content="@tanstack/vue-virtual + @tanstack/vue-query：即时消息示例" />
+
+        <script src="/p/_/js/main.js"></script>
+
+        <style>
+            [v-cloak] {
+                display: none;
+            }
+
+            :root {
+                --primary-color: #007bff;
+                --bg-color: #f5f7fa;
+                --chat-bg: #ffffff;
+                --bubble-me: #95ec69;
+                --bubble-other: #ffffff;
+                --text-color: #333;
+                --secondary-text: #999;
+                --border-color: #eee;
+                --text-time: #aeaeb2;
+            }
+
+            #app {
+                height: 100vh;
+                padding-bottom: 1.5rem;
+
+                .im-chat-window-wrapper {
+                    height: 100%;
+                    background: white;
+                    border-radius: 16px;
+                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                    overflow: hidden;
+                    position: relative;
+                }
+            }
+
+            .chat-window-box {
+                width: 100%;
+                height: 100%;
+                background: var(--chat-bg);
+                display: flex;
+                flex-direction: column;
+                position: relative;
+            }
+
+            header {
+                height: 60px;
+                border-bottom: 1px solid var(--border-color);
+                display: flex;
+                align-items: center;
+                padding: 0 16px;
+                background: #fff;
+                z-index: 10;
+                flex-shrink: 0;
+
+                h1 {
+                    font-size: 18px;
+                    font-weight: 600;
+                    margin: 0;
+                }
+
+                .status-badge {
+                    font-size: 12px;
+                    color: #666;
+                    margin-left: 10px;
+                    background: #f0f0f0;
+                    padding: 2px 6px;
+                    border-radius: 4px;
+                }
+            }
+
+            .chat-container {
+                flex: 1;
+                display: flex;
+                position: relative;
+                overflow: hidden;
+                background-color: #ededed;
+            }
+
+            .scroller {
+                width: 100%;
+                height: 100%;
+                overflow-y: auto;
+                padding: 20px 10px;
+            }
+
+            .list-container {
+                position: relative;
+                width: 100%;
+            }
+
+            .virtual-scroll-item {
+                position: absolute;
+                left: 0;
+                width: 100%;
+                will-change: transform;
+            }
+
+            .message-time {
+                width: 100%;
+                text-align: center;
+                font-size: 0.75rem;
+                color: var(--text-time);
+                margin-bottom: 12px;
+                opacity: 0.8;
+                letter-spacing: 0.5px;
+            }
+
+            .message-item {
+                display: flex;
+                align-items: flex-start;
+                margin-bottom: 12px;
+
+                .avatar {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 6px;
+                    background-color: #ddd;
+                    flex-shrink: 0;
+                    overflow: hidden;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }
+
+                .bubble-wrapper {
+                    max-width: 70%;
+                    margin: 0 12px;
+                    position: relative;
+                }
+
+                .bubble {
+                    padding: 10px 14px;
+                    border-radius: 8px;
+                    font-size: 15px;
+                    line-height: 1.5;
+                    word-wrap: break-word;
+                    position: relative;
+                    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+                }
+
+                .meta-info {
+                    font-size: 11px;
+                    color: #ccc;
+                    margin-top: 4px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    gap: 4px;
+
+                    .status-icon {
+                        font-size: 14px;
+                    }
+                    .status-sending {
+                        color: #999;
+                    }
+                    .status-error {
+                        color: #ff4d4f;
+                    }
+                    .status-read {
+                        color: var(--primary-color);
+                    }
+                }
+
+                &.me {
+                    flex-direction: row-reverse;
+
+                    .bubble {
+                        background-color: var(--bubble-me);
+                    }
+                }
+
+                &.other {
+                    .bubble {
+                        background-color: var(--bubble-other);
+                        border: 1px solid #e5e5e5;
+                    }
+
+                    .meta-info {
+                        justify-content: flex-start;
+                    }
+                }
+            }
+
+            .msg-image img {
+                max-width: 100%;
+                border-radius: 4px;
+                display: block;
+                cursor: pointer;
+            }
+
+            .msg-file {
+                display: flex;
+                align-items: center;
+                min-width: 200px;
+
+                .file-icon {
+                    font-size: 32px;
+                    margin-right: 10px;
+                    color: var(--primary-color);
+                }
+
+                .file-info {
+                    display: flex;
+                    flex-direction: column;
+                    overflow: hidden;
+
+                    .file-name {
+                        font-weight: 500;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .file-size {
+                        font-size: 12px;
+                        color: #888;
+                        margin-top: 4px;
+                    }
+                }
+            }
+
+            footer {
+                min-height: 60px;
+                background: #f7f7f7;
+                border-top: 1px solid #ddd;
+                padding: 10px 16px;
+                display: flex;
+                align-items: flex-end;
+                gap: 10px;
+                flex-shrink: 0;
+
+                textarea {
+                    flex: 1;
+                    border: none;
+                    background: #fff;
+                    border-radius: 6px;
+                    padding: 10px;
+                    font-size: 15px;
+                    resize: none;
+                    max-height: 120px;
+                    outline: none;
+                    font-family: inherit;
+                }
+
+                button.send-btn {
+                    background: var(--primary-color);
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    padding: 8px 16px;
+                    font-size: 14px;
+                    cursor: pointer;
+                    height: 40px;
+                    margin-bottom: 1px;
+                    transition: background 0.2s;
+
+                    &:hover {
+                        background: #0069d9;
+                    }
+
+                    &:disabled {
+                        background: #ccc;
+                        cursor: not-allowed;
+                    }
+                }
+            }
+
+            .loading-more {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+                color: #888;
+                font-size: 14px;
+                min-height: 60px;
+            }
+
+            .spinner {
+                width: 20px;
+                height: 20px;
+                border: 2px solid #f3f3f3;
+                border-top: 2px solid #667eea;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+                margin-right: 8px;
+            }
+
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+        </style>
+
+        <script type="importmap">
+            {
+                "imports": {
+                    "a2bei4-utils": "https://unpkg.com/a2bei4-utils@1.0.3/dist/a2bei4.utils.esm.js",
+                    "vue": "https://registry.npmmirror.com/vue/3.5.27/files/dist/vue.esm-browser.prod.js",
+                    "birpc": "https://unpkg.com/birpc@4.0.0/dist/index.mjs",
+                    "hookable": "https://unpkg.com/hookable@6.0.1/dist/index.mjs",
+                    "perfect-debounce": "https://unpkg.com/perfect-debounce@2.1.0/dist/index.mjs",
+                    "vue-demi": "https://unpkg.com/vue-demi@0.14.10/lib/index.mjs",
+                    "@vue/devtools-shared": "https://unpkg.com/@vue/devtools-shared@8.0.6/dist/index.js",
+                    "@vue/devtools-kit": "https://unpkg.com/@vue/devtools-kit@8.0.6/dist/index.js",
+                    "@vue/devtools-api": "https://unpkg.com/@vue/devtools-api@8.0.6/dist/index.js",
+                    "@tanstack/match-sorter-utils": "https://unpkg.com/@tanstack/match-sorter-utils@8.19.4/build/lib/index.mjs",
+                    "@tanstack/query-core": "https://unpkg.com/@tanstack/query-core@5.90.20/build/modern/index.js",
+                    "@tanstack/vue-query": "https://unpkg.com/@tanstack/vue-query@5.92.9/build/modern/index.js",
+                    "@tanstack/virtual-core": "https://unpkg.com/@tanstack/virtual-core@3.13.18/dist/esm/index.js",
+                    "@tanstack/vue-virtual": "https://unpkg.com/@tanstack/vue-virtual@3.13.18/dist/esm/index.js"
+                }
+            }
+        </script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>即时消息</h1>
+            <p>基于 <line-code>@tanstack/vue-virtual</line-code> 和 <line-code>@tanstack/vue-query</line-code> 实现的动态行高即时消息示例。</p>
+            <p>向上滚动加载更多历史消息，并保持视图位置。</p>
+            <div id="app" v-cloak>
+                <div class="im-chat-window-wrapper">
+                    <div class="chat-window-box">
+                        <header>
+                            <h1>{{otherInfo.name}}</h1>
+                            <span class="status-badge">{{ otherInfo.status }}</span>
+                        </header>
+
+                        <main class="chat-container">
+                            <du-im-message-list ref="messageListRef"></du-im-message-list>
+                        </main>
+
+                        <footer>
+                            <textarea v-model="inputText" @keydown.enter.prevent="sendMessage" placeholder="输入消息..." rows="1"></textarea>
+                            <button class="send-btn" @click="sendMessage" :disabled="!inputText.trim()">发送</button>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <template id="du-im-message-list-template">
+            <div ref="rootRef" class="scroller">
+                <div v-if="status === 'pending'" class="loading-more">
+                    <div class="spinner"></div>
+                    加载中...
+                </div>
+                <div v-else-if="status === 'error'" class="loading-more" style="color: #e74c3c">加载失败: {{ error?.message }}</div>
+                <template v-else>
+                    <div
+                        class="list-container"
+                        :style="{
+                                            height: `${totalSize}px`,
+                                        }">
+                        <div
+                            class="virtual-scroll-item"
+                            v-for="virtualRow in virtualItems"
+                            :key="virtualRow.key"
+                            :data-index="virtualRow.index"
+                            :ref="virtualizer?.measureElement"
+                            :style="{
+                                                height: `${virtualRow.size}px`,
+                                                transform: `translateY(${virtualRow.start}px)`,
+                                                ...(virtualRow.index === 0 && isLoadingData ? { opacity: 0.5 } : {})
+                                            }">
+                            <!-- 顶部加载状态 -->
+                            <template v-if="virtualRow.index === 0 && isLoadingData">
+                                <div class="loading-more" style="width: 100%; justify-content: center">
+                                    <div class="spinner"></div>
+                                    加载历史消息...
+                                </div>
+                            </template>
+
+                            <!-- 消息列表 -->
+                            <template v-else-if="virtualRow.index < allMessages.length">
+                                <div class="message-item-wrapper">
+                                    <div class="message-time" v-if="shouldShowTime(virtualRow.index)">{{ allMessages[virtualRow.index].timestampForShow }}</div>
+                                    <div class="message-item" :class="allMessages[virtualRow.index].isMe ? 'me' : 'other'">
+                                        <div class="avatar">
+                                            <img :src="allMessages[virtualRow.index].avatar" alt="avatar" />
+                                        </div>
+
+                                        <div class="bubble-wrapper">
+                                            <div class="bubble">
+                                                <div v-if="allMessages[virtualRow.index].type === 'text'" class="msg-text">{{ allMessages[virtualRow.index].content }}</div>
+                                                <div v-else-if="allMessages[virtualRow.index].type === 'image'" class="msg-image">
+                                                    <img :src="allMessages[virtualRow.index].content" alt="image" loading="lazy" />
+                                                </div>
+                                                <div v-else-if="allMessages[virtualRow.index].type === 'video'" class="msg-image">
+                                                    <div style="position: relative; display: inline-block">
+                                                        <img :src="allMessages[virtualRow.index].thumbnail || allMessages[virtualRow.index].content" style="opacity: 0.8" />
+                                                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-size: 30px">▶</div>
+                                                        <div style="position: absolute; bottom: 5px; right: 5px; color: #fff; font-size: 12px; background: rgba(0, 0, 0, 0.5); padding: 2px 4px; border-radius: 4px">00:30</div>
+                                                    </div>
+                                                </div>
+                                                <div v-else-if="allMessages[virtualRow.index].type === 'file'" class="msg-file">
+                                                    <span class="file-icon">📄</span>
+                                                    <div class="file-info">
+                                                        <span class="file-name">{{ allMessages[virtualRow.index].fileName }}</span>
+                                                        <span class="file-size">{{ allMessages[virtualRow.index].fileSize }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="meta-info">
+                                                <span v-if="allMessages[virtualRow.index].isMe" class="status-icon">
+                                                    <span>{{allMessages[virtualRow.index].status}}</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="line-height: 0">&nbsp;</div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <script>
+            //  https://unpkg.com/@tanstack/vue-query@5.92.9/src/vueQueryPlugin.ts  代码中有如下的代码，浏览器中没有 process
+            // if (process.env.NODE_ENV === 'development') {
+            //     if (options.enableDevtoolsV6Plugin) {
+            //     setupDevtools(app, client)
+            //     }
+            // }
+
+            // 临时解决
+            window.process = {
+                env: {
+                    NODE_ENV: "development"
+                }
+            };
+        </script>
+
+        <script type="module">
+            import { formatTimeForLocale } from "a2bei4-utils";
+            import { createApp, ref, computed, watchEffect, nextTick, onMounted, watch } from "vue";
+            import { VueQueryPlugin } from "@tanstack/vue-query";
+            import { myAvatar, otherAvatar, otherName } from "../api/im.js";
+            import MessageList from "./components/messageList.js";
+
+            const vue3App = createApp({
+                setup() {
+                    const mockDataDelay = ref(300);
+
+                    const otherInfo = ref({
+                        avatar: otherAvatar,
+                        name: otherName,
+                        status: "在线"
+                    });
+
+                    const messageListRef = ref(null);
+
+                    const inputText = ref("");
+                    function sendMessage() {
+                        const text = inputText.value.trim();
+                        if (!text) return;
+
+                        const newMsg = {
+                            id: Date.now(),
+                            isMe: true,
+                            avatar: myAvatar,
+                            nickname: "我",
+                            type: "text",
+                            content: text,
+                            timestamp: Date.now(),
+                            timestampForShow: formatTimeForLocale(Date.now()),
+                            status: "未读"
+                        };
+
+                        messageListRef.value?.addNewMessage(newMsg);
+
+                        inputText.value = "";
+                    }
+
+                    return {
+                        mockDataDelay,
+                        otherInfo,
+                        messageListRef,
+                        inputText,
+                        sendMessage
+                    };
+                }
+            });
+
+            vue3App.use(VueQueryPlugin, {
+                queryClientConfig: {
+                    defaultOptions: {
+                        queries: {
+                            staleTime: Infinity
+                        }
+                    }
+                }
+            });
+
+            vue3App.component(MessageList.name, MessageList);
+
+            vue3App.mount("#app");
+        </script>
+    </body>
+</html>
