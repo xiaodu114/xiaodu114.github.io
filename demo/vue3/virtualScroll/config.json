@@ -39,6 +39,12 @@
                     "text": "即时消息",
                     "code": "IM",
                     "page": "/demo/vue3/virtualScroll/pages/vueVirtualScrollerNext/im.html"
+                },
+                {
+                    "id": 200004,
+                    "text": "即时消息2",
+                    "code": "IM2",
+                    "page": "/demo/vue3/virtualScroll/pages/vueVirtualScrollerNext/im2.html"
                 }
             ]
         },
