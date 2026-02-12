@@ -1,7 +1,7 @@
 {
-    "pageTitle": "Vue 3 虚拟滚动 - xiaodu114.github.io",
+    "pageTitle": "虚拟滚动 - xiaodu114.github.io",
     "head": {
-        "title": "Vue 3 + 虚拟滚动 专栏",
+        "title": "虚拟滚动 Vue 3 专栏",
         "subtitle": "",
         "links": [
             {
@@ -39,6 +39,31 @@
                     "text": "即时消息",
                     "code": "IM",
                     "page": "/demo/vue3/virtualScroll/pages/vueVirtualScrollerNext/im.html"
+                }
+            ]
+        },
+        {
+            "id": 300000,
+            "text": "@tanstack/vue-virtual",
+            "code": "@tanstack/vue-virtual",
+            "children": [
+                {
+                    "id": 300001,
+                    "text": "固定行高",
+                    "code": "FixedHeight",
+                    "page": "/demo/vue3/virtualScroll/pages/tanstackVueVirtual/fixedHeight.html"
+                },
+                {
+                    "id": 300002,
+                    "text": "动态行高",
+                    "code": "DynamicHeight",
+                    "page": "/demo/vue3/virtualScroll/pages/tanstackVueVirtual/dynamicHeight.html"
+                },
+                {
+                    "id": 300003,
+                    "text": "即时消息",
+                    "code": "IM",
+                    "page": "/demo/vue3/virtualScroll/pages/tanstackVueVirtual/im.html"
                 }
             ]
         }
