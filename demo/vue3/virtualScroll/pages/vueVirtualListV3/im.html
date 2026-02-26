@@ -343,10 +343,7 @@
 
         <template id="du-im-message-list-template">
             <virtual-list class="virtual-scroll-root-element" ref="scrollerRef" :data-key="'id'" :data-sources="messages" :estimate-size="60" :item-class="'virtual-scroll-item-box'" @totop="scrollToTopHandler">
-                <template #header>
-                    <h1>666</h1>
-                </template>
-                <template #="{source:item}">
+                <template #="{source:item, index}">
                     <div class="mesage-item-wrapper">
                         <div class="message-time" v-if="shouldShowTime(index)">{{ item.timestampForShow }}</div>
                         <div class="message-item" :class="item.isMe ? 'me' : 'other'">
