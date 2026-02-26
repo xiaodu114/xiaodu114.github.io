@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>vue-virtual-list-v3 ： 即时消息 示例二</title>
+        <meta name="keywords" content="xiaodu114,Vue,Vue 3,vue-virtual-list-v3,虚拟滚动,即时消息" />
+        <meta name="description" content="vue-virtual-list-v3 ： 即时消息示例" />
+
+        <script src="/p/_/js/main.js"></script>
+
+        <style>
+            [v-cloak] {
+                display: none;
+            }
+
+            #app {
+                height: 100vh;
+                padding-bottom: 1.5rem;
+
+                .im-wrapper {
+                    height: 100%;
+                    background: white;
+                    border-radius: 16px;
+                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                    overflow: hidden;
+                    position: relative;
+
+                    .virtual-scroll-root-element {
+                        height: 100%;
+                        padding: 10px;
+                        overflow-y: auto;
+                    }
+                }
+            }
+
+            :root {
+                --primary-color: #007bff;
+                --bg-color: #f5f7fa;
+                --chat-bg: #ffffff;
+                --bubble-me: #95ec69;
+                --bubble-other: #ffffff;
+                --text-color: #333;
+                --secondary-text: #999;
+                --border-color: #eee;
+                --text-time: #aeaeb2;
+            }
+
+            .chat-window-box {
+                width: 100%;
+                height: 100%;
+                background: var(--chat-bg);
+                display: flex;
+                flex-direction: column;
+                position: relative;
+
+                /* 头部样式 */
+                header {
+                    height: 60px;
+                    border-bottom: 1px solid var(--border-color);
+                    display: flex;
+                    align-items: center;
+                    padding: 0 16px;
+                    background: #fff;
+                    z-index: 10;
+                    flex-shrink: 0;
+
+                    h1 {
+                        font-size: 18px;
+                        font-weight: 600;
+                    }
+
+                    .status-badge {
+                        font-size: 12px;
+                        color: #666;
+                        margin-left: 10px;
+                        background: #f0f0f0;
+                        padding: 2px 6px;
+                        border-radius: 4px;
+                    }
+                }
+
+                /* 消息列表区域 */
+                .chat-container {
+                    flex: 1;
+                    overflow: hidden;
+                    background-color: #ededed; /* 微信风格的背景色 */
+                    position: relative;
+
+                    /* 必须给 scroller 设置明确的高度或 flex: 1 */
+                    .scroller {
+                        height: 100%;
+                        padding: 20px 10px;
+                    }
+                }
+
+                /* 时间戳：居中，灰色，小字体 */
+                .message-time {
+                    width: 100%;
+                    text-align: center;
+                    font-size: 0.75rem;
+                    color: var(--text-time);
+                    margin-bottom: 12px;
+                    opacity: 0.8;
+                    letter-spacing: 0.5px;
+                }
+
+                /* 消息气泡样式 */
+                .message-item {
+                    display: flex;
+                    margin-bottom: 16px;
+                    align-items: flex-start;
+
+                    .avatar {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 6px;
+                        background-color: #ddd;
+                        flex-shrink: 0;
+                        overflow: hidden;
+
+                        img {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                        }
+                    }
+
+                    .bubble-wrapper {
+                        max-width: 70%;
+                        margin: 0 12px;
+                        position: relative;
+                    }
+
+                    .bubble {
+                        padding: 10px 14px;
+                        border-radius: 8px;
+                        font-size: 15px;
+                        line-height: 1.5;
+                        word-wrap: break-word;
+                        position: relative;
+                        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+                    }
+
+                    /* 状态与元数据 */
+                    .meta-info {
+                        font-size: 11px;
+                        color: #ccc;
+                        margin-top: 4px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-end;
+                        gap: 4px;
+
+                        .status-icon {
+                            font-size: 14px;
+                        }
+                        .status-sending {
+                            color: #999;
+                        }
+                        .status-error {
+                            color: #ff4d4f;
+                        }
+                        .status-read {
+                            color: var(--primary-color);
+                        }
+                    }
+
+                    &.me {
+                        flex-direction: row-reverse;
+
+                        .bubble {
+                            background-color: var(--bubble-me);
+                        }
+                    }
+
+                    &.other {
+                        .bubble {
+                            background-color: var(--bubble-other);
+                            border: 1px solid #e5e5e5;
+                        }
+
+                        .meta-info {
+                            justify-content: flex-start;
+                        }
+                    }
+                }
+
+                /* 消息类型特定样式 */
+                .msg-image img {
+                    max-width: 100%;
+                    border-radius: 4px;
+                    display: block;
+                    cursor: pointer;
+                }
+
+                .msg-file {
+                    display: flex;
+                    align-items: center;
+                    min-width: 200px;
+
+                    .file-icon {
+                        font-size: 32px;
+                        margin-right: 10px;
+                        color: var(--primary-color);
+                    }
+
+                    .file-info {
+                        display: flex;
+                        flex-direction: column;
+                        overflow: hidden;
+
+                        .file-name {
+                            font-weight: 500;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+
+                        .file-size {
+                            font-size: 12px;
+                            color: #888;
+                            margin-top: 4px;
+                        }
+                    }
+                }
+
+                /* 输入区域 */
+                footer {
+                    min-height: 60px;
+                    background: #f7f7f7;
+                    border-top: 1px solid #ddd;
+                    padding: 10px 16px;
+                    display: flex;
+                    align-items: flex-end;
+                    gap: 10px;
+                    flex-shrink: 0;
+
+                    textarea {
+                        flex: 1;
+                        border: none;
+                        background: #fff;
+                        border-radius: 6px;
+                        padding: 10px;
+                        font-size: 15px;
+                        resize: none;
+                        max-height: 120px;
+                        outline: none;
+                        font-family: inherit;
+                    }
+
+                    button.send-btn {
+                        background: var(--primary-color);
+                        color: white;
+                        border: none;
+                        border-radius: 6px;
+                        padding: 8px 16px;
+                        font-size: 14px;
+                        cursor: pointer;
+                        height: 40px;
+                        margin-bottom: 1px;
+                        transition: background 0.2s;
+
+                        &:hover {
+                            background: #0069d9;
+                        }
+
+                        &:disabled {
+                            background: #ccc;
+                            cursor: not-allowed;
+                        }
+                    }
+                }
+            }
+
+            .loading-more {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+                color: #888;
+                font-size: 14px;
+                min-height: 60px;
+
+                .spinner {
+                    width: 20px;
+                    height: 20px;
+                    border: 2px solid #f3f3f3;
+                    border-top: 2px solid #667eea;
+                    border-radius: 50%;
+                    animation: loading-more-spin 1s linear infinite;
+                    margin-right: 8px;
+                }
+            }
+
+            @keyframes loading-more-spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+        </style>
+
+        <script type="importmap">
+            {
+                "imports": {
+                    "a2bei4-utils": "https://unpkg.com/a2bei4-utils@1.0.3/dist/a2bei4.utils.esm.js",
+                    "vue": "https://registry.npmmirror.com/vue/3.5.27/files/dist/vue.esm-browser.prod.js",
+                    "vue-virtual-list-v3": "https://unpkg.com/vue-virtual-list-v3@1.5.7/dist/index.js"
+                }
+            }
+        </script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>即时消息</h1>
+            <p><line-code>vue-virtual-scroller@next</line-code>即时消息示例。</p>
+            <p>看咱模拟的怎么样，赶紧体验一下吧！</p>
+            <div id="app" v-cloak>
+                <div class="im-wrapper">
+                    <div class="chat-window-box">
+                        <header>
+                            <h1>{{otherInfo.name}}</h1>
+                            <span class="status-badge">{{ otherInfo.status }}</span>
+                        </header>
+
+                        <main class="chat-container">
+                            <du-im-message-list ref="messageListRef"></du-im-message-list>
+                        </main>
+
+                        <footer>
+                            <textarea v-model="inputText" @keydown.enter.prevent="sendMessage" placeholder="输入消息..." rows="1"></textarea>
+                            <button class="send-btn" @click="sendMessage" :disabled="!inputText.trim()">发送</button>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <template id="du-im-message-list-template">
+            <virtual-list class="virtual-scroll-root-element" ref="scrollerRef" :data-key="'id'" :data-sources="messages" :estimate-size="60" :item-class="'virtual-scroll-item-box'" @totop="scrollToTopHandler">
+                <template #header>
+                    <h1>666</h1>
+                </template>
+                <template #="{source:item}">
+                    <div class="mesage-item-wrapper">
+                        <div class="message-time" v-if="shouldShowTime(index)">{{ item.timestampForShow }}</div>
+                        <div class="message-item" :class="item.isMe ? 'me' : 'other'">
+                            <!-- 头像 -->
+                            <div class="avatar">
+                                <img :src="item.avatar" alt="avatar" />
+                            </div>
+
+                            <!-- 气泡区域 -->
+                            <div class="bubble-wrapper">
+                                <div class="bubble">
+                                    <!-- 文本消息 -->
+                                    <div v-if="item.type === 'text'" class="msg-text">{{ item.content }}</div>
+
+                                    <!-- 图片消息 -->
+                                    <div v-else-if="item.type === 'image'" class="msg-image">
+                                        <img :src="item.content" alt="image" loading="lazy" />
+                                    </div>
+
+                                    <!-- 视频消息 (模拟) -->
+                                    <div v-else-if="item.type === 'video'" class="msg-image">
+                                        <div style="position: relative; display: inline-block">
+                                            <img :src="item.thumbnail || item.content" style="opacity: 0.8" />
+                                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-size: 30px">▶</div>
+                                            <div style="position: absolute; bottom: 5px; right: 5px; color: #fff; font-size: 12px; background: rgba(0, 0, 0, 0.5); padding: 2px 4px; border-radius: 4px">00:30</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 文件消息 -->
+                                    <div v-else-if="item.type === 'file'" class="msg-file">
+                                        <span class="file-icon">📄</span>
+                                        <div class="file-info">
+                                            <span class="file-name">{{ item.fileName }}</span>
+                                            <span class="file-size">{{ item.fileSize }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 状态栏 -->
+                                <div class="meta-info">
+                                    <span v-if="item.isMe" class="status-icon">
+                                        <span>{{item.status}}</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="line-height: 0">&nbsp;</div>
+                    </div>
+                </template>
+            </virtual-list>
+        </template>
+        <script type="module">
+            import { getGUID, formatTimeForLocale } from "a2bei4-utils";
+            import { createApp, ref, reactive, computed, nextTick, watch, onMounted } from "vue";
+            import VirtualList from "vue-virtual-list-v3";
+
+            import { myAvatar, otherAvatar, otherName } from "../api/im.js";
+            import MessageList from "./components/messageList.js";
+
+            const vue3App = createApp({
+                setup() {
+                    const otherInfo = ref({
+                        avatar: otherAvatar,
+                        name: otherName,
+                        status: "在线"
+                    });
+
+                    const messageListRef = ref(null);
+
+                    const inputText = ref("");
+                    function sendMessage() {
+                        const text = inputText.value.trim();
+                        if (!text) return;
+
+                        const timestamp = Date.now();
+                        const newMsg = {
+                            id: getGUID(),
+                            isMe: true,
+                            avatar: myAvatar,
+                            nickname: "我",
+                            type: "text",
+                            content: text,
+                            timestamp,
+                            timestampForShow: formatTimeForLocale(timestamp),
+                            status: "未读"
+                        };
+
+                        messageListRef.value?.addNewMessage(newMsg);
+
+                        inputText.value = "";
+                    }
+
+                    return {
+                        otherInfo,
+                        messageListRef,
+                        inputText,
+                        sendMessage
+                    };
+                }
+            });
+
+            vue3App.use(VirtualList);
+            vue3App.component(MessageList.name, MessageList);
+            vue3App.mount("#app");
+        </script>
+    </body>
+</html>
