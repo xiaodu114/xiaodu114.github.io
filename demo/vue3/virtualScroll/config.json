@@ -72,6 +72,31 @@
                     "page": "/demo/vue3/virtualScroll/pages/tanstackVueVirtual/im.html"
                 }
             ]
+        },
+        {
+            "id": 400000,
+            "text": "vue-virtual-list-v3",
+            "code": "vue-virtual-list-v3",
+            "children": [
+                {
+                    "id": 400001,
+                    "text": "固定行高",
+                    "code": "FixedHeight",
+                    "page": "/demo/vue3/virtualScroll/pages/vueVirtualListV3/fixedHeight.html"
+                },
+                {
+                    "id": 400002,
+                    "text": "动态行高",
+                    "code": "DynamicHeight",
+                    "page": "/demo/vue3/virtualScroll/pages/vueVirtualListV3/dynamicHeight.html"
+                },
+                {
+                    "id": 400003,
+                    "text": "即时消息",
+                    "code": "IM",
+                    "page": "/demo/vue3/virtualScroll/pages/vueVirtualListV3/im.html"
+                }
+            ]
         }
     ]
 }
