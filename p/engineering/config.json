@@ -1,0 +1,48 @@
+{
+    "pageTitle": "前端工程化 - xiaodu114.github.io",
+    "head": {
+        "title": "前端工程化",
+        "subtitle": "",
+        "links": []
+    },
+    "nodes": [
+        {
+            "id": 0,
+            "text": "介绍",
+            "code": "Introduction",
+            "page": "/p/engineering/pages/introduction.html"
+        },
+        {
+            "id": 100000,
+            "text": "Node.js",
+            "code": "nodejs",
+            "children": [
+                {
+                    "id": 100001,
+                    "text": "介绍",
+                    "code": "Introduction",
+                    "page": "/p/engineering/pages/nodejs/introduction.html"
+                }
+            ]
+        },
+        {
+            "id": 200000,
+            "text": "NPM",
+            "code": "NPM",
+            "children": [
+                {
+                    "id": 200001,
+                    "text": "介绍",
+                    "code": "Introduction",
+                    "page": "/p/engineering/pages/npm/introduction.html"
+                },
+                {
+                    "id": 200002,
+                    "text": "nrm",
+                    "code": "nrm",
+                    "page": "/p/engineering/pages/npm/nrm.html"
+                }
+            ]
+        }
+    ]
+}
