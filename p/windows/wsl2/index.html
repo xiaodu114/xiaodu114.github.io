@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-cmn-Hans">
     <head>
         <meta charset="UTF-8" />
@@ -39,14 +39,30 @@ wsl --set-default-version 2
                     <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 wsl --status
                     </pre>
+                    <p>列出所有已安装的 Linux 发行版（使用 ）：</p>
+                    <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   --all 可以看到更多隐藏的发行版
+wsl -l --all
+
+#   仅列出正在运行的发行版
+wsl -l --running
+                    </pre>
                     <p>更新 WSL2 内核：</p>
                     <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 wsl --update
                     </pre>
                     <p>如果上面的命令进度特别慢，你可以试试这个：<a href="https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi" target="_blank" rel="noopener noreferrer">wsl_update_x64.msi</a></p>
-                    <p>重启 WSL：</p>
+                    <p>关闭所有 WSL 发行版：</p>
                     <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 wsl --shutdown
+                    </pre>
+                    <p>卸载/注销指定的 Linux 发行版：</p>
+                    <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+# 基本语法
+wsl --unregister <发行版名称>
+
+# 示例：卸载 Ubuntu-22.04
+wsl --unregister Ubuntu-22.04
                     </pre>
                 </mark-block>
                 <p>4、安装Ubuntu22.04</p>
