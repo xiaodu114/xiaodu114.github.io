@@ -1,0 +1,63 @@
+{
+    "pageTitle": "Android Studio - xiaodu114.github.io",
+    "head": {
+        "title": "我和 Android Studio 的故事",
+        "subtitle": "版本：Android Studio Panda 1 | 2025.3.1 Patch 1",
+        "links": [
+            {
+                "href": "https://developer.android.google.cn",
+                "text": "Android Developers（你懂的）"
+            },
+            {
+                "href": "https://developer.android.com",
+                "text": "Android 移动应用开发者工具 - Android Developers"
+            }
+        ]
+    },
+    "nodes": [
+        {
+            "id": 1,
+            "text": "介绍",
+            "code": "Introduction",
+            "page": "/p/ide/as/pages/introduction.html"
+        },
+        {
+            "id": 200000,
+            "text": "安装",
+            "code": "Install",
+            "children": [
+                {
+                    "id": 200001,
+                    "text": "Windows",
+                    "code": "Windows",
+                    "page": "/p/ide/as/pages/install/windows.html"
+                }
+            ]
+        },
+        {
+            "id": 300000,
+            "text": "插件",
+            "code": "Plugins",
+            "children": [
+                {
+                    "id": 300001,
+                    "text": "汉化",
+                    "code": "Chinese",
+                    "page": "/p/ide/as/pages/plugins/chinese.html"
+                }
+            ]
+        },
+        {
+            "id": 400000,
+            "text": "SDK Manager",
+            "code": "SDK",
+            "page": "/p/ide/as/pages/sdk.html"
+        },
+        {
+            "id": 500000,
+            "text": "模拟器管理器",
+            "code": "VirtualDevice",
+            "page": "/p/ide/as/pages/virtualDevice.html"
+        }
+    ]
+}

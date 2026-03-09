@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Android Studio - Virtual Device Manager - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,Android Studio,IDE,集成开发环境,Virtual Device Manager,虚拟设备管理器" />
+        <meta name="description" content="Android Studio - Virtual Device Manager" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>Virtual Device Manager</h1>
+            <p></p>
+            <h2>管理入口</h2>
+            <p>安装<line-code>Android Studio</line-code>之后，如何找到<line-code>Virtual Device Manager</line-code>，请看：</p>
+            <p>如果你没有创建过项目或者你将创建过的项目删除（也不是说真的删除，只是这里的记录）了，入口就在这里，如下：</p>
+            <p>
+                <img src="../images/virtualDevice/1.png" alt="" srcset="" />
+            </p>
+            <p>如果你创建过项目（也就是初始页面有项目记录），那么入口如下：</p>
+            <p>
+                <img src="../images/virtualDevice/2.png" alt="" srcset="" />
+            </p>
+            <p>点击<line-code>Virtual Device Manager</line-code>就会进入你想要的页面，如下：</p>
+            <p>
+                <img src="../images/virtualDevice/3.png" alt="" srcset="" />
+            </p>
+            <h2>环境变量</h2>
+            <mark-block>
+                <p>在创建模拟器之前最好检查一下是否创建了<line-code>ANDROID_AVD_HOME</line-code>这个环境变量。如果没有这个环境变量，<line-code>Android Studio</line-code>会把新建的模拟器放到这里<line-code>C:\Users\用户名\.android\avd</line-code></p>
+                <p>
+                    <img src="../images/virtualDevice/4.png" alt="" srcset="" />
+                </p>
+                <p>在<line-code>PowerShell</line-code>查看<line-code>ANDROID_AVD_HOME</line-code>的值</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+$env:ANDROID_AVD_HOME
+                </pre>
+            </mark-block>
+            <h2>创建模拟器</h2>
+            <p>这里创建的模拟器是<line-code>Pixel 9 Pro</line-code></p>
+            <mark-block>
+                <p>创建过程因你选择的<line-code>API</line-code>版本而有所不同：如果<line-code>API</line-code>对应的系统镜像已经下载过了，创建过程只是少了下载系统镜像的部分。下面的示例就是系统镜像没有下载过的流程。</p>
+            </mark-block>
+            <details>
+                <summary>点击查看详细流程</summary>
+                <p>
+                    <img src="../images/virtualDevice/5.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../images/virtualDevice/6.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../images/virtualDevice/7.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../images/virtualDevice/8.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../images/virtualDevice/9.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../images/virtualDevice/10.png" alt="" srcset="" />
+                </p>
+            </details>
+            <p></p>
+            <mark-block type="error">
+                <p>我遇到了一个十分郁闷的问题：环境是<line-code>Windows 10</line-code>，安装完模拟器之后，注意啊，没有使用<line-code>Android Studio</line-code>打开项目，而是按照上文提到了“入口”进入“Device Manager”，之后启动模拟器，之后奇怪的事情发生了，他就像一个害羞的小媳妇一样，就是不出来……如下图：</p>
+                <p>
+                    <img src="../images/virtualDevice/11.png" alt="" srcset="" />
+                </p>
+                <p>让人郁闷的是换掉了一个<line-code>Windows 11</line-code>电脑就没有问题，你说气人不，😫😫😫</p>
+            </mark-block>
+        </div>
+    </body>
+</html>
