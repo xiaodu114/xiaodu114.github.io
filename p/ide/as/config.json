@@ -58,6 +58,12 @@
             "text": "模拟器管理器",
             "code": "VirtualDevice",
             "page": "/p/ide/as/pages/virtualDevice.html"
+        },
+        {
+            "id": 600000,
+            "text": "常用设置",
+            "code": "CommonSettings",
+            "page": "/p/ide/as/pages/commonSet.html"
         }
     ]
 }
