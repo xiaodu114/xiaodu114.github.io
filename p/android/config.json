@@ -1,0 +1,43 @@
+{
+    "pageTitle": "Android - xiaodu114.github.io",
+    "head": {
+        "title": "我和 Android 的故事",
+        "subtitle": "",
+        "links": [
+            {
+                "href": "https://developer.android.google.cn",
+                "text": "Android Developers（你懂的）"
+            },
+            {
+                "href": "https://developer.android.com",
+                "text": "Android 移动应用开发者工具 - Android Developers"
+            }
+        ]
+    },
+    "nodes": [
+        {
+            "id": 1,
+            "text": "日常",
+            "code": "Daily",
+            "page": "/p/android/pages/android.html"
+        },
+        {
+            "id": 2,
+            "text": "介绍",
+            "code": "Introduction",
+            "page": "/p/android/pages/introduction.html"
+        },
+        {
+            "id": 3,
+            "text": "准备",
+            "code": "Prepare",
+            "page": "/p/android/pages/prepare.html"
+        },
+        {
+            "id": 4,
+            "text": "Hello World",
+            "code": "HelloWorld",
+            "page": "/p/android/pages/helloWorld.html"
+        }
+    ]
+}

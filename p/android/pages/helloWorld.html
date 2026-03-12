@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Android - Hello World - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,Android,Hello World,第一个Android程序" />
+        <meta name="description" content="Android 之 Hello World" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>Hello World</h1>
+            <p><line-code>Hello World</line-code>，开发之旅的起点</p>
+            <h2>创建项目</h2>
+            <p>这里创建是一个空白项目</p>
+            <details>
+                <summary>点击查看创建详情</summary>
+                <p>
+                    <img src="../images/helloWorld/1.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../images/helloWorld/2.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../images/helloWorld/3.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../images/helloWorld/4.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../images/helloWorld/5.png" alt="" srcset="" />
+                </p>
+            </details>
+            <p></p>
+            <mark-block>
+                <p>当你点击“完成”进入新创建的项目后，你会发现那个小锤子（对就是那个带绿点的小锤子）已经开始干活了：正在导入 “xxx” Gradle 项目。点击小锤子之后，你会发现正在下载东东：<line-code>gradle-x.x.x-bin.zip</line-code>。关键是他还下载的很慢，咱必须得搞一下他</p>
+            </mark-block>
+            <h2>Gradle 同步？构建？</h2>
+            <p>默认的太慢了，必须得修改一下。咱也不知道学名是啥？是 Gradle？还是 maven？反正就是修改了两个文件：<line-code>gradle-wrapper.properties</line-code>和<line-code>settings.gradle.kts</line-code></p>
+            <p>
+                <img src="../images/helloWorld/6-1.png" alt="" srcset="" />
+            </p>
+            <p>
+                <img src="../images/helloWorld/6-2.png" alt="" srcset="" />
+            </p>
+            <details>
+                <summary>点击查看“gradle-wrapper.properties”详情</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../source/helloWorld/gradle-wrapper.txt" ddz-lang="properties"></div>
+            </details>
+            <p></p>
+            <mark-block>
+                <p><a href="https://juejin.cn/post/7490391784948580364" target="_blank" rel="noopener noreferrer">解决Gradle下载失败的问题（未配置却下载xx-src.zip的问题）经常写android的同学都知道，在打开新gra - 掘金</a>，在此表示感谢</p>
+                <p><line-code>distributionUrl</line-code>这里设置的是<line-code>.../gradle-x.x.x-all.zip</line-code>，并且屏蔽了<line-code>distributionSha256Sum</line-code>。大部分都会告诉你使用<line-code>gradle-x.x.x-bin.zip</line-code>即可，但是如果使用它，之后再构建的时候还是会自动下载<line-code>gradle-x.x.x-src.zip</line-code>，搞了半天也不知如何关闭下载，最后用这个办法解决了。</p>
+            </mark-block>
+            <details>
+                <summary>点击查看“settings.gradle.kts”详情</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../source/helloWorld/settings.gradle.txt" ddz-lang="kotlin"></div>
+            </details>
+            <p>上面的弄完之后速度直接飞起</p>
+            <p>
+                <img src="../images/helloWorld/7.png" alt="" srcset="" />
+            </p>
+            <p>
+                <img src="../images/helloWorld/8.png" alt="" srcset="" />
+            </p>
+            <p>
+                <img src="../images/helloWorld/9.png" alt="" srcset="" />
+            </p>
+            <mark-block>
+                <p>“BUILD SUCCESSFUL”</p>
+                <p>你注意到了吗？到了这里，他已经不是从前的他了，他变了</p>
+            </mark-block>
+            <h2>运行（Shift + F10）</h2>
+            <p>构建成功之后，咱开始真正的运行了。对，就是点击那个漂亮的小三角……</p>
+            <details>
+                <summary>点击查看详情</summary>
+                <p>
+                    <img src="../images/helloWorld/10.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../images/helloWorld/11.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../images/helloWorld/12.png" alt="" srcset="" />
+                </p>
+                <p>看到最后运行成功，还是无比的……</p>
+            </details>
+            <h2>【额外的】Gradle 用户主目录</h2>
+            <p>这是最后才发现的一个坑，弄完项目之后发现我的 C 盘可以用控件少了很多，一番排查才发现元凶：一个是<line-code>C:\Users\用户名\.gradle</line-code>；另一个就是<line-code>C:\Users\用户名\.android\avd</line-code>。详细的配置你可以分别查看：<a href="/p/ide/as/index.html" target="_blank" rel="noopener noreferrer">Android Studio - xiaodu114.github.io</a>下面的“常用设置”和“模拟器管理器”章节</p>
+            <details>
+                <summary>点击查看我的 C 盘是如何撑爆的</summary>
+                <p>
+                    <img src="../images/helloWorld/13.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../images/helloWorld/14.png" alt="" srcset="" />
+                </p>
+            </details>
+            <p></p>
+            <details>
+                <summary>点击查看修改“Gradle 用户主目录”之后效果</summary>
+                <p>
+                    <img src="../images/helloWorld/15.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../images/helloWorld/16.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../images/helloWorld/17.png" alt="" srcset="" />
+                </p>
+            </details>
+        </div>
+    </body>
+</html>

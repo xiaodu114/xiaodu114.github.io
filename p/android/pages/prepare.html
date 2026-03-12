@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Android - 开发环境准备 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,Android,开发环境,Android Studio,SDK,ANDROID_HOME,ANDROID_AVD_HOME" />
+        <meta name="description" content="Android 之开发环境准备" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>开发环境准备</h1>
+            <p>先说下这里使用的是<line-code>windows</line-code><line-code>windows</line-code><line-code>windows</line-code></p>
+            <h2>Java 开发工具包</h2>
+            <p><line-code>JDK</line-code>的安装请移步这里：<a href="/p/java/index.html" target="_blank" rel="noopener noreferrer">java - xiaodu114.github.io</a></p>
+            <mark-block>
+                <p>记得看下有没有设置<line-code>JAVA_HOME</line-code>环境变量。你可以在<line-code></line-code>中检查一下，如下：</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+$env:JAVA_HOME
+                </pre>
+                <p>如果能看到输出的路径，基本上没有问题。当然你也可以在检查一下<line-code>javac</line-code></p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+javac -version
+                </pre>
+            </mark-block>
+            <p></p>
+            <mark-block>
+                <p>React Native 需要 Java Development Kit [JDK] 17。因为这个原因，咱这里安装的也是 17 版本。</p>
+            </mark-block>
+            <h2>Android Studio</h2>
+            <p><line-code>Android Studio</line-code>的安装请移步这里：<a href="/p/ide/as/index.html" target="_blank" rel="noopener noreferrer">Android Studio - xiaodu114.github.io</a>下面的“安装”章节</p>
+            <h2>环境变量和Path</h2>
+            <p>这里总结一下需要设置哪些环境变量以及需要将那些路径添加到<line-code>Path</line-code></p>
+            <h3>JAVA_HOME</h3>
+            <p>安装完<line-code>JDK</line-code>，你可以顺便配置一下这个。具体的请看上文</p>
+            <h3>ANDROID_HOME</h3>
+            <p>无论你是先安装的<line-code>Android Studio</line-code>还是先配置该环境变量，请让他们是一个值，具体的截图如下：</p>
+            <p>
+                <img src="../images/prepare/1.png" alt="" srcset="" />
+            </p>
+            <p>
+                <img src="../images/prepare/2.png" alt="" srcset="" />
+            </p>
+            <h3>ANDROID_AVD_HOME</h3>
+            <p><line-code>ANDROID_AVD_HOME</line-code>他是做什么用的呢？你可能已经猜到了，和模拟器有关。如果没有这个环境变量，<line-code>Android Studio</line-code>会把新建的模拟器放到这里<line-code>C:\Users\用户名\.android\avd</line-code>。详细的你可以看这里：<a href="/p/ide/as/index.html" target="_blank" rel="noopener noreferrer">Android Studio - xiaodu114.github.io</a>下面的“模拟器管理器”章节</p>
+            <h3>Path</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+%JAVA_HOME%\bin
+
+# 包括 adb.exe, fastboot.exe 等
+%ANDROID_HOME%\platform-tools
+            </pre>
+        </div>
+    </body>
+</html>
