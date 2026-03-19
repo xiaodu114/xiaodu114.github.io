@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Docker - Windows 安装 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,Docker,容器,Windows,安装" />
+        <meta name="description" content="Docker 之 Windows 安装篇" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>Docker 之 Windows 安装</h1>
+            <p>这里讲述一下<line-code>Windows 10</line-code>和<line-code>Docker Desktop</line-code>的故事</p>
+            <h2>下载</h2>
+            <p>下载的入口还挺多……这里下载的 exe 版本是<line-code>4.63.0.220185</line-code>，<line-code>docker -v</line-code>检测是<line-code>29.2.1</line-code></p>
+            <ul>
+                <li>
+                    <a href="https://www.docker.com/" target="_blank" rel="noopener noreferrer">Docker: Accelerated Container Application Development -- > Download Docker Desktop</a>
+                </li>
+                <li>
+                    <a href="https://www.docker.com/products/docker-desktop/" target="_blank" rel="noopener noreferrer">Docker Desktop: The #1 Containerization Tool for Developers | Docker</a>
+                </li>
+                <li>
+                    <a href="https://docs.docker.com/desktop/setup/install/windows-install/" target="_blank" rel="noopener noreferrer">Install Docker Desktop on Windows</a>
+                </li>
+            </ul>
+            <h2>安装</h2>
+            <details>
+                <summary>点击查看详细安装过程</summary>
+                <p>
+                    <img src="../../images/install/windows/1.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../../images/install/windows/2.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../../images/install/windows/3.png" alt="" srcset="" />
+                </p>
+                <p>下面是<line-code>AI</line-code>对上面安装选项的解释：</p>
+                <p>
+                    <img src="../../images/install/windows/4.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../../images/install/windows/5.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../../images/install/windows/6.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../../images/install/windows/7.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../../images/install/windows/8.png" alt="" srcset="" />
+                </p>
+            </details>
+            <p></p>
+            <mark-block>
+                <p>这里咱得说下，<line-code>Docker</line-code>默认安装到 C 盘，不给你选择的机会，真是……查了一下，看看有没有办法解决，没想到还真可以：</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+Start-Process ".\Docker Desktop Installer.exe" -ArgumentList "install --installation-dir=`"D:\ProgramOther\Docker`"" -Wait
+                </pre>
+            </mark-block>
+            <h2>首次启动-必备设置</h2>
+            <p>主要是讲可以配置路径的都弄到非 C 盘，你懂的；还有就是设置国内镜像了</p>
+            <details>
+                <summary>点击查看设置详情</summary>
+                <p>
+                    <img src="../../images/install/windows/9.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../../images/install/windows/10.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../../images/install/windows/11.png" alt="" srcset="" />
+                </p>
+                <p><strong>上面的可以直接跳过，下面的才是重点</strong></p>
+                <p>
+                    <img src="../../images/install/windows/12.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../../images/install/windows/13.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../../images/install/windows/14.png" alt="" srcset="" />
+                </p>
+            </details>
+            <h2>卸载</h2>
+            <p></p>
+            <h3>删除卸载残留</h3>
+            <p>请谨慎操作，看好了在复制！！！</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+Remove-Item -Recurse -Force -ErrorAction SilentlyContinue `
+"$env:USERPROFILE\.docker", `
+"$env:USERPROFILE\AppData\Local\Docker", `
+"$env:USERPROFILE\AppData\Local\Temp\DockerDesktop", `
+"$env:USERPROFILE\AppData\Local\Temp\DockerDesktopInstallers", `
+"$env:USERPROFILE\AppData\Roaming\Docker"
+            </pre>
+        </div>
+    </body>
+</html>

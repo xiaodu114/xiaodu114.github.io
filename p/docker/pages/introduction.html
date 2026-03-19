@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Docker - 介绍 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,Docker,容器,Introduction,简介" />
+        <meta name="description" content="Docker 之 介绍篇" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>Docker</h1>
+            <p>官网：<a href="https://www.docker.com/" target="_blank">Docker: Accelerated Container Application Development</a></p>
+            <p>docker,docker,docker.多年过去，本想与你再无交集，奈何苍天弄人，还得再上你的贼船……</p>
+            <details>
+                <summary>与 docker 的种种</summary>
+                <ul>
+                    <li>
+                        <a href="https://www.cnblogs.com/du-blog/p/7868463.html" target="_blank">在docker中初次体验.net core 2.0</a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/du-blog/p/9035538.html" target="_blank">在Docker中体验数据库之Mongodb</a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/du-blog/p/9043304.html" target="_blank">在Docker中体验数据库之MySql</a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/du-blog/p/10561787.html" target="_blank">在Docker中体验数据库之Microsoft SQL Server</a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/du-blog/p/12051707.html" target="_blank">Ubuntu 18.04中重新认识docker</a>
+                    </li>
+                </ul>
+            </details>
+            <h2>镜像</h2>
+            <p>哎！怎么说呢？干啥都得镜像……</p>
+            <p><strong>2026-03-08</strong>更新</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="json">
+{
+    "registry-mirrors": [
+        "https://docker.xuanyuan.me",
+        "https://docker.1ms.run",
+        "https://docker.m.daocloud.io",
+        "https://docker-0.unsee.tech",
+        "https://docker.tbedu.top",
+        "https://docker.melikeme.cn",
+        "https://docker.melikeme.de"
+    ]
+}
+            </pre>
+            <h2>常用命令</h2>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#   1、镜像相关
+
+#   列出本地主机上的镜像
+docker images
+
+#   拉取镜像
+docker pull xxx
+
+#   [强制 -f]删除一个或多个镜像
+docker rmi -f xxx yyy zzz
+#   删除所有已标记的镜像（docker images -q 会列出所有镜像的ID）
+docker rmi $(docker images -q)
+#   删除所有未使用的镜像，包括未标记的镜像（-a 参数表示删除所有未使用的镜像，而不仅仅是悬空的镜像）
+docker image prune -a
+
+#   2、容器相关
+
+#   列出当前正在运行的容器（添加 -a 列出所有容器，包括未运行的）
+docker ps
+
+#   运行一个新的容器实例
+#       -d 表示以 detached 模式运行容器，-p 80:80 表示将容器的 80 端口映射到宿主机的 80 端口，--name nginx001 为容器指定一个名称。
+docker run -d -p 80:80 --name nginx001 nginx
+
+#   停止一个或多个正在运行的容器
+docker stop nginx001
+#   停止所有容器
+docker stop $(docker ps -aq)
+
+#   启动一个或多个已经停止的容器
+docker start nginx001
+
+#   删除所有已停止的容器（不会影响正在运行的容器）
+docker container prune
+#   [强制 -f]删除一个或多个容器
+docker rm -f nginx001 nginx002
+#   [强制 -f]删除所有正在运行和已停止的容器
+docker rm -f $(docker ps -aq)
+
+#   在运行的容器中执行命令（-it 提供一个交互式的终端）
+docker exec -it nginx001 /bin/bash
+
+#   获取容器的日志输出
+#       -f 实时输出日志信息
+#       -n 或 --lines：仅显示最后几行日志
+#       --since 仅显示自给定时间以来的日志
+docker logs nginx001
+
+#   3、其他
+
+#   下面命令不仅会删除所有未使用的镜像，还会删除所有未使用的容器、网络和可选地，使用 --volumes 参数还可以删除未使用的卷
+docker system prune -a
+            </pre>
+        </div>
+    </body>
+</html>

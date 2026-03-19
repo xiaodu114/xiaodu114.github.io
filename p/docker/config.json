@@ -1,0 +1,48 @@
+{
+    "pageTitle": "Docker - xiaodu114.github.io",
+    "head": {
+        "title": "我和 Docker 的故事",
+        "subtitle": "",
+        "links": [
+            {
+                "href": "https://www.docker.com/",
+                "text": "Docker: Accelerated Container Application Development"
+            },
+            {
+                "href": "https://docs.docker.com/",
+                "text": "Docker Docs"
+            },
+            {
+                "href": "https://hub.docker.com/",
+                "text": "Docker Hub Container Image Library | App Containerization"
+            }
+        ]
+    },
+    "nodes": [
+        {
+            "id": 1,
+            "text": "介绍",
+            "code": "Introduction",
+            "page": "/p/docker/pages/introduction.html"
+        },
+        {
+            "id": 200000,
+            "text": "安装",
+            "code": "Install",
+            "children": [
+                {
+                    "id": 200001,
+                    "text": "Ubuntu",
+                    "code": "Ubuntu",
+                    "page": "/p/docker/pages/install/ubuntu.html"
+                },
+                {
+                    "id": 200002,
+                    "text": "Windows",
+                    "code": "Windows",
+                    "page": "/p/docker/pages/install/windows.html"
+                }
+            ]
+        }
+    ]
+}
