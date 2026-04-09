@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>OpenIM - 安装 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,即时通讯,IM,OpenIM,安装,Docker" />
+        <meta name="description" content="OpenIM 安装篇" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>OpenIM 安装</h1>
+            <p>部署环境是<line-code>Windows 10</line-code> + <line-code>Docker Desktop</line-code>。如果想看安装<line-code>Docker Desktop</line-code>等更多内容，可以移步这里：<a href="/p/docker/index.html" target="_blank" rel="noopener noreferrer">Docker - xiaodu114.github.io</a></p>
+            <p>参考地址：<a href="https://doc.rentsoft.cn/zh-Hans/guides/gettingStarted/dockerCompose" target="_blank" rel="noopener noreferrer">docker部署 | OpenIM Docs</a></p>
+            <h2>克隆仓库</h2>
+            <p>
+                <img src="../../images/openIM/install/1.png" />
+            </p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+git clone https://github.com/openimsdk/openim-docker
+            </pre>
+            <h2>启动服务</h2>
+            <p>
+                <img src="../../images/openIM/install/2.png" />
+            </p>
+            <p>
+                <img src="../../images/openIM/install/3.png" />
+            </p>
+            <details>
+                <summary>点击查看 Docker 中镜像和容器</summary>
+                <p>
+                    <img src="../../images/openIM/install/4.png" />
+                </p>
+                <p>
+                    <img src="../../images/openIM/install/5.png" />
+                </p>
+            </details>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+docker compose up -d
+            </pre>
+            <h3>停止服务</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+docker compose down
+            </pre>
+            <h3>查看日志</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+docker compose logs -f openim-server openim-chat
+            </pre>
+            <h2>立即体验</h2>
+            <h3>Admin 前端</h3>
+            <p>APP 管理员前端页面。这里可以进行用户管理哦</p>
+            <p>
+                <img src="../../images/openIM/install/6.png" />
+            </p>
+            <p>
+                <img src="../../images/openIM/install/7.png" />
+            </p>
+            <p>在这里创建了第一个用户，如下：</p>
+            <p>
+                <img src="../../images/openIM/install/8.png" />
+            </p>
+            <h3>Web 前端</h3>
+            <p>PC Web 前端。这里就可以聊天了，你想说点什么</p>
+            <p>
+                <img src="../../images/openIM/install/9.png" />
+            </p>
+            <h4>Admin 前端：新增用户登录</h4>
+            <p>
+                <img src="../../images/openIM/install/10.png" />
+            </p>
+            <p>
+                <img src="../../images/openIM/install/11.png" />
+            </p>
+            <h4>Web 前端：注册用户登录</h4>
+            <p>
+                <img src="../../images/openIM/install/12.png" />
+            </p>
+            <p>
+                <img src="../../images/openIM/install/13.png" />
+            </p>
+            <mark-block>
+                <p>短信验证码是<line-code>666666</line-code></p>
+            </mark-block>
+            <p>
+                <img src="../../images/openIM/install/14.png" />
+            </p>
+            <p>
+                <img src="../../images/openIM/install/15.png" />
+            </p>
+            <p>最后再回到“Admin 前端”看一下新注册的用户</p>
+            <p>
+                <img src="../../images/openIM/install/16.png" />
+            </p>
+        </div>
+    </body>
+</html>
