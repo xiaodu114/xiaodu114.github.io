@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Whistle - 介绍 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,Web Debugging Proxy,调试代理,Whistle,介绍" />
+        <meta name="description" content="Whistle 介绍篇" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>Whistle</h1>
+            <p>官方地址：<a href="https://wproxy.org/" target="_blank" rel="noopener noreferrer">Whistle</a></p>
+            <p>GitHub：<a href="https://github.com/avwo/whistle" target="_blank" rel="noopener noreferrer">GitHub - avwo/whistle: HTTP, HTTP2, HTTPS, Websocket debugging proxy · GitHub</a></p>
+            <p>文档：<a href="https://wproxy.org/docs/" target="_blank" rel="noopener noreferrer">文档 | Whistle</a></p>
+            <p><line-code>Whistle</line-code>是一款基于 Node.js 的跨平台网络调试代理工具。它完全基于 Web 界面操作，无需安装传统的桌面客户端。通过简单的规则配置，即可轻松实现抓包分析、Host 映射、修改请求与响应数据、接口重定向及移动端调试等功能。它轻量、灵活且免费，是前端开发与测试人员排查网络问题、模拟接口数据的利器。</p>
+            <h2>应用场景</h2>
+            <ol>
+                <li>
+                    <strong>接口 Mock 与数据篡改：</strong>在后端接口未就绪时，直接返回自定义的 JSON 数据；或者拦截线上真实接口，修改响应结果来测试前端的各种边界情况（如报错、空数据）。
+                </li>
+                <li>
+                    <strong>线上问题本地联调：</strong>将线上环境的 JS、CSS 或 HTML 文件替换为本地文件。实现“不发布代码，也能在线上环境调试本地修改后的代码”，快速定位线上 Bug。
+                </li>
+                <li>
+                    <strong>移动端与小程序调试：</strong>通过配置手机代理，在电脑端抓取并查看手机 App、H5 页面或微信小程序的网络请求；还能自动向页面注入 vConsole、Eruda 等移动端调试面板。
+                </li>
+                <li>
+                    <strong>弱网环境模拟：</strong>随意限制网速、设置延迟或丢包率，测试页面在 2G/3G 或地铁、电梯等弱网环境下的加载状态和容错机制。
+                </li>
+                <li>
+                    <strong>请求头与 Cookie 伪造：</strong>轻松修改 User-Agent、Referer、Cookie 或增加自定义 Header，常用于模拟不同设备访问，或绕过简单的鉴权/防爬机制。
+                </li>
+                <li>
+                    <strong>跨域与转发代理：</strong>将请求转发到其他域名或本地服务（如 api.example.com localhost:8080），完美解决本地开发时的跨域问题，或实现多环境（测试/预发）的无缝切换。
+                </li>
+                <li>
+                    <strong>性能与缓存分析：</strong>通过内置的界面查看请求瀑布图，强制修改缓存策略（如禁用缓存），辅助排查静态资源加载和缓存命中问题。
+                </li>
+            </ol>
+        </div>
+    </body>
+</html>

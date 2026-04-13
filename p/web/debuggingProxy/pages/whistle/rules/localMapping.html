@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Whistle - 规则 - 本地映射 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,Web Debugging Proxy,调试代理,Whistle,rules,规则,Local Mapping,本地映射" />
+        <meta name="description" content="Whistle 规则 - 本地映射" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>本地映射</h1>
+            <p>本地映射的核心逻辑是建立一张映射表：远程 URL &lt;-> 本地文件路径。当代理拦截到远程 URL 时，直接去查这张表，返回对应的本地文件。</p>
+            <h2>解释</h2>
+            <h3>响应体替换</h3>
+            <p>站在 HTTP 协议和代理引擎的角度，它做了一件非常纯粹的事情：<strong>Response Body Replacement</strong>。</p>
+            <ul>
+                <li>代理服务器并没有真的去请求目标服务器，而是伪造了一个响应。它读取本地文件的内容，作为 HTTP 响应的 Body 塞进去，然后连同状态码（200）一起返回给客户端。</li>
+                <li>在 whistle 的内部架构中，它本质上就是一个响应拦截处理器。</li>
+            </ul>
+            <h3>远程资源本地化 / 线上转本地</h3>
+            <p>在前端具体的业务场景中，我们通常用这类词汇来描述它的目的。</p>
+            <ul>
+                <li><strong>线上转本地： </strong>线上出了 Bug，但不想重新走一遍发布流程，直接把线上的请求“转”到本地代码。</li>
+                <li><strong>动静分离代理： </strong>如果只 Map Local 静态资源（JS/CSS/图片），而让接口继续走线上，这种策略常被称为动静分离调试。</li>
+            </ul>
+            <h2>本地文件映射</h2>
+            <p>咱先物色一个网站。找啊找啊，终于找到了一个网站：百度。就选它吧！</p>
+            <p>
+                <img src="../../../images/whistle/rules/localMapping/1.png" alt="" srcset="" />
+            </p>
+            <p>选择的文件是<line-code>https://pss.bdstatic.com/r/www/cache/static/protocol/https/plugins/bzPopper_d8249c4.js</line-code>，文件内容如下：</p>
+            <p>
+                <img src="../../../images/whistle/rules/localMapping/2.png" alt="" srcset="" />
+            </p>
+            <h3>配置规则</h3>
+            <p><line-code>whistle</line-code>配置的规则如下：</p>
+            <p>
+                <img src="../../../images/whistle/rules/localMapping/3.png" alt="" srcset="" />
+            </p>
+            <h3>火狐</h3>
+            <p>还得是火狐啊！她可以直接配置代理，不像<line-code>Edge</line-code>、<line-code>Chrome</line-code>，还得依赖插件……不过这两种方式各有利弊吧</p>
+            <h4>配置代理</h4>
+            <p>
+                <img src="../../../images/whistle/rules/localMapping/4.png" alt="" srcset="" />
+            </p>
+            <p>
+                <img src="../../../images/whistle/rules/localMapping/5.png" alt="" srcset="" />
+            </p>
+            <h4>见证奇迹</h4>
+            <p>在访问JS文件和刷新页面如下：</p>
+            <p>
+                <img src="../../../images/whistle/rules/localMapping/6.png" alt="" srcset="" />
+            </p>
+            <p>
+                <img src="../../../images/whistle/rules/localMapping/7.png" alt="" srcset="" />
+            </p>
+            <h3>Edge</h3>
+            <p><line-code>Edge</line-code>用起来就不那么方便了，还得依赖插件，这里使用的插件是<line-code>Zero Omega</line-code></p>
+            <mark-block>
+                <p><strong>前置提醒：</strong>如果弄完不好使，可以重启浏览器试试</p>
+            </mark-block>
+            <h4>Zero Omega</h4>
+            <p>如何安装咱就不说了啊。配置如下：</p>
+            <p>
+                <img src="../../../images/whistle/rules/localMapping/8.png" alt="" srcset="" />
+            </p>
+            <details>
+                <summary>自动切换（可选）</summary>
+                <p>如果不想全局代理，可以设置 自动切换模式：</p>
+                <p>
+                    <img src="../../../images/whistle/rules/localMapping/9.png" alt="" srcset="" />
+                </p>
+            </details>
+            <h4>见证奇迹</h4>
+            <p>在访问JS文件和刷新页面如下：</p>
+            <p>
+                <img src="../../../images/whistle/rules/localMapping/10.png" alt="" srcset="" />
+            </p>
+            <p>
+                <img src="../../../images/whistle/rules/localMapping/11.png" alt="" srcset="" />
+            </p>
+            <mark-block>
+                <p>上面的截图中使用的是“whistle-代理”情景模式。如果只想代理“百度”，其他的网站不受影响，你可以选择“auto switch”</p>
+            </mark-block>
+        </div>
+    </body>
+</html>

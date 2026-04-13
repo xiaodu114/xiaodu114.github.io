@@ -1,0 +1,63 @@
+{
+    "pageTitle": "Web Debugging Proxy - xiaodu114.github.io",
+    "head": {
+        "title": "我和 Web Debugging Proxy 的故事",
+        "subtitle": "",
+        "links": [
+            {
+                "href": "https://wproxy.org/",
+                "text": "Whistle"
+            },
+            {
+                "href": "https://proxyman.com/",
+                "text": "Proxyman - Best HTTP Debugging Proxy for macOS, iOS, Windows & Linux"
+            }
+        ]
+    },
+    "nodes": [
+        {
+            "id": 1,
+            "text": "介绍",
+            "code": "Introduction",
+            "page": "/p/web/debuggingProxy/pages/introduction.html"
+        },
+        {
+            "id": 200000,
+            "text": "Whistle",
+            "code": "Whistle",
+            "children": [
+                {
+                    "id": 201000,
+                    "text": "介绍",
+                    "code": "Introduction",
+                    "page": "/p/web/debuggingProxy/pages/whistle/introduction.html"
+                },
+                {
+                    "id": 202000,
+                    "text": "安装",
+                    "code": "Install",
+                    "page": "/p/web/debuggingProxy/pages/whistle/install.html"
+                },
+                {
+                    "id": 203000,
+                    "text": "HTTPS 证书",
+                    "code": "HTTPS",
+                    "page": "/p/web/debuggingProxy/pages/whistle/https.html"
+                },
+                {
+                    "id": 204000,
+                    "text": "规则",
+                    "code": "Rules",
+                    "children": [
+                        {
+                            "id": 204001,
+                            "text": "本地映射",
+                            "code": "LocalMapping",
+                            "page": "/p/web/debuggingProxy/pages/whistle/rules/localMapping.html"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
