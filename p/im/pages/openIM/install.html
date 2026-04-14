@@ -50,6 +50,8 @@ docker compose down
 docker compose logs -f openim-server openim-chat
             </pre>
             <h2>立即体验</h2>
+            <h3>端口开放</h3>
+            <p>体验之前咱先看一下宽口开放情况，<a href="https://doc.rentsoft.cn/zh-Hans/guides/gettingStarted/ports" target="_blank" rel="noopener noreferrer">端口开放 | OpenIM Docs</a></p>
             <h3>Admin 前端</h3>
             <p>APP 管理员前端页面。这里可以进行用户管理哦</p>
             <p>
@@ -94,6 +96,20 @@ docker compose logs -f openim-server openim-chat
             <p>
                 <img src="../../images/openIM/install/16.png" />
             </p>
+            <h3>IMServer APIs</h3>
+            <p>官方介绍：IMServer 提供了 <strong>REST API</strong>，允许您以超级权限直接从服务端操作 IM 系统，以增强业务功能。</p>
+            <h4>认证管理</h4>
+            <h5>获取管理员 token</h5>
+            <p>根据内置的用户：APP 管理员 ID<line-code>imAdmin</line-code>，密钥<line-code>openIM123</line-code>获取管理员 token</p>
+            <p>
+                <img src="../../images/openIM/install/17.png" />
+            </p>
+            <h5>获取用户 token</h5>
+            <P>根据上面获取的管理员 token，之后就可以获取用户 token 了</P>
+            <p>
+                <img src="../../images/openIM/install/18.png" />
+            </p>
+            <p>获取用户 token 之后，就可以使用各端 SDK 登录了</p>
         </div>
     </body>
 </html>
