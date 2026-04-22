@@ -6,12 +6,12 @@
     
   <url>
     <loc>https://xiaodu114.github.io/</loc>
-    <lastmod>2025-07-01T13:25:01.722Z</lastmod>
+    <lastmod>2026-04-22T14:29:24.325Z</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/android/index.html</loc>
-    <lastmod>2025-04-14T14:08:22.992Z</lastmod>
+    <lastmod>2026-04-14T14:30:31.000Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -61,7 +61,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/db/redis/index.html</loc>
-    <lastmod>2024-12-08T13:40:29.000Z</lastmod>
+    <lastmod>2025-09-04T12:31:22.383Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -71,7 +71,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/docker/index.html</loc>
-    <lastmod>2024-12-08T13:40:29.000Z</lastmod>
+    <lastmod>2026-03-18T13:47:03.021Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -105,6 +105,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://xiaodu114.github.io/p/engineering/index.html</loc>
+    <lastmod>2026-04-14T14:30:31.000Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://xiaodu114.github.io/p/fav/imageSite/index.html</loc>
     <lastmod>2024-12-08T13:40:29.000Z</lastmod>
     <priority>0.8</priority>
@@ -121,7 +126,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/fav/search/index.html</loc>
-    <lastmod>2024-12-08T13:40:29.000Z</lastmod>
+    <lastmod>2025-09-08T13:37:31.573Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -130,13 +135,23 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://xiaodu114.github.io/p/ide/as/index.html</loc>
+    <lastmod>2026-04-14T14:30:31.000Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://xiaodu114.github.io/p/ide/vscode/index.html</loc>
     <lastmod>2025-06-24T14:39:03.122Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://xiaodu114.github.io/p/im/index.html</loc>
+    <lastmod>2026-04-07T12:52:14.846Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://xiaodu114.github.io/p/java/index.html</loc>
-    <lastmod>2024-12-08T13:40:29.000Z</lastmod>
+    <lastmod>2026-03-03T14:12:38.768Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -310,6 +325,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://xiaodu114.github.io/p/nodejs/index.html</loc>
+    <lastmod>2025-09-08T12:09:47.501Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://xiaodu114.github.io/p/ocr/duguang/index.html</loc>
     <lastmod>2024-12-08T13:40:29.000Z</lastmod>
     <priority>0.8</priority>
@@ -321,7 +341,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/online/index.html</loc>
-    <lastmod>2025-05-28T12:27:45.956Z</lastmod>
+    <lastmod>2025-10-13T14:13:58.845Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -335,8 +355,13 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://xiaodu114.github.io/p/rust/index.html</loc>
+    <lastmod>2026-01-22T13:45:26.555Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://xiaodu114.github.io/p/temp/index.html</loc>
-    <lastmod>2024-12-08T13:40:29.000Z</lastmod>
+    <lastmod>2025-08-28T12:27:17.946Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -400,6 +425,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://xiaodu114.github.io/p/web/debuggingProxy/index.html</loc>
+    <lastmod>2026-04-14T14:30:31.000Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://xiaodu114.github.io/p/web/esbuild/index.html</loc>
     <lastmod>2025-01-01T01:20:00.179Z</lastmod>
     <priority>0.8</priority>
@@ -411,7 +441,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/web/html/index.html</loc>
-    <lastmod>2024-12-08T13:40:29.000Z</lastmod>
+    <lastmod>2025-08-10T14:14:03.889Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -432,6 +462,11 @@
   <url>
     <loc>https://xiaodu114.github.io/p/web/rollup/index.html</loc>
     <lastmod>2024-12-08T13:40:29.000Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/p/web/server/caddy/index.html</loc>
+    <lastmod>2026-01-22T13:45:26.918Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -461,7 +496,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/windows/index.html</loc>
-    <lastmod>2025-04-26T22:28:02.811Z</lastmod>
+    <lastmod>2026-04-22T13:30:42.474Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -471,7 +506,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/p/windows/wsl2/index.html</loc>
-    <lastmod>2024-12-08T13:40:29.000Z</lastmod>
+    <lastmod>2026-03-01T13:19:06.026Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -526,7 +561,7 @@
   </url>
   <url>
     <loc>https://xiaodu114.github.io/demo/css/scrollBar/index.html</loc>
-    <lastmod>2025-04-14T13:52:20.453Z</lastmod>
+    <lastmod>2025-08-10T13:28:39.821Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -565,8 +600,23 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://xiaodu114.github.io/demo/js/eCharts/index.html</loc>
+    <lastmod>2025-09-04T14:03:19.728Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/demo/js/emojiPickerElement/index.html</loc>
+    <lastmod>2026-01-22T13:59:39.993Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://xiaodu114.github.io/demo/js/fabMenu/index.html</loc>
     <lastmod>2024-12-08T13:40:29.000Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/demo/js/gridstack/index.html</loc>
+    <lastmod>2025-09-23T14:08:45.467Z</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -625,6 +675,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://xiaodu114.github.io/demo/js/wavesurfer/index.html</loc>
+    <lastmod>2025-08-29T03:29:05.000Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://xiaodu114.github.io/demo/js/word/index.html</loc>
     <lastmod>2025-05-28T12:26:57.074Z</lastmod>
     <priority>0.8</priority>
@@ -677,6 +732,11 @@
   <url>
     <loc>https://xiaodu114.github.io/demo/vue3/MarkdownEditor/index.html</loc>
     <lastmod>2024-12-08T13:40:29.000Z</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xiaodu114.github.io/demo/vue3/virtualScroll/index.html</loc>
+    <lastmod>2026-04-14T14:30:31.000Z</lastmod>
     <priority>0.8</priority>
   </url>
 </urlset>
