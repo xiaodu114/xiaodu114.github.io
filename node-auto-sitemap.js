@@ -195,9 +195,17 @@ const root_p = path.join(__dirname, "p");
 const excludePaths_p = {
     "/p/0": 1,
     "/p/_": 1,
+    "/p/android/pages": 1,
+    "/p/docker/pages": 1,
+    "/p/engineering/pages": 1,
+    "/p/ide/as/pages": 1,
+    "/p/im/pages": 1,
     "/p/llm/bigdl/source": 1,
     "/p/mllm/comfyUI/pages": 1,
+    "/p/nodejs/pages": 1,
+    "/p/rust/pages": 1,
     "/p/web/browser/pages": 1,
+    "/p/web/debuggingProxy/pages": 1,
     "/p/web/js/a2bei4": 1,
     "/p/web/js/base": 1,
     "/p/web/problem/crossDomain/cookie1.html": 1,
@@ -208,6 +216,7 @@ const excludePaths_p = {
     "/p/web/problem/crossDomain/windowName0.html": 1,
     "/p/web/problem/crossDomain/windowName1.html": 1,
     "/p/web/problem/sameOrigin/index-vue.html": 1,
+    "/p/web/server/caddy/pages": 1,
     "/p/web/vite": 1,
     "/p/web/vue2/source/iframe": 1,
     "/p/web/vue3/0introduction/code": 1,
@@ -224,6 +233,8 @@ const excludePaths_demo = {
     "/demo/js/BroadcastChannel/demo1.html": 1,
     "/demo/js/BroadcastChannel/demo2.html": 1,
     "/demo/js/Drag-and-Drop": 1,
+    "/demo/js/eCharts/pages": 1,
+    "/demo/js/emojiPickerElement/pages": 1,
     "/demo/js/SharedWorker/demo1.html": 1,
     "/demo/js/SharedWorker/demo2.html": 1,
     "/demo/js/VideojsPlayer/index-iframe.html": 1,
@@ -236,6 +247,7 @@ const excludePaths_demo = {
     "/demo/js/word/pages": 1,
     "/demo/vue2": 1,
     "/demo/vue3/lowcode/history": 1,
+    "/demo/vue3/virtualScroll/pages": 1,
     "/demo/webpack": 1
 };
 //  获取需要添加主页的页面：博客目录
