@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>emoji-picker-element - 示例二 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,emoji,emoji-picker-element,示例" />
+        <meta name="description" content="emoji-picker-element 示例：HTML Element 方式" />
+
+        <script src="/p/_/js/main.js"></script>
+        <!-- 方式一 -->
+        <!-- <script type="module" src="https://unpkg.com/emoji-picker-element@1.28.1/index.js"></script> -->
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>示例二：HTML 元素</h1>
+            <p></p>
+            <div id="emoji_box">
+                <emoji-picker></emoji-picker>
+                <!-- <emoji-picker locale="zh_CN" data-source="https://unpkg.com/emoji-picker-element-data@1.8.0/zh/emojibase/data.json"></emoji-picker> -->
+            </div>
+            <p>
+                你选择的是：
+                <span id="emoji_text" style="font-size: 1.5rem"></span>
+            </p>
+        </div>
+
+        <script type="module">
+            // 方式二
+            import "https://unpkg.com/emoji-picker-element@1.28.1/index.js";
+            import zh_CN from "https://unpkg.com/emoji-picker-element@1.28.1/i18n/zh_CN.js";
+
+            const eleEmojiText = document.getElementById("emoji_text");
+
+            const emojiPicker = document.querySelector("emoji-picker");
+            emojiPicker.addEventListener("emoji-click", (event) => {
+                eleEmojiText.innerHTML = event.detail.unicode;
+            });
+            // 等 DOM 解析完再把 i18n 塞给组件
+            customElements.whenDefined("emoji-picker").then(() => {
+                emojiPicker.i18n = zh_CN;
+
+                // locale 和 dataSource 也可以通过上面元素的属性来设置
+                emojiPicker.locale = "zh_CN";
+                emojiPicker.dataSource = "https://unpkg.com/emoji-picker-element-data@1.8.0/zh/emojibase/data.json";
+            });
+        </script>
+    </body>
+</html>

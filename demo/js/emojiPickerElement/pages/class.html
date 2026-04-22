@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>emoji-picker-element - 示例一 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,emoji,emoji-picker-element,示例" />
+        <meta name="description" content="emoji-picker-element 示例" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>示例一：new Picker()</h1>
+            <p></p>
+            <div id="emoji_box"></div>
+            <p>
+                你选择的是：
+                <span id="emoji_text" style="font-size: 1.5rem"></span>
+            </p>
+        </div>
+
+        <script type="module">
+            import { Picker } from "https://unpkg.com/emoji-picker-element@1.28.1/index.js";
+            import zh_CN from "https://unpkg.com/emoji-picker-element@1.28.1/i18n/zh_CN.js";
+
+            const eleEmojiText = document.getElementById("emoji_text");
+
+            const picker = new Picker({
+                locale: "zh_CN",
+                i18n: zh_CN,
+                dataSource: "https://unpkg.com/emoji-picker-element-data@1.8.0/zh/emojibase/data.json"
+            });
+            picker.addEventListener("emoji-click", (event) => {
+                eleEmojiText.innerHTML = event.detail.unicode;
+            });
+            document.getElementById("emoji_box").appendChild(picker);
+        </script>
+    </body>
+</html>

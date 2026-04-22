@@ -1,0 +1,38 @@
+{
+    "pageTitle": "emoji-picker-element - xiaodu114.github.io",
+    "head": {
+        "title": "我和 emoji-picker-element 的故事",
+        "subtitle": "版本：1.28.1",
+        "links": [
+            {
+                "href": "https://github.com/nolanlawson/emoji-picker-element",
+                "text": "nolanlawson/emoji-picker-element"
+            },
+            {
+                "href": "https://github.com/nolanlawson/emoji-picker-element-data",
+                "text": "nolanlawson/emoji-picker-element-data"
+            }
+        ]
+    },
+    "nodes": [
+         {
+            "id": 1,
+            "text": "介绍",
+            "code": "Introduction",
+            "page": "/demo/js/emojiPickerElement/pages/introduction.html"
+        },
+        {
+            "id": 2,
+            "text": "类",
+            "code": "Class",
+            "page": "/demo/js/emojiPickerElement/pages/class.html"
+        },
+        {
+            "id": 3,
+            "text": "HTML Element",
+            "code": "HtmlElement",
+            "page": "/demo/js/emojiPickerElement/pages/htmlElement.html"
+        }
+    ]
+}
+
