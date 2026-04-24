@@ -28,6 +28,18 @@
             <p>
                 <img src="../images/virtualDevice/3.png" alt="" srcset="" />
             </p>
+            <mark-block>
+                <p>这里环境变量<line-code>ANDROID_HOME</line-code>的值为<line-code>D:\Android\Sdk</line-code></p>
+                <p>为了更方便的查看和使用模拟器，你可以将<line-code>%ANDROID_HOME%\emulator</line-code>添加到<line-code>Path</line-code>，之后你就可以在任意终端尽情玩耍了</p>
+                <p>1、列出所有可用的 AVD（Android Virtual Device）</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+emulator -list-avds
+                </pre>
+                <p>2、启动指定模拟器</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+emulator -avd Pixel_9_Pro
+                </pre>
+            </mark-block>
             <h2>环境变量</h2>
             <mark-block>
                 <p>在创建模拟器之前最好检查一下是否创建了<line-code>ANDROID_AVD_HOME</line-code>这个环境变量。如果没有这个环境变量，<line-code>Android Studio</line-code>会把新建的模拟器放到这里<line-code>C:\Users\用户名\.android\avd</line-code></p>
