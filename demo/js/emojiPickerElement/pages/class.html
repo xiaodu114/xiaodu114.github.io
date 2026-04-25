@@ -14,6 +14,25 @@
         <div class="blog-page">
             <h1>示例一：new Picker()</h1>
             <p></p>
+            <fieldset>
+                <legend>选择语言</legend>
+                <form>
+                    <p>
+                        <label> <input type="radio" name="lang" value="zh" checked /> 中文 </label>
+                        <label> <input type="radio" name="lang" value="en" /> 英文 </label>
+                    </p>
+                </form>
+            </fieldset>
+            <fieldset>
+                <legend>选择皮肤</legend>
+                <form>
+                    <p>
+                        <label> <input type="radio" name="skin" value="light" checked /> 浅色 </label>
+                        <label> <input type="radio" name="skin" value="dark" /> 深色 </label>
+                    </p>
+                </form>
+            </fieldset>
+            <p></p>
             <div id="emoji_box"></div>
             <p>
                 你选择的是：
@@ -24,18 +43,104 @@
         <script type="module">
             import { Picker } from "https://unpkg.com/emoji-picker-element@1.28.1/index.js";
             import zh_CN from "https://unpkg.com/emoji-picker-element@1.28.1/i18n/zh_CN.js";
+            import en_US from "https://unpkg.com/emoji-picker-element@1.28.1/i18n/en.js";
+
+            const zhCNDataSource = "https://unpkg.com/emoji-picker-element-data@1.8.0/zh/emojibase/data.json";
+            const enUSDataSource = "https://unpkg.com/emoji-picker-element-data@1.8.0/en/emojibase/data.json";
+
+            class EmojiPickerManager {
+                container = null;
+                picker = null;
+                callbacks = null;
+
+                constructor(container, callbacks, option) {
+                    this.handleEmojiClick = this.handleEmojiClick.bind(this);
+
+                    this.container = container;
+                    this.callbacks = callbacks;
+                    this.mount(option);
+                }
+
+                mount(option = {}) {
+                    this.unmount();
+                    this.picker = new Picker(option);
+                    this.picker.addEventListener("emoji-click", this.handleEmojiClick);
+                    this.container.innerHTML = "";
+                    this.container.appendChild(this.picker);
+                }
+
+                handleEmojiClick(event) {
+                    if (typeof this.callbacks === "object" && this.callbacks !== null) {
+                        if (typeof this.callbacks.handleEmojiClick === "function") {
+                            this.callbacks.handleEmojiClick(event);
+                        }
+                    }
+                }
+
+                setTheme(theme = "light") {
+                    if (!this.picker) return;
+                    const classList = this.picker.classList;
+                    classList.remove("dark", "light");
+                    classList.add(theme);
+                }
+
+                unmount() {
+                    if (!this.picker) return;
+                    this.picker.removeEventListener("emoji-click", this.handleEmojiClick);
+                    this.picker._cmp?.$destroy?.();
+                    this.picker = null;
+                }
+
+                destroy() {
+                    this.unmount();
+                    this.container = null;
+                    this.callbacks = null;
+                }
+            }
 
             const eleEmojiText = document.getElementById("emoji_text");
 
-            const picker = new Picker({
+            const zhCNOption = {
                 locale: "zh_CN",
                 i18n: zh_CN,
-                dataSource: "https://unpkg.com/emoji-picker-element-data@1.8.0/zh/emojibase/data.json"
-            });
-            picker.addEventListener("emoji-click", (event) => {
+                dataSource: zhCNDataSource
+            };
+            const enUSOption = {
+                locale: "en_US",
+                i18n: en_US,
+                dataSource: enUSDataSource
+            };
+
+            function emojiClickHandler(event) {
                 eleEmojiText.innerHTML = event.detail.unicode;
+            }
+            const emojiPickerWrapper = new EmojiPickerManager(
+                document.getElementById("emoji_box"),
+                {
+                    handleEmojiClick: emojiClickHandler
+                },
+                zhCNOption
+            );
+
+            // 监听语言切换
+            document.querySelectorAll('input[name="lang"]').forEach((radio) => {
+                radio.addEventListener("change", (e) => {
+                    switch (e.target.value) {
+                        case "zh":
+                            emojiPickerWrapper.mount(zhCNOption);
+                            break;
+                        case "en":
+                            emojiPickerWrapper.mount(enUSOption);
+                    }
+                });
             });
-            document.getElementById("emoji_box").appendChild(picker);
+
+            //  监听主题切换
+            document.querySelectorAll('input[name="skin"]').forEach((radio) => {
+                radio.addEventListener("change", (e) => {
+                    emojiPickerWrapper.setTheme(e.target.value);
+                });
+            });
         </script>
     </body>
 </html>
