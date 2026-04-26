@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>OpenIM - JSSDK - 登录 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,即时通讯,IM,OpenIM,JSSDK,Mini Program,登录,Login,Authentication" />
+        <meta name="description" content="OpenIM 之 JSSDK 登录篇" />
+
+        <script src="/p/_/js/main.js"></script>
+        <!-- "loglevel": "https://unpkg.com/loglevel@1.9.2/lib/loglevel.js",
+        "spark-md5": "https://unpkg.com/spark-md5@3.0.2/spark-md5.js",  -->
+        <script type="importmap">
+            {
+                "imports": {
+                    "loglevel": "https://esm.sh/loglevel@1.9.2",
+                    "spark-md5": "https://esm.sh/spark-md5@3.0.2",
+                    "base64-arraybuffer": "https://unpkg.com/base64-arraybuffer@1.0.2/dist/base64-arraybuffer.es5.js",
+                    "@openim/protocol": "https://unpkg.com/@openim/protocol@0.0.8/lib/index.es.js",
+                    "@openim/client-sdk": "https://unpkg.com/@openim/client-sdk@3.8.3/lib/index.es.js"
+                }
+            }
+        </script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>登录</h1>
+            <mark-block>
+                <p>官方推荐：</p>
+                <ul>
+                    <li>登录前绑定监听事件，避免漏接状态</li>
+                    <li>登录后 IM SDK 将自动维持长连接</li>
+                    <li>Token 过期时需重新登录</li>
+                    <li>login调用成功并不代表连接IMServer成功，需监听连接事件确认状态。</li>
+                </ul>
+            </mark-block>
+            <h2>获取管理员 token</h2>
+            <p></p>
+            <div>
+                <p style="display: flex">
+                    <label style="flex: 1; display: flex; flex-direction: column">
+                        <span>获取管理员 token 的 API 地址:</span>
+                        <input style="flex: 1" type="url" id="serverAPI_admin_token_url" placeholder="请输入获取管理员 token 的 API 地址" value="http://localhost:10002/auth/get_admin_token" />
+                    </label>
+                </p>
+                <p style="display: flex">
+                    <label style="flex: 1"> 管理员 ID：<input type="text" id="serverAPI_admin_token_userId" placeholder="请输入管理员 ID" value="imAdmin" /> </label>
+                    <label style="flex: 1"> 密钥：<input type="text" id="serverAPI_admin_token_secret" placeholder="请输入密钥" value="openIM123" /> </label>
+                </p>
+                <p>
+                    <button onclick="getAdminToken()">获取管理员 token</button>
+                </p>
+                <p style="display: flex">
+                    <label style="flex: 1; display: flex; flex-direction: column">
+                        <span>管理员 token:</span>
+                        <textarea id="serverAPI_admin_token_result" style="flex: 1" rows="3" placeholder="请输入管理员 token 或者点击【获取管理员 token】按钮"></textarea>
+                    </label>
+                </p>
+                <script>
+                    function getAdminToken() {
+                        const adminTokenUrl = document.getElementById("serverAPI_admin_token_url").value;
+                        const adminTokenUserId = document.getElementById("serverAPI_admin_token_userId").value;
+                        const adminTokenSecret = document.getElementById("serverAPI_admin_token_secret").value;
+                        const adminTokenResultEle = document.getElementById("serverAPI_admin_token_result");
+                        fetch(adminTokenUrl, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "operationID": Date.now()
+                            },
+                            body: JSON.stringify({
+                                userID: adminTokenUserId,
+                                secret: adminTokenSecret
+                            })
+                        })
+                            .then((response) => response.json())
+                            .then(({ errCode, errMsg, errDlt, data }) => {
+                                if (errCode === 0) {
+                                    adminTokenResultEle.value = data.token;
+                                } else {
+                                    adminTokenResultEle.value = `异常：${errMsg}，${errDlt}`;
+                                }
+                            })
+                            .catch((error) => {
+                                adminTokenResultEle.value = error;
+                            });
+                    }
+                </script>
+            </div>
+            <mark-block>
+                <p>你可以输入表单的所有值，之后点击【获取管理员 token】按钮获取；当然你也可以手动添加到【管理员 token】</p>
+            </mark-block>
+            <h2>获取用户 token</h2>
+            <p><strong>注意：</strong>获取用户 token 这个API　依赖“管理员 token”</p>
+            <p></p>
+            <div>
+                <p style="display: flex">
+                    <label style="flex: 1; display: flex; flex-direction: column">
+                        <span>获取用户 token 的 API 地址:</span>
+                        <input style="flex: 1" type="url" id="serverAPI_user_token_url" placeholder="请输入获取用户 token 的 API 地址" value="http://localhost:10002/auth/get_user_token" />
+                    </label>
+                </p>
+                <p style="display: flex">
+                    <label style="flex: 1"> 用户 ID：<input type="text" id="serverAPI_user_token_userId" placeholder="请输入用户 ID" value="6960769246" /> </label>
+                    <label style="flex: 1"> 平台 ID：<input type="number" id="serverAPI_user_token_platformID" placeholder="请输入平台 ID" value="5" /> </label>
+                </p>
+                <p><strong>说明：</strong>1:iOS, 2:Android, 3:Windows, 4:OSX, 5:Web, 6:MiniWeb, 7:Linux, 8:APad, 9:IPad, 10:Admin, 11:HarmonyOS</p>
+                <p>
+                    <button onclick="getUserToken()">获取用户 token</button>
+                </p>
+                <p style="display: flex">
+                    <label style="flex: 1; display: flex; flex-direction: column">
+                        <span>用户 token:</span>
+                        <textarea id="serverAPI_user_token_result" style="flex: 1" rows="3" placeholder="请输入用户 token 或者点击【获取用户 token】按钮"></textarea>
+                    </label>
+                </p>
+                <script>
+                    function getUserToken() {
+                        const adminTokenResultEle = document.getElementById("serverAPI_admin_token_result");
+
+                        const userTokenUrl = document.getElementById("serverAPI_user_token_url").value;
+                        const userTokenUserId = document.getElementById("serverAPI_user_token_userId").value;
+                        const userTokenPlatformID = document.getElementById("serverAPI_user_token_platformID").value;
+                        const userTokenResultEle = document.getElementById("serverAPI_user_token_result");
+                        fetch(userTokenUrl, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "operationID": Date.now(),
+                                "token": adminTokenResultEle.value
+                            },
+                            body: JSON.stringify({
+                                userID: userTokenUserId,
+                                platformID: Number(userTokenPlatformID)
+                            })
+                        })
+                            .then((response) => response.json())
+                            .then(({ errCode, errMsg, errDlt, data }) => {
+                                if (errCode === 0) {
+                                    userTokenResultEle.value = data.token;
+                                } else {
+                                    userTokenResultEle.value = `异常：${errMsg}，${errDlt}`;
+                                }
+                            })
+                            .catch((error) => {
+                                userTokenResultEle.value = error;
+                            });
+                    }
+                </script>
+            </div>
+            <mark-block>
+                <p>你可以输入表单的所有值，之后点击【获取用户 token】按钮获取；当然你也可以手动添加到【用户 token】</p>
+            </mark-block>
+            <h2>SDK 登录</h2>
+            <mark-block>
+                <p>SDK 登录需要：用户 ID、平台 ID、用户 token、websocket 地址、API 地址 这几个参数，一定要准备好哦</p>
+            </mark-block>
+            <p></p>
+            <div>
+                <p style="display: flex">
+                    <label style="flex: 1"> websocket 地址：<input type="text" id="sdk_login_wsAddr" placeholder="请输入 websocket 地址" value="ws://localhost:10001" /></label>
+                    <label style="flex: 1"> API 地址：<input type="text" id="sdk_login_apiAddr" placeholder="请输入 API 地址" value="http://localhost:10002" /> </label>
+                </p>
+                <p>
+                    <button id="btnSDKLogin">用户登录</button>
+                </p>
+                <p>登录结果：<span id="sdk_login_result"></span></p>
+                <script type="module">
+                    import { initIM } from "../common/helper.js";
+
+                    function imLoginHandler() {
+                        const login_wsAddr = document.getElementById("sdk_login_wsAddr").value;
+                        const login_apiAddr = document.getElementById("sdk_login_apiAddr").value;
+                        const userTokenUserId = document.getElementById("serverAPI_user_token_userId").value;
+                        const userTokenPlatformID = document.getElementById("serverAPI_user_token_platformID").value;
+                        const userTokenResultEle = document.getElementById("serverAPI_user_token_result");
+                        const loginResultEle = document.getElementById("sdk_login_result");
+
+                        initIM({
+                            userID: userTokenUserId,
+                            platformID: 5,
+                            token: userTokenResultEle.value,
+                            wsAddr: login_wsAddr,
+                            apiAddr: login_apiAddr
+                        })
+                            .then((res) => {
+                                loginResultEle.innerHTML = "登录成功";
+                            })
+                            .catch((err) => {
+                                loginResultEle.innerHTML = JSON.stringify(err);
+                            });
+                    }
+
+                    document.getElementById("btnSDKLogin").addEventListener("click", imLoginHandler);
+                </script>
+            </div>
+            <h2>SDK 获取用户信息</h2>
+            <mark-block>
+                <p>在这之前一定要调用【SDK 登录】哦</p>
+            </mark-block>
+            <p></p>
+            <div>
+                <p>
+                    <button id="btnSDKGetUserInfo">获取用户信息</button>
+                </p>
+                <p>用户信息如下：</p>
+                <pre id="sdk_user_info_result"></pre>
+                <script type="module">
+                    import { IMSDK } from "../common/helper.js";
+
+                    const userInfoResultEle = document.getElementById("sdk_user_info_result");
+
+                    function imGetUserInfoHandler() {
+                        IMSDK.getSelfUserInfo()
+                            .then(({ data }) => {
+                                userInfoResultEle.innerHTML = JSON.stringify(data, null, 4);
+                            })
+                            .catch((err) => {
+                                userInfoResultEle.innerHTML = JSON.stringify(err);
+                            });
+                    }
+
+                    document.getElementById("btnSDKGetUserInfo").addEventListener("click", imGetUserInfoHandler);
+                </script>
+            </div>
+        </div>
+    </body>
+</html>
