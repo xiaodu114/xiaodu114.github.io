@@ -28,6 +28,25 @@
                     "text": "安装",
                     "code": "Install",
                     "page": "/p/im/pages/openIM/install.html"
+                },
+                {
+                    "id": 203000,
+                    "text": "JSSDK",
+                    "code": "JSSDK",
+                    "children": [
+                        {
+                            "id": 203001,
+                            "text": "介绍",
+                            "code": "Introduction",
+                            "page": "/p/im/pages/openIM/JSSDK/introduction.html"
+                        },
+                        {
+                            "id": 203002,
+                            "text": "登录",
+                            "code": "Login",
+                            "page": "/p/im/pages/openIM/JSSDK/login.html"
+                        }
+                    ]
                 }
             ]
         }
