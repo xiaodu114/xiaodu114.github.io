@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>React Native - 开发环境准备 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,React Native,开发环境" />
+        <meta name="description" content="React Native 之开发环境准备" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>开发环境准备</h1>
+            <p>先说下这里使用的是<line-code>windows</line-code><line-code>windows</line-code><line-code>windows</line-code></p>
+            <ul>
+                <li>
+                    <a href="https://reactnative.dev/docs/set-up-your-environment" target="_blank" rel="noopener noreferrer">Set Up Your Environment · React Native</a>
+                </li>
+                <li>
+                    <a href="https://reactnative.net.cn/docs/set-up-your-environment" target="_blank" rel="noopener noreferrer">设置你的环境 · React Native 框架</a>
+                </li>
+            </ul>
+            <h2>Node.js</h2>
+            <p>你可以参考：<a href="/p/nodejs/index.html" target="_blank" rel="noopener noreferrer">Node.js - xiaodu114.github.io</a></p>
+            <h2>JDK</h2>
+            <p>你可以参考：<a href="/p/java/index.html" target="_blank" rel="noopener noreferrer">java - xiaodu114.github.io</a></p>
+            <mark-block>
+                <p><line-code>React Native</line-code>对<line-code>JDK</line-code>有版本要求：<line-code>JDK17</line-code></p>
+            </mark-block>
+            <h2>Android 开发环境</h2>
+            <p>你可以参考：</p>
+            <ul>
+                <li>
+                    <a href="/p/ide/as/index.html" target="_blank" rel="noopener noreferrer">Android Studio - xiaodu114.github.io</a>
+                </li>
+                <li>
+                    <a href="/p//android//index.html" target="_blank" rel="noopener noreferrer">Android - xiaodu114.github.io</a>
+                </li>
+            </ul>
+            <p><line-code>React Native</line-code>对<line-code>Android SDK</line-code>有版本要求，如下：</p>
+            <dl>
+                <dt>SDK Platforms</dt>
+                <dd><line-code>Android SDK Platform 35</line-code></dd>
+                <dd><line-code>Intel x86 Atom_64 System Image</line-code>或<line-code>Google APIs Intel x86 Atom System Image</line-code></dd>
+                <dt>SDK Tools</dt>
+                <dd><line-code>Android SDK Build-Tools</line-code>下的<line-code>36.0.0</line-code></dd>
+                <dd><line-code>Android SDK Command-line Tools (latest)</line-code></dd>
+            </dl>
+            <mark-block>
+                <p><line-code>Intel x86 Atom_64 System Image</line-code>?还是<line-code>Intel x86_64 Atom System Image</line-code></p>
+            </mark-block>
+            <p>记得在检查一下<line-code>ANDROID_HOME</line-code>环境变量和<line-code>Path</line-code>：</p>
+            <ul>
+                <li>
+                    环境变量：ANDROID_HOME 
+                </li>
+                <li>
+                    新增 Path：%ANDROID_HOME%\platform-tools
+                </li>
+            </ul>
+        </div>
+    </body>
+</html>

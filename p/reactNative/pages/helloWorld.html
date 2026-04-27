@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>React Native - Hello World - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,React Native,Hello World,第一个 React Native 程序" />
+        <meta name="description" content="React Native 之 Hello World" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>Hello World</h1>
+            <p><line-code>Hello World</line-code>，React Native 开发之旅的起点</p>
+            <h2>React Native Community CLI</h2>
+            <p>GitHub 地址：<a href="https://github.com/react-native-community/cli" target="_blank" rel="noopener noreferrer">GitHub - react-native-community/cli: The React Native Community CLI - command line tools to help you build RN apps · GitHub</a></p>
+            <h3>清理 Gradle</h3>
+            <p>记录一下如何清理 Gradle 缓存</p>
+            <h4>本项目</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+cd android
+./gradlew clean
+            </pre>
+            <h4>全局</h4>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+Remove-Item -Recurse -Force -ErrorAction SilentlyContinue "C:\Users\xxx\.gradle\.tmp","C:\Users\xxx\.gradle\caches"
+            </pre>
+            <mark-block>
+                <p>记得换成你自己的“用户名”哦</p>
+                <p>删除时如果提示正在使用，可以尝试干掉<line-code>adb.exe</line-code>、<line-code>java jdk</line-code>（这里是 OpenJDK） 等进程</p>
+            </mark-block>
+            <h3>卸载旧版本</h3>
+            <p>如果之前装过全局安装过<line-code>react-native-cli</line-code>、<line-code>@react-native-community/cli</line-code>可能会导致意外问题，所以先卸载</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+npm uninstall -g react-native-cli @react-native-community/cli
+            </pre>
+            <h3>创建项目</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+npx @react-native-community/cli@latest init MyApp001
+            </pre>
+            <details>
+                <summary>如果你不想自动安装依赖，可以点击这里</summary>
+                <p>上面的命令会自动安装依赖，如果想跳过安装依赖，可以使用下面的命令：</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#	使用 --skip-install 参数可以跳过自动安装依赖。
+npx @react-native-community/cli@latest init MyApp001 --skip-install
+                </pre>
+            </details>
+            <p>
+                <img src="../images/helloWorld/1.png" alt="" srcset="" />
+            </p>
+            <h3>配置国内镜像 - npm</h3>
+            <p>这里弄得是项目级别的镜像，项目根目录添加<line-code>.npmrc</line-code>文件，文件内容如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+registry=https://registry.npmmirror.com/
+            </pre>
+            <mark-block>
+                <p>之前已经配置了全局的 npm 镜像，没有单独测试这个。这里仅仅记录一下。查看 npm 源地址：<line-code>npm config get registry</line-code></p>
+            </mark-block>
+            <h3>配置国内镜像 - android</h3>
+            <p>先整体看一下需要修改的几个文件：</p>
+            <p>
+                <img src="../images/helloWorld/2.png" alt="" srcset="" />
+            </p>
+            <h4>android\gradle\wrapper\gradle-wrapper.properties</h4>
+            <p>该文件只需修改<line-code>distributionUrl</line-code>的值即可</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+distributionUrl=https\://mirrors.aliyun.com/gradle/distributions/v9.3.1/gradle-9.3.1-bin.zip
+            </pre>
+            <p>
+                <img src="../images/helloWorld/3.png" alt="" srcset="" />
+            </p>
+            <h4>android\build.gradle</h4>
+            <p>下面是该文件修改之后的全部内容：</p>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../source/helloWorld/build.gradle.txt" ddz-lang="properties"></div>
+            <p>咱们再对比一下，看看修改了哪些地方：</p>
+            <p>
+                <img src="../images/helloWorld/4.png" alt="" srcset="" />
+            </p>
+            <h4>android\settings.gradle</h4>
+            <p><strong>注意：</strong>该文件格式要求很严格。下面是该文件修改之后的全部内容：</p>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../source/helloWorld/settings.gradle.txt" ddz-lang="properties"></div>
+            <p>咱们再对比一下，看看修改了哪些地方：</p>
+            <p>
+                <img src="../images/helloWorld/5.png" alt="" srcset="" />
+            </p>
+            <h3>运行</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+npx react-native run-android
+            </pre>
+            <mark-block>
+                <p>如果你想真机调试，你可以这样做：</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#	查看设备ID
+adb devices
+#	使用 --deviceId 参数指定真机设备进行调试
+npx react-native run-android --deviceId &lt;设备ID>
+                </pre>
+            </mark-block>
+            <p>来，看一下运行过程（起的终端真不少啊）：</p>
+            <p>
+                <img src="../images/helloWorld/6.png" alt="" srcset="" />
+            </p>
+            <p>第一次是真的慢啊！（不对啊！第一次，不应该很快嘛）。等他跑起来，<line-code>Metro</line-code>已近溜了……</p>
+            <p>
+                <img src="../images/helloWorld/7.png" alt="" srcset="" />
+            </p>
+            <p>既然服务停了，那咱就重新启动一下。下图你会看到 8081 已经启动了，之后刷新模拟器中的“RELOAD”，不知道是不是咱哪里弄错了，还是不行：</p>
+            <p>
+                <img src="../images/helloWorld/8.png" alt="" srcset="" />
+            </p>
+            <p>算了，从头再来一次把。我去，竟然是原来越快，神奇啊</p>
+            <p>
+                <img src="../images/helloWorld/9.png" alt="" srcset="" />
+            </p>
+            <p>
+                <img src="../images/helloWorld/10.png" alt="" srcset="" />
+            </p>
+            <h3>修改 App.tsx</h3>
+            <p>说好的<line-code>Hello Word</line-code>呢？你给我们看的是什么啊，我要<line-code>Hello Word</line-code>、<line-code>Hello Word</line-code>、<line-code>Hello Word</line-code></p>
+            <p>必须安排，文件全部内容如下：</p>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../source/helloWorld/App.tsx.txt" ddz-lang="tsx"></div>
+            <p>来吧，请看：</p>
+            <p>
+                <img src="../images/helloWorld/11.png" alt="" srcset="" />
+            </p>
+            <details>
+                <summary>踩坑详情</summary>
+                <p><strong>1、镜像问题？</strong></p>
+                <p>先看截图：</p>
+                <p>
+                    <img src="../images/helloWorld/error-1.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../images/helloWorld/error-2.png" alt="" srcset="" />
+                </p>
+                <p>
+                    <img src="../images/helloWorld/error-3.png" alt="" srcset="" />
+                </p>
+                <p>分析：我记得最开始弄<line-code>React Native</line-code>的时候，版本应该不是<line-code>0.85.2</line-code>，没有截图，硬伤啊！过几天再弄时版本就是<line-code>0.85.2</line-code>了，并且我认为应该是刚出来的最新版本，之后我就开始用了，当然是配置镜像之后才会有的问题，你看上面的图片中的日志，访问的是：<line-code>https://maven.aliyun.com/repository/public/com/facebook/react/react-android/0.85.2/react-android-0.85.2-debug.aar</line-code>。记得当时我还用浏览器访问了一下这个地址，确实没有对应的文件（当然，你现在访问肯定没有问题啊）。所以我怀疑<line-code>React Native 0.85.2</line-code>太新了，阿里云还没有来得及同步。本来还想着不用镜像了，可是后面再次尝试运行时，竟然成功了，再次用浏览器访问上面的地址文件也可以正常下载了，事情肯定是发生在同一天啊，这个可以确定</p>
+                <p>为了验证上面的分析，现在访问一下：<line-code>https://maven.aliyun.com/repository/public/com/facebook/react/react-android/0.85.3/react-android-0.85.3-debug.aar</line-code>，来，看一下效果：</p>
+                <p>
+                    <img src="../images/helloWorld/error-4.png" alt="" srcset="" />
+                </p>
+                <p>等到哪天<line-code>React Native 0.85.3</line-code>出来了，咱在试试</p>
+            </details>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,19 @@
+pluginManagement {
+    repositories {
+        // 国内镜像优先
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url 'https://repo.huaweicloud.com/repository/maven/' }
+        
+        // 兜底
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    includeBuild("../node_modules/@react-native/gradle-plugin")
+}
+plugins { id("com.facebook.react.settings") }
+extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
+rootProject.name = 'MyApp001'
+include ':app'
+includeBuild('../node_modules/@react-native/gradle-plugin')
