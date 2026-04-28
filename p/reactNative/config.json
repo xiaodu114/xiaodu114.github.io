@@ -18,16 +18,22 @@
             "page": "/p/reactNative/pages/introduction.html"
         },
         {
-            "id": 3,
+            "id": 2,
             "text": "准备",
             "code": "Prepare",
             "page": "/p/reactNative/pages/prepare.html"
         },
         {
-            "id": 4,
+            "id": 3,
             "text": "Hello World",
             "code": "HelloWorld",
             "page": "/p/reactNative/pages/helloWorld.html"
+        },
+        {
+            "id": 4,
+            "text": "Android 打包",
+            "code": "AndroidPackage",
+            "page": "/p/reactNative/pages/androidPackage.html"
         }
     ]
 }
