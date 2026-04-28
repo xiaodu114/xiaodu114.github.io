@@ -1,0 +1,154 @@
+/* 页面的整体布局样式 */
+.app {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    > .header {
+        flex-shrink: 0;
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding-left: 25px;
+        padding-right: 25px;
+
+        &::after {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            height: 1px;
+            content: "";
+            -webkit-transform: scaleY(0.5);
+            transform: scaleY(0.5);
+            background-color: var(--main-color);
+        }
+    }
+
+    > .main {
+        flex: 1;
+        overflow: hidden;
+        display: flex;
+
+        > .nav {
+            width: 300px;
+            flex-shrink: 0;
+            position: relative;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            scrollbar-width: none;
+
+            &::after {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                width: 1px;
+                content: "";
+                -webkit-transform: scaleX(0.5);
+                transform: scaleX(0.5);
+                background-color: var(--main-color);
+            }
+        }
+
+        > .content {
+            flex: 1;
+            margin: 15px;
+            box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.2);
+        }
+    }
+
+    > .mobile-menu-btn {
+        display: none;
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 1001;
+        padding: 10px;
+        background: var(--main-color);
+        border-radius: 50%;
+        box-shadow:
+            0 3px 5px -1px rgb(0 0 0 / 20%),
+            0 6px 10px 0 rgb(0 0 0 / 14%),
+            0 1px 18px 0 rgb(0 0 0 / 12%);
+        cursor: pointer;
+
+        > svg {
+            width: 36px;
+            color: #fff;
+        }
+    }
+
+    > .mobile-menu-drawer {
+        display: none;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1002;
+        background: rgba(0, 0, 0, 0);
+        pointer-events: none;
+        transition: background 0.3s ease;
+
+        > .mobile-menu-drawer-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 280px;
+            background: #fff;
+            overflow-y: auto;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+
+            > .mobile-menu-drawer-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 15px;
+                border-bottom: 1px solid #eee;
+                font-weight: 600;
+            }
+        }
+
+        &.mobile-menu-drawer-open {
+            background: rgba(0, 0, 0, 0.5);
+            pointer-events: auto;
+
+            > .mobile-menu-drawer-content {
+                transform: translateX(0);
+            }
+        }
+    }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .app {
+        > .header {
+            display: none !important;
+        }
+
+        > .main {
+            > .nav {
+                display: none !important;
+            }
+
+            > .content {
+                margin: 0 !important;
+            }
+        }
+
+        > .mobile-menu-btn {
+            display: flex;
+        }
+
+        > .mobile-menu-drawer {
+            display: block;
+        }
+    }
+}
