@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>React Native - Android 打包 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,React Native,React,Android,Package,打包,APK" />
+        <meta name="description" content="React Native 之 Android 打包" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>Android 打包</h1>
+            <ul>
+                <li>
+                    <a href="https://reactnative.dev/docs/signed-apk-android" target="_blank" rel="noopener noreferrer">Publishing to Google Play Store · React Native</a>
+                </li>
+                <li>
+                    <a href="https://reactnative.net.cn/docs/signed-apk-android" target="_blank" rel="noopener noreferrer">发布到 Google Play Store · React Native 框架</a>
+                </li>
+            </ul>
+            <h2>生成私有签名密钥</h2>
+            <p>可以使用<line-code>keytool</line-code>生成私有签名密钥。<line-code>keytool</line-code>是啥？你安装了吗？既然都看到了这里，我觉得已经安装了，你看这里：</p>
+            <p>
+                <img src="../images/androidPackage/1.png" alt="" srcset="" />
+            </p>
+            <p>来吧，进入<line-code>android/app</line-code>目录并打开终端，输入下面的命令：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+keytool -genkeypair -v -storetype PKCS12 -keystore myapp001-android-key.keystore -alias myapp001-android-key-alias -keyalg RSA -keysize 2048 -validity 10000
+            </pre>
+            <mark-block>
+                <p>因为官方文档后面的介绍是将密钥文件放到<line-code>android/app</line-code>目录下，所以这里直接再该目录下生成</p>
+                <ul>
+                    <li><line-code>myapp001-android-key.keystore</line-code>：密钥文件名</li>
+                    <li><line-code>myapp001-android-key-alias</line-code>：别名</li>
+                </ul>
+            </mark-block>
+            <p>
+                <img src="../images/androidPackage/2.png" alt="" srcset="" />
+            </p>
+            <h2>配置 Gradle 签名</h2>
+            <p>这里需要修改<line-code>android\app\build.gradle</line-code>这个文件</p>
+            <details>
+                <summary>文件内容有点长，点击查看详情</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../source/androidPackage/build.gradle.txt" ddz-lang="properties"></div>
+            </details>
+            <p>咱们再对比一下，看看修改了哪些地方：</p>
+            <p>
+                <img src="../images/androidPackage/3.png" alt="" srcset="" />
+            </p>
+            <h2>APK</h2>
+            <mark-block>
+                <p>如果不是第一次执行，建议先清理一下：</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+./gradlew clean
+                </pre>
+            </mark-block>
+            <p>终端进入项目下<line-code>android</line-code>目录，执行下面的命令：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+./gradlew assembleRelease
+            </pre>
+            <p><line-code>APK</line-code>在这里哦！你发现了吗？<line-code>android/app/build/outputs/apk/release/app-release.apk</line-code></p>
+            <p>
+                <img src="../images/androidPackage/4.png" alt="" srcset="" />
+            </p>
+            <h3>npx react-native build-android --tasks assembleRelease</h3>
+            <p>这个是后补的。打包<line-code>AAB</line-code>时，才知道有这种方式（请看下文），于是查一下是否有类似的命令来打包<line-code>APK</line-code>，真有：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+npx react-native build-android --tasks assembleRelease
+            </pre>
+            <h2>AAB</h2>
+            <mark-block>
+                <p>如果不是第一次执行，建议先清理一下：</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+./gradlew clean
+                </pre>
+                <p>
+                    <img src="../images/androidPackage/5.png" alt="" srcset="" />
+                </p>
+            </mark-block>
+            <p>终端进入项目下<line-code>android</line-code>目录，执行下面的命令：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+./gradlew bundleRelease
+            </pre>
+            <p><line-code>AAB</line-code>在这里哦！你发现了吗？<line-code>android/app/build/outputs/bundle/release/app-release.aab</line-code></p>
+            <p>
+                <img src="../images/androidPackage/6.png" alt="" srcset="" />
+            </p>
+            <h3>npx react-native build-android --mode=release</h3>
+            <p>官方提供的打包<line-code>AAB</line-code>的另一种方式：<line-code>npx react-native build-android --mode=release</line-code></p>
+            <p>终端进入项目根目录，执行下面的命令：</p>
+            <p>
+                <img src="../images/androidPackage/7.png" alt="" srcset="" />
+            </p>
+            <h2>配置打包文件名称</h2>
+            <p>无论是<line-code>APK</line-code>还是<line-code>AAB</line-code>，文件名称都是<line-code>app-release</line-code>，一点都不高大上……</p>
+            <p>怎么弄呢？还是得修改<line-code>android\app\build.gradle</line-code>这个文件，在上面内容的基础上添加下面的内容：</p>
+            <p><strong>APK 文件名</strong></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="properties">
+android {
+    ...
+    defaultConfig {   
+    }
+    signingConfigs {   
+    }
+    buildTypes {    
+    }
+    // 这里，这里，这里，APK 命名规则
+    applicationVariants.configureEach { variant ->
+        variant.outputs.configureEach { output ->
+            if (variant.buildType.name == "release") {
+                def versionName = variant.versionName
+                def date = new Date().format("yyyyMMdd", TimeZone.getTimeZone("Asia/Shanghai"))
+                output.outputFileName = "MyApp001-v${versionName}-${date}.apk"
+            }
+        }
+    }
+}
+            </pre>
+            <p><strong>AAB 文件名</strong></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="properties">
+android {
+}
+
+dependencies {
+}
+
+// 这里，这里，这里，AAB 命名规则
+tasks.whenTaskAdded { task ->
+    if (task.name == "bundleRelease") {
+        task.doLast {
+            def aabDir = file("${project.buildDir}/outputs/bundle/release/")
+            def date = new Date().format("yyyyMMdd", TimeZone.getTimeZone("Asia/Shanghai"))
+            def versionName = android.defaultConfig.versionName
+            
+            aabDir.listFiles()?.each { file ->
+                if (file.name.endsWith('.aab')) {
+                    file.renameTo(new File(file.parent, "MyApp001-v${versionName}-${date}.aab"))
+                }
+            }
+        }
+    }
+}
+            </pre>
+            <p>咱们再对比一下，看看修改了哪些地方：</p>
+            <p>
+                <img src="../images/androidPackage/8.png" alt="" srcset="" />
+            </p>
+            <p>打包命令保持不变，下面就是见证奇迹的时刻：</p>
+            <p>
+                <img src="../images/androidPackage/9.png" alt="" srcset="" />
+            </p>
+            <p>
+                <img src="../images/androidPackage/10.png" alt="" srcset="" />
+            </p>
+        </div>
+    </body>
+</html>
