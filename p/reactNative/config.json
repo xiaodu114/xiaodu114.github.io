@@ -34,6 +34,19 @@
             "text": "Android 打包",
             "code": "AndroidPackage",
             "page": "/p/reactNative/pages/androidPackage.html"
+        },
+        {
+            "id": 500000,
+            "text": "导航",
+            "code": "Navigation",
+            "children": [
+                {
+                    "id": 500001,
+                    "text": "堆栈导航器",
+                    "code": "StackNavigation",
+                    "page": "/p/reactNative/pages/nav/stack.html"
+                }
+            ]
         }
     ]
 }
