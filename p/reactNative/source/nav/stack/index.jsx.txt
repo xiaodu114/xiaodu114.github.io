@@ -1,0 +1,111 @@
+import * as React from 'react';
+import { View, Text, Button } from 'react-native';
+import {
+  createStaticNavigation,
+  useNavigation,
+} from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+function HomeScreen() {
+  const navigation = useNavigation();
+
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>这里是主页</Text>
+      <Button
+        onPress={() => {
+          navigation.navigate('Details', {
+            itemId: 13140,
+            otherParam: '我是 xiaodu114',
+          });
+        }}
+        title="进入详情页"
+      />
+    </View>
+  );
+}
+
+function DetailsScreen({ route }) {
+  const navigation = useNavigation();
+  const { itemId, otherParam } = route.params;
+
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>这里是【详情】页面</Text>
+      <Text>itemId: {itemId}</Text>
+      <Text>otherParam: {otherParam}</Text>
+      <View style={{ flexDirection: 'row', gap: 10 }}>
+        <Button
+          onPress={() => {
+            navigation.navigate('Edit');
+          }}
+          title="进入编辑页"
+        />
+        <Button
+          onPress={() => {
+            navigation.goBack();
+          }}
+          title="返回主页"
+        />
+      </View>
+    </View>
+  );
+}
+
+function EditScreen() {
+  const navigation = useNavigation();
+
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>这里是【编辑】页面</Text>
+      <View style={{ flexDirection: 'row', gap: 10 }}>
+        <Button
+          onPress={() => {
+            navigation.goBack();
+          }}
+          title="返回上一页"
+        />
+        <Button
+          onPress={() => {
+            navigation.popTo('Home');
+          }}
+          title="返回主页"
+        />
+      </View>
+    </View>
+  );
+}
+
+const RootStack = createNativeStackNavigator({
+  initialRouteName: 'Home',
+  screenOptions: {
+    headerTitleAlign: 'center',
+    gestureEnabled: true,
+    gestureDirection: 'horizontal',
+  },
+  screens: {
+    Home: {
+      screen: HomeScreen,
+      options: {
+        headerTitle: '你的主页',
+      },
+    },
+    Details: {
+      screen: DetailsScreen,
+      options: {
+        headerTitle: '详情页',
+        headerTitleAlign: 'left',
+      },
+    },
+    Edit: {
+      screen: EditScreen,
+      options: {
+        headerTitle: '编辑页',
+      },
+    },
+  },
+});
+
+const Navigation = createStaticNavigation(RootStack);
+
+export default Navigation;
