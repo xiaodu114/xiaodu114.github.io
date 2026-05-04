@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>React Native - React Navigation - stack navigator - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,React Native,React Navigation,stack navigator,导航,堆栈导航器" />
+        <meta name="description" content="React Navigation 之堆栈导航器" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>堆栈导航器</h1>
+            <p>这里是<line-code>React Navigation</line-code>之堆栈导航器的入门篇。基于前面创建的项目<line-code>MyApp001</line-code>，添加堆栈导航器的使用。</p>
+            <p>参考：<a href="https://reactnavigation.org/docs/getting-started/" target="_blank" rel="noopener noreferrer">Getting started | React Navigation</a></p>
+            <h2>前置准备</h2>
+            <p>在使用堆栈导航器之前需要安装一些基础包以及做一些响应的配置</p>
+            <h3>安装基础包和依赖</h3>
+            <p>开始安装<line-code>@react-navigation/native</line-code></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+npm install @react-navigation/native
+            </pre>
+            <p>开始安装依赖包</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+npm install react-native-screens react-native-safe-area-context
+            </pre>
+            <p>你安装了吗？反正我安装好了，如下：</p>
+            <p>
+                <img src="../../images/nav/stack/1.png" alt="" srcset="" />
+            </p>
+            <h3>Android 配置 react-native-screens</h3>
+            <p>这里需要修改<line-code>android/app/src/main/java/com/myapp001/MainActivity.kt</line-code>这个文件，修改如下：</p>
+            <p>
+                <img src="../../images/nav/stack/2.png" alt="" srcset="" />
+            </p>
+            <p>咱再对比一下，看下修改了哪些内容：</p>
+            <p>
+                <img src="../../images/nav/stack/3.png" alt="" srcset="" />
+            </p>
+            <details>
+                <summary>点击查看文件详情</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/stack/MainActivity.kt.txt" ddz-lang="properties"></div>
+            </details>
+            <h3>Opting-out of predictive back on Android</h3>
+            <p>这里需要修改<line-code>android/app/src/main/AndroidManifest.xml</line-code>这个文件，修改如下：</p>
+            <p>
+                <img src="../../images/nav/stack/4.png" alt="" srcset="" />
+            </p>
+            <mark-block>
+                <p>到这里咱都准备好了，下面开始正题了</p>
+            </mark-block>
+            <h2>安装堆栈导航</h2>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+npm install @react-navigation/native-stack
+            </pre>
+            <p>
+                <img src="../../images/nav/stack/5.png" alt="" srcset="" />
+            </p>
+            <h2>创建导航入口文件</h2>
+            <p>这里创建导航入口文件：<line-code>src/navigation/index.jsx</line-code>。因为这是一个简单的 demo 示例，所以将几个页面都放在这个文件里了</p>
+            <p>
+                <img src="../../images/nav/stack/6.png" alt="" srcset="" />
+            </p>
+            <details>
+                <summary>点击查看文件详情</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/stack/index.jsx.txt" ddz-lang="properties"></div>
+            </details>
+            <h2>修改 App.tsx</h2>
+            <p>咱还得修改一下：<line-code>App.tsx</line-code>这个文件，如下：</p>
+            <p>
+                <img src="../../images/nav/stack/7.png" alt="" srcset="" />
+            </p>
+            <details>
+                <summary>点击查看文件详情</summary>
+                <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/stack/App.tsx.txt" ddz-lang="properties"></div>
+            </details>
+            <p>到这里咱都弄完了，赶紧运行试试吧</p>
+            <h2>运行</h2>
+            <p>有了之前<line-code>Hello Word</line-code>的经历，这里还是比较顺利的，咱们直接上截图，分别是：主页、详情页面、编辑页面，如下：</p>
+            <p>
+                <img src="../../images/nav/stack/8.png" alt="" srcset="" />
+            </p>
+            <p>
+                <img src="../../images/nav/stack/9.png" alt="" srcset="" />
+            </p>
+            <p>
+                <img src="../../images/nav/stack/10.png" alt="" srcset="" />
+            </p>
+            <p>最后，咱再看一下在<line-code>Hello Word</line-code>项目基础上修改了哪些文件，如下：</p>
+            <p>
+                <img src="../../images/nav/stack/11.png" alt="" srcset="" />
+            </p>
+        </div>
+    </body>
+</html>
