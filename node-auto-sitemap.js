@@ -203,6 +203,7 @@ const excludePaths_p = {
     "/p/llm/bigdl/source": 1,
     "/p/mllm/comfyUI/pages": 1,
     "/p/nodejs/pages": 1,
+    "/p/reactNative/pages": 1,
     "/p/rust/pages": 1,
     "/p/web/browser/pages": 1,
     "/p/web/debuggingProxy/pages": 1,
