@@ -25,6 +25,10 @@ cd android
             </pre>
             <h4>全局</h4>
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+Remove-Item -Recurse -Force -ErrorAction SilentlyContinue node_modules
+            </pre>
+            <p></p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 Remove-Item -Recurse -Force -ErrorAction SilentlyContinue "C:\Users\xxx\.gradle\.tmp","C:\Users\xxx\.gradle\caches"
             </pre>
             <mark-block>
@@ -90,6 +94,16 @@ distributionUrl=https\://mirrors.aliyun.com/gradle/distributions/v9.3.1/gradle-9
             <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
 npx react-native run-android
             </pre>
+            <mark-block>
+                <p>虚拟机</p>
+                <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+#	列出所有可用的 AVD（Android Virtual Device）
+emulator -list-avds
+#	启动指定模拟器
+emulator -avd Pixel_9_Pro
+                </pre>
+            </mark-block>
+            <p></p>
             <mark-block>
                 <p>如果你想真机调试，你可以这样做：</p>
                 <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
