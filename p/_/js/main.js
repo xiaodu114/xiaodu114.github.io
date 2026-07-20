@@ -82,13 +82,13 @@
 
     function loadUtilsJS() {
         return new Promise((resolve, reject) => {
-            import("/lib/_/utils.js").then((module) => {
+            (import("/lib/_/utils.js").then((module) => {
                 window.pUtils = module;
                 resolve();
             }),
                 () => {
                     resolve();
-                };
+                });
         });
     }
 
@@ -172,7 +172,7 @@
      *  3、添加依赖的css
      *      //https://cdn.jsdelivr.net/npm/normalize.css/normalize.min.css
      */
-    ["/lib/highlight/github.css", "/lib/highlight/lang-label.css", "/p/_/css/typesetting.css"].forEach((cssPath) => {
+    ["/lib/highlight/theme.css", "/lib/highlight/lang-label.css", "/p/_/css/typesetting.css"].forEach((cssPath) => {
         let linkElement = document.createElement("link");
         linkElement.id = "link-css-" + cssPath.slice(cssPath.lastIndexOf("/") + 1);
         linkElement.rel = "stylesheet";
