@@ -45,6 +45,12 @@
                     "text": "堆栈导航器",
                     "code": "StackNavigation",
                     "page": "/p/reactNative/pages/nav/stack.html"
+                },
+                {
+                    "id": 500002,
+                    "text": "嵌套导航",
+                    "code": "NestedNavigator",
+                    "page": "/p/reactNative/pages/nav/nested.html"
                 }
             ]
         }
