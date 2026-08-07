@@ -1,0 +1,26 @@
+import { View, Text, Button, StyleSheet } from 'react-native';
+
+import { useAuthStore } from '../../store/useAuthStore.js';
+
+export default function ProfileScreen() {
+  const logout = useAuthStore(state => state.logout);
+
+  function logoutHandler() {
+    logout();
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text>我的</Text>
+      <Button title="退出登录" onPress={logoutHandler} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

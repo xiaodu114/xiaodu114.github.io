@@ -1,0 +1,15 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import MessageTopTabs from './MessageTopTabs.jsx';
+import Chat from '../screens/message/Chat.jsx';
+
+const Stack = createNativeStackNavigator();
+
+export default function MyStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="MessageTopTabs" component={MessageTopTabs} />
+      <Stack.Screen name="Chat" component={Chat} />
+    </Stack.Navigator>
+  );
+}

@@ -1,0 +1,60 @@
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from '@react-native-vector-icons/ionicons';
+
+import MessageStack from './MessageStack.jsx';
+import ReportStack from './ReportStack.jsx';
+import WorkspaceStack from './WorkspaceStack.jsx';
+import MyStack from './MyStack.jsx';
+
+const Tab = createBottomTabNavigator();
+
+function getTabBarIcon(routeName, focused, color, size) {
+  const iconMap = {
+    Message: focused ? 'chatbubbles' : 'chatbubbles-outline',
+    Report: focused ? 'cloud-upload' : 'cloud-upload-outline',
+    Workspace: focused ? 'grid' : 'grid-outline',
+    My: focused ? 'person' : 'person-outline',
+  };
+  return <Ionicons name={iconMap[routeName]} size={size} color={color} />;
+}
+
+export default function MainTabs() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarIcon: ({ focused, color, size }) =>
+          getTabBarIcon(route.name, focused, color, size),
+      })}
+    >
+      <Tab.Screen
+        name="Message"
+        component={MessageStack}
+        options={{
+          title: '消息',
+        }}
+      />
+      <Tab.Screen
+        name="Report"
+        component={ReportStack}
+        options={{
+          title: '一键上报',
+        }}
+      />
+      <Tab.Screen
+        name="Workspace"
+        component={WorkspaceStack}
+        options={{
+          title: '工作台',
+        }}
+      />
+      <Tab.Screen
+        name="My"
+        component={MyStack}
+        options={{
+          title: '我的',
+        }}
+      />
+    </Tab.Navigator>
+  );
+}

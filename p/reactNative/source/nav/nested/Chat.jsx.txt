@@ -1,0 +1,29 @@
+import { View, Text, Button, StyleSheet } from 'react-native';
+
+import { useNavigation } from '@react-navigation/native';
+
+export default function ChatScreen({ route }) {
+  const { conversationId } = route.params;
+
+  const navigation = useNavigation();
+
+  const goBack = () => {
+    navigation.goBack();
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text>消息：聊天</Text>
+      <Text>参数 conversationId: {conversationId}</Text>
+      <Button title="返回" onPress={goBack} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

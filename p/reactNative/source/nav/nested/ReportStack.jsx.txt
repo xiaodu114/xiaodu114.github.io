@@ -1,0 +1,13 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import ReportMain from '../screens/report/ReportMain.jsx';
+
+const Stack = createNativeStackNavigator();
+
+export default function ReportStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="ReportMain" component={ReportMain} />
+    </Stack.Navigator>
+  );
+}

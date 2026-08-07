@@ -1,0 +1,48 @@
+import { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+
+import { useNavigation } from '@react-navigation/native';
+import { useAuthStore } from '../../store/useAuthStore.js';
+
+export default function LoginScreen() {
+  const navigation = useNavigation();
+  const login = useAuthStore(state => state.login);
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = () => {
+    login('666666');
+  };
+
+  const go2Register = () => {
+    navigation.navigate('Register');
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>登录</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="用户名"
+        value={username}
+        onChangeText={setUsername}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="密码"
+        secureTextEntry
+        value={password}
+        onChangeText={setPassword}
+      />
+      <Button title="登录" onPress={handleLogin} />
+      <Button title="注册" onPress={go2Register} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

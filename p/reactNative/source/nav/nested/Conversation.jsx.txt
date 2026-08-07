@@ -1,0 +1,28 @@
+import { View, Text, Button, StyleSheet } from 'react-native';
+
+import { useNavigation } from '@react-navigation/native';
+
+export default function ConversationScreen() {
+  const navigation = useNavigation();
+
+  const go2Chat = () => {
+    navigation.navigate('Chat', {
+      conversationId: 114,
+    });
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text>消息：会话</Text>
+      <Button title="去聊天" onPress={go2Chat} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

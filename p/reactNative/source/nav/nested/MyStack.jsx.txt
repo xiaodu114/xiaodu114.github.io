@@ -1,0 +1,13 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import Profile from '../screens/my/Profile.jsx';
+
+const Stack = createNativeStackNavigator();
+
+export default function MyStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Profile" component={Profile} />
+    </Stack.Navigator>
+  );
+}

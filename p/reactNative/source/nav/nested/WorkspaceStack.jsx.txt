@@ -1,0 +1,13 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import WorkspaceMain from '../screens/workspace/WorkspaceMain.jsx';
+
+const Stack = createNativeStackNavigator();
+
+export default function WorkspaceStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="WorkspaceMain" component={WorkspaceMain} />
+    </Stack.Navigator>
+  );
+}

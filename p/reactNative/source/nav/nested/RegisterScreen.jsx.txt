@@ -1,0 +1,26 @@
+import { View, Text, Button, StyleSheet } from 'react-native';
+
+import { useNavigation } from '@react-navigation/native';
+
+export default function RegisterScreen() {
+  const navigation = useNavigation();
+
+  const go2Login = () => {
+    navigation.goBack();
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text>注册页面</Text>
+      <Button title="返回登录" onPress={go2Login} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

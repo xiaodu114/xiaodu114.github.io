@@ -1,0 +1,35 @@
+│  App.tsx
+│  
+└─src
+    ├─navigation
+    │      AuthStack.jsx            # 未授权堆栈：登录页面、注册页面
+    │      MainTabs.jsx             # 底部页签导航：消息堆栈、上报堆栈、工作台堆栈、我的堆栈
+    │      MessageStack.jsx         # 底部页签导航--消息堆栈
+    │      MessageTopTabs.jsx       # 底部页签导航--消息堆栈--顶部页签导航
+    │      MyStack.jsx              # 底部页签导航--我的堆栈
+    │      ReportStack.jsx          # 底部页签导航--上报堆栈
+    │      RootNavigator.jsx        # 根导航：未授权堆栈（AuthStack）、底部页签导航（MainTabs）
+    │      WorkspaceStack.jsx       # 底部页签导航--工作台堆栈
+    │      
+    ├─screens
+    │  ├─auth
+    │  │      LoginScreen.jsx       # 未授权堆栈--登录页面
+    │  │      RegisterScreen.jsx    # 未授权堆栈--注册页面
+    │  │      
+    │  ├─message
+    │  │      AddressBook.jsx       # 底部页签导航--消息堆栈--顶部页签导航--通讯录页面
+    │  │      Chat.jsx              # 底部页签导航--消息堆栈--聊天页面			
+    │  │      Conversation.jsx      # 底部页签导航--消息堆栈--顶部页签导航--会话列表页面
+    │  │      Group.jsx             # 底部页签导航--消息堆栈--顶部页签导航--群组页面
+    │  │      
+    │  ├─my
+    │  │      Profile.jsx           # 底部页签导航--我的堆栈--我的主页
+    │  │      
+    │  ├─report
+    │  │      ReportMain.jsx        # 底部页签导航--上报堆栈--上报主页
+    │  │      
+    │  └─workspace
+    │          WorkspaceMain.jsx    # 底部页签导航--工作台堆栈--工作台主页
+    │          
+    └─store
+            useAuthStore.js         # 鉴权状态存储

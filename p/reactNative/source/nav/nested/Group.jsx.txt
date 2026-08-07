@@ -1,0 +1,17 @@
+import { View, Text, StyleSheet } from 'react-native';
+
+export default function GroupScreen() {
+  return (
+    <View style={styles.container}>
+      <Text>消息：群组</Text>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

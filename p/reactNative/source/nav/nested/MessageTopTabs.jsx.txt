@@ -1,0 +1,32 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
+import Conversation from '../screens/message/Conversation.jsx';
+import Group from '../screens/message/Group.jsx';
+import AddressBook from '../screens/message/AddressBook.jsx';
+
+const Tab = createMaterialTopTabNavigator();
+
+export default function MessageTopTabs() {
+  return (
+    <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+      <Tab.Navigator>
+        <Tab.Screen
+          name="Conversation"
+          component={Conversation}
+          options={{ title: '会话' }}
+        />
+        <Tab.Screen
+          name="Group"
+          component={Group}
+          options={{ title: '群组' }}
+        />
+        <Tab.Screen
+          name="AddressBook"
+          component={AddressBook}
+          options={{ title: '通讯录' }}
+        />
+      </Tab.Navigator>
+    </SafeAreaView>
+  );
+}
