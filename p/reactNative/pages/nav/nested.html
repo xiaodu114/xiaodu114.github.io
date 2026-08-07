@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>React Native - React Navigation - nested navigators - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,React Native,React Navigation,nested navigators,Stack Navigator,Bottom Tabs Navigator,Material Top Tabs Navigator,导航,嵌套导航,栈导航器,底部标签导航器,顶部标签导航器" />
+        <meta name="description" content="React Navigation 之嵌套导航" />
+
+        <script src="/p/_/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>嵌套导航</h1>
+            <p>搞定了<line-code>React Navigation</line-code>栈导航器之后，这里尝试弄一下嵌套导航。还是基于前面创建的项目<line-code>MyApp001</line-code>，追加嵌套导航。</p>
+            <p>参考：<a href="https://reactnavigation.org/docs/getting-started/" target="_blank" rel="noopener noreferrer">Getting started | React Navigation</a></p>
+            <details>
+                <summary>此时再战，已经是<line-code>0.86.2</line-code>了</summary>
+                <p>
+                    <img src="../../images/nav/nested/1.png" alt="" srcset="" />
+                </p>
+            </details>
+            <h2>前置准备</h2>
+            <h3>安装依赖</h3>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+npm install @react-navigation/native react-native-screens react-native-safe-area-context
+            </pre>
+            <details>
+                <summary>有图有真相</summary>
+                <p>
+                    <img src="../../images/nav/nested/2.png" alt="" srcset="" />
+                </p>
+            </details>
+            <h3>Android 配置 react-native-screens</h3>
+            <p>修改<line-code>android/app/src/main/java/com/myapp001/MainActivity.kt</line-code>这个文件，如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="kotlin">
+import android.os.Bundle
+import com.swmansion.rnscreens.fragment.restoration.RNScreensFragmentFactory
+
+// ...
+
+class MainActivity: ReactActivity() {
+  // ...
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    supportFragmentManager.fragmentFactory = RNScreensFragmentFactory()
+    super.onCreate(savedInstanceState)
+  }
+
+  // ...
+}
+            </pre>
+            <details>
+                <summary>有图有真相</summary>
+                <p>
+                    <img src="../../images/nav/nested/3.png" alt="" srcset="" />
+                </p>
+            </details>
+            <h3>Opting-out of predictive back on Android</h3>
+            <p>修改<line-code>android/app/src/main/AndroidManifest.xml</line-code>这个文件，如下：</p>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="xml">
+&lt;application
+  android:enableOnBackInvokedCallback="false"
+  >
+  &lt;!-- ... -->
+&lt;/application>
+            </pre>
+            <details>
+                <summary>有图有真相</summary>
+                <p>
+                    <img src="../../images/nav/nested/4.png" alt="" srcset="" />
+                </p>
+            </details>
+            <p></p>
+            <mark-block>
+                <p>更详细的配置，可以参考：</p>
+                <ul>
+                    <li>
+                        <a href="/p/reactNative/pages/nav/stack.html" target="_blank" rel="noopener noreferrer">React Native - React Navigation - stack navigator - xiaodu114.github.io</a>
+                    </li>
+                    <li>
+                        <a href="https://reactnavigation.org/docs/getting-started" target="_blank" rel="noopener noreferrer">Getting started | React Navigation</a>
+                    </li>
+                </ul>
+            </mark-block>
+            <h2>安装包</h2>
+            <pre ddz-class="here-need-to-handle-by-highlight" ddz-lang="bash">
+npm install @react-native-vector-icons/ionicons @react-navigation/bottom-tabs @react-navigation/material-top-tabs @react-navigation/native-stack react-native-pager-view zustand
+            </pre>
+            <details>
+                <summary>有图有真相</summary>
+                <p>
+                    <img src="../../images/nav/nested/5.png" alt="" srcset="" />
+                </p>
+            </details>
+            <p></p>
+            <mark-block>
+                <dl>
+                    <dt>导航包</dt>
+                    <dd>@react-navigation/bottom-tabs</dd>
+                    <dd>@react-navigation/material-top-tabs</dd>
+                    <dd>@react-navigation/native-stack</dd>
+                    <dt>其他</dt>
+                    <dd>@react-native-vector-icons/ionicons</dd>
+                    <dd>react-native-pager-view （ @react-navigation/material-top-tabs 依赖）</dd>
+                    <dd>zustand</dd>
+                </dl>
+            </mark-block>
+            <h2>目录结构</h2>
+            <p>你可以根据下面的目录结构</p>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/nested/directoryStructure.txt" ddz-lang="properties"></div>
+            <details>
+                <summary>你可以点击这里哦，别人我可不告诉他</summary>
+                <p><strong>ASCII 树状逻辑图</strong></p>
+                <p>
+                    <img src="../../images/nav/nested/6.png" alt="" srcset="" />
+                </p>
+                <p><strong>Mermaid 架构图</strong></p>
+                <p>
+                    <img src="../../images/nav/nested/7.svg" alt="" srcset="" />
+                </p>
+            </details>
+            <h2>代码来了</h2>
+            <h3>src/store/useAuthStore.js</h3>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/nested/useAuthStore.js" ddz-lang="javascript"></div>
+            <h3>App.tsx</h3>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/nested/App.tsx.txt" ddz-lang="properties"></div>
+            <h3>src/navigation/RootNavigator.jsx</h3>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/nested/RootNavigator.jsx.txt" ddz-lang="properties"></div>
+            <h3>未授权堆栈（AuthStack.jsx）</h3>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/nested/AuthStack.jsx.txt" ddz-lang="properties"></div>
+            <h4>登录页面（src/screens/auth/LoginScreen.jsx）</h4>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/nested/LoginScreen.jsx.txt" ddz-lang="properties"></div>
+            <h4>注册页面（src/screens/auth/RegisterScreen.jsx）</h4>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/nested/RegisterScreen.jsx.txt" ddz-lang="properties"></div>
+            <h3>底部页签导航（MainTabs.jsx）</h3>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/nested/MainTabs.jsx.txt" ddz-lang="properties"></div>
+            <h4>消息堆栈（src/navigation/MessageStack.jsx）</h4>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/nested/MessageStack.jsx.txt" ddz-lang="properties"></div>
+            <h5>消息堆栈--顶部页签导航（src/navigation/MessageTopTabs.jsx）</h5>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/nested/MessageTopTabs.jsx.txt" ddz-lang="properties"></div>
+            <h6>src/screens/message/Conversation.jsx</h6>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/nested/Conversation.jsx.txt" ddz-lang="properties"></div>
+            <h6>src/screens/message/Group.jsx</h6>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/nested/Group.jsx.txt" ddz-lang="properties"></div>
+            <h6>src/screens/message/AddressBook.jsx</h6>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/nested/AddressBook.jsx.txt" ddz-lang="properties"></div>
+            <h5>消息堆栈--聊天页面（src/screens/message/Chat.jsx）</h5>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/nested/Chat.jsx.txt" ddz-lang="properties"></div>
+            <h4>上报堆栈（src/navigation/ReportStack.jsx）</h4>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/nested/ReportStack.jsx.txt" ddz-lang="properties"></div>
+            <h5>src/screens/report/ReportMain.jsx</h5>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/nested/ReportMain.jsx.txt" ddz-lang="properties"></div>
+            <h4>工作台堆栈（src/navigation/WorkspaceStack.jsx）</h4>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/nested/WorkspaceStack.jsx.txt" ddz-lang="properties"></div>
+            <h5>src/screens/workspace/WorkspaceMain.jsx</h5>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/nested/WorkspaceMain.jsx.txt" ddz-lang="properties"></div>
+            <h4>我的堆栈（src/navigation/MyStack.jsx）</h4>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/nested/MyStack.jsx.txt" ddz-lang="properties"></div>
+            <h5>src/screens/my/Profile.jsx</h5>
+            <div ddz-class="here-need-to-handle-by-highlight-and-request-html" data-url="../../source/nav/nested/Profile.jsx.txt" ddz-lang="properties"></div>
+            <h2>跑起来了</h2>
+            <h3>未授权堆栈</h3>
+            <p>
+                <img src="../../images/nav/nested/8.png" alt="" srcset="" />
+            </p>
+            <h3>消息堆栈</h3>
+            <p>
+                <img src="../../images/nav/nested/9.png" alt="" srcset="" />
+            </p>
+            <h3>消息堆栈--顶部页签导航</h3>
+            <p>
+                <img src="../../images/nav/nested/10.png" alt="" srcset="" />
+            </p>
+            <h3>其他</h3>
+            <p>
+                <img src="../../images/nav/nested/11.png" alt="" srcset="" />
+            </p>
+        </div>
+    </body>
+</html>
