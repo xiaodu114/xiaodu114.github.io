@@ -38,6 +38,12 @@
             "text": "Hello World",
             "code": "HelloWorld",
             "page": "/p/android/pages/helloWorld.html"
+        },
+        {
+            "id": 5,
+            "text": "应用配置",
+            "code": "AppConfig",
+            "page": "/p/android/pages/appConfig.html"
         }
     ]
 }
