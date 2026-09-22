@@ -34,24 +34,30 @@
         },
         {
             "id": 4,
+            "text": "高德地图：坐标拾取器",
+            "code": "AMapCoordinates",
+            "page": "/demo/js/openlayers/pages/amapCoordinates.html"
+        },
+        {
+            "id": 5,
             "text": "高德地图：地图属性",
             "code": "AMapAttr",
             "page": "/demo/js/openlayers/pages/amapAttr.html"
         },
         {
-            "id": 5,
+            "id": 6,
             "text": "高德地图：地图控件",
             "code": "AMapControl",
             "page": "/demo/js/openlayers/pages/amapControl.html"
         },
         {
-            "id": 6,
+            "id": 7,
             "text": "高德地图：点覆盖物",
             "code": "AMapPointCover01",
             "page": "/demo/js/openlayers/pages/amapPointCover01.html"
         },
         {
-            "id": 7,
+            "id": 8,
             "text": "高德地图：点覆盖物（DOM）",
             "code": "AMapPointCover02",
             "page": "/demo/js/openlayers/pages/amapPointCover02.html"
