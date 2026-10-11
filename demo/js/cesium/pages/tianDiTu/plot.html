@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Cesium - 天地图 - 标绘 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,Cesium,Cesium.js,天地图,标绘,点,线,面" />
+        <meta name="description" content="Cesium：天地图，点、线、面标绘示例" />
+
+        <link href="https://unpkg.com/cesium@1.146.0/Build/Cesium/Widgets/widgets.css" rel="stylesheet" />
+
+        <style>
+            #allmap {
+                width: 100%;
+                height: 100vh;
+            }
+            /* 绘制状态提示条 */
+            .draw-tip {
+                position: fixed;
+                top: 12px;
+                left: 50%;
+                transform: translateX(-50%);
+                padding: 6px 16px;
+                background: rgba(0, 0, 0, 0.65);
+                color: #fff;
+                font-size: 13px;
+                border-radius: 4px;
+                pointer-events: none; /* 不阻挡地图交互 */
+                display: none;
+                z-index: 999;
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+        <script type="text/javascript" src="https://unpkg.com/cesium@1.146.0/Build/Cesium/Cesium.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>天地图：标绘示例</h1>
+            <p>开启你的标绘之旅吧！</p>
+            <p>
+                <button type="button" id="btnPoint">绘制：点</button>
+                <button type="button" id="btnLine">绘制：线</button>
+                <button type="button" id="btnPolygon">绘制：面</button>
+                <button type="button" id="btnClear">清空标绘</button>
+            </p>
+            <div id="mapBox"></div>
+            <!-- 绘制状态提示 -->
+            <div class="draw-tip" id="drawTip"></div>
+        </div>
+        <script type="module">
+            import { serializeQueryParams, createCesiumViewer, MapEventManager } from "../../common/index.js";
+
+            const viewer = createCesiumViewer("mapBox");
+
+            /* ------------------------------ 加载天地图 ------------------------------ */
+            function loadTianDiTuMap(token) {
+                const commonOption = {
+                    layer: "img",
+                    style: "default",
+                    format: "tiles",
+                    tileMatrixSetID: "w", // 天地图使用 Web 墨卡托投影（EPSG:3857），需确保 tileMatrixSetID: "w"
+                    subdomains: ["t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7"], // 子域名
+                    maximumLevel: 18,
+                    credit: new Cesium.Credit("天地图影像")
+                };
+                const commonQueryParams = {
+                    service: "WMTS",
+                    request: "GetTile",
+                    version: "1.0.0",
+                    tileMatrixSet: "w",
+                    tileMatrix: "{TileMatrix}",
+                    tileRow: "{TileRow}",
+                    tileCol: "{TileCol}",
+                    style: "default",
+                    format: "tiles",
+                    tk: token
+                };
+
+                const layerProvider = new Cesium.WebMapTileServiceImageryProvider({
+                    url: `https://{s}.tianditu.gov.cn/img_w/wmts?${serializeQueryParams({ ...commonQueryParams, layer: "img" })}`,
+                    ...commonOption
+                });
+                const labelProvider = new Cesium.WebMapTileServiceImageryProvider({
+                    url: `https://{s}.tianditu.gov.cn/cia_w/wmts?${serializeQueryParams({ ...commonQueryParams, layer: "cia" })}`,
+                    ...commonOption
+                });
+
+                viewer.imageryLayers.addImageryProvider(layerProvider);
+                viewer.imageryLayers.addImageryProvider(labelProvider);
+            }
+
+            loadTianDiTuMap();
+
+            /* ------------------------------ 绘制状态管理 ------------------------------ */
+            const plotDrawConfig = {
+                isOpen: false, // 是否处于绘制模式
+                drawType: "", // point | polyline | polygon
+                drawData: null // 绘制中的临时数据 { id, positions, previewEntity }
+            };
+
+            // 线/面绘制时的最少点数校验
+            const MIN_POINTS = {
+                polyline: 2,
+                polygon: 3
+            };
+
+            const drawTip = document.getElementById("drawTip");
+            /** 显示/隐藏绘制状态提示 */
+            function showDrawTip(text) {
+                if (text) {
+                    drawTip.textContent = text;
+                    drawTip.style.display = "block";
+                } else {
+                    drawTip.style.display = "none";
+                }
+            }
+
+            /* ------------------------------ 预览（动态）实体 ------------------------------ */
+            /**
+             * 创建线绘制的预览实体
+             * 核心：positions 使用 CallbackProperty，每帧从 plotDrawConfig 中取最新数据，实现"实时跟随鼠标"
+             */
+            function createPolylinePreview() {
+                return viewer.entities.add({
+                    polyline: {
+                        positions: new Cesium.CallbackProperty(() => {
+                            const positions = plotDrawConfig.drawData?.positions ?? [];
+                            // 已有点 + 当前鼠标悬停点，形成"橡皮筋"效果
+                            return plotDrawConfig.drawData?.hoverPosition ? [...positions, plotDrawConfig.drawData.hoverPosition] : positions;
+                        }, false), // false：每次都要重新求值（动态属性）
+                        width: 3,
+                        material: Cesium.Color.YELLOW,
+                        clampToGround: true // 贴地
+                    }
+                });
+            }
+
+            /** 创建面绘制的预览实体（半透明填充 + 黄色边线） */
+            function createPolygonPreview() {
+                return viewer.entities.add({
+                    polygon: {
+                        hierarchy: new Cesium.CallbackProperty(() => {
+                            const positions = plotDrawConfig.drawData?.positions ?? [];
+                            const all = plotDrawConfig.drawData?.hoverPosition ? [...positions, plotDrawConfig.drawData.hoverPosition] : positions;
+                            return new Cesium.PolygonHierarchy(all, []);
+                        }, false),
+                        material: Cesium.Color.YELLOW.withAlpha(0.35),
+                        // 注意：贴地面实体（clampToGround）不支持 outline，
+                        // 用一条同步的边线 polyline 代替
+                        // perPositionHeight: true, // 如需按点的高程绘制可打开
+                        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+                    },
+                    polyline: {
+                        positions: new Cesium.CallbackProperty(() => {
+                            const positions = plotDrawConfig.drawData?.positions ?? [];
+                            const all = plotDrawConfig.drawData?.hoverPosition ? [...positions, plotDrawConfig.drawData.hoverPosition] : positions;
+                            // 面的边线需要首尾闭合
+                            return all.length > 2 ? [...all, all[0]] : all;
+                        }, false),
+                        width: 2,
+                        material: Cesium.Color.YELLOW,
+                        clampToGround: true
+                    }
+                });
+            }
+
+            /* ------------------------------ 绘制流程控制 ------------------------------ */
+            /** 开始绘制 */
+            function startPlotDraw(drawType) {
+                // 如果已经在绘制中，先取消上一次
+                cancelPlotDraw();
+
+                plotDrawConfig.isOpen = true;
+                plotDrawConfig.drawType = drawType;
+                plotDrawConfig.drawData = {
+                    id: Date.now(),
+                    positions: [], // 已确认的坐标点
+                    hoverPosition: null, // 鼠标当前悬停坐标（仅用于预览）
+                    previewEntity: null // 预览实体引用
+                };
+
+                // 线/面需要创建预览实体
+                if (drawType === "polyline") {
+                    plotDrawConfig.drawData.previewEntity = createPolylinePreview();
+                    showDrawTip("【绘制线】左键添加节点，右键结束（至少 2 个点），ESC 取消");
+                } else if (drawType === "polygon") {
+                    plotDrawConfig.drawData.previewEntity = createPolygonPreview();
+                    showDrawTip("【绘制面】左键添加节点，右键结束（至少 3 个点），ESC 取消");
+                } else {
+                    showDrawTip("【绘制点】左键放置点位");
+                }
+
+                mapEventManager.openMouseMoveMarker();
+            }
+
+            /** 结束绘制并生成最终实体（type：finish=正常结束，cancel=取消） */
+            function endPlotDraw(type = "finish") {
+                const { drawType, drawData } = plotDrawConfig;
+
+                // 移除预览实体
+                if (drawData?.previewEntity) {
+                    viewer.entities.remove(drawData.previewEntity);
+                }
+
+                if (type === "cancel") {
+                    showDrawTip(null);
+                } else {
+                    // 点数校验：不满足最少点数视为无效绘制
+                    const min = MIN_POINTS[drawType];
+                    if (min && drawData.positions.length < min) {
+                        showDrawTip(null);
+                    } else {
+                        showDrawTip(null);
+                    }
+                }
+
+                mapEventManager.closeMouseMoveMarker();
+                plotDrawConfig.isOpen = false;
+                plotDrawConfig.drawType = "";
+                plotDrawConfig.drawData = null;
+            }
+
+            /** 取消绘制（不生成实体） */
+            function cancelPlotDraw() {
+                if (plotDrawConfig.isOpen) endPlotDraw("cancel");
+            }
+
+            /* ------------------------------ 正式实体创建 ------------------------------ */
+            /** 添加点实体 */
+            function addPointEntity(cartesianPos) {
+                viewer.entities.add({
+                    id: Date.now().toString(),
+                    position: cartesianPos,
+                    billboard: {
+                        image: "/logo/1024.png",
+                        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+                        horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+                        disableDepthTestDistance: Number.POSITIVE_INFINITY,
+                        width: 32,
+                        height: 32
+                    },
+                    label: {
+                        text: "xiaodu114",
+                        font: "bold 14px sans-serif",
+                        fillColor: Cesium.Color.WHITE,
+                        outlineColor: Cesium.Color.BLACK,
+                        outlineWidth: 3,
+                        style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+                        showBackground: false,
+                        disableDepthTestDistance: Number.POSITIVE_INFINITY
+                    },
+                    properties: {
+                        title: "点",
+                        desc: "xiaodu114",
+                        entityType: "point"
+                    }
+                });
+            }
+
+            /** 添加线实体 */
+            function addPolylineEntity(positions) {
+                viewer.entities.add({
+                    id: Date.now().toString(),
+                    polyline: {
+                        positions: positions,
+                        width: 3,
+                        material: Cesium.Color.RED,
+                        clampToGround: true
+                    },
+                    properties: {
+                        title: "线",
+                        desc: `共 ${positions.length} 个节点`,
+                        entityType: "polyline",
+                        // 坐标序列存入属性，方便后续读取
+                        positions: positions
+                    }
+                });
+            }
+
+            /** 添加面实体 */
+            function addPolygonEntity(positions) {
+                viewer.entities.add({
+                    id: Date.now().toString(),
+                    polygon: {
+                        hierarchy: new Cesium.PolygonHierarchy(positions, []),
+                        material: Cesium.Color.RED.withAlpha(0.4),
+                        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+                    },
+                    // 面同样用边线强化可见性（贴地面不支持 outline）
+                    polyline: {
+                        positions: [...positions, positions[0]],
+                        width: 2,
+                        material: Cesium.Color.RED,
+                        clampToGround: true
+                    },
+                    properties: {
+                        title: "面",
+                        desc: `共 ${positions.length} 个节点`,
+                        entityType: "polygon",
+                        positions: positions
+                    }
+                });
+            }
+
+            /* ------------------------------ 地图事件管理 ------------------------------ */
+            const mapEventManager = new MapEventManager(
+                viewer,
+                {
+                    // 左键：添加节点 / 放置点位
+                    [Cesium.ScreenSpaceEventType.LEFT_CLICK]: (cartesianPos, click) => {
+                        if (!plotDrawConfig.isOpen || !cartesianPos) return;
+
+                        if (plotDrawConfig.drawType === "point") {
+                            addPointEntity(cartesianPos);
+                            endPlotDraw();
+                        } else if (plotDrawConfig.drawType === "polyline" || plotDrawConfig.drawType === "polygon") {
+                            // 修复：原来的 positions.push() 是空推，这里真正把点击坐标压入
+                            plotDrawConfig.drawData.positions.push(cartesianPos);
+                        }
+                    },
+                    // 右键：结束线/面绘制
+                    [Cesium.ScreenSpaceEventType.RIGHT_CLICK]: (cartesianPos, click) => {
+                        if (!plotDrawConfig.isOpen) return;
+
+                        const { drawType, drawData } = plotDrawConfig;
+                        if (drawType === "point") {
+                            // 点绘制模式下右键 = 取消
+                            endPlotDraw("cancel");
+                        } else if (drawType === "polyline") {
+                            if (drawData.positions.length >= MIN_POINTS.polyline) {
+                                addPolylineEntity(drawData.positions);
+                                endPlotDraw();
+                            } else {
+                                alert(`绘制线至少需要 ${MIN_POINTS.polyline} 个点，当前 ${drawData.positions.length} 个`);
+                            }
+                        } else if (drawType === "polygon") {
+                            if (drawData.positions.length >= MIN_POINTS.polygon) {
+                                addPolygonEntity(drawData.positions);
+                                endPlotDraw();
+                            } else {
+                                alert(`绘制面至少需要 ${MIN_POINTS.polygon} 个点，当前 ${drawData.positions.length} 个`);
+                            }
+                        }
+                    },
+                    // 鼠标移动：实时更新绘制数据
+                    [Cesium.ScreenSpaceEventType.MOUSE_MOVE]: (cartesianPos, movement) => {
+                        // 仅在线/面绘制中处理
+                        if (!plotDrawConfig.isOpen) return;
+                        if (plotDrawConfig.drawType !== "polyline" && plotDrawConfig.drawType !== "polygon") return;
+
+                        if (cartesianPos && plotDrawConfig.drawData) {
+                            plotDrawConfig.drawData.hoverPosition = cartesianPos;
+                        }
+                    }
+                },
+                {
+                    selectedEntityChangedHandler: (entity) => {
+                        // 绘制中不响应选中（避免绘制时点到已有实体误弹窗）
+                        if (plotDrawConfig.isOpen) {
+                            viewer.selectedEntity = undefined;
+                            return;
+                        }
+                        if (entity && entity.properties) {
+                            const props = entity.properties;
+                            const msg = `类型: ${props.entityType?.getValue()}
+标题：${props.title?.getValue()}
+描述：${props.desc?.getValue()}`;
+                            alert(msg);
+                            // 处理完立即取消选中（配合 selectionIndicator 关闭，避免残留状态）
+                            if (viewer.selectedEntity === entity) {
+                                viewer.selectedEntity = undefined;
+                            }
+                        }
+                    }
+                }
+            );
+
+            /* ------------------------------ ESC 取消绘制 ------------------------------ */
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") cancelPlotDraw();
+            });
+
+            /* ------------------------------ 按钮事件 ------------------------------ */
+            document.getElementById("btnPoint").addEventListener("click", () => startPlotDraw("point"));
+            document.getElementById("btnLine").addEventListener("click", () => startPlotDraw("polyline"));
+            document.getElementById("btnPolygon").addEventListener("click", () => startPlotDraw("polygon"));
+
+            // 清空所有标绘
+            document.getElementById("btnClear").addEventListener("click", () => {
+                cancelPlotDraw();
+                viewer.entities.removeAll();
+            });
+        </script>
+    </body>
+</html>

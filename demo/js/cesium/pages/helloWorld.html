@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Cesium - Hello World - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,Cesium,Cesium.js,第一个示例,Hello World" />
+        <meta name="description" content="Cesium 第一个示例：Hello World" />
+
+        <link href="https://unpkg.com/cesium@1.146.0/Build/Cesium/Widgets/widgets.css" rel="stylesheet" />
+
+        <style>
+            #allmap {
+                width: 100%;
+                height: 100vh;
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+
+        <script type="text/javascript" src="https://unpkg.com/cesium@1.146.0/Build/Cesium/Cesium.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>Hello World</h1>
+            <p>Cesium 第一个示例：Hello World</p>
+            <mark-block>
+                <p>如果你想知道下面地图中的小工具都是做什么的？你可以参考这里：<a href="https://www.cnblogs.com/rainbow70626/p/16019280.html" target="_blank" rel="noopener noreferrer">[转]cesium很全的入门教程-翻译官网和加入自己理解 - rainbow70626 - 博客园</a></p>
+            </mark-block>
+            <div id="mapBox"></div>
+        </div>
+        <script type="text/javascript">
+            const viewer = new Cesium.Viewer("mapBox", {});
+        </script>
+    </body>
+</html>

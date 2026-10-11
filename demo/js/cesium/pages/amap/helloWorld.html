@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Cesium - 高德地图 - xiaodu114.github.io</title>
+        <meta name="keywords" content="xiaodu114,Cesium,Cesium.js,高德地图,第一个示例" />
+        <meta name="description" content="Cesium：高德地图第一个示例，Hello World" />
+
+        <link href="https://unpkg.com/cesium@1.146.0/Build/Cesium/Widgets/widgets.css" rel="stylesheet" />
+
+        <style>
+            #allmap {
+                width: 100%;
+                height: 100vh;
+            }
+        </style>
+
+        <script src="/p/_/js/main.js"></script>
+
+        <script type="text/javascript" src="https://unpkg.com/cesium@1.146.0/Build/Cesium/Cesium.js"></script>
+    </head>
+
+    <body>
+        <div class="blog-page">
+            <h1>高德地图：第一个示例，Hello World</h1>
+            <p></p>
+            <div id="mapBox"></div>
+        </div>
+        <script type="module">
+            import { createCesiumViewer } from "../../common/index.js";
+
+            const viewer = createCesiumViewer("mapBox");
+
+            // 加载高德地图
+            function loadAmapMap(token) {
+                const layerProvider = new Cesium.UrlTemplateImageryProvider({
+                    url: "https://webst0{s}.is.autonavi.com/appmaptile?lang=zh_cn&style=6&x={x}&y={y}&z={z}",
+                    subdomains: ["1", "2", "3", "4"]
+                });
+                viewer.imageryLayers.addImageryProvider(layerProvider);
+            }
+
+            loadAmapMap();
+        </script>
+    </body>
+</html>

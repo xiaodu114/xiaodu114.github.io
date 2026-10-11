@@ -1,0 +1,70 @@
+{
+    "pageTitle": "Cesium - xiaodu114.github.io",
+    "head": {
+        "title": "我和 Cesium 的故事",
+        "links": [
+            {
+                "href": "https://cesium.com/",
+                "text": "Cesium: The Platform for 3D Geospatial"
+            },
+            {
+                "href": "https://github.com/CesiumGS/cesium",
+                "text": "GitHub - CesiumGS/cesium"
+            },
+            {
+                "href": "https://cesium.net.cn/",
+                "text": "Cesium: 3D 地理空间平台 - Cesium 平台"
+            },
+            {
+                "href": "https://www.tianditu.gov.cn/",
+                "text": "国家地理信息公共服务平台 天地图"
+            }
+        ]
+    },
+    "nodes": [
+        {
+            "id": 1,
+            "text": "介绍",
+            "code": "Introduction",
+            "page": "/demo/js/cesium/pages/introduction.html"
+        },
+        {
+            "id": 2,
+            "text": "Hello World",
+            "code": "HelloWorld",
+            "page": "/demo/js/cesium/pages/helloWorld.html"
+        },
+        {
+            "id": 300000,
+            "text": "天地图",
+            "code": "TianDiTu",
+            "children": [
+                {
+                    "id": 300001,
+                    "text": "Hello World",
+                    "code": "TianDiTu-HelloWorld",
+                    "page": "/demo/js/cesium/pages/tianDiTu/helloWorld.html"
+                },
+                {
+                    "id": 300002,
+                    "text": "Plot",
+                    "code": "TianDiTu-Plot",
+                    "page": "/demo/js/cesium/pages/tianDiTu/plot.html"
+                }
+            ]
+        },
+        {
+            "id": 400000,
+            "text": "高德地图",
+            "code": "Amap",
+            "children": [
+                {
+                    "id": 400001,
+                    "text": "Hello World",
+                    "code": "Amap-HelloWorld",
+                    "page": "/demo/js/cesium/pages/amap/helloWorld.html"
+                }
+            ]
+        }
+    ]
+}
