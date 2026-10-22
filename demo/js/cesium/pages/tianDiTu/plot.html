@@ -329,7 +329,7 @@
                 {
                     [Cesium.ScreenSpaceEventType.LEFT_DOWN]: (cartesianPos, click) => {
                         const pickedObject = viewer.scene.pick(click.position);
-                        if (!Cesium.defined(pickedObject) && pickedObject.id) return;
+                        if (!(Cesium.defined(pickedObject) && pickedObject.id)) return;
                         const entity = pickedObject.id;
                         const isDrag = entity.properties.isDrag?.getValue?.();
                         if (isDrag !== true) return;
