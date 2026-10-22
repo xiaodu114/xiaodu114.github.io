@@ -196,7 +196,12 @@ export class MapEventManager {
     }
 
     // 鼠标左键抬起事件
-    [ScreenSpaceEventTypeValue2HandlerName[Cesium.ScreenSpaceEventType.LEFT_UP]](click) {}
+    [ScreenSpaceEventTypeValue2HandlerName[Cesium.ScreenSpaceEventType.LEFT_UP]](click) {
+        const handler = this.inputActionOption[Cesium.ScreenSpaceEventType.LEFT_UP];
+        if (typeof handler === "function") {
+            handler(click);
+        }
+    }
 
     // 鼠标左键点击事件
     [ScreenSpaceEventTypeValue2HandlerName[Cesium.ScreenSpaceEventType.LEFT_CLICK]](click) {
