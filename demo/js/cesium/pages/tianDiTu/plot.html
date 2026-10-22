@@ -93,6 +93,24 @@
 
             loadTianDiTuMap();
 
+            //#region  实体拖拽
+
+            let dragEntity = null;
+            function onEntityDragStart(entity, cartesianPos) {}
+            function onEntityDragging(entity, cartesianPos) {}
+            function onEntityDragEnd(entity, cartesianPos) {
+                const cartographic = Cesium.Cartographic.fromCartesian(cartesianPos);
+                const dbData = {
+                    id: entity.id,
+                    lon: Cesium.Math.toDegrees(cartographic.longitude),
+                    lat: Cesium.Math.toDegrees(cartographic.latitude),
+                    height: cartographic.height
+                };
+                alert(JSON.stringify(dbData));
+            }
+
+            //#endregion
+
             /* ------------------------------ 绘制状态管理 ------------------------------ */
             const plotDrawConfig = {
                 isOpen: false, // 是否处于绘制模式
@@ -254,6 +272,7 @@
                     properties: {
                         title: "点",
                         desc: "xiaodu114",
+                        isDrag: true,
                         entityType: "point"
                     }
                 });
@@ -308,6 +327,31 @@
             const mapEventManager = new MapEventManager(
                 viewer,
                 {
+                    [Cesium.ScreenSpaceEventType.LEFT_DOWN]: (cartesianPos, click) => {
+                        const pickedObject = viewer.scene.pick(click.position);
+                        if (!Cesium.defined(pickedObject) && pickedObject.id) return;
+                        const entity = pickedObject.id;
+                        const isDrag = entity.properties.isDrag?.getValue?.();
+                        if (isDrag !== true) return;
+
+                        dragEntity = entity;
+                        // 关键：拖拽期间禁用默认的相机旋转/平移，否则地图会跟着转
+                        viewer.scene.screenSpaceCameraController.enableRotate = false;
+                        viewer.scene.screenSpaceCameraController.enableTranslate = false;
+                        onEntityDragStart(entity);
+                    },
+                    [Cesium.ScreenSpaceEventType.LEFT_UP]: (cartesianPos, click) => {
+                        if (dragEntity) {
+                            // 恢复相机控制
+                            viewer.scene.screenSpaceCameraController.enableRotate = true;
+                            viewer.scene.screenSpaceCameraController.enableTranslate = true;
+
+                            const entityCartesianPos = dragEntity.position.getValue(viewer.clock.currentTime);
+                            const entity = dragEntity;
+                            dragEntity = null;
+                            onEntityDragEnd(entity, entityCartesianPos);
+                        }
+                    },
                     // 左键：添加节点 / 放置点位
                     [Cesium.ScreenSpaceEventType.LEFT_CLICK]: (cartesianPos, click) => {
                         if (!plotDrawConfig.isOpen || !cartesianPos) return;
@@ -346,12 +390,17 @@
                     },
                     // 鼠标移动：实时更新绘制数据
                     [Cesium.ScreenSpaceEventType.MOUSE_MOVE]: (cartesianPos, movement) => {
-                        // 仅在线/面绘制中处理
-                        if (!plotDrawConfig.isOpen) return;
-                        if (plotDrawConfig.drawType !== "polyline" && plotDrawConfig.drawType !== "polygon") return;
-
-                        if (cartesianPos && plotDrawConfig.drawData) {
-                            plotDrawConfig.drawData.hoverPosition = cartesianPos;
+                        if (plotDrawConfig.isOpen) {
+                            // 仅在线/面绘制中处理
+                            if (["polyline", "polygon"].includes(plotDrawConfig.drawType)) {
+                                if (cartesianPos && plotDrawConfig.drawData) {
+                                    plotDrawConfig.drawData.hoverPosition = cartesianPos;
+                                }
+                            }
+                        }
+                        if (dragEntity) {
+                            dragEntity.position = cartesianPos;
+                            onEntityDragging(dragEntity, cartesianPos);
                         }
                     }
                 },
